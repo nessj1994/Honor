@@ -3,7 +3,8 @@
 
 #include "Player.h"
 #include "Game.h"
-
+#include "AnimationEngine.h"
+#include <string>
 
 
 Camera* Camera::GetInstance(void)
@@ -30,6 +31,26 @@ void Camera::Draw(SGD::Rectangle _rect, SGD::Color _color)
 
 
 
+}
+
+void Camera::DrawAnimation(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped)
+{
+	AnimationEngine::GetInstance()->Render(position, rotation, ts, flipped, 1, m_ptCameraPosition);
+}
+
+void Camera::DrawString(std::string str, SGD::Point position)
+{
+	SGD::GraphicsManager::GetInstance()->DrawString(str.c_str(), { position.x - m_ptCameraPosition.x, position.y - m_ptCameraPosition.y },
+		SGD::Color(255, 0, 0, 0));
+}
+
+void Camera::DrawTexture(SGD::Point position, float rotation, SGD::HTexture m_hImage, bool flipped)
+{
+	float scaleX = 1;
+	if (flipped == true)
+		scaleX = -scaleX;
+	SGD::GraphicsManager::GetInstance()->DrawTexture(m_hImage,
+	{ position.x - m_ptCameraPosition.x, position.y - m_ptCameraPosition.y }, rotation, {}, {}, { scaleX, 1 });
 }
 
 void Camera::Update(float _elapsedTime)

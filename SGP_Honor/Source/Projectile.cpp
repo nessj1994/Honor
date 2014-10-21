@@ -91,7 +91,7 @@ SGD::Rectangle Projectile::GetRect(void) const
 }
 void Projectile::HandleCollision(const IEntity* pOther)
 {
-	if (pOther->GetType() == ENT_SOLID_WALL &&
+	if (pOther->GetType() == ENT_BLOCK &&
 		pOther != GetOwner())
 	{
 		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };

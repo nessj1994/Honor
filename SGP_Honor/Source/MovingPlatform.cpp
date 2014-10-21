@@ -16,16 +16,16 @@ MovingPlatform::~MovingPlatform()
 void MovingPlatform::Update(float elapsedTime)
 {
 	// Move horizontally or vertically
-	if (m_bIsVertical)
+	if(m_bIsVertical)
 	{
 		// Moving backward or forward
-		if (m_bReturning)
+		if(m_bReturning)
 		{
 			// Update speed and keep track of how far it has traveled
 			m_fDistanceTraveled += m_fSpeed * elapsedTime;
 			SetVelocity({ 0.0f, -m_fSpeed });
 			// Move each entity
-			for (int i = 0; i < m_vEntities.size(); ++i)
+			for(int i = 0; i < m_vEntities.size(); ++i)
 			{
 				SGD::Point position = m_vEntities[i]->GetPosition();
 				position.y -= m_fSpeed * elapsedTime;
@@ -37,7 +37,7 @@ void MovingPlatform::Update(float elapsedTime)
 			m_fDistanceTraveled += m_fSpeed * elapsedTime;
 			SetVelocity({ 0.0f, m_fSpeed });
 			// Move each entity
-			for (int i = 0; i < m_vEntities.size(); ++i)
+			for(int i = 0; i < m_vEntities.size(); ++i)
 			{
 				SGD::Point position = m_vEntities[i]->GetPosition();
 				position.y += m_fSpeed * elapsedTime;
@@ -48,12 +48,12 @@ void MovingPlatform::Update(float elapsedTime)
 	else
 	{
 		// Moving backward or forward
-		if (m_bReturning)
+		if(m_bReturning)
 		{
 			m_fDistanceTraveled += m_fSpeed * elapsedTime;
 			SetVelocity({ -m_fSpeed, 0.0f });
 			// Move each entity
-			for (int i = 0; i < m_vEntities.size(); ++i)
+			for(int i = 0; i < m_vEntities.size(); ++i)
 			{
 				SGD::Point position = m_vEntities[i]->GetPosition();
 				position.x -= m_fSpeed * elapsedTime;
@@ -65,7 +65,7 @@ void MovingPlatform::Update(float elapsedTime)
 			m_fDistanceTraveled += m_fSpeed * elapsedTime;
 			SetVelocity({ m_fSpeed, 0.0f });
 			// Move each entity
-			for (int i = 0; i < m_vEntities.size(); ++i)
+			for(int i = 0; i < m_vEntities.size(); ++i)
 			{
 				SGD::Point position = m_vEntities[i]->GetPosition();
 				position.x += m_fSpeed * elapsedTime;
@@ -75,7 +75,7 @@ void MovingPlatform::Update(float elapsedTime)
 	}
 
 	// Determine if it is time to move back
-	if (m_fDistanceTraveled >= m_fTurnDistance)
+	if(m_fDistanceTraveled >= m_fTurnDistance)
 	{
 		m_fDistanceTraveled = 0;
 		m_bReturning = !m_bReturning;

@@ -3,6 +3,8 @@
 #include "Animation.h"
 #include <map>
 
+class IEntity;
+
 class AnimationEngine
 {
 public:
@@ -15,11 +17,13 @@ public:
 	/////////////////////////////////////////////////////////////////////////
 	/////////////////////////Setup, Play, Cleanup///////////////////////////
 	bool Initialize(void);
-	void Update(float elapsedTime, AnimTimeStamp& ts);
-	void Render(SGD::Point position, float rotation, AnimTimeStamp& ts);
+	void Update(float elapsedTime, AnimTimeStamp& ts, IEntity* sender);
+	void Render(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale, SGD::Point camerapos);
 	void Terminate(void);
 
 	Animation GetAnimation(std::string anim) { return m_mAnimationMap[anim]; }
+	SGD::Rectangle GetRect(const AnimTimeStamp& ts, bool facingRight, float scale, SGD::Point position);
+	SGD::Rectangle GetAttackRect(const AnimTimeStamp& ts, bool facingRight, float scale, SGD::Point position);
 
 
 	/////////////////////////////////////////////////////////////////////////

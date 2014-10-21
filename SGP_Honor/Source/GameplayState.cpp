@@ -28,9 +28,6 @@
 #include "Activator.h"
 #include "Ice.h"
 #include "Hawk.h"
-#include "MovingPlatform.h"
-#include "Stalactite.h"
-#include "Geyser.h"
 #include "BuzzSaw.h"
 #include "Turret.h"
 
@@ -107,7 +104,6 @@ void GameplayState::Enter(void) //Load Resources
 	m_pFBlock = new FallingBlock();
 	m_pSwitch = new Activator(false);
 	m_pPressurePlate = new Activator(true);
-	m_pStalactite = new Stalactite();
 	m_pBuzzSaw = new BuzzSaw();
 	m_pTurret = new Turret();
 
@@ -123,7 +119,6 @@ void GameplayState::Enter(void) //Load Resources
 	//Add factory methods to put entities in the manager
 	CreateBlocks();
 	CreatePermFrozenTiles();
-	CreateGeyser(100, 400);
 	CreateTempFrozenTiles();
 
 
@@ -139,8 +134,6 @@ void GameplayState::Enter(void) //Load Resources
 	m_pEntities->AddEntity(m_pSwitch, Entity::ENT_SWITCH);
 	m_pEntities->AddEntity(m_pBuzzSaw, Entity::ENT_BUZZSAW);
 	m_pEntities->AddEntity(m_pTurret, Entity::ENT_TURRET);
-	m_pEntities->AddEntity(m_pStalactite, Entity::ENT_STALACTITE);
-
 	m_pDoor->SetActivator(m_pSwitch);
 
 
@@ -149,10 +142,6 @@ void GameplayState::Enter(void) //Load Resources
 	//For Particle Testing
 	//m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test");
 	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("RotationTest.xml", "Test", { -100, -100 });
-	AnimationEngine::GetInstance()->LoadAnimation("../Assets/testSkelleton.xml");
-	ts.SetCurrAnimation("Swing");
-	ts2.SetCurrAnimation("SwordDraw");
-	ts3.SetCurrAnimation("SwordDraw");
 }
 
 
@@ -181,7 +170,6 @@ void GameplayState::Exit(void)
 	delete m_pPressurePlate;
 	delete m_pBuzzSaw;
 	delete m_pTurret;
-	delete m_pStalactite;
 
 	if(m_pPlayer != nullptr)
 	{
@@ -286,31 +274,15 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_TEMP_FREEZE, Entity::ENT_SPRAY);
 
 
-	m_pEntities->CheckCollisions(Entity::ENT_PROJ, Entity::ENT_SOLID_WALL);
+	m_pEntities->CheckCollisions(Entity::ENT_PROJ, Entity::ENT_BLOCK);
 	m_pEntities->CheckCollisions(Entity::ENT_FALLING_BLOCK, Entity::ENT_BLOCK);
 	m_pEntities->CheckCollisions(Entity::ENT_FALLING_BLOCK, Entity::ENT_PLAYER);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_FALLING_BLOCK);
-	m_pEntities->CheckWorldCollision(Entity::ENT_PROJ);
-	m_pEntities->CheckWorldCollision(Entity::ENT_HAWK);
-	m_pEntities->CheckWorldCollision(Entity::ENT_STALACTITE);
-
-
 
 	//Process messages and events
 	SGD::EventManager::GetInstance()->Update();
-	ts.SetPlaying(true);
-	AnimationEngine::GetInstance()->Update(elapsedTime, ts);
-	ts2.SetPlaying(true);
-	AnimationEngine::GetInstance()->Update(elapsedTime, ts2);
-	if (testtime > 0.3f)
-	{
-		ts3.SetPlaying(true);
-		AnimationEngine::GetInstance()->Update(elapsedTime, ts3);
-	}
-
-
 	SGD::MessageManager::GetInstance()->Update();
 }
 
@@ -323,12 +295,6 @@ void GameplayState::Render(void)
 	m_pLevel->Render();
 	//m_pEmitter->Render();
 	m_pEmitter2->Render({ m_pPlayer->GetPosition().x - Camera::GetInstance()->GetCameraPos().x, m_pPlayer->GetPosition().y - Camera::GetInstance()->GetCameraPos().y });
-	AnimationEngine::GetInstance()->Render(SGD::Point(200, 200), 0, ts);
-	AnimationEngine::GetInstance()->Render(SGD::Point(400, 200), 0, ts2);
-	if (testtime > 0.3f)
-	{
-		AnimationEngine::GetInstance()->Render(SGD::Point(500, 200), 0, ts3);
-	}
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 
@@ -582,7 +548,7 @@ Player* GameplayState::CreatePlayer(void)
 
 	pPlayer->SetPosition(SGD::Point(100, 100));
 	pPlayer->SetSize(SGD::Size(64, 64));
-
+	
 	return pPlayer;
 
 
@@ -694,48 +660,6 @@ void GameplayState::CreateFallingBlock(int _x, int _y)
 	m_pEntities->AddEntity(fBlock, Entity::ENT_FALLING_BLOCK);
 	fBlock->Release();
 }
-
-void GameplayState::CreateActivator(int _x, int _y, bool _isPressure, bool _currState, int _ID)
-{
-	Activator * pActivator = new Activator(_isPressure);
-	pActivator->SetPosition({ (float)_x, (float)_y });
-	pActivator->SetOn(_currState);
-	pActivator->SetKeyID(_ID);
-	m_pEntities->AddEntity(pActivator, Entity::ENT_SWITCH);
-	pActivator->Release();
-}
-
-void GameplayState::CreateDoor(int _x, int _y, bool _isHorizontal, int _ID, int _size)
-{
-	Door * pDoor = new Door();
-	pDoor->SetPosition({ (float)_x, (float)_y });
-	if (_isHorizontal)
-	{
-		pDoor->SetSize({ 32.0f * _size, 32.0f });
-	}
-	else
-	{
-		pDoor->SetSize({ 32.0f, 32.0f * _size });
-	}
-	pDoor->SetKeyID(_ID);
-	pDoor->SetLength(_size);
-	m_pEntities->AddEntity(pDoor, Entity::ENT_DOOR);
-	pDoor->Release();
-}
-
-
-
-void GameplayState::CreateGeyser(int _x, int _y)
-{
-	Geyser* m_pGeyser = new Geyser;
-	m_pGeyser->SetPosition({ (float)_x, (float)_y });
-	m_pGeyser->SetOrigPosition({ (float)_x, (float)_y });
-
-	m_pEntities->AddEntity(m_pGeyser, Entity::ENT_GEYSER);
-
-
-}
-
 
 #pragma endregion
 

@@ -11,10 +11,12 @@
 #include "CreateHawkMessage.h"
 #include "LevelCollider.h"
 #include "Hawk.h"
+#include "AnimationEngine.h"
 
 #include <Windows.h>
 #include "Dash.h"
 #include "Camera.h"
+#include "Honor.h"
 
 
 #define JOYSTICK_DEADZONE  0.2f
@@ -24,9 +26,8 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("KILL_PLAYER");
 	SetDirection({ 1, 0 });
 	m_pDash = new Dash;
-
-
-
+	AnimationEngine::GetInstance()->LoadAnimation("../Assets/CollisionTesting.xml");
+	m_ts.SetCurrAnimation("Idle");
 }
 
 
@@ -56,12 +57,14 @@ void Player::Update(float elapsedTime)
 	float leftStickYOff = pInput->GetLeftJoystick(0).y;
 
 	bool leftClamped = false;
+	static int stickFrame = 1;
+	bool controller = pInput->IsControllerConnected(0);
 
 	if(leftStickXOff > -JOYSTICK_DEADZONE && leftStickXOff < JOYSTICK_DEADZONE)
 	{
 		leftStickXOff = 0;
 		leftClamped = true;
-
+		stickFrame = 5;
 	}
 
 	SetIsBouncing(false);
@@ -129,6 +132,30 @@ void Player::Update(float elapsedTime)
 
 		/////////////////////////////////////////////////
 		/////////////////Movement////////////////////////
+		//reset currframe to 0 & set the animation playing to true
+		if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false))
+		{
+			stickFrame = 1;
+			m_ts.ResetCurrFrame();
+			m_ts.SetPlaying(true);
+		}
+		//reset currframe to 0 & set the animation playing to false
+		if ((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true))
+		{
+			leftClamped = false;
+		}
+		if (pInput->IsKeyReleased(SGD::Key::E) == true || pInput->IsKeyReleased(SGD::Key::Q) == true)
+		{
+			m_ts.SetPlaying(false);
+			m_ts.ResetCurrFrame();
+			m_ts.SetCurrAnimation("Idle");
+		}
+		else if (leftClamped == true)
+		{
+			m_ts.SetPlaying(false);
+			m_ts.ResetCurrFrame();
+			m_ts.SetCurrAnimation("Idle");
+		}
 		//Right Movement
 		if(pInput->IsKeyDown(SGD::Key::E) == true
 			|| leftStickXOff > JOYSTICK_DEADZONE)
@@ -150,7 +177,7 @@ void Player::Update(float elapsedTime)
 					SetVelocity(SGD::Vector(GetVelocity().x + GetSpeed() * elapsedTime, GetVelocity().y));
 				SetDirection({ 1, 0 });
 			}
-
+			m_ts.SetCurrAnimation("Walking");
 			SetFacingRight(true);
 		}
 
@@ -174,7 +201,7 @@ void Player::Update(float elapsedTime)
 				}
 				SetDirection({ -1, 0 });
 			}
-
+			m_ts.SetCurrAnimation("Walking");
 			SetFacingRight(false);
 		}
 
@@ -380,6 +407,7 @@ void Player::Update(float elapsedTime)
 	pATEvent = nullptr;
 
 	Unit::Update(elapsedTime);
+	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 	SetGravity(-500);
 
 
@@ -387,16 +415,16 @@ void Player::Update(float elapsedTime)
 
 void Player::Render(void)
 {
-	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+	//SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 
-	//Camera::GetInstance()->Draw(SGD::Rectangle(10, 300, 20, 320), SGD::Color::Color(255, 0, 0, 255));
+	////Camera::GetInstance()->Draw(SGD::Rectangle(10, 300, 20, 320), SGD::Color::Color(255, 0, 0, 255));
 
-	Camera::GetInstance()->Draw(SGD::Rectangle(
-		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
-		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
-		SGD::Color::Color(255, 255, 0, 0));
+	//Camera::GetInstance()->Draw(SGD::Rectangle(
+	//	m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
+	//	m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
+	//	SGD::Color::Color(255, 255, 0, 0));
 
-
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, IsFacingRight());
 }
 
 
@@ -405,7 +433,10 @@ void Player::Render(void)
 SGD::Rectangle Player::GetRect(void) const
 {
 
-	return SGD::Rectangle{ m_ptPosition, m_szSize };
+	/*return SGD::Rectangle{ m_ptPosition, m_szSize };*/
+	//SGD::Rectangle rect = AnimationEngine::GetInstance()->GetRect(m_ts, IsFacingRight(), 1, m_ptPosition);
+	//return rect;
+	return{ m_ptPosition, m_szSize };
 }
 
 void Player::HandleCollision(const IEntity* pOther)
@@ -413,6 +444,16 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	Unit::HandleCollision(pOther);
 
+	if (pOther->GetType() == Entity::ENT_HONOR)
+	{
+		const Honor* honor = dynamic_cast<const Honor*>(pOther);
+		IncreaseHonorCount(honor->GetHonorAmount());
+	}
+
+	if (pOther->GetType() == Entity::ENT_ARMOR)
+	{
+		m_bHasArmor = true;
+	}
 
 	if(pOther->GetType() == Entity::ENT_SOLID_WALL)
 	{
@@ -423,7 +464,6 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if(pOther->GetType() == Entity::ENT_DEATH)
 	{
-
 		//Kill the player
 		m_ptPosition = m_ptStartPosition;
 	}
@@ -733,8 +773,15 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 
 	//Set the player back to his last checkpoint 
 	//This is usually back to the level start
-	if(pEvent->GetEventID() == "KILL_PLAYER")
+	if (pEvent->GetEventID() == "KILL_PLAYER")
 	{
-		m_ptPosition = m_ptStartPosition;
+		if (m_bHasArmor == false)
+		{
+			m_ptPosition = m_ptStartPosition;
+		}
+		else
+		{
+			m_bHasArmor = false;
+		}
 	}
 }

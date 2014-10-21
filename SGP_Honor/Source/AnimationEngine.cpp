@@ -2,6 +2,13 @@
 #include "../TinyXML/tinyxml.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include <string>
+#include "IEntity.h"
+#include "Entity.h"
+#include "Player.h"
+#include <Windows.h>
+#include "Camera.h"
+#include "../SGD Wrappers/SGD_Event.h"
+#include "../SGD Wrappers/SGD_EventManager.h"
 
 #define relativePath std::string("../assets/graphics/")
 
@@ -16,7 +23,7 @@ AnimationEngine* AnimationEngine::s_pInstance = nullptr;
 //Instantiate ONE instance of the singleton
 AnimationEngine* AnimationEngine::GetInstance(void)
 {
-	if(s_pInstance == nullptr)
+	if (s_pInstance == nullptr)
 	{
 		s_pInstance = new AnimationEngine;
 	}
@@ -39,12 +46,19 @@ bool AnimationEngine::Initialize(void)
 	return true;
 }
 
-void AnimationEngine::Update(float elapsedTime, AnimTimeStamp& ts)
+void AnimationEngine::Update(float elapsedTime, AnimTimeStamp& ts, IEntity* sender)
 {
 	if (ts.IsPlaying() == false)
 		return;
 
 	ts.SetTimeWaited(ts.GetTimeWaited() + elapsedTime);
+
+	if (m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetEvent() != "none")
+	{
+		SGD::Event* pATEvent = new SGD::Event(m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetEvent().c_str(), nullptr, this);
+		SGD::EventManager::GetInstance()->SendEventNow(pATEvent);
+		pATEvent = nullptr;
+	}
 
 	if (ts.GetTimeWaited() >= m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetDuration())
 	{
@@ -64,11 +78,15 @@ void AnimationEngine::Update(float elapsedTime, AnimTimeStamp& ts)
 	}
 }
 
-void AnimationEngine::Render(SGD::Point position, float rotation, AnimTimeStamp& ts)
+void AnimationEngine::Render(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale, SGD::Point camerapos)
 {
+	float scaleX = scale;
+	if (flipped == false)
+		scaleX = -scaleX;
 	SGD::Rectangle frame = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetSourceRect();
 	SGD::Point anchor = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetAnchor();
-	SGD::GraphicsManager::GetInstance()->DrawTextureSection(m_mAnimationMap[ts.GetCurrAnimation()].GetImage(), { position.x - anchor.x, position.y - anchor.y }, frame, rotation);
+	SGD::GraphicsManager::GetInstance()->DrawTextureSection(m_mAnimationMap[ts.GetCurrAnimation()].GetImage(),
+	{ position.x - (anchor.x * scaleX) - camerapos.x, position.y - (anchor.y * scale) - camerapos.y }, frame, rotation, {}, {}, { scaleX, scale });
 }
 
 void AnimationEngine::Terminate(void)
@@ -80,6 +98,57 @@ void AnimationEngine::Terminate(void)
 		iter->second.UnloadTexture();
 	}
 
+}
+
+SGD::Rectangle AnimationEngine::GetRect(const AnimTimeStamp& ts, bool facingRight, float scale, SGD::Point position)
+{
+	SGD::Point anchor = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetAnchor();
+	SGD::Rectangle colRect = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetCollisionRect();
+	SGD::Rectangle renderRect = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetSourceRect();
+
+	SGD::Point plrAnchor = { position.x - anchor.x, position.y - anchor.y };
+	SGD::Point plrColOffset = { renderRect.left - colRect.left, renderRect.top - colRect.top };
+
+	SGD::Rectangle rect;
+	rect.left = plrAnchor.x - plrColOffset.x;
+	rect.top = plrAnchor.y - plrColOffset.y;
+	rect.right = rect.left + colRect.ComputeWidth();
+	rect.bottom = rect.top + colRect.ComputeHeight();
+
+	if (facingRight == false)
+	{
+		rect.left -= colRect.ComputeWidth() / 2.0f;
+		rect.right -= colRect.ComputeWidth() / 2.0f;
+	}
+	/*SGD::GraphicsManager::GetInstance()->DrawRectangle({ rect.left - Camera::GetInstance()->GetCameraPos().x,
+	rect.top - Camera::GetInstance()->GetCameraPos().y, rect.right - Camera::GetInstance()->GetCameraPos().x,
+	rect.bottom - Camera::GetInstance()->GetCameraPos().y }, SGD::Color{ 255, 255, 0, 0 });*/
+	return rect;
+}
+
+SGD::Rectangle AnimationEngine::GetAttackRect(const AnimTimeStamp& ts, bool facingRight, float scale, SGD::Point position)
+{
+	SGD::Point anchor = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetAnchor();
+	SGD::Rectangle atkRect = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetAttackRect();
+	SGD::Rectangle renderRect = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetSourceRect();
+	SGD::Point plrAnchor = { position.x - anchor.x, position.y - anchor.y };
+	SGD::Point plrAtkOffset = { renderRect.left - atkRect.left, renderRect.top - atkRect.top };
+
+	SGD::Rectangle rect;
+	rect.left = plrAnchor.x - plrAtkOffset.x;
+	rect.top = plrAnchor.y - plrAtkOffset.y;
+	rect.right = rect.left + renderRect.ComputeWidth();
+	rect.bottom = rect.top + renderRect.ComputeHeight();
+
+	if (facingRight == false)
+	{
+		rect.left -= atkRect.ComputeWidth() / 2.0f;
+		rect.right -= atkRect.ComputeWidth() / 2.0f;
+	}
+	/*SGD::GraphicsManager::GetInstance()->DrawRectangle({ rect.left - Camera::GetInstance()->GetCameraPos().x,
+	rect.top - Camera::GetInstance()->GetCameraPos().y, rect.right - Camera::GetInstance()->GetCameraPos().x,
+	rect.bottom - Camera::GetInstance()->GetCameraPos().y }, SGD::Color{ 255, 0, 0, 255 });*/
+	return rect;
 }
 
 

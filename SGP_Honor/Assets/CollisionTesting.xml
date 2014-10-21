@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations Character="Skeleton">
+  <Animation name="Walking" spritesheet="Skeleton.png" looping="1">
+    <Frame RenderRectLeft="7" RenderRectTop="176" RenderRectRight="75" RenderRectBottom="227" CollisionRectLeft="20" CollisionRectTop="176" CollisionRectRight="53" CollisionRectBottom="227" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="22" anchorpointY="49" />
+    <Frame RenderRectLeft="82" RenderRectTop="173" RenderRectRight="138" RenderRectBottom="227" CollisionRectLeft="89" CollisionRectTop="173" CollisionRectRight="120" CollisionRectBottom="227" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="13" anchorpointY="52" />
+    <Frame RenderRectLeft="145" RenderRectTop="171" RenderRectRight="192" RenderRectBottom="227" CollisionRectLeft="149" CollisionRectTop="171" CollisionRectRight="177" CollisionRectBottom="227" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="11" anchorpointY="54" />
+    <Frame RenderRectLeft="200" RenderRectTop="175" RenderRectRight="256" RenderRectBottom="227" CollisionRectLeft="218" CollisionRectTop="175" CollisionRectRight="248" CollisionRectBottom="227" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="26" anchorpointY="50" />
+    <Frame RenderRectLeft="264" RenderRectTop="173" RenderRectRight="317" RenderRectBottom="227" CollisionRectLeft="270" CollisionRectTop="173" CollisionRectRight="300" CollisionRectBottom="227" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="17" anchorpointY="52" />
+    <Frame RenderRectLeft="326" RenderRectTop="171" RenderRectRight="380" RenderRectBottom="227" CollisionRectLeft="328" CollisionRectTop="171" CollisionRectRight="362" CollisionRectBottom="227" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="10" anchorpointY="54" />
+  </Animation>
+  <Animation name="Idle" spritesheet="Skeleton.png" looping="0">
+    <Frame RenderRectLeft="324" RenderRectTop="344" RenderRectRight="407" RenderRectBottom="397" CollisionRectLeft="336" CollisionRectTop="344" CollisionRectRight="369" CollisionRectBottom="397" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="21" anchorpointY="50" />
+  </Animation>
+</Animations>

@@ -2,7 +2,7 @@
 
 #include "../SGD Wrappers/SGD_Geometry.h"	// Rectangle type
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
-
+#include "AnimTimeStamp.h"
 
 class Level;
 class Player;
@@ -41,6 +41,9 @@ public:
 
 	//Draw
 	void Draw(SGD::Rectangle _rect, SGD::Color _color);
+	void DrawAnimation(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped);
+	void DrawTexture(SGD::Point position, float rotation, SGD::HTexture m_hImage, bool flipped);
+	void DrawString(std::string str, SGD::Point position);
 
 	void Update(float _elapsedTime);
 

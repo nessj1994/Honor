@@ -16,8 +16,6 @@
 
 
 
-
-
 ////////////////////////////////////////////////////
 //////////// Foward Class Declarations ////////////
 class EntityManager;
@@ -76,15 +74,10 @@ public:
 	///////////////////// Factory Methods  ////////////////////
 	//void CreateHonor(int x, int y, int amount);
 	//void CreateActivator(int x, int y);
-	void CreateActivator(int _x, int _y, bool _isPressure, bool _currState, int _ID);
-	void CreateDoor(int _x, int _y, bool _isHorizontal, int _ID, int _size);
-	void CreateMovingPlatform(int _x, int _y, bool _vertical, float _turnDistance, float _speed);
-	void CreateGeyser(int x, int y);
-
 	//void CreateLaser(int x, int y);
 	//void CreateTurret(int x, int y);
 	//void CreateDoor(int x, int y);
-	
+	void CreateMovingPlatform(int _x, int _y, bool _vertical, float _turnDistance, float _speed);
 	//void CreateGeyser(int x, int y);
 	//void CreateLava(int x, int y);
 	void CreateFallingBlock(int _x, int _y);
@@ -134,10 +127,6 @@ private:
 	/////////////// Message Callback Funtion ////////////////
 	static void MessageProc(const SGD::Message* pMsg);
 
-	////////////////////////////////////////////////////////
-	/////////////////////// Assets ////////////////////////
-	SGD::HAudio  m_hBGM = SGD::INVALID_HANDLE;
-
 
 	//////////////////////////////////////////////////////////
 	/////////////////// Game Entities ///////////////////////
@@ -161,12 +150,10 @@ private:
 	BossDoor* m_pBDoor = nullptr;
 	Activator* m_pSwitch = nullptr;
 	Activator* m_pPressurePlate = nullptr;
-	Stalactite* m_pStalactite = nullptr;
-
 	BuzzSaw* m_pBuzzSaw = nullptr;
 	Turret* m_pTurret = nullptr;
 
-	
+	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
 
 };
 

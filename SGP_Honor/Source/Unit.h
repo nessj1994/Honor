@@ -3,6 +3,7 @@
 #include <map>
 
 #include "Animation.h"
+#include "AnimTimeStamp.h"
 
 class Hawk;
 
@@ -72,5 +73,7 @@ private:
 	float m_fDashTimer = 0.5f;
 	float m_fHawkTimer = 0.0f;
 
+protected:
+	AnimTimeStamp m_ts;
 };
 

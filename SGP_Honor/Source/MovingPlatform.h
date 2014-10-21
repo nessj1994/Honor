@@ -35,5 +35,4 @@ private:
 	float		m_fDistanceTraveled = 0.0f;
 	bool		m_bReturning = false;
 	std::vector<Entity*> m_vEntities;
-
 };
