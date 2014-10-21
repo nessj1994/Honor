@@ -99,5 +99,20 @@ void Activator::HandleCollision(const IEntity* pOther)
 		}
 
 	}
+
+
+	if (pOther->GetType() == ENT_HAWK)
+	{
+		if (m_bPressurePlate == false && m_fSwitchTimer == 0.0f)
+		{
+
+			//Open Door
+			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+			m_fSwitchTimer = 3.0f;
+		}
+
+	}
 }
 

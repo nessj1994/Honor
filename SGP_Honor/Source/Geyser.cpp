@@ -12,7 +12,7 @@ Geyser::Geyser()
 	m_szOrigSize = m_szSize;
 
 	m_bSPRAYED = true;
-
+	
 }
 
 
@@ -25,6 +25,8 @@ Geyser::~Geyser()
 void Geyser::Update(float elapsedTime)
 {
 	ChangePillar(100, elapsedTime);
+
+
 
 
 }
@@ -51,6 +53,13 @@ SGD::Rectangle Geyser::GetRect(void) const
 
 void Geyser::HandleCollision(const IEntity* pOther)
 {
+	if (pOther->GetType() == ENT_SPRAY)
+	{
+		m_bSPRAYED = true;
+
+		m_fSprayTimer = 4.0f;
+	}
+
 
 }
 
@@ -140,4 +149,14 @@ void Geyser::ChangePillar(int _height, float _delta)
 	}
 
 
+}
+
+int Geyser::GetType(void) const
+{
+	if (m_bSPRAYED == false)
+		return ENT_GEYSER;
+	else
+		return ENT_SOLID_WALL;
+
+	
 }

@@ -74,7 +74,6 @@ public:
 	///////////////////// Factory Methods  ////////////////////
 	//void CreateHonor(int x, int y, int amount);
 	//void CreateActivator(int x, int y);
-	//void CreateLaser(int x, int y);
 	//void CreateTurret(int x, int y);
 	//void CreateDoor(int x, int y);
 	void CreateMovingPlatform(int _x, int _y, bool _vertical, float _turnDistance, float _speed);
@@ -82,6 +81,14 @@ public:
 	void CreateDoor(int _x, int _y, bool _isHorizontal, int _ID, int _size);
 	void CreateFallingBlock(int _x, int _y);
 	void CreateGeyser(int x, int y);
+	void CreateLaser(int x, int y);
+
+	
+
+
+	void CreateLaser(int x, int y, SGD::Vector _direction, int _switchX, int _switchY);
+
+	
 
 	//void CreateGeyser(int x, int y);
 	//void CreateLava(int x, int y);
@@ -119,7 +126,7 @@ private:
 	void CreateBlocks(void);
 	void CreatePermFrozenTiles(void);
 	void CreateTempFrozenTiles(void);
-
+	
 
 	///////////////////////////////////////////////////////////
 	//////////////////// Save and Load ///////////////////////

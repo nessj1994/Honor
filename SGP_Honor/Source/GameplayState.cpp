@@ -32,8 +32,8 @@
 #include "Turret.h"
 #include "Stalactite.h"
 #include "Geyser.h"
-
-
+#include "laser.h"
+#include "Lava.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
@@ -125,8 +125,10 @@ void GameplayState::Enter(void) //Load Resources
 	CreatePermFrozenTiles();
 	CreateTempFrozenTiles();
 	CreateGeyser(100, 400);
+	CreateLaser(120, 500, { 1, 1 }, 200, 700);
+	CreateLaser(50, 700);
 
-
+	CreateMovingPlatform(1000, 500, false, 200, 100);
 
 	// Add Entities to the entity manager
 
@@ -278,14 +280,27 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BUZZSAW);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PROJ);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_GEYSER);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_LASER);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_LAVA);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MOVING_PLATFORM);
+
+
+
 
 	m_pEntities->CheckCollisions(Entity::ENT_TEMP_FREEZE, Entity::ENT_SPRAY);
+	m_pEntities->CheckCollisions(Entity::ENT_GEYSER, Entity::ENT_SPRAY);
+
 
 
 	m_pEntities->CheckCollisions(Entity::ENT_PROJ, Entity::ENT_BLOCK);
 	m_pEntities->CheckCollisions(Entity::ENT_FALLING_BLOCK, Entity::ENT_BLOCK);
 	m_pEntities->CheckCollisions(Entity::ENT_FALLING_BLOCK, Entity::ENT_PLAYER);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_STALACTITE);
+	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_SWITCH);
+	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_GEYSER);
+
+
 
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_PLAYER);
@@ -293,6 +308,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_PROJ);
 	m_pEntities->CheckWorldCollision(Entity::ENT_HAWK);
 	m_pEntities->CheckWorldCollision(Entity::ENT_STALACTITE);
+	m_pEntities->CheckWorldCollision(Entity::ENT_LASER);
 
 
 	//Process messages and events
@@ -684,8 +700,39 @@ void GameplayState::CreateGeyser(int _x, int _y)
 
 	m_pEntities->AddEntity(m_pGeyser, Entity::ENT_GEYSER);
 
-
+	m_pGeyser->Release(); 
 }
+
+
+void GameplayState::CreateLaser(int x, int y)
+{
+	Lava* m_pLava = new Lava;
+	m_pLava->SetPosition({ (float)x, (float)y });
+	m_pLava->SetOrigPosition({ (float)x, (float)y });
+	m_pEntities->AddEntity(m_pLava, Entity::ENT_LAVA);
+
+	m_pLava->Release();
+}
+
+void GameplayState::CreateLaser(int x, int y, SGD::Vector _direction, int _switchX, int _switchY)
+{
+	Laser* m_pLaser = new Laser;
+	m_pLaser->SetPosition({ (float)x, (float)y });
+	m_pLaser->SetOrigPosition({ (float)x, (float)y });
+	m_pLaser->SetDirection({ _direction });
+
+	Activator* m_pLaserSwitch = new Activator(false);
+	m_pLaserSwitch->SetPosition({ (float)_switchX, (float)_switchY });
+
+
+
+	m_pEntities->AddEntity(m_pLaser, Entity::ENT_LASER);
+	m_pEntities->AddEntity(m_pLaserSwitch, Entity::ENT_SWITCH);
+
+	m_pLaser->Release();
+}
+
+
 
 void GameplayState::CreateDoor(int _x, int _y, bool _isHorizontal, int _ID, int _size)
 {

@@ -15,7 +15,7 @@ public:
 	virtual void Update(float elapsedTime)  override;
 	virtual void Render(void) override;
 
-	virtual int GetType(void) const { return ENT_GEYSER; }
+	virtual int GetType(void) const override;
 	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
 
@@ -31,13 +31,13 @@ private:
 
 	//SGD::Rectangle m_rPillar = { m_ptPosition, m_szSize };
 
+	
+
+	bool m_bSPRAYED = false;
 	bool m_bRising = false;
 	bool m_bApex = false;
 	bool m_bFalling = false;
 	bool m_bResting = false;
-
-	bool m_bSPRAYED = false;
-
 
 	float m_fApexTimer = 2.0f;
 	float m_fSprayTimer = 4.0f;
