@@ -1,0 +1,23 @@
+<Animations	Character = "test">
+  <Animation	name = "testanim"	spritesheet = "Skeleton.png" looping = "1">
+    <Frame RenderRectLeft = "560"		RenderRectTop = "444"
+        RenderRectRight = "614"	RenderRectBottom = "498"
+        CollisionRectLeft = "0"	CollisionRectTop = "0"
+        CollisionRectRight = "0"	CollisionRectBottom = "0"
+        ActiveRectLeft = "0"	ActiveRectTop = "0"
+        ActiveRectRight = "0"	ActiveRectBottom = "0"
+        EventRectLeft = "0"		EventRectTop = "0"
+        EventRectRight = "0"	EventRectBottom = "0" event = "none"
+        duration = "0.5"   anchorpointX = "29"   anchorpointY = "53" />
+    
+    <Frame RenderRectLeft = "623"		RenderRectTop = "408"
+        RenderRectRight = "696"	RenderRectBottom = "498"
+        CollisionRectLeft = "0"	CollisionRectTop = "0"
+        CollisionRectRight = "0"	CollisionRectBottom = "0"
+        ActiveRectLeft = "0"	ActiveRectTop = "0"
+        ActiveRectRight = "0"	ActiveRectBottom = "0"
+        EventRectLeft = "0"		EventRectTop = "0"
+        EventRectRight = "0"	EventRectBottom = "0" event = "none"
+        duration = "0.5"   anchorpointX = "29"   anchorpointY = "89" />
+  </Animation>
+</Animations>

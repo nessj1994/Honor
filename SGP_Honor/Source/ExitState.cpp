@@ -1,0 +1,70 @@
+#include "ExitState.h"
+
+
+///////////////////////////////////////////////////////////
+///////////////////// Singleton Accessor /////////////////
+
+/////////////////////////////////////////////////////////
+// GetInstance
+// - allocate the static global instance
+// - return THE instance
+ExitState* ExitState::GetInstance(void)
+{
+	static ExitState s_Instance; //This is stored ONCE in global memory
+	return &s_Instance;
+}
+
+
+
+
+//////////////////////////////////////////////////////////////
+//////////////////// IGameState Interface ///////////////////
+
+
+
+///////////////////////////////////////////////////
+// Enter
+// - Reset the game
+// - Load the resources
+// - set up entities
+void ExitState::Enter(void) //Load Resources
+{
+
+}
+
+
+/////////////////////////////////////////////////
+// Exit
+// - Deallocate all entities
+// - unload all resources
+void ExitState::Exit(void)
+{
+
+}
+
+
+/////////////////////////////////////////////////
+// Input
+// - Handle the user's input
+bool ExitState::Input(void) //Hanlde user Input
+{
+
+	return true;
+}
+
+//////////////////////////////////////////////
+// Update
+// - Update all game entities
+void ExitState::Update(float elapsedTime)
+{
+
+}
+
+/////////////////////////////////////////////
+// Render
+// - Render all game entities
+void ExitState::Render(void)
+{
+
+
+}

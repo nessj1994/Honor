@@ -1,0 +1,557 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{d7410f5d-e805-4873-bb4f-ad931a59faba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Miscellaneous">
+      <UniqueIdentifier>{eee0ba67-827a-47c9-94f1-877de11ab7e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game States">
+      <UniqueIdentifier>{798cc33f-6548-4a1c-9438-1a10dc8f8bcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Messages">
+      <UniqueIdentifier>{3d30e334-9da4-43e3-958a-850f5d63beba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Events">
+      <UniqueIdentifier>{7a15c39b-10f5-41a4-97e3-afa008cac798}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{1066d207-aa4c-4663-aaa7-544a3f7c9617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Enemies">
+      <UniqueIdentifier>{5ad4edc1-e152-4c7e-bac5-35c581b69060}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Obstacles">
+      <UniqueIdentifier>{a4363337-81cd-450b-8436-f13f6a7482ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Player">
+      <UniqueIdentifier>{87a53bae-10b2-4638-b7ef-52364995ca18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Base">
+      <UniqueIdentifier>{810c7083-719a-4f5f-8802-6b8ab49efa00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engines">
+      <UniqueIdentifier>{7d384361-d0b5-4316-8780-309eaf1a79ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engines\Animation">
+      <UniqueIdentifier>{f03c5c21-7243-418d-894b-9534194398d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engines\Particle">
+      <UniqueIdentifier>{2ace82dd-e07c-4c84-a47a-75bf8c16f9be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engines\Tile">
+      <UniqueIdentifier>{a292a9fb-52ff-49b7-94a6-54d0dabfa861}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Spells">
+      <UniqueIdentifier>{7a8820c4-15b9-4880-a631-1718ef62a11c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Collectibles">
+      <UniqueIdentifier>{826e9771-4079-4ca8-8ad7-9eba9f710f82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SGD Wrappers">
+      <UniqueIdentifier>{48edb1c3-8536-4c22-9a23-c556aeb2c1a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TinyXML">
+      <UniqueIdentifier>{4f101775-377c-430d-bfca-e1acc7f71cca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BitmapFont">
+      <UniqueIdentifier>{4ecad214-2981-4016-b980-79218ecbde73}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Source\WinMain.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Game.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\AnchorPointAnimation.cpp">
+      <Filter>Miscellaneous</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Yeti.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Wizard.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Caveman.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Crab.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Bull.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Boss.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Enemy.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Player.cpp">
+      <Filter>Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Unit.cpp">
+      <Filter>Entities\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Projectile.cpp">
+      <Filter>Entities\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Entity.cpp">
+      <Filter>Entities\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Emitter.cpp">
+      <Filter>Engines\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Particle.cpp">
+      <Filter>Engines\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ParticleEngine.cpp">
+      <Filter>Engines\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Animation.cpp">
+      <Filter>Engines\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\AnimationEngine.cpp">
+      <Filter>Engines\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Frame.cpp">
+      <Filter>Engines\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Level.cpp">
+      <Filter>Engines\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Layer.cpp">
+      <Filter>Engines\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\World.cpp">
+      <Filter>Engines\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Ice.cpp">
+      <Filter>Entities\Spells</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Dash.cpp">
+      <Filter>Entities\Spells</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Bounce.cpp">
+      <Filter>Entities\Spells</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Hawk.cpp">
+      <Filter>Entities\Spells</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ProfileState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\CreditsState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ExitState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\GameplayState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\InstructionsState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\OptionsState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\EntityManager.cpp">
+      <Filter>Entities\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SGD Wrappers\SGD_AudioManager.cpp">
+      <Filter>SGD Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SGD Wrappers\SGD_Event.cpp">
+      <Filter>SGD Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SGD Wrappers\SGD_EventManager.cpp">
+      <Filter>SGD Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SGD Wrappers\SGD_Geometry.cpp">
+      <Filter>SGD Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SGD Wrappers\SGD_GraphicsManager.cpp">
+      <Filter>SGD Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SGD Wrappers\SGD_InputManager.cpp">
+      <Filter>SGD Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SGD Wrappers\SGD_Listener.cpp">
+      <Filter>SGD Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SGD Wrappers\SGD_Message.cpp">
+      <Filter>SGD Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SGD Wrappers\SGD_MessageManager.cpp">
+      <Filter>SGD Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Turret.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Activator.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\BuzzSaw.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Door.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\FallingBlock.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\FreezeableGround.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Geyser.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\HintStatue.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Laser.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Lava.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MovingPlatform.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Pendulum.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Stalactite.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Block.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Honor.cpp">
+      <Filter>Entities\Collectibles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Armor.cpp">
+      <Filter>Entities\Collectibles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TinyXML\tinystr.cpp">
+      <Filter>TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TinyXML\tinyxml.cpp">
+      <Filter>TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TinyXML\tinyxmlerror.cpp">
+      <Filter>TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TinyXML\tinyxmlparser.cpp">
+      <Filter>TinyXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MainMenuState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Camera.cpp">
+      <Filter>Engines\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\CreateProjectileMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\DestroyEntityMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Letter.cpp">
+      <Filter>BitmapFont</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Font.cpp">
+      <Filter>BitmapFont</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\BitmapFont.cpp">
+      <Filter>BitmapFont</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PauseState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\AnimTimeStamp.cpp">
+      <Filter>Engines\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\CreateSprayMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\LevelCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+<<<<<<< HEAD
+    <ClCompile Include="..\Source\CreateHawkMessage.cpp">
+      <Filter>Messages</Filter>
+=======
+    <ClCompile Include="..\source\BossDoor.cpp">
+      <Filter>Entities\Obstacles</Filter>
+>>>>>>> a8ab10883f5a48f3516e35e10ab78ba2c2ad62f9
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\Game.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\AnchorPointAnimation.h">
+      <Filter>Miscellaneous</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Yeti.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Wizard.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Crab.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Caveman.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Bull.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Boss.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Player.h">
+      <Filter>Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Unit.h">
+      <Filter>Entities\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Projectile.h">
+      <Filter>Entities\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\IEntity.h">
+      <Filter>Entities\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Entity.h">
+      <Filter>Entities\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Enemy.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Particle.h">
+      <Filter>Engines\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ParticleEngine.h">
+      <Filter>Engines\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Emitter.h">
+      <Filter>Engines\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Frame.h">
+      <Filter>Engines\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\AnimationEngine.h">
+      <Filter>Engines\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Animation.h">
+      <Filter>Engines\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Layer.h">
+      <Filter>Engines\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Level.h">
+      <Filter>Engines\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\World.h">
+      <Filter>Engines\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Ice.h">
+      <Filter>Entities\Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Dash.h">
+      <Filter>Entities\Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Bounce.h">
+      <Filter>Entities\Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Hawk.h">
+      <Filter>Entities\Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ProfileState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\CreditsState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ExitState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\GameplayState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\IGameState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\InstructionsState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\OptionsState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\EntityManager.h">
+      <Filter>Entities\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_AudioManager.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_Color.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_Declarations.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_Event.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_EventManager.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_Geometry.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_GraphicsManager.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_Handle.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_HandleManager.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_HandleManager.hpp">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_InputManager.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_Key.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_Listener.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_Message.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_MessageManager.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SGD Wrappers\SGD_String.h">
+      <Filter>SGD Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Turret.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Activator.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Block.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\BuzzSaw.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Door.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\FallingBlock.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\FreezeableGround.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Geyser.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\HintStatue.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Laser.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Lava.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MovingPlatform.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Pendulum.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Stalactite.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Honor.h">
+      <Filter>Entities\Collectibles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Armor.h">
+      <Filter>Entities\Collectibles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TinyXML\tinystr.h">
+      <Filter>TinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TinyXML\tinyxml.h">
+      <Filter>TinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MainMenuState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MessageID.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Camera.h">
+      <Filter>Engines\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\CreateProjectileMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\DestroyEntityMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\BitmapFont.h">
+      <Filter>BitmapFont</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Font.h">
+      <Filter>BitmapFont</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Letter.h">
+      <Filter>BitmapFont</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PauseState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\AnimTimeStamp.h">
+      <Filter>Engines\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\BossDoor.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\CreateSprayMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\LevelCollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\CreateHawkMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

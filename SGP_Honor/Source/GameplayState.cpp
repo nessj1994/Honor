@@ -1,0 +1,781 @@
+#include "GameplayState.h"
+
+
+#include "Game.h"
+#include "MainMenuState.h"
+#include "Emitter.h"
+#include "Level.h"
+#include "AnimationEngine.h"
+#include "MessageID.h"
+#include "DestroyEntityMessage.h"
+#include "CreateProjectileMessage.h"
+#include "CreateSprayMessage.h"
+#include "CreateHawkMessage.h"
+#include "MovingPlatform.h"
+
+#include "Entity.h"
+#include "Projectile.h"
+#include "Player.h"
+#include "EntityManager.h"
+#include "Camera.h"
+#include "ParticleEngine.h"
+#include "Block.h"
+#include "FreezeableGround.h"
+#include "PauseState.h"
+#include "FallingBlock.h"
+#include "Door.h"
+#include "BossDoor.h"
+#include "Activator.h"
+#include "Ice.h"
+#include "Hawk.h"
+#include "MovingPlatform.h"
+#include "Stalactite.h"
+#include "Geyser.h"
+#include "BuzzSaw.h"
+#include "Turret.h"
+
+#include "../SGD Wrappers/SGD_AudioManager.h"
+#include "../SGD Wrappers/SGD_GraphicsManager.h"
+#include "../SGD Wrappers/SGD_InputManager.h"
+#include "../SGD Wrappers/SGD_String.h"
+#include "../SGD Wrappers/SGD_EventManager.h"
+#include "../SGD Wrappers/SGD_Event.h"
+#include "../SGD Wrappers/SGD_MessageManager.h"
+#include "../TinyXML/tinyxml.h"
+
+
+#include <cassert>
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
+///////////////////////////////////////////////////////////
+///////////////////// Singleton Accessor /////////////////
+
+/////////////////////////////////////////////////////////
+// GetInstance
+// - allocate the static global instance
+// - return THE instance
+GameplayState* GameplayState::GetInstance(void)
+{
+	static GameplayState s_Instance; //This is stored ONCE in global memory
+	return &s_Instance;
+}
+
+
+
+
+//////////////////////////////////////////////////////////////
+//////////////////// IGameState Interface ///////////////////
+
+
+
+///////////////////////////////////////////////////
+// Enter
+// - Reset the game
+// - Load the resources
+// - set up entities
+void GameplayState::Enter(void) //Load Resources
+{
+	//Create Local references to the SGD Wrappers
+	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+
+	//Set the background color
+	SGD::GraphicsManager::GetInstance()->SetClearColor({ 0, 0, 0 }); //Black
+
+	//Allocate the Entity Manager
+	m_pEntities = new EntityManager;
+
+	//Initialize the Event and Message Managers
+	SGD::EventManager::GetInstance()->Initialize();
+	SGD::MessageManager::GetInstance()->Initialize(&MessageProc);
+
+
+	//Load Assets here
+	m_pLevel = new Level();
+	m_pLevel->LoadLevel("../Assets/TestLevel.xml");
+
+
+
+
+	//Load Audio
+	m_hBGM = pAudio->LoadAudio(L"../Assets/Audio/HonorBGM.xwm");
+
+	//These are only for testing and will be removed later
+	m_pDoor = new Door();
+	m_pBDoor = new BossDoor();
+	m_pFBlock = new FallingBlock();
+	m_pSwitch = new Activator(false);
+	m_pPressurePlate = new Activator(true);
+	m_pStalactite = new Stalactite();
+	m_pBuzzSaw = new BuzzSaw();
+	m_pTurret = new Turret();
+
+
+	//Create player with factory method
+	m_pPlayer = CreatePlayer();
+
+	//Load the game
+	LoadGame();
+
+	Camera::GetInstance()->SetPlayer(m_pPlayer);
+
+	//Add factory methods to put entities in the manager
+	CreateBlocks();
+	CreatePermFrozenTiles();
+	CreateGeyser(100, 400);
+	CreateTempFrozenTiles();
+
+
+
+	// Add Entities to the entity manager
+
+	m_pEntities->AddEntity(m_pPlayer, Entity::ENT_PLAYER);
+
+	//Remove this test code later
+	m_pEntities->AddEntity(m_pFBlock, Entity::ENT_FALLING_BLOCK);
+	m_pEntities->AddEntity(m_pDoor, Entity::ENT_DOOR);
+	m_pEntities->AddEntity(m_pBDoor, Entity::ENT_BOSS_DOOR);
+	m_pEntities->AddEntity(m_pSwitch, Entity::ENT_SWITCH);
+	m_pEntities->AddEntity(m_pBuzzSaw, Entity::ENT_BUZZSAW);
+	m_pEntities->AddEntity(m_pTurret, Entity::ENT_TURRET);
+	m_pEntities->AddEntity(m_pStalactite, Entity::ENT_STALACTITE);
+
+	m_pDoor->SetActivator(m_pSwitch);
+
+
+
+	
+	//For Particle Testing
+	//m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test");
+	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("RotationTest.xml", "Test", { -100, -100 });
+	AnimationEngine::GetInstance()->LoadAnimation("../Assets/testSkelleton.xml");
+	ts.SetCurrAnimation("Swing");
+	ts2.SetCurrAnimation("SwordDraw");
+	ts3.SetCurrAnimation("SwordDraw");
+}
+
+
+/////////////////////////////////////////////////
+// Exit
+// - Deallocate all entities
+// - unload all resources
+void GameplayState::Exit(void)
+{
+
+	//Save the game
+	SaveGame();
+
+
+	if (m_pEntities != nullptr)
+	{
+		//Deallocate the Entity Manager
+		m_pEntities->RemoveAll();
+		delete m_pEntities;
+		m_pEntities = nullptr;
+	}
+
+	delete m_pBDoor;
+	delete m_pDoor;
+	delete m_pSwitch;
+	delete m_pPressurePlate;
+	delete m_pBuzzSaw;
+	delete m_pTurret;
+	delete m_pStalactite;
+
+	if(m_pPlayer != nullptr)
+	{
+		m_pPlayer->Release();
+	}
+
+	if (m_pFBlock)
+	{
+		m_pFBlock->Release();
+	}
+	//Create local references to the SGD Wrappers
+
+	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+	ParticleEngine::GetInstance()->Terminate();
+	ParticleEngine::GetInstance()->DeleteInstance();
+
+
+
+
+	//Unload Assets
+	//Level
+	delete m_pLevel;
+
+	AnimationEngine::GetInstance()->Terminate();
+	AnimationEngine::GetInstance()->DeleteInstance();
+
+	//Graphics
+
+
+	//Audio
+	pAudio->UnloadAudio(m_hBGM);
+
+
+
+	//Terminate and deallocate the SGD Wrappers
+	//event manager
+	SGD::EventManager::GetInstance()->Terminate();
+	SGD::EventManager::GetInstance()->DeleteInstance();
+
+	//message manager
+	SGD::MessageManager::GetInstance()->Terminate();
+	SGD::MessageManager::GetInstance()->DeleteInstance();
+}
+
+
+/////////////////////////////////////////////////
+// Input
+// - Handle the user's input
+bool GameplayState::Input(void) //Hanlde user Input
+{
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+	//DOOR TEST This will be removed later
+	if(pInput->IsKeyPressed(SGD::Key::X))
+	{
+		m_pDoor->SetOpen(!(m_pDoor->GetOpen()));
+	}
+	if(pInput->IsKeyPressed(SGD::Key::H))
+	{
+		m_pPlayer->SetHonorCollected(m_pPlayer->GetHonorCollected() + 50);
+		//Gained Honor event for certain doors
+		SGD::Event* pATEvent = new SGD::Event("HONOR_GAINED", nullptr, m_pPlayer);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
+
+	}
+
+	if (pInput->IsKeyPressed(SGD::Key::P)
+		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
+	{
+		Game::GetInstance()->AddState(PauseState::GetInstance());
+	}
+
+	return true;
+}
+
+//////////////////////////////////////////////
+// Update
+// - Update all game entities
+void GameplayState::Update(float elapsedTime)
+{
+
+	//	m_pCamera->Update(elapsedTime);
+	if (testtime <= 0.3f)
+		testtime += elapsedTime;
+
+	//m_pEmitter->Update(elapsedTime);
+	m_pEmitter2->Update(elapsedTime);
+	float x = elapsedTime;
+	
+	m_pEntities->UpdateAll(elapsedTime);
+	Camera::GetInstance()->Update(elapsedTime);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BLOCK);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PERM_FREEZE);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TEMP_FREEZE);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_DOOR);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_SWITCH);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BUZZSAW);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PROJ);
+
+	m_pEntities->CheckCollisions(Entity::ENT_TEMP_FREEZE, Entity::ENT_SPRAY);
+
+
+	m_pEntities->CheckCollisions(Entity::ENT_PROJ, Entity::ENT_SOLID_WALL);
+	m_pEntities->CheckCollisions(Entity::ENT_FALLING_BLOCK, Entity::ENT_BLOCK);
+	m_pEntities->CheckCollisions(Entity::ENT_FALLING_BLOCK, Entity::ENT_PLAYER);
+
+	m_pEntities->CheckWorldCollision(Entity::ENT_PLAYER);
+	m_pEntities->CheckWorldCollision(Entity::ENT_FALLING_BLOCK);
+	m_pEntities->CheckWorldCollision(Entity::ENT_PROJ);
+	m_pEntities->CheckWorldCollision(Entity::ENT_HAWK);
+	m_pEntities->CheckWorldCollision(Entity::ENT_STALACTITE);
+
+
+
+	//Process messages and events
+	SGD::EventManager::GetInstance()->Update();
+	ts.SetPlaying(true);
+	AnimationEngine::GetInstance()->Update(elapsedTime, ts);
+	ts2.SetPlaying(true);
+	AnimationEngine::GetInstance()->Update(elapsedTime, ts2);
+	if (testtime > 0.3f)
+	{
+		ts3.SetPlaying(true);
+		AnimationEngine::GetInstance()->Update(elapsedTime, ts3);
+	}
+
+
+	SGD::MessageManager::GetInstance()->Update();
+}
+
+/////////////////////////////////////////////
+// Render
+// - Render all game entities
+void GameplayState::Render(void)
+{
+	m_pLevel->RenderImageLayer(true);
+	m_pLevel->Render();
+	//m_pEmitter->Render();
+	m_pEmitter2->Render({ m_pPlayer->GetPosition().x - Camera::GetInstance()->GetCameraPos().x, m_pPlayer->GetPosition().y - Camera::GetInstance()->GetCameraPos().y });
+	AnimationEngine::GetInstance()->Render(SGD::Point(200, 200), 0, ts);
+	AnimationEngine::GetInstance()->Render(SGD::Point(400, 200), 0, ts2);
+	if (testtime > 0.3f)
+	{
+		AnimationEngine::GetInstance()->Render(SGD::Point(500, 200), 0, ts3);
+	}
+	m_pEntities->RenderAll();
+	m_pLevel->RenderImageLayer(false);
+
+
+}
+
+//Static Message callback function
+void GameplayState::MessageProc(const SGD::Message* pMsg)
+{
+
+	//Show warning when a message ID enumerator is not handled
+#pragma warning (push)
+#pragma warning (1 : 4061)
+
+	//What type of message is this
+	switch (pMsg->GetMessageID())
+	{
+	case MessageID::MSG_DESTROY_ENTITY:
+	{
+										  //Downcast to the real message type
+										  const DestroyEntityMessage* pDestroyMsg =
+											  dynamic_cast<const DestroyEntityMessage*>(pMsg);
+
+										  //Make sure the message isnt a nullptr
+										  assert(pDestroyMsg != nullptr
+											  && "GameplayState::MessageProc - MSG_DESTROY_ENTITY is not actually a DestroyEntityMessage");
+
+										  //get the message's entity
+										  Entity* ptr = pDestroyMsg->GetEntity();
+
+										  //Use the singleton to access the entity manager
+										  if (ptr != nullptr)
+										  {
+											  GameplayState::GetInstance()->m_pEntities->RemoveEntity(ptr);
+										  }
+
+										  break;
+	}
+	case MessageID::MSG_CREATE_PROJECTILE:
+	{
+											 //Downcast to the real message type
+											 const CreateProjectileMessage* pCreateMsg =
+												 dynamic_cast<const CreateProjectileMessage*>(pMsg);
+
+											 //Make sure the message isn't a nullptr
+											 assert(pCreateMsg != nullptr
+												 && "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
+
+											 //Create a local reference to the gameplaystate singleton
+											 GameplayState* pSelf = GameplayState::GetInstance();
+
+
+											 //Play the projectile's audio sound
+
+											 //Call CreateProjectile factory method sending in the messages projectile
+											 Entity* pProj = pSelf->CreateProjectile(pCreateMsg->GetOwner());
+
+
+											 if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+											 { 
+												 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+											 }
+											 else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_TURRET)
+											 {
+												 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+											 }
+
+											 // if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+											 // {
+											 //	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_PLAYER_PROJ);
+											 // }
+											 // else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+											 // {
+											 //	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_ENEMY_PROJ);
+											 // }
+
+											 pProj->Release();
+											 pProj = nullptr;
+
+
+											 break;
+	}
+	case MessageID::MSG_CREATE_SPRAY:
+	{
+
+										//Downcast to the real message type
+										const CreateSprayMessage* pCreateMsg =
+											dynamic_cast<const CreateSprayMessage*>(pMsg);
+
+										//Make sure the message isn't a nullptr
+										assert(pCreateMsg != nullptr
+											&& "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
+
+										//Create a local reference to the gameplaystate singleton
+										GameplayState* pSelf = GameplayState::GetInstance();
+
+
+										//Play the projectile's audio sound
+
+										//Call CreateProjectile factory method sending in the messages projectile
+										Entity* pProj = pSelf->CreateSpray(pCreateMsg->GetOwner());
+
+
+										if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+										{
+											pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+										}
+										else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+										{
+											pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+										}
+
+										// if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+										// {
+										//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_PLAYER_PROJ);
+										// }
+										// else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+										// {
+										//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_ENEMY_PROJ);
+										// }
+
+										pProj->Release();
+										pProj = nullptr;
+
+
+										break;
+
+	}
+	case MessageID::MSG_CREATE_HAWK:
+	{
+
+									   //Downcast to the real message type
+									   const CreateHawkMessage* pCreateMsg =
+										   dynamic_cast<const CreateHawkMessage*>(pMsg);
+
+									   //Make sure the message isn't a nullptr
+									   assert(pCreateMsg != nullptr
+										   && "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
+
+									   //Create a local reference to the gameplaystate singleton
+									   GameplayState* pSelf = GameplayState::GetInstance();
+
+
+									   //Play the projectile's audio sound
+
+
+									   //Call CreateProjectile factory method sending in the messages projectile
+									   Entity* pProj = pSelf->CreateHawk(pCreateMsg->GetOwner());
+
+
+									   if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+									   {
+										   pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_HAWK);
+
+
+									   }
+									   else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+									   {
+										   pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_HAWK);
+									   }
+
+									   pProj->Release();
+									   pProj = nullptr;
+
+
+									   break;
+
+	}
+	case MessageID::MSG_UNKNOWN:
+	{
+								   OutputDebugStringW(L"Game::MessageProc - unknown message id\n");
+								   break;
+	}
+	default:
+	{
+
+			   break;
+	}
+	}
+
+
+}
+
+
+///////////////////////////////////////////////////////////
+//////////////////// Factory Methods /////////////////////
+
+//Creates a new projectile to be added to the entity manager
+Entity* GameplayState::CreateProjectile(Entity* pOwner) const
+{
+	Projectile* proj = new Projectile();
+	if (pOwner->GetDirection().x == 1)
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + +pOwner->GetSize().height / 2));
+	else
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+
+	proj->SetSize({ 40, 40 });
+	proj->SetDirection({ pOwner->GetDirection() });
+	//proj->SetVelocity({ pOwner->GetDirection() });
+	proj->SetOwner(pOwner);
+
+	return proj;
+
+}
+
+//Creates a new projectile to be added to the entity manager
+Entity* GameplayState::CreateSpray(Entity* pOwner) const
+{
+	Ice* proj = new Ice;
+	if (pOwner->GetDirection().x == 1)
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + +pOwner->GetSize().height / 2));
+	else
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+
+	proj->SetSize({ 4, 4 });
+	proj->SetDirection({ pOwner->GetDirection().x, -1 });
+	//proj->SetVelocity({ pOwner->GetDirection() });
+	proj->SetOwner(pOwner);
+
+	return proj;
+
+}
+
+
+Hawk* GameplayState::CreateHawk(Entity* pOwner) const
+{
+	Hawk* proj = new Hawk;
+	if (pOwner->GetDirection().x == 1)
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + +pOwner->GetSize().height / 2));
+	else
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+
+	proj->SetSize({ 10, 10 });
+	proj->SetDirection({ pOwner->GetDirection() });
+	proj->SetOwner(pOwner);
+	//pOwner->SetHawkPtr(proj);
+	m_pPlayer->SetHawkPtr(proj);
+
+	return proj;
+
+}
+
+
+
+/////////////////////////////////////////////
+// Factory Methods
+// - Creates character class
+Player* GameplayState::CreatePlayer(void)
+{
+	Player* pPlayer = new Player;
+
+	pPlayer->SetPosition(SGD::Point(100, 100));
+	pPlayer->SetSize(SGD::Size(64, 64));
+
+	return pPlayer;
+
+
+
+}
+
+void GameplayState::CreateBlocks(void)
+{
+
+
+	for (unsigned int i = 0; i < 10; i++)
+	{
+		Block* pBlock_1 = new Block;
+
+		pBlock_1->SetPosition(SGD::Point(100 + (i * 20), 400));
+		pBlock_1->SetSize(SGD::Size(20, 20));
+
+		m_pEntities->AddEntity(pBlock_1, Entity::ENT_BLOCK);
+
+		pBlock_1->Release();
+	}
+
+	for (unsigned int i = 0; i < 40; i++)
+	{
+		Block* pBlock_2 = new Block;
+
+		pBlock_2->SetPosition(SGD::Point(600, 380 - (i * 20)));
+		pBlock_2->SetSize(SGD::Size(20, 20));
+
+		m_pEntities->AddEntity(pBlock_2, Entity::ENT_BLOCK);
+
+		pBlock_2->Release();
+	}
+
+}
+
+void GameplayState::CreatePermFrozenTiles(void)
+{
+
+	for (unsigned int i = 0; i < 10; i++)
+	{
+		FreezeableGround* pFreeze = new FreezeableGround;
+
+
+		//// TYPE STATE WILL CHANGE ( Needs to be done through TYPE with enttiyManger) Two types for each frozen tile === It's Current state and it's Bucket type (temp or perm tile)
+		pFreeze->SetType(Entity::ENT_FROZEN);
+
+		pFreeze->SetSize(SGD::Size(20, 20));
+		pFreeze->SetPosition(SGD::Point(300 + (i * 20), 400));
+		pFreeze->SetIsFrozen(true);
+		pFreeze->SetIsPerm(true);
+
+		////// TYPE OF TILE Bucket
+		m_pEntities->AddEntity(pFreeze, Entity::ENT_PERM_FREEZE);
+
+		pFreeze->Release();
+	}
+
+
+}
+
+
+void GameplayState::CreateTempFrozenTiles(void)
+{
+	for (unsigned int i = 0; i < 10; i++)
+	{
+		FreezeableGround* pFreeze = new FreezeableGround;
+
+		//// TYPE STATE WILL CHANGE ( Needs to be done through TYPE with enttiyManger) Two types for each frozen tile === It's Current state and it's Bucket type (temp or perm tile)
+		pFreeze->SetType(Entity::ENT_NOT_FROZEN);
+
+		pFreeze->SetSize(SGD::Size(20, 20));
+		pFreeze->SetPosition(SGD::Point(500 + (i * 20), 400));
+		pFreeze->SetIsFrozen(false);
+		pFreeze->SetIsPerm(false);
+
+		////// TYPE OF TILE Bucket
+		m_pEntities->AddEntity(pFreeze, Entity::ENT_TEMP_FREEZE);
+
+		pFreeze->Release();
+	}
+
+}
+
+#pragma region Entity factory methods
+
+/////////////////////////
+// CreateMovingPlatform
+// -Creates a moving platform at the given coordinates
+void GameplayState::CreateMovingPlatform(int _x, int _y, bool _vertical, float _turnDistance, float _speed)
+{
+	MovingPlatform * mPlatform = new MovingPlatform();
+	mPlatform->SetPosition({ (float)_x, (float)_y });
+	mPlatform->SetSize({ 128.0f, 32.0f });
+	mPlatform->SetVertical(_vertical);
+	mPlatform->SetTurnDistance(_turnDistance);
+	mPlatform->SetSpeed(_speed);
+	m_pEntities->AddEntity(mPlatform, Entity::ENT_MOVING_PLATFORM);
+	mPlatform->Release();
+}
+
+/////////////////////////
+// CreateFallingBlock
+// -Creates a falling block at the given coordinates
+void GameplayState::CreateFallingBlock(int _x, int _y)
+{
+	FallingBlock * fBlock = new FallingBlock();
+	fBlock->SetPosition({ (float)_x, (float)_y });
+	m_pEntities->AddEntity(fBlock, Entity::ENT_FALLING_BLOCK);
+	fBlock->Release();
+}
+
+void GameplayState::CreateActivator(int _x, int _y, bool _isPressure, bool _currState, int _ID)
+{
+	Activator * pActivator = new Activator(_isPressure);
+	pActivator->SetPosition({ (float)_x, (float)_y });
+	pActivator->SetOn(_currState);
+	pActivator->SetKeyID(_ID);
+	m_pEntities->AddEntity(pActivator, Entity::ENT_SWITCH);
+	pActivator->Release();
+}
+
+void GameplayState::CreateDoor(int _x, int _y, bool _isHorizontal, int _ID, int _size)
+{
+	Door * pDoor = new Door();
+	pDoor->SetPosition({ (float)_x, (float)_y });
+	if (_isHorizontal)
+	{
+		pDoor->SetSize({ 32.0f * _size, 32.0f });
+	}
+	else
+	{
+		pDoor->SetSize({ 32.0f, 32.0f * _size });
+	}
+	pDoor->SetKeyID(_ID);
+	pDoor->SetLength(_size);
+	m_pEntities->AddEntity(pDoor, Entity::ENT_DOOR);
+	pDoor->Release();
+}
+
+
+
+void GameplayState::CreateGeyser(int _x, int _y)
+{
+	Geyser* m_pGeyser = new Geyser;
+	m_pGeyser->SetPosition({ (float)_x, (float)_y });
+	m_pGeyser->SetOrigPosition({ (float)_x, (float)_y });
+
+	m_pEntities->AddEntity(m_pGeyser, Entity::ENT_GEYSER);
+
+
+}
+
+
+#pragma endregion
+
+void GameplayState::SaveGame()
+{
+	
+	//Create the doc
+	TiXmlDocument doc;
+
+	//Create the declaraction
+	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
+	doc.LinkEndChild(decl);
+
+	//Create the root element
+	TiXmlElement* rootElement = new TiXmlElement("savefile");
+	doc.LinkEndChild(rootElement);
+
+	TiXmlElement* element = new TiXmlElement("player");
+	rootElement->LinkEndChild(element);
+	element->SetAttribute("x", m_pPlayer->GetPosition().x);
+	element->SetAttribute("y", m_pPlayer->GetPosition().y);
+	doc.SaveFile("../Assets/SaveGame.xml");
+}
+
+void GameplayState::LoadGame()
+{
+	//Create the doc
+	TiXmlDocument doc;
+
+	doc.LoadFile("../Assets/SaveGame.xml");
+
+	TiXmlElement* pRoot = doc.RootElement();
+
+	TiXmlElement* pPlayer = pRoot->FirstChildElement("player");
+
+	int x;
+	int y;
+
+	pPlayer->Attribute("x", &x);
+	pPlayer->Attribute("y", &y);
+
+	m_pPlayer->SetPosition(SGD::Point( x, y ));
+}

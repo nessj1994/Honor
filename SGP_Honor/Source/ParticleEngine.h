@@ -1,0 +1,44 @@
+#pragma once
+
+#include "Emitter.h"
+#include <map>
+
+
+class ParticleEngine
+{
+public:
+
+	//////////////////////////////////////////////////////////////////////////
+	////////////////////////Singleton Accessors//////////////////////////////
+	static ParticleEngine* GetInstance(void);
+	static void DeleteInstance(void);
+
+	/////////////////////////////////////////////////////////////////////////
+	/////////////////////////Setup, Play, Cleanup///////////////////////////
+	bool Initialize(void);
+	int Update(void);
+	void Terminate(void);
+
+
+	/////////////////////////////////////////////////////////////////////////
+	///////////////////////////////Interface////////////////////////////////
+	Emitter* LoadEmitter(std::string filePath,std::string Name,SGD::Point _Point);
+
+	////////////////////////////////////////////////////////////////////////
+	////////////////////////////Accessors//////////////////////////////////
+	//Emitter& GetEmitter(std::string emitterName) const { return new Emitter(); }
+
+
+private:
+	static ParticleEngine* s_pInstance;
+
+	ParticleEngine() = default;
+	virtual ~ParticleEngine() = default;
+
+	ParticleEngine(const ParticleEngine&) = delete;
+	ParticleEngine& operator= (const ParticleEngine&) = delete;
+
+	std::map<std::string, Emitter*> m_mEmitterMap;
+
+};
+

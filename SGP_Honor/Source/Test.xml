@@ -1,0 +1,6 @@
+<Particles Name="Test" >
+  <Emitter Position_X="500" Position_Y="500" Width="100" Height="100" Looping="1" Max_Particles="20">
+    <Particles_Max Width="50" Height="50" LifeSpan="1" AlphaFade="255" />
+    <Particles_Min Width="20" Height="20" LifeSpan="1" AlphaFade="155" />
+  </Animation>
+</Animations>

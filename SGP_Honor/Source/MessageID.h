@@ -1,0 +1,12 @@
+#pragma once
+enum class MessageID
+{
+
+	MSG_UNKNOWN,
+	MSG_DESTROY_ENTITY,
+	MSG_CREATE_PROJECTILE,
+	MSG_CREATE_SPRAY,
+	MSG_CREATE_HAWK,
+
+};
+

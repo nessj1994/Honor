@@ -1,0 +1,28 @@
+#pragma once
+#include "Entity.h"
+
+class LevelCollider :
+	public Entity
+{
+public:
+	LevelCollider();
+	virtual ~LevelCollider();
+
+
+	/////////////////////////////////////////////////
+	/////////////////Interface//////////////////////
+	int GetType(void) const override;
+
+
+	/////////////////////////////////////////////////
+	/////////////////Accessors//////////////////////
+	int GetCollide(void) const { return m_nCollide; }
+
+	/////////////////////////////////////////////////
+	/////////////////Mutators//////////////////////
+	void SetCollide(int _value) { m_nCollide = _value; }
+
+private:
+	int m_nCollide;
+};
+
