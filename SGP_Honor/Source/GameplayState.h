@@ -86,10 +86,6 @@ public:
 	void CreateFallingBlock(int _x, int _y);
 	void CreateGeyser(int x, int y);
 	void CreateLava(int x, int y);
-
-	
-
-
 	void CreateLaser(int x, int y, SGD::Vector _direction, int _switchX, int _switchY);
 
 	

@@ -159,10 +159,12 @@ void Level::RenderImageLayer(bool background)
 			int mapWidth = (int)(Game::GetInstance()->GetScreenWidth() / 32);
 			int mapHeight = (int)(Game::GetInstance()->GetScreenHeight() / 32);
 
+			// TODO fix culling
+
 			// Loop through the map
-			for (int xx = startX; xx < startX + mapWidth + 2; ++xx)
+			for (int xx = startX + 2; xx < startX + mapWidth + 2; ++xx)
 			{
-				for (int yy = startY; yy < startY + mapHeight + 2; ++yy)
+				for (int yy = startY + 2; yy < startY + mapHeight + 2; ++yy)
 				{
 					// Check if the current tile is within bounds
 					if (xx >= 0 && xx < m_nWidth && yy >= 0 && yy < m_nHeight)

@@ -642,17 +642,17 @@ void GameplayState::CreateBlocks(void)
 		pBlock_1->Release();
 	}
 
-	for (unsigned int i = 0; i < 40; i++)
-	{
-		Block* pBlock_2 = new Block;
+	//for (unsigned int i = 0; i < 40; i++)
+	//{
+	//	Block* pBlock_2 = new Block;
 
-		pBlock_2->SetPosition(SGD::Point(600, 380 - (i * 20)));
-		pBlock_2->SetSize(SGD::Size(20, 20));
+	//	pBlock_2->SetPosition(SGD::Point(600, 380 - (i * 20)));
+	//	pBlock_2->SetSize(SGD::Size(20, 20));
 
-		m_pEntities->AddEntity(pBlock_2, Entity::ENT_BLOCK);
+	//	m_pEntities->AddEntity(pBlock_2, Entity::ENT_BLOCK);
 
-		pBlock_2->Release();
-	}
+	//	pBlock_2->Release();
+	//}
 
 }
 
