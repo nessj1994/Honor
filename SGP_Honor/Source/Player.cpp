@@ -462,6 +462,34 @@ void Player::HandleCollision(const IEntity* pOther)
 		SetFriction(1.0f);
 	}
 
+	if (pOther->GetType() == Entity::ENT_MOVING_PLATFORM)
+	{
+		is_Platform = true;
+		BasicCollision(pOther);
+		SetFriction(1.0f);
+	}
+
+	if (pOther->GetType() == Entity::ENT_BLOCK)
+	{
+		is_Platform = true;
+		BasicCollision(pOther);
+		SetFriction(1.0f);
+	}
+
+	if (pOther->GetType() == Entity::ENT_FROZEN)
+	{
+		is_Platform = true;
+		BasicCollision(pOther);
+		SetFriction(0.1f);
+	}
+
+	if (pOther->GetType() == Entity::ENT_NOT_FROZEN)
+	{
+		is_Platform = true;
+		BasicCollision(pOther);
+		SetFriction(1.0f);
+	}
+
 	if(pOther->GetType() == Entity::ENT_DEATH)
 	{
 		//Kill the player
@@ -501,6 +529,34 @@ void Player::HandleCollision(const IEntity* pOther)
 		is_Ramp = true;
 	}
 
+	if (pOther->GetType() == Entity::ENT_GEYSER)
+	{
+		is_Platform = true;
+		GeyserCollision(pOther);
+		//BasicCollision(pOther);
+		SetFriction(1.0f);
+
+	}
+
+	if (pOther->GetType() == Entity::ENT_LASER)
+	{
+		if (IsDashing() == true)
+		{
+
+		}
+		else
+		{
+			LaserCollision(pOther);
+		}
+	}
+
+	if (pOther->GetType() == Entity::ENT_LAVA)
+	{
+		//if so move back up but kill the player
+		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+		SGD::EventManager::GetInstance()->SendEventNow(&Event);
+	}
+
 
 }
 
@@ -527,24 +583,24 @@ void Player::BasicCollision(const IEntity* pOther)
 	//Create a rectangle for the intersection
 	RECT rIntersection = {};
 
-	//	RECT rPlayerWall;
-	//	rPlayerWall.left = (LONG)GetRect().left - 1;
-	//	rPlayerWall.top = (LONG)GetRect().top;
-	//	rPlayerWall.right = (LONG)GetRect().right + 1;
-	//	rPlayerWall.bottom = (LONG)GetRect().bottom;
-	//
-	//	IntersectRect(&rIntersection, &rPlayer, &rPlayerWall);
+	RECT rPlayerWall;
+	rPlayerWall.left = (LONG)GetRect().left - 5;
+	rPlayerWall.top = (LONG)GetRect().top;
+	rPlayerWall.right = (LONG)GetRect().right + 1;
+	rPlayerWall.bottom = (LONG)GetRect().bottom;
+	
+	IntersectRect(&rIntersection, &rObject, &rPlayerWall);
 
 	int nIntersectWidth = rIntersection.right - rIntersection.left;
 	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
-	//if (nIntersectHeight > nIntersectWidth)
-	//{
-	//	if (GetIsFalling() == true
-	//		|| GetIsJumping() == true)
-	//		SetIsInputStuck(true);
-	//
-	//}
+	if (nIntersectHeight > nIntersectWidth)
+	{
+		if (GetIsFalling() == true
+			|| GetIsJumping() == true)
+			SetIsInputStuck(true);
+	
+	}
 
 	IntersectRect(&rIntersection, &rPlayer, &rObject);
 
@@ -735,6 +791,181 @@ void Player::RightRampCollision(const IEntity* pOther)
 
 }
 
+
+void Player::GeyserCollision(const IEntity* pOther)
+{
+	RECT rPlayer;
+	rPlayer.left = (LONG)GetRect().left;
+	rPlayer.top = (LONG)GetRect().top;
+	rPlayer.right = (LONG)GetRect().right;
+	rPlayer.bottom = (LONG)GetRect().bottom;
+
+	//Create a rectangle for the other object
+	RECT rObject;
+	rObject.left = (LONG)pOther->GetRect().left;
+	rObject.top = (LONG)pOther->GetRect().top;
+	rObject.right = (LONG)pOther->GetRect().right;
+	rObject.bottom = (LONG)pOther->GetRect().bottom;
+
+	//Create a rectangle for the intersection
+	RECT rIntersection = {};
+
+	//	RECT rPlayerWall;
+	//	rPlayerWall.left = (LONG)GetRect().left - 1;
+	//	rPlayerWall.top = (LONG)GetRect().top;
+	//	rPlayerWall.right = (LONG)GetRect().right + 1;
+	//	rPlayerWall.bottom = (LONG)GetRect().bottom;
+	//
+	//	IntersectRect(&rIntersection, &rPlayer, &rPlayerWall);
+
+	int nIntersectWidth = rIntersection.right - rIntersection.left;
+	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+	//if (nIntersectHeight > nIntersectWidth)
+	//{
+	//	if (GetIsFalling() == true
+	//		|| GetIsJumping() == true)
+	//		SetIsInputStuck(true);
+	//
+	//}
+
+	IntersectRect(&rIntersection, &rPlayer, &rObject);
+
+	nIntersectWidth = rIntersection.right - rIntersection.left;
+	nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+	//Colliding with the side of the object
+	if (nIntersectHeight > nIntersectWidth)
+	{
+		if (rPlayer.right == rIntersection.right)
+		{
+
+			//SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
+			SetVelocity({ 500 * GetDirection().x * -1, GetVelocity().y - 300 });
+			//SetDashTimer(0);
+
+			is_Right_Coll = true;
+		}
+		if (rPlayer.left == rIntersection.left)
+		{
+
+			//SetPosition({ (float)rObject.right, GetPosition().y });
+
+			SetVelocity({ 500 * GetDirection().x * -1, GetVelocity().y - 300 });
+
+			//SetVelocity({ 0, GetVelocity().y });
+			//SetDashTimer(0);
+
+			is_Left_Coll = true;
+
+		}
+	}
+
+	if (nIntersectWidth > nIntersectHeight)
+	{
+		if (rPlayer.bottom == rIntersection.bottom)
+		{
+
+			if (IsBouncing() == true)
+			{
+			//	SetVelocity({ GetVelocity().x, GetVelocity().y * -1 });
+				//				SetJumpVelCur(GetJumpVelCur() * -1);
+				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height  /*- nIntersectHeight*/ });
+
+			}
+
+			else
+			{
+				SetVelocity({ 400 * GetDirection().x * -1, GetVelocity().y });
+
+
+			}
+
+			SetJumpVelCur(0);
+			SetIsJumping(false);
+			SetIsFalling(false);
+			SetIsInputStuck(false);
+
+			is_Left_Coll = false;
+			is_Right_Coll = false;
+		}
+		if (rPlayer.top == rIntersection.top)
+		{
+			SetPosition({ GetPosition().x, (float)rObject.bottom });
+			SetVelocity({ GetVelocity().x, 0 });
+		}
+	}
+}
+
+void Player::LaserCollision(const IEntity* pOther)
+{
+
+	
+
+
+	RECT rPlayer;
+	rPlayer.left = (LONG)GetRect().left;
+	rPlayer.top = (LONG)GetRect().top;
+	rPlayer.right = (LONG)GetRect().right;
+	rPlayer.bottom = (LONG)GetRect().bottom;
+
+	//Create a rectangle for the other object
+	RECT rObject;
+	rObject.left = (LONG)pOther->GetRect().left;
+	rObject.top = (LONG)pOther->GetRect().top;
+	rObject.right = (LONG)pOther->GetRect().right;
+	rObject.bottom = (LONG)pOther->GetRect().bottom;
+
+	//Create a rectangle for the intersection
+	RECT rIntersection = {};
+
+
+	IntersectRect(&rIntersection, &rPlayer, &rObject);
+
+
+	int nIntersectWidth = rIntersection.right - rIntersection.left;
+	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+	//Colliding with the side of the object
+	if (nIntersectHeight > nIntersectWidth)
+	{
+		if (rPlayer.right == rIntersection.right)
+		{
+
+			//if so move back up but kill the player
+			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+			SGD::EventManager::GetInstance()->SendEventNow(&Event);
+
+		}
+		if (rPlayer.left == rIntersection.left)
+		{
+			//if so move back up but kill the player
+			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+			SGD::EventManager::GetInstance()->SendEventNow(&Event);
+
+		}
+	}
+
+	if (nIntersectWidth > nIntersectHeight)
+	{
+		if (rPlayer.bottom == rIntersection.bottom)
+		{
+
+			//if so move back up but kill the player
+			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+			SGD::EventManager::GetInstance()->SendEventNow(&Event);
+		}
+		if (rPlayer.top == rIntersection.top)
+		{
+
+			//if so move back up but kill the player
+			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+			SGD::EventManager::GetInstance()->SendEventNow(&Event);
+
+		}
+	}
+
+}
 
 ////////////////////////////////////////////////
 /////////////////////Methods///////////////////
