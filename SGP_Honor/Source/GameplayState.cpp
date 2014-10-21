@@ -30,6 +30,9 @@
 #include "Hawk.h"
 #include "BuzzSaw.h"
 #include "Turret.h"
+#include "Stalactite.h"
+#include "Geyser.h"
+
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -104,6 +107,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pFBlock = new FallingBlock();
 	m_pSwitch = new Activator(false);
 	m_pPressurePlate = new Activator(true);
+	m_pStalactite = new Stalactite();
 	m_pBuzzSaw = new BuzzSaw();
 	m_pTurret = new Turret();
 
@@ -120,6 +124,7 @@ void GameplayState::Enter(void) //Load Resources
 	CreateBlocks();
 	CreatePermFrozenTiles();
 	CreateTempFrozenTiles();
+	CreateGeyser(100, 400);
 
 
 
@@ -134,6 +139,8 @@ void GameplayState::Enter(void) //Load Resources
 	m_pEntities->AddEntity(m_pSwitch, Entity::ENT_SWITCH);
 	m_pEntities->AddEntity(m_pBuzzSaw, Entity::ENT_BUZZSAW);
 	m_pEntities->AddEntity(m_pTurret, Entity::ENT_TURRET);
+	m_pEntities->AddEntity(m_pStalactite, Entity::ENT_STALACTITE);
+
 	m_pDoor->SetActivator(m_pSwitch);
 
 
@@ -170,6 +177,7 @@ void GameplayState::Exit(void)
 	delete m_pPressurePlate;
 	delete m_pBuzzSaw;
 	delete m_pTurret;
+	delete m_pStalactite;
 
 	if(m_pPlayer != nullptr)
 	{
@@ -277,9 +285,15 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PROJ, Entity::ENT_BLOCK);
 	m_pEntities->CheckCollisions(Entity::ENT_FALLING_BLOCK, Entity::ENT_BLOCK);
 	m_pEntities->CheckCollisions(Entity::ENT_FALLING_BLOCK, Entity::ENT_PLAYER);
+	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_STALACTITE);
+
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_FALLING_BLOCK);
+	m_pEntities->CheckWorldCollision(Entity::ENT_PROJ);
+	m_pEntities->CheckWorldCollision(Entity::ENT_HAWK);
+	m_pEntities->CheckWorldCollision(Entity::ENT_STALACTITE);
+
 
 	//Process messages and events
 	SGD::EventManager::GetInstance()->Update();
@@ -660,6 +674,48 @@ void GameplayState::CreateFallingBlock(int _x, int _y)
 	m_pEntities->AddEntity(fBlock, Entity::ENT_FALLING_BLOCK);
 	fBlock->Release();
 }
+
+
+void GameplayState::CreateGeyser(int _x, int _y)
+{
+	Geyser* m_pGeyser = new Geyser;
+	m_pGeyser->SetPosition({ (float)_x, (float)_y });
+	m_pGeyser->SetOrigPosition({ (float)_x, (float)_y });
+
+	m_pEntities->AddEntity(m_pGeyser, Entity::ENT_GEYSER);
+
+
+}
+
+void GameplayState::CreateDoor(int _x, int _y, bool _isHorizontal, int _ID, int _size)
+{
+	Door * pDoor = new Door();
+	pDoor->SetPosition({ (float)_x, (float)_y });
+	if (_isHorizontal)
+	{
+		pDoor->SetSize({ 32.0f * _size, 32.0f });
+	}
+	else
+	{
+		pDoor->SetSize({ 32.0f, 32.0f * _size });
+	}
+	pDoor->SetKeyID(_ID);
+	//pDoor->SetSize(_size);
+	m_pEntities->AddEntity(pDoor, Entity::ENT_DOOR);
+	pDoor->Release();
+}
+
+
+void GameplayState::CreateActivator(int _x, int _y, bool _isPressure, bool _currState, int _ID)
+{
+	Activator * pActivator = new Activator(_isPressure);
+	pActivator->SetPosition({ (float)_x, (float)_y });
+	pActivator->SetOn(_currState);
+	pActivator->SetKeyID(_ID);
+	m_pEntities->AddEntity(pActivator, Entity::ENT_SWITCH);
+	pActivator->Release();
+}
+
 
 #pragma endregion
 

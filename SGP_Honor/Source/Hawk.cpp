@@ -80,3 +80,26 @@ void Hawk::Update(float elapsedTime)
 
 
 }
+
+void Hawk::HandleCollision(const IEntity* pOther)
+{
+	if (pOther->GetType() == ENT_SOLID_WALL &&
+		pOther != GetOwner())
+	{
+	//	DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+	//	pMsg->QueueMessage();
+	//	pMsg = nullptr;
+
+		//EVENT SYSTEM
+		//SGD::Event m_Eevent = { "PLAYER_HIT", GetOwner(), this };
+		//m_Eevent.SendEventNow((void*)pOther);
+
+
+		SetPosition({ -100, -100 });
+
+		SetVelocity({ 0, 0 });
+
+	}
+
+
+}
