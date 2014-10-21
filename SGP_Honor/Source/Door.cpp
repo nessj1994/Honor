@@ -33,7 +33,7 @@ void Door::Update(float elapsedTime)
 	//	m_bOpen = false;
 	//}
 
-	if(m_bOpen)
+	if (m_bOpen)
 	{
 		m_szSize = { 0, 0 };
 	}

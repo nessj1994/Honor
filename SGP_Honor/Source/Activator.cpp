@@ -21,7 +21,7 @@ Activator::~Activator()
 /////////////////Interface//////////////////////
 void Activator::Update(float elapsedTime)
 {
-	if(m_fSwitchTimer > 0.0f)
+	if (m_fSwitchTimer > 0.0f)
 	{
 		m_fSwitchTimer -= elapsedTime;
 
@@ -59,7 +59,7 @@ void Activator::Render(void)
 int Activator::GetType(void) const
 {
 
-	if(m_bPressurePlate == false)
+	if (m_bPressurePlate == false)
 	{
 		return ENT_SWITCH;
 	}
@@ -78,7 +78,7 @@ SGD::Rectangle Activator::GetRect(void) const
 
 void Activator::HandleCollision(const IEntity* pOther)
 {
-	if(pOther->GetType() == ENT_PLAYER)
+	if (pOther->GetType() == ENT_PLAYER)
 	{
 		if(m_bPressurePlate == false && m_fSwitchTimer == 0.0f)
 		{
@@ -99,4 +99,25 @@ void Activator::HandleCollision(const IEntity* pOther)
 		}
 
 	}
+
+
+	if (pOther->GetType() == ENT_HAWK)
+	{
+		if (m_bPressurePlate == false && m_fSwitchTimer == 0.0f)
+		{
+
+			//Open Door
+			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+
+			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+			m_fSwitchTimer = 3.0f;
+		}
+
+	}
+
 }
+
