@@ -106,12 +106,13 @@ void GameplayState::Enter(void) //Load Resources
 
 	//Load Audio
 	m_hBGM = pAudio->LoadAudio(L"../Assets/Audio/HonorBGM.xwm");
+	pAudio->PlayAudio(m_hBGM);
 
 	//These are only for testing and will be removed later
 	m_pDoor = new Door();
 	m_pBDoor = new BossDoor();
 	m_pFBlock = new FallingBlock();
-	m_pSwitch = new Activator(false);
+	m_pSwitch = new Activator(true);
 	m_pPressurePlate = new Activator(true);
 	m_pStalactite = new Stalactite();
 	m_pBuzzSaw = new BuzzSaw();
@@ -136,8 +137,8 @@ void GameplayState::Enter(void) //Load Resources
 	CreateBlocks();
 	CreatePermFrozenTiles();
 	CreateTempFrozenTiles();
-	CreateGeyser(100, 400);
-	CreateLaser(120, 500, { 1, 1 }, 200, 700);
+	CreateGeyser(1000, 700);
+	CreateLaser(1500, 500, { 1, 1 }, 1500, 700);
 	CreateLava(50, 700);
 
 	CreateMovingPlatform(1000, 500, false, 200, 100);
@@ -181,7 +182,7 @@ void GameplayState::Exit(void)
 
 	//Save the game
 	SaveGame();
-
+	
 
 	if (m_pEntities != nullptr)
 	{
@@ -241,6 +242,7 @@ void GameplayState::Exit(void)
 
 
 	//Audio
+	pAudio->StopAudio(m_hBGM);
 	pAudio->UnloadAudio(m_hBGM);
 
 
@@ -262,6 +264,8 @@ void GameplayState::Exit(void)
 bool GameplayState::Input(void) //Hanlde user Input
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+
 
 	//DOOR TEST This will be removed later
 	if(pInput->IsKeyPressed(SGD::Key::X))
@@ -282,6 +286,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
+		pAudio->StopAudio(m_hBGM);
 	}
 
 	return true;
@@ -771,7 +776,7 @@ void GameplayState::CreateLaser(int x, int y, SGD::Vector _direction, int _switc
 
 	m_pEntities->AddEntity(m_pLaser, Entity::ENT_LASER);
 	m_pEntities->AddEntity(m_pLaserSwitch, Entity::ENT_SWITCH);
-
+	m_pLaserSwitch->Release();
 	m_pLaser->Release();
 }
 

@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "Animation.h"
 #include "../SGD Wrappers/SGD_Message.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "AnimTimeStamp.h"
 
 
@@ -70,9 +71,11 @@ public:
 	Level* GetCurrentLevel(void) const { return m_pLevel; }
 
 
+
 	//////////////////////////////////////////////////////////
 	////////////////////// Mutators /////////////////////////
 	void SetCamera(Camera* camera) { m_pCamera = camera; }
+	void ResetAudio() { SGD::AudioManager::GetInstance()->PlayAudio(m_hBGM); }
 
 	///////////////////////////////////////////////////////////
 	///////////////////// Factory Methods  ////////////////////
