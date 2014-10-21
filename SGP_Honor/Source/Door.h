@@ -42,7 +42,6 @@ public:
 	void SetHorizontal(bool isHorizontal) { m_bHorizontal = isHorizontal; }
 	void SetActivator(Activator* activator) { if (m_pActivator)m_pActivator->Release(); m_pActivator = activator; if (m_pActivator)m_pActivator->AddRef(); }
 	void SetKeyID(unsigned int ID) { m_unKeyID = ID; }
-	void SetKeyID(unsigned int ID) { m_unKeyID = ID; }
 
 
 private:
