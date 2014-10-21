@@ -42,6 +42,10 @@ public:
 	void BasicCollision(const IEntity* pOther);
 	void LeftRampCollision(const IEntity* pOther);
 	void RightRampCollision(const IEntity* pOther);
+	void GeyserCollision(const IEntity* pOther);
+	void LaserCollision(const IEntity* pOther);
+
+
 
 
 	//SGD::Rectangle GetWallRect(void) const;
