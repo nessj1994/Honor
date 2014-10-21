@@ -12,6 +12,8 @@ public:
 	virtual ~Hawk();
 
 	virtual void Update(float elapsedTime);
+	virtual void HandleCollision(const IEntity* pOther) override;
+	int GetType(void) const override { return ENT_HAWK; }
 
 
 	float GetCooldown(void) const { return m_fCooldown; }
