@@ -4,11 +4,20 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 
-Laser::Laser()
+Laser::Laser() : Listener(this)
 {
 	m_szSize = { 32, 32 };
 
-}
+	Listener::RegisterForEvent("FLIP_LASER");
+
+	m_ptPosition = { 200, 150 };
+	m_ptOrigPos = m_ptPosition;
+	//m_szSize = { 100, 200 };
+	m_szOrigSize = m_szSize;
+	m_bOn = true;
+
+	}
+
 
 
 Laser::~Laser()
@@ -19,10 +28,23 @@ Laser::~Laser()
 /////////////////Interface//////////////////////
 void Laser::Update(float elapsedTime)
 {
-	if (m_bFull == false)
+
+	if (m_bOn == true)
 	{
-		m_ptPosition.y -= 100 *  elapsedTime;
-		m_szSize.height += 100 * elapsedTime;
+
+		if (m_bFull == false)
+		{
+			m_ptPosition.y -= 100 * elapsedTime;
+			m_szSize.height += 100 * elapsedTime;
+		}
+
+	}
+	else
+	{
+		m_ptPosition.y = m_ptOrigPos.y;
+		m_szSize.height = m_szOrigSize.height;
+
+		m_bFull = false;
 	}
 
 }
@@ -59,4 +81,17 @@ void Laser::HandleCollision(const IEntity* pOther)
 	}
 
 
+}
+
+void Laser::HandleEvent(const SGD::Event* pEvent)
+{
+	
+	if (pEvent->GetEventID() == "FLIP_LASER")
+	{
+		Activator* pActivator = reinterpret_cast<Activator*>(pEvent->GetSender());
+		if (pActivator->GetKeyID() == m_nFreq)
+		{
+			m_bOn = !m_bOn;
+		}
+	}
 }

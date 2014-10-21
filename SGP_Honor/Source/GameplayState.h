@@ -32,6 +32,10 @@ class Hawk;
 class Stalactite;
 class BuzzSaw;
 class Turret;
+class Pendulum;
+class HintStatue;
+class Honor;
+class Armor;
 
 //////////////////////////////////////////////////
 // GameplayState class
@@ -81,7 +85,7 @@ public:
 	void CreateDoor(int _x, int _y, bool _isHorizontal, int _ID, int _size);
 	void CreateFallingBlock(int _x, int _y);
 	void CreateGeyser(int x, int y);
-	void CreateLaser(int x, int y);
+	void CreateLava(int x, int y);
 
 	
 
@@ -162,9 +166,13 @@ private:
 	Activator* m_pSwitch = nullptr;
 	Activator* m_pPressurePlate = nullptr;
 	Stalactite* m_pStalactite = nullptr;
-
 	BuzzSaw* m_pBuzzSaw = nullptr;
 	Turret* m_pTurret = nullptr;
+
+	Pendulum * m_pPendulum = nullptr;
+	HintStatue * m_pStatue = nullptr;
+	Honor * m_pHonor = nullptr;
+	Armor * m_pArmor = nullptr;
 
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
 

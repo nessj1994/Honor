@@ -493,13 +493,16 @@ void Level::CheckCollision(IEntity * _entity)
 	int y = (int)(rect.top / 32);
 
 	// Determine how far to check
-	int width = (int)((rect.right - rect.left) / 32);
-	int height = (int)((rect.bottom - rect.top) / 32);
+	int width = (int)((rect.right-1 - rect.left) / 32);
+	int height = (int)((rect.bottom-1 - rect.top) / 32);
+
+	//int x2 = (int)((rect.right - 1) / 32);
+	//int y2 = (int)((rect.bottom - 1) / 32);
 
 	// loop through all adjacent collision pieces
-	for (int xx = x - 1; xx < x + width + 1; ++xx)
+	for (int xx = x; xx <= x + width + 1; ++xx)
 	{
-		for (int yy = y - 1; yy < y + height + 1; ++yy)
+		for (int yy = y; yy <= y + height + 1; ++yy)
 		{
 			// Check if the current piece is in the bounds of the array
 			if (xx >= 0 && xx < m_nWidth && yy >= 0 && yy < m_nHeight)
@@ -512,7 +515,7 @@ void Level::CheckCollision(IEntity * _entity)
 					LevelCollider * collider = new LevelCollider();
 					collider->SetPosition({ xx * 32.0f, yy * 32.0f });
 					collider->SetSize({ 32, 32 });
-					if (collider->GetRect().IsIntersecting(_entity->GetRect()))
+					//if (collider->GetRect().IsIntersecting(_entity->GetRect()))
 					{
 						collider->SetCollide(id);
 						_entity->HandleCollision(collider);

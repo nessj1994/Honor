@@ -26,6 +26,7 @@
 #include "Door.h"
 #include "BossDoor.h"
 #include "Activator.h"
+#include "Stalactite.h"
 #include "Ice.h"
 #include "Hawk.h"
 #include "BuzzSaw.h"
@@ -34,6 +35,11 @@
 #include "Geyser.h"
 #include "laser.h"
 #include "Lava.h"
+#include "Pendulum.h"
+#include "Armor.h"
+#include "Honor.h"
+#include "HintStatue.h"
+
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
@@ -111,6 +117,12 @@ void GameplayState::Enter(void) //Load Resources
 	m_pBuzzSaw = new BuzzSaw();
 	m_pTurret = new Turret();
 
+	m_pArmor = new Armor();
+	m_pHonor = new Honor();
+	m_pPendulum = new Pendulum();
+	m_pStatue = new HintStatue();
+	m_pStatue->SetMessageString("This is a test string");
+
 
 	//Create player with factory method
 	m_pPlayer = CreatePlayer();
@@ -126,7 +138,7 @@ void GameplayState::Enter(void) //Load Resources
 	CreateTempFrozenTiles();
 	CreateGeyser(100, 400);
 	CreateLaser(120, 500, { 1, 1 }, 200, 700);
-	CreateLaser(50, 700);
+	CreateLava(50, 700);
 
 	CreateMovingPlatform(1000, 500, false, 200, 100);
 
@@ -139,10 +151,16 @@ void GameplayState::Enter(void) //Load Resources
 	m_pEntities->AddEntity(m_pDoor, Entity::ENT_DOOR);
 	m_pEntities->AddEntity(m_pBDoor, Entity::ENT_BOSS_DOOR);
 	m_pEntities->AddEntity(m_pSwitch, Entity::ENT_SWITCH);
+	m_pEntities->AddEntity(m_pStalactite, Entity::ENT_STALACTITE);
 	m_pEntities->AddEntity(m_pBuzzSaw, Entity::ENT_BUZZSAW);
 	m_pEntities->AddEntity(m_pTurret, Entity::ENT_TURRET);
 	m_pEntities->AddEntity(m_pStalactite, Entity::ENT_STALACTITE);
 
+
+	m_pEntities->AddEntity(m_pArmor, Entity::ENT_ARMOR);
+	m_pEntities->AddEntity(m_pHonor, Entity::ENT_HONOR);
+	m_pEntities->AddEntity(m_pPendulum, Entity::ENT_PENDULUM);
+	m_pEntities->AddEntity(m_pStatue, Entity::ENT_STATUE);
 	m_pDoor->SetActivator(m_pSwitch);
 
 
@@ -185,6 +203,18 @@ void GameplayState::Exit(void)
 	{
 		m_pPlayer->Release();
 	}
+
+	if (m_pStatue != nullptr)
+		m_pStatue->Release();
+
+	if (m_pHonor != nullptr)
+		m_pHonor->Release();
+
+	if (m_pArmor != nullptr)
+		m_pArmor->Release();
+
+	if (m_pPendulum != nullptr)
+		m_pPendulum->Release();
 
 	if (m_pFBlock)
 	{
@@ -262,6 +292,11 @@ bool GameplayState::Input(void) //Hanlde user Input
 // - Update all game entities
 void GameplayState::Update(float elapsedTime)
 {
+	if (m_pHonor->GetIsCollected() == true)
+		m_pEntities->RemoveEntity(m_pHonor);
+
+	if (m_pArmor->GetIsCollected() == true)
+		m_pEntities->RemoveEntity(m_pArmor);
 
 	//	m_pCamera->Update(elapsedTime);
 	if (testtime <= 0.3f)
@@ -277,6 +312,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PERM_FREEZE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TEMP_FREEZE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_DOOR);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_DOOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BUZZSAW);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PROJ);
@@ -299,9 +335,14 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_STALACTITE);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_GEYSER);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STATUE);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
 
+	if (m_pArmor != nullptr)
+		m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ARMOR);
 
-
+	if (m_pHonor != nullptr)
+		m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_FALLING_BLOCK);
@@ -704,7 +745,7 @@ void GameplayState::CreateGeyser(int _x, int _y)
 }
 
 
-void GameplayState::CreateLaser(int x, int y)
+void GameplayState::CreateLava(int x, int y)
 {
 	Lava* m_pLava = new Lava;
 	m_pLava->SetPosition({ (float)x, (float)y });
@@ -720,11 +761,13 @@ void GameplayState::CreateLaser(int x, int y, SGD::Vector _direction, int _switc
 	m_pLaser->SetPosition({ (float)x, (float)y });
 	m_pLaser->SetOrigPosition({ (float)x, (float)y });
 	m_pLaser->SetDirection({ _direction });
+	m_pLaser->SetFreq(2);
+
 
 	Activator* m_pLaserSwitch = new Activator(false);
 	m_pLaserSwitch->SetPosition({ (float)_switchX, (float)_switchY });
 
-
+	m_pLaserSwitch->SetKeyID(2);
 
 	m_pEntities->AddEntity(m_pLaser, Entity::ENT_LASER);
 	m_pEntities->AddEntity(m_pLaserSwitch, Entity::ENT_SWITCH);

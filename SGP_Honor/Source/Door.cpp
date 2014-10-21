@@ -77,27 +77,27 @@ void Door::HandleEvent(const SGD::Event* pEvent)
 
 	//Set the player back to his last checkpoint 
 	//This is usually back to the level start
-	if (pEvent->GetEventID() == "OPEN_DOOR")
+	if(pEvent->GetEventID() == "OPEN_DOOR")
 	{
 		Activator* pActivator = reinterpret_cast<Activator*>(pEvent->GetSender());
-		if (pActivator->GetKeyID() == m_unKeyID)
+		if(pActivator->GetKeyID() == m_unKeyID)
 		{
 			m_bOpen = true;
 		}
 	}
-	if (pEvent->GetEventID() == "CLOSE_DOOR")
+	if(pEvent->GetEventID() == "CLOSE_DOOR")
 	{
 
 		Activator* pActivator = reinterpret_cast<Activator*>(pEvent->GetSender());
-		if (pActivator->GetKeyID() == m_unKeyID)
+		if(pActivator->GetKeyID() == m_unKeyID)
 		{
 			m_bOpen = false;
 		}
 	}
-	if (pEvent->GetEventID() == "FLIP_DOOR")
+	if(pEvent->GetEventID() == "FLIP_DOOR")
 	{
 		Activator* pActivator = reinterpret_cast<Activator*>(pEvent->GetSender());
-		if (pActivator->GetKeyID() == m_unKeyID)
+		if(pActivator->GetKeyID() == m_unKeyID)
 		{
 			m_bOpen = !m_bOpen;
 		}
