@@ -35,6 +35,11 @@
 #include "Geyser.h"
 #include "laser.h"
 #include "Lava.h"
+#include "Pendulum.h"
+#include "Armor.h"
+#include "Honor.h"
+#include "HintStatue.h"
+
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
@@ -101,6 +106,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	//Load Audio
 	m_hBGM = pAudio->LoadAudio(L"../Assets/Audio/HonorBGM.xwm");
+	pAudio->PlayAudio(m_hBGM);
 
 	//These are only for testing and will be removed later
 	m_pDoor = new Door();
@@ -111,6 +117,12 @@ void GameplayState::Enter(void) //Load Resources
 	m_pStalactite = new Stalactite();
 	m_pBuzzSaw = new BuzzSaw();
 	m_pTurret = new Turret();
+
+	m_pArmor = new Armor();
+	m_pHonor = new Honor();
+	m_pPendulum = new Pendulum();
+	m_pStatue = new HintStatue();
+	m_pStatue->SetMessageString("This is a test string");
 
 
 	//Create player with factory method
@@ -125,8 +137,8 @@ void GameplayState::Enter(void) //Load Resources
 	CreateBlocks();
 	CreatePermFrozenTiles();
 	CreateTempFrozenTiles();
-	CreateGeyser(100, 400);
-	CreateLaser(120, 500, { 1, 1 }, 200, 700);
+	CreateGeyser(1000, 700);
+	CreateLaser(1500, 500, { 1, 1 }, 1500, 700);
 	CreateLava(50, 700);
 
 	CreateMovingPlatform(1000, 500, false, 200, 100);
@@ -145,6 +157,11 @@ void GameplayState::Enter(void) //Load Resources
 	m_pEntities->AddEntity(m_pTurret, Entity::ENT_TURRET);
 	m_pEntities->AddEntity(m_pStalactite, Entity::ENT_STALACTITE);
 
+
+	m_pEntities->AddEntity(m_pArmor, Entity::ENT_ARMOR);
+	m_pEntities->AddEntity(m_pHonor, Entity::ENT_HONOR);
+	m_pEntities->AddEntity(m_pPendulum, Entity::ENT_PENDULUM);
+	m_pEntities->AddEntity(m_pStatue, Entity::ENT_STATUE);
 	m_pDoor->SetActivator(m_pSwitch);
 
 
@@ -165,7 +182,7 @@ void GameplayState::Exit(void)
 
 	//Save the game
 	SaveGame();
-
+	
 
 	if (m_pEntities != nullptr)
 	{
@@ -187,6 +204,18 @@ void GameplayState::Exit(void)
 	{
 		m_pPlayer->Release();
 	}
+
+	if (m_pStatue != nullptr)
+		m_pStatue->Release();
+
+	if (m_pHonor != nullptr)
+		m_pHonor->Release();
+
+	if (m_pArmor != nullptr)
+		m_pArmor->Release();
+
+	if (m_pPendulum != nullptr)
+		m_pPendulum->Release();
 
 	if (m_pFBlock)
 	{
@@ -213,6 +242,7 @@ void GameplayState::Exit(void)
 
 
 	//Audio
+	pAudio->StopAudio(m_hBGM);
 	pAudio->UnloadAudio(m_hBGM);
 
 
@@ -234,6 +264,8 @@ void GameplayState::Exit(void)
 bool GameplayState::Input(void) //Hanlde user Input
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+
 
 	//DOOR TEST This will be removed later
 	if(pInput->IsKeyPressed(SGD::Key::X))
@@ -254,6 +286,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
+		pAudio->StopAudio(m_hBGM);
 	}
 
 	return true;
@@ -264,6 +297,11 @@ bool GameplayState::Input(void) //Hanlde user Input
 // - Update all game entities
 void GameplayState::Update(float elapsedTime)
 {
+	if (m_pHonor->GetIsCollected() == true)
+		m_pEntities->RemoveEntity(m_pHonor);
+
+	if (m_pArmor->GetIsCollected() == true)
+		m_pEntities->RemoveEntity(m_pArmor);
 
 	//	m_pCamera->Update(elapsedTime);
 	if (testtime <= 0.3f)
@@ -302,9 +340,14 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_STALACTITE);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_GEYSER);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STATUE);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
 
+	if (m_pArmor != nullptr)
+		m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ARMOR);
 
-
+	if (m_pHonor != nullptr)
+		m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_FALLING_BLOCK);
@@ -604,17 +647,17 @@ void GameplayState::CreateBlocks(void)
 		pBlock_1->Release();
 	}
 
-	for (unsigned int i = 0; i < 40; i++)
-	{
-		Block* pBlock_2 = new Block;
+	//for (unsigned int i = 0; i < 40; i++)
+	//{
+	//	Block* pBlock_2 = new Block;
 
-		pBlock_2->SetPosition(SGD::Point(600, 380 - (i * 20)));
-		pBlock_2->SetSize(SGD::Size(20, 20));
+	//	pBlock_2->SetPosition(SGD::Point(600, 380 - (i * 20)));
+	//	pBlock_2->SetSize(SGD::Size(20, 20));
 
-		m_pEntities->AddEntity(pBlock_2, Entity::ENT_BLOCK);
+	//	m_pEntities->AddEntity(pBlock_2, Entity::ENT_BLOCK);
 
-		pBlock_2->Release();
-	}
+	//	pBlock_2->Release();
+	//}
 
 }
 
@@ -733,7 +776,7 @@ void GameplayState::CreateLaser(int x, int y, SGD::Vector _direction, int _switc
 
 	m_pEntities->AddEntity(m_pLaser, Entity::ENT_LASER);
 	m_pEntities->AddEntity(m_pLaserSwitch, Entity::ENT_SWITCH);
-
+	m_pLaserSwitch->Release();
 	m_pLaser->Release();
 }
 

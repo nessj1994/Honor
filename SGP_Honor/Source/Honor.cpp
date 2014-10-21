@@ -40,5 +40,6 @@ void Honor::HandleCollision(const IEntity* pOther)
 	{
 		if (GetRect().IsIntersecting(pOther->GetRect()) == true)
 			isCollected = true;
+
 	}
 }

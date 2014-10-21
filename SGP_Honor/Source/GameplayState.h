@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "Animation.h"
 #include "../SGD Wrappers/SGD_Message.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "AnimTimeStamp.h"
 
 
@@ -32,6 +33,10 @@ class Hawk;
 class Stalactite;
 class BuzzSaw;
 class Turret;
+class Pendulum;
+class HintStatue;
+class Honor;
+class Armor;
 
 //////////////////////////////////////////////////
 // GameplayState class
@@ -66,9 +71,11 @@ public:
 	Level* GetCurrentLevel(void) const { return m_pLevel; }
 
 
+
 	//////////////////////////////////////////////////////////
 	////////////////////// Mutators /////////////////////////
 	void SetCamera(Camera* camera) { m_pCamera = camera; }
+	void ResetAudio() { SGD::AudioManager::GetInstance()->PlayAudio(m_hBGM); }
 
 	///////////////////////////////////////////////////////////
 	///////////////////// Factory Methods  ////////////////////
@@ -164,6 +171,11 @@ private:
 	Stalactite* m_pStalactite = nullptr;
 	BuzzSaw* m_pBuzzSaw = nullptr;
 	Turret* m_pTurret = nullptr;
+
+	Pendulum * m_pPendulum = nullptr;
+	HintStatue * m_pStatue = nullptr;
+	Honor * m_pHonor = nullptr;
+	Armor * m_pArmor = nullptr;
 
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
 

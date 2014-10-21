@@ -156,6 +156,7 @@ bool PauseState::Input(void)
 		if(m_nCursor == 0)
 		{
 			//Changestate to gameplay state
+			GameplayState::GetInstance()->ResetAudio();
 			Game::GetInstance()->RemoveState();
 		}
 		else if(m_nCursor == 1)
@@ -185,6 +186,8 @@ bool PauseState::Input(void)
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 1 /*Button B on xbox controller*/))
 	{
+		GameplayState::GetInstance()->ResetAudio();
+
 		Game::GetInstance()->RemoveState();
 	}
 

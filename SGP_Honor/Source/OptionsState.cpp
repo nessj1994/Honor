@@ -76,7 +76,7 @@ void OptionsState::Exit(void)
 	doc.SaveFile("../Assets/Options.xml");
 
 
-	
+	pAudio->StopAudio(m_hBGM);
 	pAudio->UnloadAudio(m_hBGM);
 }
 
