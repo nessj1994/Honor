@@ -90,27 +90,27 @@ void Level::Render()
 				case 0:
 					color = { 150, 150, 150 }; // gray
 					break;
-				// Death
+					// Death
 				case 1:
 					color = { 255, 150, 150 }; // red
 					break;
-				// Left ramp
+					// Left ramp
 				case 2:
 					color = { 160, 80, 250 }; // purple
 					break;
-				// Right ramp
+					// Right ramp
 				case 3:
 					color = { 250, 70, 210 }; // pink
 					break;
-				// Ice
+					// Ice
 				case 4:
 					color = { 0, 220, 220 }; // Cyan
 					break;
-				// Ice left ramp
+					// Ice left ramp
 				case 5:
 					color = { 50, 110, 0 }; // dark green
 					break;
-				// Ice right ramp
+					// Ice right ramp
 				case 6:
 					color = { 30, 220, 0 }; // light green
 					break;
@@ -391,84 +391,84 @@ bool Level::LoadLevel(const char * _path)
 				case 0:
 					// TODO: parse args
 					break;
-				// Activator
+					// Activator
 				case 1:
 					// TODO: parse args
 					break;
-				// Laser
+					// Laser
 				case 2:
 					// TODO: parse args
 					break;
-				// Turret
+					// Turret
 				case 3:
 					// TODO: parse args
 					break;
-				// Door
+					// Door
 				case 4:
 					// TODO: parse args
 					break;
-				// Moving platform
+					// Moving platform
 				case 5:
 				{
-						  // TODO: parse args
-
-						  TiXmlElement * pArg = pEntity->FirstChildElement();
-						  int vertical;
-						  pArg->Attribute("value", &vertical);
-						  pArg = pArg->NextSiblingElement();
-						  double turnDistance;
-						  pArg->Attribute("value", &turnDistance);
-						  pArg = pArg->NextSiblingElement();
-						  double speed;
-						  pArg->Attribute("value", &speed);
-						  GameplayState::GetInstance()->CreateMovingPlatform(x, y, (bool)vertical, (float)turnDistance, (float)speed);
-						  break;
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					int vertical;
+					pArg->Attribute("value", &vertical);
+					pArg = pArg->NextSiblingElement();
+					double turnDistance;
+					pArg->Attribute("value", &turnDistance);
+					pArg = pArg->NextSiblingElement();
+					double speed;
+					pArg->Attribute("value", &speed);
+					GameplayState::GetInstance()->CreateMovingPlatform(x, y, (bool)vertical, (float)turnDistance, (float)speed);
+					break;
 				}
-				// Geyser
+					// Geyser
 				case 6:
 					// TODO: parse args
 					break;
-				// Lava
+					// Lava
 				case 7:
 					// TODO: parse args
 					break;
-				// Falling block
+					// Falling block
 				case 8:
+				{
 					GameplayState::GetInstance()->CreateFallingBlock(x, y);
 					break;
-				// Block
+				}
+					// Block
 				case 9:
 					// Nothing!
 					break;
-				// Pendulum
+					// Pendulum
 				case 10:
 					// Nothing!
 					break;
-				// Buzz saw
+					// Buzz saw
 				case 11:
 					// TODO: parse args
 					break;
-				// Stalactite
+					// Stalactite
 				case 12:
 					// Nothing!
 					break;
-				// Armor
+					// Armor
 				case 13:
 					// Nothing!
 					break;
-				// Freezable ground
+					// Freezable ground
 				case 14:
 					// Nothing!
 					break;
-				// Freezable left ramp
+					// Freezable left ramp
 				case 15:
 					// Nothing!
 					break;
-				// Freezable right ramp
+					// Freezable right ramp
 				case 16:
 					// Nothing!
 					break;
-				// Hint statue
+					// Hint statue
 				case 17:
 					// TODO: parse args
 					break;
