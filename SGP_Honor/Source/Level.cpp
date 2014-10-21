@@ -496,6 +496,9 @@ void Level::CheckCollision(IEntity * _entity)
 	int width = (int)((rect.right-1 - rect.left) / 32);
 	int height = (int)((rect.bottom-1 - rect.top) / 32);
 
+	//int x2 = (int)((rect.right - 1) / 32);
+	//int y2 = (int)((rect.bottom - 1) / 32);
+
 	// loop through all adjacent collision pieces
 	for (int xx = x; xx <= x + width + 1; ++xx)
 	{
