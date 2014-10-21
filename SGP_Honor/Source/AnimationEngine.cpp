@@ -86,7 +86,7 @@ void AnimationEngine::Render(SGD::Point position, float rotation, AnimTimeStamp&
 	SGD::Rectangle frame = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetSourceRect();
 	SGD::Point anchor = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetAnchor();
 	SGD::GraphicsManager::GetInstance()->DrawTextureSection(m_mAnimationMap[ts.GetCurrAnimation()].GetImage(),
-	{ position.x - /*(anchor.x * scaleX)*/  camerapos.x, position.y /*- (anchor.y * scale)*/ - camerapos.y }, frame, rotation, {}, {}, { scaleX, scale });
+	{ position.x - (anchor.x * scaleX) - camerapos.x, position.y - (anchor.y * scale) - camerapos.y }, frame, rotation, {}, {}, { scaleX, scale });
 }
 
 void AnimationEngine::Terminate(void)
