@@ -1,5 +1,7 @@
 #include "Activator.h"
 #include "Camera.h"
+#include "../SGD Wrappers/SGD_Event.h"
+#include "../SGD Wrappers/SGD_EventManager.h"
 
 Activator::Activator(bool isPressure)
 {
@@ -24,11 +26,19 @@ void Activator::Update(float elapsedTime)
 		m_fSwitchTimer -= elapsedTime;
 
 	}
-	
 
-	if(m_fSwitchTimer < 0.0f)
+
+	if(m_fSwitchTimer < 0.0f && m_bPressurePlate == false)
 	{
 		m_fSwitchTimer = 0.0f;
+	}
+	else if(m_fSwitchTimer < 0.0f && m_bPressurePlate == true)
+	{
+		m_fSwitchTimer = 0.0f;
+		//Close Door
+		SGD::Event* pATEvent = new SGD::Event("CLOSE_DOOR", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
 	}
 
 }
@@ -70,11 +80,22 @@ void Activator::HandleCollision(const IEntity* pOther)
 {
 	if(pOther->GetType() == ENT_PLAYER)
 	{
-		if(m_fSwitchTimer == 0.0f)
+		if(m_bPressurePlate == false && m_fSwitchTimer == 0.0f)
 		{
-			m_bIsOn = !m_bIsOn;
+			//Open Door
+			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
 			m_fSwitchTimer = 3.0f;
 
+		}
+		else if(m_bPressurePlate == true)
+		{
+			//Open Door
+			SGD::Event* pATEvent = new SGD::Event("OPEN_DOOR", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+			m_fSwitchTimer = 0.25f;
 		}
 
 	}

@@ -26,6 +26,7 @@
 #include "Door.h"
 #include "BossDoor.h"
 #include "Activator.h"
+#include "Stalactite.h"
 #include "Ice.h"
 #include "Hawk.h"
 #include "BuzzSaw.h"
@@ -104,6 +105,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pFBlock = new FallingBlock();
 	m_pSwitch = new Activator(false);
 	m_pPressurePlate = new Activator(true);
+	m_pStalactite = new Stalactite();
 	m_pBuzzSaw = new BuzzSaw();
 	m_pTurret = new Turret();
 
@@ -132,6 +134,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pEntities->AddEntity(m_pDoor, Entity::ENT_DOOR);
 	m_pEntities->AddEntity(m_pBDoor, Entity::ENT_BOSS_DOOR);
 	m_pEntities->AddEntity(m_pSwitch, Entity::ENT_SWITCH);
+	m_pEntities->AddEntity(m_pStalactite, Entity::ENT_STALACTITE);
 	m_pEntities->AddEntity(m_pBuzzSaw, Entity::ENT_BUZZSAW);
 	m_pEntities->AddEntity(m_pTurret, Entity::ENT_TURRET);
 	m_pDoor->SetActivator(m_pSwitch);
@@ -267,6 +270,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PERM_FREEZE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TEMP_FREEZE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_DOOR);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_DOOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BUZZSAW);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PROJ);
@@ -280,6 +284,8 @@ void GameplayState::Update(float elapsedTime)
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_FALLING_BLOCK);
+	m_pEntities->CheckWorldCollision(Entity::ENT_STALACTITE);
+
 
 	//Process messages and events
 	SGD::EventManager::GetInstance()->Update();

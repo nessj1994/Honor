@@ -443,6 +443,15 @@ void Player::HandleCollision(const IEntity* pOther)
 {
 
 	Unit::HandleCollision(pOther);
+	if(pOther->GetType() == ENT_DOOR)
+	{
+		BasicCollision(pOther);
+	}
+
+	if(pOther->GetType() == ENT_BOSS_DOOR)
+	{
+		BasicCollision(pOther);
+	}
 
 	if (pOther->GetType() == Entity::ENT_HONOR)
 	{

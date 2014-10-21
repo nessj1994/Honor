@@ -150,6 +150,7 @@ private:
 	BossDoor* m_pBDoor = nullptr;
 	Activator* m_pSwitch = nullptr;
 	Activator* m_pPressurePlate = nullptr;
+	Stalactite* m_pStalactite = nullptr;
 	BuzzSaw* m_pBuzzSaw = nullptr;
 	Turret* m_pTurret = nullptr;
 
