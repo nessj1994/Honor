@@ -133,76 +133,79 @@ void Player::Update(float elapsedTime)
 		/////////////////////////////////////////////////
 		/////////////////Movement////////////////////////
 		//reset currframe to 0 & set the animation playing to true
-		if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false))
+		if (IsDashing() == false)
 		{
-			stickFrame = 1;
-			m_ts.ResetCurrFrame();
-			m_ts.SetPlaying(true);
-		}
-		//reset currframe to 0 & set the animation playing to false
-		if ((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true))
-		{
-			leftClamped = false;
-		}
-		if (pInput->IsKeyReleased(SGD::Key::E) == true || pInput->IsKeyReleased(SGD::Key::Q) == true)
-		{
-			m_ts.SetPlaying(false);
-			m_ts.ResetCurrFrame();
-			m_ts.SetCurrAnimation("Idle");
-		}
-		else if (leftClamped == true)
-		{
-			m_ts.SetPlaying(false);
-			m_ts.ResetCurrFrame();
-			m_ts.SetCurrAnimation("Idle");
-		}
-		//Right Movement
-		if(pInput->IsKeyDown(SGD::Key::E) == true
-			|| leftStickXOff > JOYSTICK_DEADZONE)
-		{
-
-			if(GetIsInputStuck() == true)
-				m_fInputTimer += elapsedTime;
-
-
-			if(m_fInputTimer > 0.20f
-				|| GetIsInputStuck() == false)
+			if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false))
 			{
-				if(GetVelocity().x <= 0)
-				{
-					SetVelocity(SGD::Vector(GetVelocity().x + (5 * GetSpeed() * elapsedTime), GetVelocity().y));
-
-				}
-				else
-					SetVelocity(SGD::Vector(GetVelocity().x + GetSpeed() * elapsedTime, GetVelocity().y));
-				SetDirection({ 1, 0 });
+				stickFrame = 1;
+				m_ts.ResetCurrFrame();
+				m_ts.SetPlaying(true);
 			}
-			m_ts.SetCurrAnimation("Walking");
-			SetFacingRight(true);
-		}
-
-		//Left Movement
-		if(pInput->IsKeyDown(SGD::Key::Q) == true
-			|| leftStickXOff < -JOYSTICK_DEADZONE)
-		{
-			if(GetIsInputStuck() == true)
-				m_fInputTimer += elapsedTime;
-
-			if(m_fInputTimer > 0.20f
-				|| GetIsInputStuck() == false)
+			//reset currframe to 0 & set the animation playing to false
+			if ((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true))
 			{
-				if(GetVelocity().x >= 0)
-				{
-					SetVelocity(SGD::Vector(GetVelocity().x - (5 * GetSpeed() * elapsedTime), GetVelocity().y));
-				}
-				else
-				{
-					SetVelocity(SGD::Vector(GetVelocity().x - GetSpeed() * elapsedTime, GetVelocity().y));
-				}
-				SetDirection({ -1, 0 });
+				leftClamped = false;
 			}
-			m_ts.SetCurrAnimation("Walking");
-			SetFacingRight(false);
+			if (pInput->IsKeyReleased(SGD::Key::E) == true || pInput->IsKeyReleased(SGD::Key::Q) == true)
+			{
+				m_ts.SetPlaying(false);
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Idle");
+			}
+			else if (leftClamped == true)
+			{
+				m_ts.SetPlaying(false);
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Idle");
+			}
+			//Right Movement
+			if (pInput->IsKeyDown(SGD::Key::E) == true
+				|| leftStickXOff > JOYSTICK_DEADZONE)
+			{
+
+				if (GetIsInputStuck() == true)
+					m_fInputTimer += elapsedTime;
+
+
+				if (m_fInputTimer > 0.20f
+					|| GetIsInputStuck() == false)
+				{
+					if (GetVelocity().x <= 0)
+					{
+						SetVelocity(SGD::Vector(GetVelocity().x + (5 * GetSpeed() * elapsedTime), GetVelocity().y));
+
+					}
+					else
+						SetVelocity(SGD::Vector(GetVelocity().x + GetSpeed() * elapsedTime, GetVelocity().y));
+					SetDirection({ 1, 0 });
+				}
+				m_ts.SetCurrAnimation("Walking");
+				SetFacingRight(true);
+			}
+
+			//Left Movement
+			if (pInput->IsKeyDown(SGD::Key::Q) == true
+				|| leftStickXOff < -JOYSTICK_DEADZONE)
+			{
+				if (GetIsInputStuck() == true)
+					m_fInputTimer += elapsedTime;
+
+				if (m_fInputTimer > 0.20f
+					|| GetIsInputStuck() == false)
+				{
+					if (GetVelocity().x >= 0)
+					{
+						SetVelocity(SGD::Vector(GetVelocity().x - (5 * GetSpeed() * elapsedTime), GetVelocity().y));
+					}
+					else
+					{
+						SetVelocity(SGD::Vector(GetVelocity().x - GetSpeed() * elapsedTime, GetVelocity().y));
+					}
+					SetDirection({ -1, 0 });
+				}
+				m_ts.SetCurrAnimation("Walking");
+				SetFacingRight(false);
+			}
 		}
 
 		m_fShotTimer += elapsedTime;
@@ -212,6 +215,9 @@ void Player::Update(float elapsedTime)
 			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
 		{
 			CastDash();
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+			m_ts.SetCurrAnimation("dashing");
 		}
 
 		/////////////////////////////////////////////////
