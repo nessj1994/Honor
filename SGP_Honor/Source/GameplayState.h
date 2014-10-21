@@ -81,7 +81,7 @@ public:
 	void CreateDoor(int _x, int _y, bool _isHorizontal, int _ID, int _size);
 	void CreateFallingBlock(int _x, int _y);
 	void CreateGeyser(int x, int y);
-	void CreateLaser(int x, int y);
+	void CreateLava(int x, int y);
 
 	
 

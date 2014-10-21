@@ -126,7 +126,7 @@ void GameplayState::Enter(void) //Load Resources
 	CreateTempFrozenTiles();
 	CreateGeyser(100, 400);
 	CreateLaser(120, 500, { 1, 1 }, 200, 700);
-	CreateLaser(50, 700);
+	CreateLava(50, 700);
 
 	CreateMovingPlatform(1000, 500, false, 200, 100);
 
@@ -704,7 +704,7 @@ void GameplayState::CreateGeyser(int _x, int _y)
 }
 
 
-void GameplayState::CreateLaser(int x, int y)
+void GameplayState::CreateLava(int x, int y)
 {
 	Lava* m_pLava = new Lava;
 	m_pLava->SetPosition({ (float)x, (float)y });
@@ -720,11 +720,13 @@ void GameplayState::CreateLaser(int x, int y, SGD::Vector _direction, int _switc
 	m_pLaser->SetPosition({ (float)x, (float)y });
 	m_pLaser->SetOrigPosition({ (float)x, (float)y });
 	m_pLaser->SetDirection({ _direction });
+	m_pLaser->SetFreq(2);
+
 
 	Activator* m_pLaserSwitch = new Activator(false);
 	m_pLaserSwitch->SetPosition({ (float)_switchX, (float)_switchY });
 
-
+	m_pLaserSwitch->SetKeyID(2);
 
 	m_pEntities->AddEntity(m_pLaser, Entity::ENT_LASER);
 	m_pEntities->AddEntity(m_pLaserSwitch, Entity::ENT_SWITCH);

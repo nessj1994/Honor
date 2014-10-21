@@ -110,9 +110,14 @@ void Activator::HandleCollision(const IEntity* pOther)
 			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
+
+			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
 			m_fSwitchTimer = 3.0f;
 		}
 
 	}
+
 }
 
