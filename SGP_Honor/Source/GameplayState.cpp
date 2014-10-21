@@ -106,7 +106,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pDoor = new Door();
 	m_pBDoor = new BossDoor();
 	m_pFBlock = new FallingBlock();
-	m_pSwitch = new Activator(false);
+	m_pSwitch = new Activator(true);
 	m_pPressurePlate = new Activator(true);
 	m_pStalactite = new Stalactite();
 	m_pBuzzSaw = new BuzzSaw();
