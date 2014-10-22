@@ -74,7 +74,7 @@ bool Game::Initialize(float width, float height)
 
 	//Initialize the font
 	m_pFont = new BitmapFont();
-	m_pFont->LoadFont("../Assets/HonorFont.fnt");
+	m_pFont->LoadFont("Assets/HonorFont.fnt");
 
 	//Start the game in the proper state
 	AddState(MainMenuState::GetInstance());

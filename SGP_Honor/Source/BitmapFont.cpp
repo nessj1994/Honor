@@ -58,7 +58,7 @@ bool BitmapFont::LoadFont(const char* filePath)
 	std::string file = pFont->Attribute("file");
 
 	//Append the image path to the rest of the file path (relative)
-	std::string fullPath = "../Assets/Graphics/" + file;
+	std::string fullPath = "Assets/Graphics/" + file;
 
 	//Set our fonts texture to the previously obtained elements file attribute
 	temp.m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(fullPath.c_str());

@@ -99,20 +99,20 @@ void GameplayState::Enter(void) //Load Resources
 
 	//Load Assets here
 	m_pLevel = new Level();
-	m_pLevel->LoadLevel("../Assets/TestLevel.xml");
+	m_pLevel->LoadLevel("Assets/TestLevel.xml");
 
 
 
 
 	//Load Audio
-	m_hBGM = pAudio->LoadAudio(L"../Assets/Audio/HonorBGM.xwm");
+	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/HonorBGM.xwm");
 	pAudio->PlayAudio(m_hBGM);
 
 	//These are only for testing and will be removed later
 	m_pDoor = new Door();
 	m_pBDoor = new BossDoor();
 	m_pFBlock = new FallingBlock();
-	m_pSwitch = new Activator(true);
+	m_pSwitch = new Activator(false);
 	m_pPressurePlate = new Activator(true);
 	m_pStalactite = new Stalactite();
 	m_pBuzzSaw = new BuzzSaw();
@@ -169,7 +169,7 @@ void GameplayState::Enter(void) //Load Resources
 	
 	//For Particle Testing
 	//m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test");
-	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("RotationTest.xml", "Test", { -100, -100 });
+	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/RotationTest.xml", "Test", { -100, -100 });
 }
 
 
@@ -834,7 +834,7 @@ void GameplayState::SaveGame()
 	rootElement->LinkEndChild(element);
 	element->SetAttribute("x", m_pPlayer->GetPosition().x);
 	element->SetAttribute("y", m_pPlayer->GetPosition().y);
-	doc.SaveFile("../Assets/SaveGame.xml");
+	doc.SaveFile("Assets/SaveGame.xml");
 }
 
 void GameplayState::LoadGame()
@@ -842,7 +842,7 @@ void GameplayState::LoadGame()
 	//Create the doc
 	TiXmlDocument doc;
 
-	doc.LoadFile("../Assets/SaveGame.xml");
+	doc.LoadFile("Assets/SaveGame.xml");
 
 	TiXmlElement* pRoot = doc.RootElement();
 

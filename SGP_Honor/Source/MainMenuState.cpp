@@ -50,7 +50,7 @@ void MainMenuState::Enter(void) //Load Resources
 
 	TiXmlDocument doc;
 
-	doc.LoadFile("../Assets/Options.xml");
+	doc.LoadFile("Assets/Options.xml");
 
 	TiXmlElement* pRoot = doc.RootElement();
 

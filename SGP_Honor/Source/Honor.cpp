@@ -5,7 +5,7 @@
 
 Honor::Honor()
 {
-	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("../Assets/graphics/star.png");
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/star.png");
 	m_ptPosition = SGD::Point(200, 300);
 	SetSize(SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage));
 }

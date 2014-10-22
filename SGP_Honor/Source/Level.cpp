@@ -295,8 +295,9 @@ bool Level::LoadLevel(const char * _path)
 		imageLayer->SetTileSetSize(tileSetSize);
 
 		// tileset texture
-		std::string path = "..";
+		std::string path = "";
 		path += pImageLayer->Attribute("image");
+		path = path.erase(0, 1);
 		SGD::HTexture texture = SGD::GraphicsManager::GetInstance()->LoadTexture(path.c_str());
 		imageLayer->SetTileSet(texture);
 
