@@ -356,6 +356,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_STALACTITE);
 	m_pEntities->CheckWorldCollision(Entity::ENT_LASER);
 
+	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
+
 
 	//Process messages and events
 	SGD::EventManager::GetInstance()->Update();

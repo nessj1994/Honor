@@ -348,7 +348,7 @@ bool Level::LoadLevel(const char * _path)
 
 	// Read in tiles
 	m_stEventLayer = new std::string*[m_nWidth];
-	pTile = pCollisionLayer->FirstChildElement();
+	pTile = pEventLayer->FirstChildElement();
 	for (int xx = 0; xx < m_nWidth; ++xx)
 	{
 		m_stEventLayer[xx] = new std::string[m_nHeight];
@@ -358,6 +358,9 @@ bool Level::LoadLevel(const char * _path)
 			/*char * value = nullptr;
 			pTile->Attribute(
 			collisionInfo[xx][yy] = value;*/
+			std::string value = "";
+			value = pTile->Attribute("event");
+			m_stEventLayer[xx][yy] = value;
 			pTile = pTile->NextSiblingElement();
 		}
 	}
@@ -540,31 +543,29 @@ void Level::CheckEvent(IEntity * _entity)
 	int y = (int)(rect.top / 32);
 
 	// Determine how far to check
-	int width = (int)((rect.right - rect.left) / 32);
-	int height = (int)((rect.bottom - rect.top) / 32);
+	int width = (int)((rect.right - 1 - rect.left) / 32);
+	int height = (int)((rect.bottom - 1 - rect.top) / 32);
+
+	//int x2 = (int)((rect.right - 1) / 32);
+	//int y2 = (int)((rect.bottom - 1) / 32);
 
 	// loop through all adjacent collision pieces
-	for (int xx = x - 1; xx < x + width + 1; ++xx)
+	for (int xx = x; xx <= x + width + 1; ++xx)
 	{
-		for (int yy = y - 1; yy < y + height + 1; ++yy)
+		for (int yy = y; yy <= y + height + 1; ++yy)
 		{
 			// Check if the current piece is in the bounds of the array
 			if (xx >= 0 && xx < m_nWidth && yy >= 0 && yy < m_nHeight)
 			{
-				// Create a rectangle and see if the entity is touching it
-				SGD::Rectangle rect = SGD::Rectangle(xx * 32, yy * 32, xx * 32 + 32, yy * 32 + 32);
-				if (_entity->GetRect().IsIntersecting(rect))
-				{
-					// Figure out what is at this position
-					std::string levelEvent = m_stEventLayer[xx][yy];
+				// Figure out what is at this position
+				std::string levelEvent = m_stEventLayer[xx][yy];
 
-					if (levelEvent != "") // only throw non blank events
-					{
-						// Throw event
-						SGD::Event* pATEvent = new SGD::Event(levelEvent.c_str(), nullptr, this);
-						SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-						pATEvent = nullptr;
-					}
+				if (levelEvent != "") // only throw non blank events
+				{
+					// Throw event
+					SGD::Event* pATEvent = new SGD::Event(levelEvent.c_str(), nullptr, this);
+					SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+					pATEvent = nullptr;
 				}
 			}
 		}
