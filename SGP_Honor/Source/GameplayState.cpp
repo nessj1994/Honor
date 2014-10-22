@@ -169,7 +169,7 @@ void GameplayState::Enter(void) //Load Resources
 	
 	//For Particle Testing
 	//m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test");
-	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/RotationTest.xml", "Test", { -100, -100 });
+	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/C++Test.xml", "Test", { -100, -100 });
 }
 
 
