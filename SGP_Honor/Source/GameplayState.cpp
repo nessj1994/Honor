@@ -99,13 +99,14 @@ void GameplayState::Enter(void) //Load Resources
 
 	//Load Assets here
 	m_pLevel = new Level();
-	m_pLevel->LoadLevel("../Assets/TestLevel.xml");
+	m_pLevel->LoadLevel("Assets/TestLevel.xml");
 
 
 
 
 	//Load Audio
-	m_hBGM = pAudio->LoadAudio(L"../Assets/Audio/HonorBGM.xwm");
+	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/HonorBGM.xwm");
+	pAudio->PlayAudio(m_hBGM);
 
 	//These are only for testing and will be removed later
 	m_pDoor = new Door();
@@ -136,8 +137,8 @@ void GameplayState::Enter(void) //Load Resources
 	CreateBlocks();
 	CreatePermFrozenTiles();
 	CreateTempFrozenTiles();
-	CreateGeyser(100, 400);
-	CreateLaser(120, 500, { 1, 1 }, 200, 700);
+	CreateGeyser(1000, 700);
+	CreateLaser(1500, 500, { 1, 1 }, 1500, 700);
 	CreateLava(50, 700);
 
 	CreateMovingPlatform(1000, 500, false, 200, 100);
@@ -168,7 +169,7 @@ void GameplayState::Enter(void) //Load Resources
 	
 	//For Particle Testing
 	//m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test");
-	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test", { -100, -100 });
+	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/RotationTest.xml", "Test", { -100, -100 });
 }
 
 
@@ -181,7 +182,7 @@ void GameplayState::Exit(void)
 
 	//Save the game
 	SaveGame();
-
+	
 
 	if (m_pEntities != nullptr)
 	{
@@ -241,6 +242,7 @@ void GameplayState::Exit(void)
 
 
 	//Audio
+	pAudio->StopAudio(m_hBGM);
 	pAudio->UnloadAudio(m_hBGM);
 
 
@@ -262,6 +264,8 @@ void GameplayState::Exit(void)
 bool GameplayState::Input(void) //Hanlde user Input
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
+
 
 	//DOOR TEST This will be removed later
 	if(pInput->IsKeyPressed(SGD::Key::X))
@@ -282,6 +286,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
+		pAudio->StopAudio(m_hBGM);
 	}
 
 	return true;
@@ -350,6 +355,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_HAWK);
 	m_pEntities->CheckWorldCollision(Entity::ENT_STALACTITE);
 	m_pEntities->CheckWorldCollision(Entity::ENT_LASER);
+
+	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
 
 
 	//Process messages and events
@@ -642,17 +649,17 @@ void GameplayState::CreateBlocks(void)
 		pBlock_1->Release();
 	}
 
-	for (unsigned int i = 0; i < 40; i++)
-	{
-		Block* pBlock_2 = new Block;
+	//for (unsigned int i = 0; i < 40; i++)
+	//{
+	//	Block* pBlock_2 = new Block;
 
-		pBlock_2->SetPosition(SGD::Point(600, 380 - (i * 20)));
-		pBlock_2->SetSize(SGD::Size(20, 20));
+	//	pBlock_2->SetPosition(SGD::Point(600, 380 - (i * 20)));
+	//	pBlock_2->SetSize(SGD::Size(20, 20));
 
-		m_pEntities->AddEntity(pBlock_2, Entity::ENT_BLOCK);
+	//	m_pEntities->AddEntity(pBlock_2, Entity::ENT_BLOCK);
 
-		pBlock_2->Release();
-	}
+	//	pBlock_2->Release();
+	//}
 
 }
 
@@ -771,7 +778,7 @@ void GameplayState::CreateLaser(int x, int y, SGD::Vector _direction, int _switc
 
 	m_pEntities->AddEntity(m_pLaser, Entity::ENT_LASER);
 	m_pEntities->AddEntity(m_pLaserSwitch, Entity::ENT_SWITCH);
-
+	m_pLaserSwitch->Release();
 	m_pLaser->Release();
 }
 
@@ -827,7 +834,7 @@ void GameplayState::SaveGame()
 	rootElement->LinkEndChild(element);
 	element->SetAttribute("x", m_pPlayer->GetPosition().x);
 	element->SetAttribute("y", m_pPlayer->GetPosition().y);
-	doc.SaveFile("../Assets/SaveGame.xml");
+	doc.SaveFile("Assets/SaveGame.xml");
 }
 
 void GameplayState::LoadGame()
@@ -835,7 +842,7 @@ void GameplayState::LoadGame()
 	//Create the doc
 	TiXmlDocument doc;
 
-	doc.LoadFile("../Assets/SaveGame.xml");
+	doc.LoadFile("Assets/SaveGame.xml");
 
 	TiXmlElement* pRoot = doc.RootElement();
 

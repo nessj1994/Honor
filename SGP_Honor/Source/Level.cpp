@@ -90,27 +90,27 @@ void Level::Render()
 				case 0:
 					color = { 150, 150, 150 }; // gray
 					break;
-				// Death
+					// Death
 				case 1:
 					color = { 255, 150, 150 }; // red
 					break;
-				// Left ramp
+					// Left ramp
 				case 2:
 					color = { 160, 80, 250 }; // purple
 					break;
-				// Right ramp
+					// Right ramp
 				case 3:
 					color = { 250, 70, 210 }; // pink
 					break;
-				// Ice
+					// Ice
 				case 4:
 					color = { 0, 220, 220 }; // Cyan
 					break;
-				// Ice left ramp
+					// Ice left ramp
 				case 5:
 					color = { 50, 110, 0 }; // dark green
 					break;
-				// Ice right ramp
+					// Ice right ramp
 				case 6:
 					color = { 30, 220, 0 }; // light green
 					break;
@@ -159,10 +159,12 @@ void Level::RenderImageLayer(bool background)
 			int mapWidth = (int)(Game::GetInstance()->GetScreenWidth() / 32);
 			int mapHeight = (int)(Game::GetInstance()->GetScreenHeight() / 32);
 
+			// TODO fix culling
+
 			// Loop through the map
-			for (int xx = startX; xx < startX + mapWidth + 2; ++xx)
+			for (int xx = startX + 2; xx < startX + mapWidth + 2; ++xx)
 			{
-				for (int yy = startY; yy < startY + mapHeight + 2; ++yy)
+				for (int yy = startY + 2; yy < startY + mapHeight + 2; ++yy)
 				{
 					// Check if the current tile is within bounds
 					if (xx >= 0 && xx < m_nWidth && yy >= 0 && yy < m_nHeight)
@@ -293,8 +295,9 @@ bool Level::LoadLevel(const char * _path)
 		imageLayer->SetTileSetSize(tileSetSize);
 
 		// tileset texture
-		std::string path = "..";
+		std::string path = "";
 		path += pImageLayer->Attribute("image");
+		path = path.erase(0, 1);
 		SGD::HTexture texture = SGD::GraphicsManager::GetInstance()->LoadTexture(path.c_str());
 		imageLayer->SetTileSet(texture);
 
@@ -346,7 +349,7 @@ bool Level::LoadLevel(const char * _path)
 
 	// Read in tiles
 	m_stEventLayer = new std::string*[m_nWidth];
-	pTile = pCollisionLayer->FirstChildElement();
+	pTile = pEventLayer->FirstChildElement();
 	for (int xx = 0; xx < m_nWidth; ++xx)
 	{
 		m_stEventLayer[xx] = new std::string[m_nHeight];
@@ -356,6 +359,9 @@ bool Level::LoadLevel(const char * _path)
 			/*char * value = nullptr;
 			pTile->Attribute(
 			collisionInfo[xx][yy] = value;*/
+			std::string value = "";
+			value = pTile->Attribute("event");
+			m_stEventLayer[xx][yy] = value;
 			pTile = pTile->NextSiblingElement();
 		}
 	}
@@ -391,84 +397,84 @@ bool Level::LoadLevel(const char * _path)
 				case 0:
 					// TODO: parse args
 					break;
-				// Activator
+					// Activator
 				case 1:
 					// TODO: parse args
 					break;
-				// Laser
+					// Laser
 				case 2:
 					// TODO: parse args
 					break;
-				// Turret
+					// Turret
 				case 3:
 					// TODO: parse args
 					break;
-				// Door
+					// Door
 				case 4:
 					// TODO: parse args
 					break;
-				// Moving platform
+					// Moving platform
 				case 5:
 				{
-						  // TODO: parse args
-
-						  TiXmlElement * pArg = pEntity->FirstChildElement();
-						  int vertical;
-						  pArg->Attribute("value", &vertical);
-						  pArg = pArg->NextSiblingElement();
-						  double turnDistance;
-						  pArg->Attribute("value", &turnDistance);
-						  pArg = pArg->NextSiblingElement();
-						  double speed;
-						  pArg->Attribute("value", &speed);
-						  GameplayState::GetInstance()->CreateMovingPlatform(x, y, (bool)vertical, (float)turnDistance, (float)speed);
-						  break;
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					int vertical;
+					pArg->Attribute("value", &vertical);
+					pArg = pArg->NextSiblingElement();
+					double turnDistance;
+					pArg->Attribute("value", &turnDistance);
+					pArg = pArg->NextSiblingElement();
+					double speed;
+					pArg->Attribute("value", &speed);
+					GameplayState::GetInstance()->CreateMovingPlatform(x, y, (bool)vertical, (float)turnDistance, (float)speed);
+					break;
 				}
-				// Geyser
+					// Geyser
 				case 6:
 					// TODO: parse args
 					break;
-				// Lava
+					// Lava
 				case 7:
 					// TODO: parse args
 					break;
-				// Falling block
+					// Falling block
 				case 8:
+				{
 					GameplayState::GetInstance()->CreateFallingBlock(x, y);
 					break;
-				// Block
+				}
+					// Block
 				case 9:
 					// Nothing!
 					break;
-				// Pendulum
+					// Pendulum
 				case 10:
 					// Nothing!
 					break;
-				// Buzz saw
+					// Buzz saw
 				case 11:
 					// TODO: parse args
 					break;
-				// Stalactite
+					// Stalactite
 				case 12:
 					// Nothing!
 					break;
-				// Armor
+					// Armor
 				case 13:
 					// Nothing!
 					break;
-				// Freezable ground
+					// Freezable ground
 				case 14:
 					// Nothing!
 					break;
-				// Freezable left ramp
+					// Freezable left ramp
 				case 15:
 					// Nothing!
 					break;
-				// Freezable right ramp
+					// Freezable right ramp
 				case 16:
 					// Nothing!
 					break;
-				// Hint statue
+					// Hint statue
 				case 17:
 					// TODO: parse args
 					break;
@@ -538,31 +544,29 @@ void Level::CheckEvent(IEntity * _entity)
 	int y = (int)(rect.top / 32);
 
 	// Determine how far to check
-	int width = (int)((rect.right - rect.left) / 32);
-	int height = (int)((rect.bottom - rect.top) / 32);
+	int width = (int)((rect.right - 1 - rect.left) / 32);
+	int height = (int)((rect.bottom - 1 - rect.top) / 32);
+
+	//int x2 = (int)((rect.right - 1) / 32);
+	//int y2 = (int)((rect.bottom - 1) / 32);
 
 	// loop through all adjacent collision pieces
-	for (int xx = x - 1; xx < x + width + 1; ++xx)
+	for (int xx = x; xx <= x + width + 1; ++xx)
 	{
-		for (int yy = y - 1; yy < y + height + 1; ++yy)
+		for (int yy = y; yy <= y + height + 1; ++yy)
 		{
 			// Check if the current piece is in the bounds of the array
 			if (xx >= 0 && xx < m_nWidth && yy >= 0 && yy < m_nHeight)
 			{
-				// Create a rectangle and see if the entity is touching it
-				SGD::Rectangle rect = SGD::Rectangle(xx * 32, yy * 32, xx * 32 + 32, yy * 32 + 32);
-				if (_entity->GetRect().IsIntersecting(rect))
-				{
-					// Figure out what is at this position
-					std::string levelEvent = m_stEventLayer[xx][yy];
+				// Figure out what is at this position
+				std::string levelEvent = m_stEventLayer[xx][yy];
 
-					if (levelEvent != "") // only throw non blank events
-					{
-						// Throw event
-						SGD::Event* pATEvent = new SGD::Event(levelEvent.c_str(), nullptr, this);
-						SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-						pATEvent = nullptr;
-					}
+				if (levelEvent != "") // only throw non blank events
+				{
+					// Throw event
+					SGD::Event* pATEvent = new SGD::Event(levelEvent.c_str(), nullptr, this);
+					SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+					pATEvent = nullptr;
 				}
 			}
 		}

@@ -26,7 +26,7 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("KILL_PLAYER");
 	SetDirection({ 1, 0 });
 	m_pDash = new Dash;
-	AnimationEngine::GetInstance()->LoadAnimation("../Assets/CollisionTesting.xml");
+	AnimationEngine::GetInstance()->LoadAnimation("Assets/CollisionTesting.xml");
 	m_ts.SetCurrAnimation("Idle");
 }
 

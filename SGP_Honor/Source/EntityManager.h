@@ -27,6 +27,7 @@ public:
 
 	void CheckCollisions(unsigned int _bucket1, unsigned int _bucket2);
 	void CheckWorldCollision(unsigned int _bucket);
+	void CheckWorldEvent(unsigned int _bucket);
 
 private:
 

@@ -10,7 +10,7 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 
-#define relativePath std::string("../assets/graphics/")
+#define relativePath std::string("Assets/graphics/")
 
 
 //Instantiate the static member for the games instance

@@ -123,7 +123,9 @@ Emitter* ParticleEngine::LoadEmitter(std::string filePath,std::string Name,SGD::
 				//
 				if (ImageName.size() > 0)
 				{
-					ReturnEmit->SetImage(SGD::GraphicsManager::GetInstance()->LoadTexture(ImageName.c_str()));
+					string path = "Assets/";
+					path += ImageName.c_str();
+					ReturnEmit->SetImage(SGD::GraphicsManager::GetInstance()->LoadTexture(path.c_str()));
 				}
 				else
 				{

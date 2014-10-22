@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "Animation.h"
 #include "../SGD Wrappers/SGD_Message.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "AnimTimeStamp.h"
 
 
@@ -70,9 +71,11 @@ public:
 	Level* GetCurrentLevel(void) const { return m_pLevel; }
 
 
+
 	//////////////////////////////////////////////////////////
 	////////////////////// Mutators /////////////////////////
 	void SetCamera(Camera* camera) { m_pCamera = camera; }
+	void ResetAudio() { SGD::AudioManager::GetInstance()->PlayAudio(m_hBGM); }
 
 	///////////////////////////////////////////////////////////
 	///////////////////// Factory Methods  ////////////////////
@@ -86,10 +89,6 @@ public:
 	void CreateFallingBlock(int _x, int _y);
 	void CreateGeyser(int x, int y);
 	void CreateLava(int x, int y);
-
-	
-
-
 	void CreateLaser(int x, int y, SGD::Vector _direction, int _switchX, int _switchY);
 
 	

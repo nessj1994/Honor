@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level name="NewLevel" width="50" height="24" fixed="0">
+<Level name="NewLevel" width="50" height="24" fixed="0" playerX="0" playerY="0">
 	<ImageLayers numLayers="3">
 		<ImageLayer speed="0.5" depth="-1" image="\Assets\graphics\TileSet1.png" name="Parralax" render="1" tileSetWidth="6" tileSetHeight="16" tileSetSize="32">
 			<ImageTile type="-1" />
@@ -4842,6 +4842,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="NextLevel" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -4865,8 +4866,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
+		<EventTile event="NextLevel" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
