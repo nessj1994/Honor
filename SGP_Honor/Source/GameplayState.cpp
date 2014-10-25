@@ -169,7 +169,7 @@ void GameplayState::Enter(void) //Load Resources
 	
 	//For Particle Testing
 	//m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test");
-	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/RotationTest.xml", "Test", { -100, -100 });
+	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/C++Test.xml", "Test", { -100, -100 });
 }
 
 
@@ -372,7 +372,7 @@ void GameplayState::Render(void)
 	m_pLevel->RenderImageLayer(true);
 	m_pLevel->Render();
 	//m_pEmitter->Render();
-	m_pEmitter2->Render({ m_pPlayer->GetPosition().x - Camera::GetInstance()->GetCameraPos().x, m_pPlayer->GetPosition().y - Camera::GetInstance()->GetCameraPos().y });
+	m_pEmitter2->Render( m_pPlayer->GetPosition());
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 
