@@ -79,31 +79,29 @@ public:
 
 	///////////////////////////////////////////////////////////
 	///////////////////// Factory Methods  ////////////////////
-	//void CreateHonor(int x, int y, int amount);
-	//void CreateActivator(int x, int y);
-	//void CreateTurret(int x, int y);
-	//void CreateDoor(int x, int y);
+	void CreateHonor(int x, int y, int _amount);
+	void CreateActivator(int x, int y, bool _pressurePlate, bool _active, int _ID);
+	void CreateLaser(int x, int y, SGD::Vector _direction, int _ID);
+	void CreateTurret(int x, int y, int _direction, float _timer);
+	void CreateDoor(int _x, int _y, bool _isHorizontal, int _ID);
 	void CreateMovingPlatform(int _x, int _y, bool _vertical, float _turnDistance, float _speed);
-	void CreateActivator(int _x, int _y, bool _isPressure, bool _currState, int _ID);
-	void CreateDoor(int _x, int _y, bool _isHorizontal, int _ID, int _size);
+	void CreateGeyser(int _x, int _y, float _speed, float _maxHeight, int _currState);
+	void CreateLava(int _x, int _y, float _speed, float _maxHeight, int _currState);
 	void CreateFallingBlock(int _x, int _y);
-	void CreateGeyser(int x, int y);
-	void CreateLava(int x, int y);
-	void CreateLaser(int x, int y, SGD::Vector _direction, int _switchX, int _switchY);
+	void CreateBlock(int _x, int _y);
+	void CreatePendulum(int _x, int _y);
+	void CreateBuzzsaw(int _x, int _y, bool _horizontal, unsigned int _returnDistance);
+	void CreateStalactite(int _x, int _y, float _timer);
+	void CreateArmor(int _x, int _y);
+	void CreateFreezableGround(int _x, int _y);
+	void CreateFreezableLeftRamp(int _x, int _y);
+	void CreateFreezableRightRamp(int _x, int _y);
+	void CreateHintStatue(int _x, int _y, std::string _message);
 
 	
 
 	//void CreateGeyser(int x, int y);
 	//void CreateLava(int x, int y);
-	//void CreateBlock(int x, int y);
-	//void CreatePendulum(int x, int y);
-	//void CreateBuzzsaw(int x, int y);
-	//void CreateStalactite(int x, int y);
-	//void CreateArmor(int x, int y);
-	//void CreateFreezableGround(int x, int y);
-	//void CreateFreezableLeftRamp(int x, int y);
-	//void CreateFreezableRightRamp(int x, int y);
-	//void CreateHintStatue(int x, int y);
 
 private:
 
