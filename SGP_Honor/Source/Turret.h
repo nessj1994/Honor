@@ -16,10 +16,17 @@ public:
 	virtual int GetType(void) const override;
 	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
+	
+
+	/////////////////////////////////////////////////
+	/////////////////Mutators//////////////////////
+	void SetFireTimer(float _timer) { m_fFireTimer = _timer; }
+	void SetDirection(int _direction) { m_nDirection = _direction; }
 
 private:
 
 	float m_fFireTimer = 1.0f;
+	int m_nDirection = 0;
 };
 
 

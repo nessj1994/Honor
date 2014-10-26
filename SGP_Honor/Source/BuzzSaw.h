@@ -35,7 +35,7 @@ private:
 	bool m_bHorizontal = true;		//Isthe buzzsaw moving horizontal
 	bool m_bMovingRight = false;	//Is the buzzsaw moving right or left
 	SGD::Point m_ptStartPosition;	//Position to store for movement
-	unsigned int m_unDistance = 50; //Pixels moved from the start postion on either side
+	unsigned int m_unDistance = 0; //Pixels moved from the start postion on either side
 
 
 
