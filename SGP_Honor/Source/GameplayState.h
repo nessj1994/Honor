@@ -157,19 +157,19 @@ private:
 	float testtime = 0;
 	
 	//Test Entities to be removed later
-	FallingBlock* m_pFBlock = nullptr;
-	Door* m_pDoor = nullptr;
-	BossDoor* m_pBDoor = nullptr;
-	Activator* m_pSwitch = nullptr;
-	Activator* m_pPressurePlate = nullptr;
-	Stalactite* m_pStalactite = nullptr;
-	BuzzSaw* m_pBuzzSaw = nullptr;
-	Turret* m_pTurret = nullptr;
+	//FallingBlock* m_pFBlock = nullptr;
+	//Door* m_pDoor = nullptr;
+	//BossDoor* m_pBDoor = nullptr;
+	//Activator* m_pSwitch = nullptr;
+	//Activator* m_pPressurePlate = nullptr;
+	//Stalactite* m_pStalactite = nullptr;
+	//BuzzSaw* m_pBuzzSaw = nullptr;
+	//Turret* m_pTurret = nullptr;
 
-	Pendulum * m_pPendulum = nullptr;
-	HintStatue * m_pStatue = nullptr;
-	Honor * m_pHonor = nullptr;
-	Armor * m_pArmor = nullptr;
+	//Pendulum * m_pPendulum = nullptr;
+	//HintStatue * m_pStatue = nullptr;
+	//Honor * m_pHonor = nullptr;
+	//Armor * m_pArmor = nullptr;
 
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
 

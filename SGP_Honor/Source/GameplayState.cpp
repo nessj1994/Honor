@@ -109,20 +109,20 @@ void GameplayState::Enter(void) //Load Resources
 	//pAudio->PlayAudio(m_hBGM);
 
 	//These are only for testing and will be removed later
-	m_pDoor = new Door();
-	m_pBDoor = new BossDoor();
-	m_pFBlock = new FallingBlock();
-	m_pSwitch = new Activator(false);
-	m_pPressurePlate = new Activator(true);
-	m_pStalactite = new Stalactite();
-	m_pBuzzSaw = new BuzzSaw();
-	m_pTurret = new Turret();
+	//m_pDoor = new Door();
+	//m_pBDoor = new BossDoor();
+	//m_pFBlock = new FallingBlock();
+	//m_pSwitch = new Activator(false);
+	//m_pPressurePlate = new Activator(true);
+	//m_pStalactite = new Stalactite();
+	//m_pBuzzSaw = new BuzzSaw();
+	//m_pTurret = new Turret();
 
-	m_pArmor = new Armor();
-	m_pHonor = new Honor();
-	m_pPendulum = new Pendulum();
-	m_pStatue = new HintStatue();
-	m_pStatue->SetMessageString("This is a test string");
+	//m_pArmor = new Armor();
+	//m_pHonor = new Honor();
+	//m_pPendulum = new Pendulum();
+	//m_pStatue = new HintStatue();
+	//m_pStatue->SetMessageString("This is a test string");
 
 
 	//Create player with factory method
@@ -192,35 +192,35 @@ void GameplayState::Exit(void)
 		m_pEntities = nullptr;
 	}
 
-	delete m_pBDoor;
-	delete m_pDoor;
-	delete m_pSwitch;
-	delete m_pPressurePlate;
-	delete m_pBuzzSaw;
-	delete m_pTurret;
-	delete m_pStalactite;
+	//delete m_pBDoor;
+	//delete m_pDoor;
+	//delete m_pSwitch;
+	//delete m_pPressurePlate;
+	//delete m_pBuzzSaw;
+	//delete m_pTurret;
+	//delete m_pStalactite;
 
 	if(m_pPlayer != nullptr)
 	{
 		m_pPlayer->Release();
 	}
 
-	if (m_pStatue != nullptr)
-		m_pStatue->Release();
+	//if (m_pStatue != nullptr)
+	//	m_pStatue->Release();
 
-	if (m_pHonor != nullptr)
-		m_pHonor->Release();
+	//if (m_pHonor != nullptr)
+	//	m_pHonor->Release();
 
-	if (m_pArmor != nullptr)
-		m_pArmor->Release();
+	//if (m_pArmor != nullptr)
+	//	m_pArmor->Release();
 
-	if (m_pPendulum != nullptr)
-		m_pPendulum->Release();
+	//if (m_pPendulum != nullptr)
+	//	m_pPendulum->Release();
 
-	if (m_pFBlock)
-	{
-		m_pFBlock->Release();
-	}
+	//if (m_pFBlock)
+	//{
+	//	m_pFBlock->Release();
+	//}
 	//Create local references to the SGD Wrappers
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -268,10 +268,10 @@ bool GameplayState::Input(void) //Hanlde user Input
 
 
 	//DOOR TEST This will be removed later
-	if(pInput->IsKeyPressed(SGD::Key::X))
-	{
-		m_pDoor->SetOpen(!(m_pDoor->GetOpen()));
-	}
+	//if(pInput->IsKeyPressed(SGD::Key::X))
+	//{
+	//	m_pDoor->SetOpen(!(m_pDoor->GetOpen()));
+	//}
 	if(pInput->IsKeyPressed(SGD::Key::H))
 	{
 		m_pPlayer->SetHonorCollected(m_pPlayer->GetHonorCollected() + 50);
@@ -297,11 +297,11 @@ bool GameplayState::Input(void) //Hanlde user Input
 // - Update all game entities
 void GameplayState::Update(float elapsedTime)
 {
-	if (m_pHonor->GetIsCollected() == true)
-		m_pEntities->RemoveEntity(m_pHonor);
+	//if (m_pHonor->GetIsCollected() == true)
+	//	m_pEntities->RemoveEntity(m_pHonor);
 
-	if (m_pArmor->GetIsCollected() == true)
-		m_pEntities->RemoveEntity(m_pArmor);
+	//if (m_pArmor->GetIsCollected() == true)
+	//	m_pEntities->RemoveEntity(m_pArmor);
 
 	//	m_pCamera->Update(elapsedTime);
 	if (testtime <= 0.3f)
@@ -343,11 +343,11 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STATUE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
 
-	if (m_pArmor != nullptr)
-		m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ARMOR);
+	//if (m_pArmor != nullptr)
+	//	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ARMOR);
 
-	if (m_pHonor != nullptr)
-		m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
+	//if (m_pHonor != nullptr)
+	//	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_FALLING_BLOCK);
