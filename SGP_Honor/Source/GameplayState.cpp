@@ -372,7 +372,10 @@ void GameplayState::Render(void)
 	m_pLevel->RenderImageLayer(true);
 	m_pLevel->Render();
 	//m_pEmitter->Render();
-	m_pEmitter2->Render( m_pPlayer->GetPosition());
+
+
+
+	//m_pEmitter2->Render( m_pPlayer->GetPosition());
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 
@@ -625,7 +628,7 @@ Player* GameplayState::CreatePlayer(void)
 	Player* pPlayer = new Player;
 
 	pPlayer->SetPosition(SGD::Point(100, 100));
-	pPlayer->SetSize(SGD::Size(64, 64));
+	pPlayer->SetSize(SGD::Size(32, 32));
 	
 	return pPlayer;
 
@@ -804,7 +807,9 @@ void GameplayState::CreateMovingPlatform(int _x, int _y, bool _vertical, float _
 	mPlatform->SetPosition({ (float)_x, (float)_y });
 	mPlatform->SetSize({ 128.0f, 32.0f });
 	mPlatform->SetVertical(_vertical);
-	mPlatform->SetTurnDistance(_turnDistance);
+	mPlatform->SetTurnDistance(100);
+
+	//mPlatform->SetTurnDistance(_turnDistance);
 	mPlatform->SetSpeed(_speed);
 	m_pEntities->AddEntity(mPlatform, Entity::ENT_MOVING_PLATFORM);
 	mPlatform->Release();

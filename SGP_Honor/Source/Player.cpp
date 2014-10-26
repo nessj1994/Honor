@@ -158,6 +158,8 @@ void Player::Update(float elapsedTime)
 				m_ts.ResetCurrFrame();
 				m_ts.SetCurrAnimation("Idle");
 			}
+
+
 			//Right Movement
 			if (pInput->IsKeyDown(SGD::Key::E) == true
 				|| leftStickXOff > JOYSTICK_DEADZONE)
@@ -170,7 +172,7 @@ void Player::Update(float elapsedTime)
 				if (m_fInputTimer > 0.20f
 					|| GetIsInputStuck() == false)
 				{
-					if (GetVelocity().x <= 0)
+					if (GetVelocity().x < 0)
 					{
 						SetVelocity(SGD::Vector(GetVelocity().x + (5 * GetSpeed() * elapsedTime), GetVelocity().y));
 
@@ -193,7 +195,7 @@ void Player::Update(float elapsedTime)
 				if (m_fInputTimer > 0.20f
 					|| GetIsInputStuck() == false)
 				{
-					if (GetVelocity().x >= 0)
+					if (GetVelocity().x > 0)
 					{
 						SetVelocity(SGD::Vector(GetVelocity().x - (5 * GetSpeed() * elapsedTime), GetVelocity().y));
 					}
@@ -234,13 +236,33 @@ void Player::Update(float elapsedTime)
 		{
 			if(GetIsJumping() == false)
 			{
-				m_fJumpTimer = 0.2f;
+				m_fJumpTimer = 0.4f;
+
+			//	SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
+				//SetVelocity({ GetVelocity().x, -450});
+				//SetIsJumping(true);
+				SetVelocity({ GetVelocity().x, -900 });
+
+
 			}
 
 			if(GetIsFalling() == false)
 			{
-				SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
-				SetVelocity({ GetVelocity().x, GetJumpVelCur() });
+				//SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
+				//SetVelocity({ GetVelocity().x, GetJumpVelCur() });
+				
+				if (m_fJumpTimer < 0.1f)
+				{
+					SetVelocity({ GetVelocity().x, GetVelocity().y + (9000 * elapsedTime) });
+					if (GetVelocity().y > 0)
+					{
+						SetVelocity({ GetVelocity().x, 0 });
+
+					}
+
+				}
+
+
 				SetIsJumping(true);
 			}
 
@@ -286,11 +308,6 @@ void Player::Update(float elapsedTime)
 			if(m_bHawkCast == false
 				&& m_fHawkTimer > 1.0f)
 			{
-				//	if (m_fHawkTimer > 1.0f)
-				//	{
-				//
-				//	}
-
 
 				m_bHawkCast = true;
 				CreateHawkMessage* pMsg = new CreateHawkMessage(this);
@@ -376,19 +393,31 @@ void Player::Update(float elapsedTime)
 		/////////////////////////////////////////////////
 		//////////////Constant Updates///////////////////
 
-		if((m_fJumpTimer == 0.0f
+		
+
+
+		if(GetIsFalling() == true)
+		{
+			SetGravity(-3000);
+
+
+			SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
+		}
+
+		if ((m_fJumpTimer == 0.0f
 			|| pInput->IsKeyDown(SGD::Key::Space) == false
 			&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
 			&& GetVelocity().y <= 0
 			/*&& GetIsInputStuck() == true*/)
 		{
 			SetIsFalling(true);
-		}
 
+			if (GetVelocity().y < 0)
+			{
+				SetVelocity({ GetVelocity().x, 0 });
 
-		if(GetIsFalling() == true)
-		{
-			SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
+			}
+
 		}
 
 
@@ -397,9 +426,9 @@ void Player::Update(float elapsedTime)
 	//////Dash should maybe end check here
 
 
-	if(GetVelocity().y > 450)
+	if(GetVelocity().y > 1050)
 	{
-		SetVelocity(SGD::Vector(GetVelocity().x, 450));
+		SetVelocity(SGD::Vector(GetVelocity().x, 1050));
 	}
 
 	SetIsInputStuck(false);
@@ -414,7 +443,10 @@ void Player::Update(float elapsedTime)
 
 	Unit::Update(elapsedTime);
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
-	SetGravity(-500);
+
+		SetGravity(-3000);
+
+	
 
 
 }
@@ -579,70 +611,103 @@ void Player::HandleCollision(const IEntity* pOther)
 void Player::BasicCollision(const IEntity* pOther)
 {
 
-	SetGravity(-500);
+	SetGravity(-3000);
 
-	SGD::Rectangle rPlayer = GetRect();
-	SGD::Rectangle rOther = pOther->GetRect();
-	SGD::Rectangle rIntersecting = rPlayer.ComputeIntersection(rOther);
+	RECT rPlayer;
+	rPlayer.left = (LONG)GetRect().left;
+	rPlayer.top = (LONG)GetRect().top;
+	rPlayer.right = (LONG)GetRect().right;
+	rPlayer.bottom = (LONG)GetRect().bottom;
 
-	float rIntersectWidth = rIntersecting.ComputeWidth();
-	float rIntersectHeight = rIntersecting.ComputeHeight();
+	//Create a rectangle for the other object
+	RECT rObject;
+	rObject.left = (LONG)pOther->GetRect().left;
+	rObject.top = (LONG)pOther->GetRect().top;
+	rObject.right = (LONG)pOther->GetRect().right;
+	rObject.bottom = (LONG)pOther->GetRect().bottom;
 
-	if (rIntersectWidth >= rIntersectHeight)
+	//Create a rectangle for the intersection
+	RECT rIntersection = {};
+
+	//	RECT rPlayerWall;
+	//	rPlayerWall.left = (LONG)GetRect().left - 1;
+	//	rPlayerWall.top = (LONG)GetRect().top;
+	//	rPlayerWall.right = (LONG)GetRect().right + 1;
+	//	rPlayerWall.bottom = (LONG)GetRect().bottom;
+	//
+	//	IntersectRect(&rIntersection, &rPlayer, &rPlayerWall);
+
+	int nIntersectWidth = rIntersection.right - rIntersection.left;
+	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+	//if (nIntersectHeight > nIntersectWidth)
+	//{
+	//	if (GetIsFalling() == true
+	//		|| GetIsJumping() == true)
+	//		SetIsInputStuck(true);
+	//
+	//}
+
+	IntersectRect(&rIntersection, &rPlayer, &rObject);
+
+	nIntersectWidth = rIntersection.right - rIntersection.left;
+	nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+	//Colliding with the side of the object
+	if (nIntersectHeight > nIntersectWidth)
 	{
-		if (rOther.top == rIntersecting.top)
+		if (rPlayer.right == rIntersection.right)
 		{
-			if (m_vtVelocity.y > 0)
-			{
-				if (IsBouncing() == true)
-				{
-					SetVelocity({ GetVelocity().x, GetVelocity().y * -1 });
-					//				SetJumpVelCur(GetJumpVelCur() * -1);
-					//SetPosition({ GetPosition().x, (float)rCollider.top /*- GetSize().height*/ - rIntersectHeight });
-					m_ptPosition.y -= rIntersectHeight;
-				}
-				else
-				{
-					SetVelocity({ GetVelocity().x, 0 });
-					//SetPosition({ GetPosition().x, (float)rCollider.top - /*GetSize().height + 1*/ - rIntersectHeight - 1 });
-					m_ptPosition.y -= rIntersectHeight;
-				}
-				SetJumpVelCur(0);
-				SetIsJumping(false);
-				SetIsFalling(false);
-				SetIsInputStuck(false);
-				is_Left_Coll = false;
-				is_Right_Coll = false;
-			}
-		}
-		if (rOther.bottom == rIntersecting.bottom)
-		{
-			//SetPosition({ GetPosition().x, (float)rCollider.bottom });
-			m_ptPosition.y += rIntersectHeight;
-			SetVelocity({ GetVelocity().x, 0 });
-		}
-	}
-	else if /*(rIntersectHeight > 3)*/ (rIntersectHeight > rIntersectWidth)
-	{
-		//if (GetIsFalling() == true
-		// || GetIsJumping() == true)
-		// SetIsInputStuck(true);
 
-		if (rOther.left == rIntersecting.left)
-		{
-			//SetPosition({ (float)rCollider.left - GetSize().width + 1, GetPosition().y });
+			SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
 			SetVelocity({ 0, GetVelocity().y });
-			m_ptPosition.x -= rIntersectWidth;
 			//SetDashTimer(0);
+
 			is_Right_Coll = true;
 		}
-		if (rOther.right == rIntersecting.right)
+		if (rPlayer.left == rIntersection.left)
 		{
-			//SetPosition({ (float)rCollider.right + GetSize().width + 1, GetPosition().y });
+			SetPosition({ (float)rObject.right, GetPosition().y });
 			SetVelocity({ 0, GetVelocity().y });
-			m_ptPosition.x += rIntersectWidth;
 			//SetDashTimer(0);
+
 			is_Left_Coll = true;
+
+		}
+	}
+
+	if (nIntersectWidth > nIntersectHeight)
+	{
+		if (rPlayer.bottom == rIntersection.bottom)
+		{
+
+			if (IsBouncing() == true)
+			{
+				SetVelocity({ GetVelocity().x, GetVelocity().y * -1 });
+				//				SetJumpVelCur(GetJumpVelCur() * -1);
+				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height  /*- nIntersectHeight*/ });
+
+			}
+
+			else
+			{
+				SetVelocity({ GetVelocity().x, 0 });
+				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 /*- nIntersectHeight*/ });
+
+			}
+
+			SetJumpVelCur(0);
+			SetIsJumping(false);
+			SetIsFalling(false);
+			SetIsInputStuck(false);
+
+			is_Left_Coll = false;
+			is_Right_Coll = false;
+		}
+		if (rPlayer.top == rIntersection.top)
+		{
+			SetPosition({ GetPosition().x, (float)rObject.bottom });
+			SetVelocity({ GetVelocity().x, 0 });
 		}
 	}
 
