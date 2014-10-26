@@ -227,6 +227,12 @@
     <ClCompile Include="Source\Projectile.cpp">
       <Filter>Entitys</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Teleporter.cpp">
+      <Filter>Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChangeLevelMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -477,6 +483,12 @@
     </ClInclude>
     <ClInclude Include="Source\Projectile.h">
       <Filter>Entitys</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Teleporter.h">
+      <Filter>Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChangeLevelMessage.h">
+      <Filter>Messages</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

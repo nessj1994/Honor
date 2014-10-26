@@ -97,6 +97,7 @@ public:
 	void CreateFreezableLeftRamp(int _x, int _y);
 	void CreateFreezableRightRamp(int _x, int _y);
 	void CreateHintStatue(int _x, int _y, std::string _message);
+	void CreateTeleporter(int _x, int _y, std::string _level);
 
 	void LoadLevel(std::string _level);
 

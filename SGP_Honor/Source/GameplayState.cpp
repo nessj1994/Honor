@@ -11,6 +11,7 @@
 #include "CreateProjectileMessage.h"
 #include "CreateSprayMessage.h"
 #include "CreateHawkMessage.h"
+#include "ChangeLevelMessage.h"
 #include "MovingPlatform.h"
 
 #include "Entity.h"
@@ -39,6 +40,7 @@
 #include "Armor.h"
 #include "Honor.h"
 #include "HintStatue.h"
+#include "Teleporter.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -165,7 +167,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadLevel("TestLevel");
+	LoadLevel("HubLevel");
 }
 
 
@@ -327,6 +329,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_LASER);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_LAVA);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MOVING_PLATFORM);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TELEPORTER);
 
 
 
@@ -541,6 +544,25 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 
 
 			break;
+
+		}
+		case MessageID::MSG_CHANGE_LEVEL:
+		{
+			//Downcast to the real message type
+			const ChangeLevelMessage* pCreateMsg =
+				dynamic_cast<const ChangeLevelMessage*>(pMsg);
+
+			//Make sure the message isn't a nullptr
+			assert(pCreateMsg != nullptr
+				   && "GameplayState::MessageProc - MSG_CHANGE_LEVEL is not actually a CreateProjectileMessage");
+
+			//Create a local reference to the gameplaystate singleton
+			GameplayState* pSelf = GameplayState::GetInstance();
+
+			// Reference to the teleporter entity
+			Teleporter * teleporter = dynamic_cast<Teleporter*>(pCreateMsg->GetOwner());
+
+			pSelf->LoadLevel(teleporter->GetLevel());
 
 		}
 		case MessageID::MSG_UNKNOWN:
@@ -953,6 +975,19 @@ void GameplayState::CreateHintStatue(int _x, int _y, std::string _message)
 	mStatue->Release();
 }
 
+/////////////////////////
+// CreateTeleporter
+// -Creates a teleporter at the given coordinates
+void GameplayState::CreateTeleporter(int _x, int _y, std::string _level)
+{
+	Teleporter * mTeleporter = new Teleporter();
+	mTeleporter->SetPosition({ (float)_x, (float)_y });
+	mTeleporter->SetSize({ 64.0f, 64.0f });
+	mTeleporter->SetLevel(_level);
+	m_pEntities->AddEntity(mTeleporter, Entity::ENT_TELEPORTER);
+	mTeleporter->Release();
+}
+
 #pragma endregion
 
 void GameplayState::SaveGame()
@@ -1057,6 +1092,7 @@ void GameplayState::LoadLevel(std::string _level)
 	// Set the players position
 	m_pPlayer->SetPosition({ (float)m_pLevel->GetPlayerX(), (float)m_pLevel->GetPlayerY() });
 	m_pPlayer->SetStartPosition({ (float)m_pLevel->GetPlayerX(), (float)m_pLevel->GetPlayerY() });
+	m_pPlayer->SetVelocity({ 0.0f, 0.0f });
 
 	// TODO anything else to reset the player
 }

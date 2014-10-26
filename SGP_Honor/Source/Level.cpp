@@ -553,13 +553,18 @@ bool Level::LoadLevel(const char * _path)
 					GameplayState::GetInstance()->CreateFreezableRightRamp(x, y);
 					break;
 				}
-					// Hint statue
-				case 17:
+				case 17: // Hint statue
 				{
 					TiXmlElement * pArg = pEntity->FirstChildElement();
 					std::string message = pArg->Attribute("value");
 					GameplayState::GetInstance()->CreateHintStatue(x, y, message);
 					break;
+				}
+				case 18: // Teleporter
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					std::string level = pArg->Attribute("value");
+					GameplayState::GetInstance()->CreateTeleporter(x, y, level);
 				}
 			}
 
