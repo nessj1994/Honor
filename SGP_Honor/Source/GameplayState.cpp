@@ -128,7 +128,7 @@ void GameplayState::Enter(void) //Load Resources
 	//Create player with factory method
 	m_pPlayer = CreatePlayer();
 
-	//Load the game
+	//Load the game 
 	LoadGame();
 
 	Camera::GetInstance()->SetPlayer(m_pPlayer);
@@ -137,11 +137,11 @@ void GameplayState::Enter(void) //Load Resources
 	CreateBlocks();
 	CreatePermFrozenTiles();
 	CreateTempFrozenTiles();
-	CreateGeyser(1000, 700);
-	CreateLaser(1500, 500, { 1, 1 }, 1500, 700);
-	CreateLava(50, 700);
+	//CreateGeyser(1000, 700);
+	//CreateLaser(1500, 500, { 1, 1 }, 1500, 700);
+	//CreateLava(50, 700);
 
-	CreateMovingPlatform(1000, 500, false, 200, 100);
+	CreateMovingPlatform(1000, 600, false, 200, 100);
 
 	// Add Entities to the entity manager
 

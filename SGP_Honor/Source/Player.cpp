@@ -425,10 +425,10 @@ void Player::Render(void)
 
 	////Camera::GetInstance()->Draw(SGD::Rectangle(10, 300, 20, 320), SGD::Color::Color(255, 0, 0, 255));
 
-	//Camera::GetInstance()->Draw(SGD::Rectangle(
-	//	m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
-	//	m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
-	//	SGD::Color::Color(255, 255, 0, 0));
+	Camera::GetInstance()->Draw(SGD::Rectangle(
+		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
+		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
+		SGD::Color::Color(255, 255, 0, 0));
 
 	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, IsFacingRight());
 }
@@ -440,9 +440,9 @@ SGD::Rectangle Player::GetRect(void) const
 {
 
 	/*return SGD::Rectangle{ m_ptPosition, m_szSize };*/
-	SGD::Rectangle rect = AnimationEngine::GetInstance()->GetRect(m_ts, IsFacingRight(), 1, m_ptPosition);
-	return rect;
-	//return{ m_ptPosition, m_szSize };
+//	SGD::Rectangle rect = AnimationEngine::GetInstance()->GetRect(m_ts, IsFacingRight(), 1, m_ptPosition);
+//	return rect;
+	return{ m_ptPosition, m_szSize };
 }
 
 void Player::HandleCollision(const IEntity* pOther)
@@ -622,7 +622,7 @@ void Player::BasicCollision(const IEntity* pOther)
 			SetVelocity({ GetVelocity().x, 0 });
 		}
 	}
-	else if (rIntersectHeight > 3)// (rIntersectHeight > rIntersectWidth)
+	else if /*(rIntersectHeight > 3)*/ (rIntersectHeight > rIntersectWidth)
 	{
 		//if (GetIsFalling() == true
 		// || GetIsJumping() == true)
