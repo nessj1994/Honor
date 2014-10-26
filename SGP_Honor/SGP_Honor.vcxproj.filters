@@ -162,8 +162,17 @@
     <ClInclude Include="SGD Wrappers\SGD_String.h" />
     <ClInclude Include="TinyXML\tinystr.h" />
     <ClInclude Include="TinyXML\tinyxml.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SGP_Honor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="icon2.ico" />
+    <Image Include="icon3.ico" />
   </ItemGroup>
 </Project>

@@ -89,6 +89,7 @@
     <ClCompile Include="TinyXML\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h" />
     <ClInclude Include="SGD Wrappers\SGD_Color.h" />
     <ClInclude Include="SGD Wrappers\SGD_Declarations.h" />
@@ -175,6 +176,14 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SGP_Honor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="icon2.ico" />
+    <Image Include="icon3.ico" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{25D1F010-F642-489C-B6B1-2F749EF0434F}</ProjectGuid>
