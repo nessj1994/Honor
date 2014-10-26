@@ -13,7 +13,7 @@
 #include "../SGD Wrappers/SGD_Message.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "AnimTimeStamp.h"
-
+#include <map>
 
 
 
@@ -98,10 +98,7 @@ public:
 	void CreateFreezableRightRamp(int _x, int _y);
 	void CreateHintStatue(int _x, int _y, std::string _message);
 
-	
-
-	//void CreateGeyser(int x, int y);
-	//void CreateLava(int x, int y);
+	void LoadLevel(std::string _level);
 
 private:
 
@@ -133,6 +130,7 @@ private:
 	//////////////////// Save and Load ///////////////////////
 	void SaveGame();
 	void LoadGame();
+	void LoadLevelMap();
 
 	
 	//////////////////////////////////////////////////////////
@@ -149,6 +147,8 @@ private:
 	Emitter* m_pEmitter2						    = nullptr;
 	Level* m_pLevel									= nullptr;
 	Player* m_pPlayer								= nullptr;
+
+	std::map<std::string, std::string> m_mLevels;
 
 	AnimTimeStamp ts;
 	AnimTimeStamp ts2;
