@@ -35,6 +35,7 @@
     <ClCompile Include="Source\BuzzSaw.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Caveman.cpp" />
+    <ClCompile Include="Source\ChangeLevelMessage.cpp" />
     <ClCompile Include="Source\Crab.cpp" />
     <ClCompile Include="Source\CreateHawkMessage.cpp" />
     <ClCompile Include="Source\CreateProjectileMessage.cpp" />
@@ -79,6 +80,7 @@
     <ClCompile Include="Source\Projectile.cpp" />
     <ClCompile Include="Source\Squid.cpp" />
     <ClCompile Include="Source\Stalactite.cpp" />
+    <ClCompile Include="Source\Teleporter.cpp" />
     <ClCompile Include="Source\Turret.cpp" />
     <ClCompile Include="Source\Unit.cpp" />
     <ClCompile Include="Source\WinMain.cpp" />
@@ -123,6 +125,7 @@
     <ClInclude Include="Source\BuzzSaw.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Caveman.h" />
+    <ClInclude Include="Source\ChangeLevelMessage.h" />
     <ClInclude Include="Source\Crab.h" />
     <ClInclude Include="Source\CreateHawkMessage.h" />
     <ClInclude Include="Source\CreateProjectileMessage.h" />
@@ -170,6 +173,7 @@
     <ClInclude Include="Source\Projectile.h" />
     <ClInclude Include="Source\Squid.h" />
     <ClInclude Include="Source\Stalactite.h" />
+    <ClInclude Include="Source\Teleporter.h" />
     <ClInclude Include="Source\Turret.h" />
     <ClInclude Include="Source\Unit.h" />
     <ClInclude Include="Source\Wizard.h" />
@@ -179,6 +183,7 @@
     <ClInclude Include="TinyXML\tinyxml.h" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="Assets\SaveGame.xml" />
     <Xml Include="Source\Test.xml" />
   </ItemGroup>
   <ItemGroup>
