@@ -108,6 +108,8 @@ private:
 
 	bool is_Jumping = false;
 	bool is_Falling = true;
+	bool has_landed = true;
+
 	bool is_Stuck = false;
 	bool is_Left_Coll = false;
 	bool is_Right_Coll = false;

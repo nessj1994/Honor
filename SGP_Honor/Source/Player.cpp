@@ -230,6 +230,7 @@ void Player::Update(float elapsedTime)
 			SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
 		}
 
+
 		if(pInput->IsKeyDown(SGD::Key::Space) == true
 			|| pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)
 
@@ -341,10 +342,7 @@ void Player::Update(float elapsedTime)
 				}
 
 			}
-			//m_fShotTimer = 0.0f;
-			//CreateProjectileMessage* pMsg = new CreateProjectileMessage(this);
-			//pMsg->QueueMessage();
-			//pMsg = nullptr;
+
 		}
 		if(pInput->IsKeyDown(SGD::Key::D) == false
 			/*&& m_fShotTimer > 0.25f*/)
@@ -360,13 +358,6 @@ void Player::Update(float elapsedTime)
 				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ GetHawkPtr() };
 				pMsg->QueueMessage();
 				pMsg = nullptr;
-
-
-				//GetHawkPtr()->SetPosition({ -100, -100 });
-				//
-				//SetVelocity({ 0, 0 });
-
-
 
 				SetHawkPtr(nullptr);
 			}
@@ -393,9 +384,6 @@ void Player::Update(float elapsedTime)
 		/////////////////////////////////////////////////
 		//////////////Constant Updates///////////////////
 
-		
-
-
 		if(GetIsFalling() == true)
 		{
 			SetGravity(-3000);
@@ -415,15 +403,12 @@ void Player::Update(float elapsedTime)
 			if (GetVelocity().y < 0)
 			{
 				SetVelocity({ GetVelocity().x, 0 });
-
 			}
 
 		}
 
 
-	}///////////////////Dash check ends
-
-	//////Dash should maybe end check here
+	}
 
 
 	if(GetVelocity().y > 1050)
@@ -445,10 +430,6 @@ void Player::Update(float elapsedTime)
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 
 		SetGravity(-3000);
-
-	
-
-
 }
 
 void Player::Render(void)
@@ -470,10 +451,6 @@ void Player::Render(void)
 
 SGD::Rectangle Player::GetRect(void) const
 {
-
-	/*return SGD::Rectangle{ m_ptPosition, m_szSize };*/
-//	SGD::Rectangle rect = AnimationEngine::GetInstance()->GetRect(m_ts, IsFacingRight(), 1, m_ptPosition);
-//	return rect;
 	return{ m_ptPosition, m_szSize };
 }
 
@@ -611,6 +588,9 @@ void Player::HandleCollision(const IEntity* pOther)
 void Player::BasicCollision(const IEntity* pOther)
 {
 
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+
 	SetGravity(-3000);
 
 	RECT rPlayer;
@@ -680,21 +660,18 @@ void Player::BasicCollision(const IEntity* pOther)
 	{
 		if (rPlayer.bottom == rIntersection.bottom)
 		{
-
 			if (IsBouncing() == true)
 			{
 				SetVelocity({ GetVelocity().x, GetVelocity().y * -1 });
-				//				SetJumpVelCur(GetJumpVelCur() * -1);
 				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height  /*- nIntersectHeight*/ });
-
 			}
 
 			else
 			{
 				SetVelocity({ GetVelocity().x, 0 });
 				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 /*- nIntersectHeight*/ });
-
 			}
+
 
 			SetJumpVelCur(0);
 			SetIsJumping(false);
