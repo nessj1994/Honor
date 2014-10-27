@@ -68,10 +68,10 @@ void Particle::Update(float elapsedTime)
 	else
 	{
 		//Smooth this out Later
-		m_fCurLifeSpan += (elapsedTime * 10);
+		m_fCurLifeSpan += elapsedTime;
 	}
 	//Smooth this out later
-	m_ptPosition += m_vtVelocity * (elapsedTime * 10);
+	m_ptPosition += m_vtVelocity * elapsedTime;
 	//Timer Changes
 	AlphaChangeTimer += elapsedTime;
 	ColorChangeTimer += elapsedTime;
@@ -89,76 +89,76 @@ void Particle::Update(float elapsedTime)
 		if (m_cCurrentColor.alpha > 0)
 		{
 			int count = 0;
-			while (m_cCurrentColor.alpha > 0 && count != m_fAlphaFade)
+			while (m_cCurrentColor.alpha > 2 && count != m_fAlphaFade)
 			{
-				m_cCurrentColor.alpha--;
+				m_cCurrentColor.alpha -= 2;
 				count++;
 			}
 		}
 	}
-	if (ColorChangeTimer >= 0.06f)
-	{
-		ColorChangeTimer = 0;
-		if (m_iColorChange > 0)
+		if (ColorChangeTimer >= 0.06f)
 		{
-			//incrementing
-			if (m_cCurrentColor.red < m_cEndColor.red)
+			ColorChangeTimer = 0;
+			if (m_iColorChange > 0)
 			{
-				int count = 0;
-				while (m_cCurrentColor.red < 255 && count != m_iColorChange)
+				//incrementing
+				if (m_cCurrentColor.red < m_cEndColor.red)
 				{
-					m_cCurrentColor.red++;
-					count++;
+					int count = 0;
+					while (m_cCurrentColor.red < 255 && count != m_iColorChange)
+					{
+						m_cCurrentColor.red += 2;
+						count++;
+					}
 				}
-			}
-			if (m_cCurrentColor.green < m_cEndColor.green)
-			{
-				int count = 0;
-				while (m_cCurrentColor.green > 255 && count != m_iColorChange)
+				if (m_cCurrentColor.green < m_cEndColor.green)
 				{
-					m_cCurrentColor.green++;
-					count++;
+					int count = 0;
+					while (m_cCurrentColor.green > 255 && count != m_iColorChange)
+					{
+						m_cCurrentColor.green += 2;
+						count++;
+					}
 				}
-			}
-			if (m_cCurrentColor.blue < m_cEndColor.blue)
-			{
-				int count = 0;
-				while (m_cCurrentColor.blue < 255 && count != m_iColorChange)
+				if (m_cCurrentColor.blue < m_cEndColor.blue)
 				{
-					m_cCurrentColor.blue++;
-					count++;
+					int count = 0;
+					while (m_cCurrentColor.blue < 255 && count != m_iColorChange)
+					{
+						m_cCurrentColor.blue += 2;
+						count++;
+					}
 				}
-			}
-			///Decrementing
-			if (m_cCurrentColor.red > m_cEndColor.red)
-			{
-				int count = 0;
-				while (m_cCurrentColor.red > 0 && count != m_iColorChange + 10)
+				///Decrementing
+				if (m_cCurrentColor.red > m_cEndColor.red)
 				{
-					m_cCurrentColor.red--;
-					count++;
+					int count = 0;
+					while (m_cCurrentColor.red > 0 && count != m_iColorChange + 10)
+					{
+						m_cCurrentColor.red -= 2;
+						count++;
+					}
 				}
-			}
-			if (m_cCurrentColor.green > m_cEndColor.green)
-			{
-				int count = 0;
-				while (m_cCurrentColor.green > 0 && count != m_iColorChange + 10)
+				if (m_cCurrentColor.green > m_cEndColor.green)
 				{
-					m_cCurrentColor.green--;
-					count++;
+					int count = 0;
+					while (m_cCurrentColor.green > 0 && count != m_iColorChange + 10)
+					{
+						m_cCurrentColor.green -= 2;
+						count++;
+					}
 				}
-			}
-			if (m_cCurrentColor.blue > m_cEndColor.blue)
-			{
-				int count = 0;
-				while (m_cCurrentColor.blue > 0 && count != m_iColorChange + 10)
+				if (m_cCurrentColor.blue > m_cEndColor.blue)
 				{
-					m_cCurrentColor.blue--;
-					count++;
+					int count = 0;
+					while (m_cCurrentColor.blue > 0 && count != m_iColorChange + 10)
+					{
+						m_cCurrentColor.blue -= 2;
+						count++;
+					}
 				}
 			}
 		}
-	}
 }
 
 

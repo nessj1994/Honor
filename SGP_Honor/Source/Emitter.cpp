@@ -29,6 +29,24 @@ void Emitter::StartParticles()
 		std::uniform_real_distribution<float>thing2(m_ptPosition.y, m_ptPosition.y + m_szSize.height);
 		std::uniform_real_distribution<float>VelX(m_vtMinVelocity.x,m_vtMaxVelocity.x );
 		std::uniform_real_distribution<float>VelY(m_vtMinVelocity.y, m_vtMaxVelocity.y);
+		float VX = VelX(MT);
+		if (VX > 0)
+		{
+			VX += 40;
+		}
+		else
+		{
+			VX -= 40;
+		}
+		float VY = VelY(MT);
+		if (VY > 0)
+		{
+			VY += 40;
+		}
+		else
+		{
+			VY -= 40;
+		}
 						//Position																																//Life Time
 		//Particle Temp({ (m_ptPosition.x + (rand() % ((int)m_szSize.width - (0 + 1))) + 0), (m_ptPosition.y + (rand() % ((int)m_szSize.height - (0 + 1))) + 0) }, rand() % (int)(m_fMaxLifeSpan - (m_fMinLifeSpan + 1)) + m_fMinLifeSpan);
 		Particle Temp({thing(MT),thing2(MT)}, rand() % (int)(m_fMaxLifeSpan - (m_fMinLifeSpan + 1)) + m_fMinLifeSpan);
@@ -40,7 +58,7 @@ void Emitter::StartParticles()
 		float Width = m_szScale.width;
 		float Height = m_szScale.height;
 		Temp.SetScale({Width,Height});
-		Temp.SetVelocity({VelX(MT),VelY(MT)});
+		Temp.SetVelocity({ VX, VY });
 		Temp.SetImage(m_hImage);
 		Temp.SetColorChange(m_fColorChange);
 		Temp.Reset();
