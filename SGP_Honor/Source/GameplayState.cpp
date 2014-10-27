@@ -123,8 +123,8 @@ void GameplayState::Enter(void) //Load Resources
 	//m_pStatue = new HintStatue();
 	//m_pStatue->SetMessageString("This is a test string");
 
-	m_pSquid = new Squid();
-	m_pPouncer = new Pouncer();
+	//m_pSquid = new Squid();
+	//m_pPouncer = new Pouncer();
 
 
 	//Create player with factory method
@@ -174,8 +174,8 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadLevel("HubLevel");
 
-	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
-	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
+	/*m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
+	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);*/
 }
 
 
