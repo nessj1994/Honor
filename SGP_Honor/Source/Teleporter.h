@@ -1,32 +1,30 @@
 #pragma once
 #include "Entity.h"
-class Turret :
+#include <string>
+
+class Teleporter :
 	public Entity
 {
 public:
-	Turret();
-	virtual ~Turret();
+	Teleporter();
+	virtual ~Teleporter();
 
 
 	/////////////////////////////////////////////////
 	/////////////////Interface//////////////////////
-	virtual void Update(float elapsedTime)  override;
 	virtual void Render(void) override;
-
-	virtual int GetType(void) const override;
-	virtual SGD::Rectangle GetRect(void) const override;
+	int GetType(void) const override { return ENT_TELEPORTER; }
 	virtual void HandleCollision(const IEntity* pOther) override;
-	
+
+	/////////////////////////////////////////////////
+	/////////////////Accessors//////////////////////
+	std::string GetLevel(void) const { return m_sLevel; }
 
 	/////////////////////////////////////////////////
 	/////////////////Mutators//////////////////////
-	void SetFireTimer(float _timer) { m_fFireTimer = _timer; }
-	void SetDirection(int _direction) { m_nDirection = _direction; }
+	void SetLevel(std::string _level) { m_sLevel = _level; }
 
 private:
-
-	float m_fFireTimer = 1.0f;
-	int m_nDirection = 0;
+	std::string m_sLevel;
 };
-
 

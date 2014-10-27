@@ -298,6 +298,11 @@ void EntityManager::CheckCollisions(unsigned int bucket1, unsigned int bucket2)
 //	- check collision between the given bucket and the world
 void EntityManager::CheckWorldCollision(unsigned int _bucket)
 {
+	// Make sure there is something in the bucket to check
+	if (_bucket >= m_tEntities.size()
+		|| m_tEntities[_bucket].size() == 0)
+		return;
+
 	// Reference to the level
 	Level * level = GameplayState::GetInstance()->GetCurrentLevel();
 
