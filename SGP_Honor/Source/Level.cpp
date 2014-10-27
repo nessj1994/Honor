@@ -259,6 +259,15 @@ bool Level::LoadLevel(const char * _path)
 	pRoot->Attribute("width", &m_nWidth);
 	pRoot->Attribute("height", &m_nHeight);
 
+	// Read in if fixed
+	int fixed;
+	pRoot->Attribute("fixed", &fixed);
+	m_bFixed = fixed ? true : false;
+
+	// Read in players start coordinates
+	pRoot->Attribute("playerX", &m_nPlayerX);
+	pRoot->Attribute("playerY", &m_nPlayerY);
+
 	// Load in the image layers by finding out how many there are
 	TiXmlElement* pImageLayers = pRoot->FirstChildElement();
 	int numLayers = 0;
@@ -544,13 +553,18 @@ bool Level::LoadLevel(const char * _path)
 					GameplayState::GetInstance()->CreateFreezableRightRamp(x, y);
 					break;
 				}
-					// Hint statue
-				case 17:
+				case 17: // Hint statue
 				{
 					TiXmlElement * pArg = pEntity->FirstChildElement();
 					std::string message = pArg->Attribute("value");
 					GameplayState::GetInstance()->CreateHintStatue(x, y, message);
 					break;
+				}
+				case 18: // Teleporter
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					std::string level = pArg->Attribute("value");
+					GameplayState::GetInstance()->CreateTeleporter(x, y, level);
 				}
 			}
 

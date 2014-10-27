@@ -11,6 +11,7 @@
 #include "CreateProjectileMessage.h"
 #include "CreateSprayMessage.h"
 #include "CreateHawkMessage.h"
+#include "ChangeLevelMessage.h"
 #include "MovingPlatform.h"
 
 #include "Entity.h"
@@ -39,6 +40,7 @@
 #include "Armor.h"
 #include "Honor.h"
 #include "HintStatue.h"
+#include "Teleporter.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -97,11 +99,6 @@ void GameplayState::Enter(void) //Load Resources
 	SGD::MessageManager::GetInstance()->Initialize(&MessageProc);
 
 
-	//Load Assets here
-	m_pLevel = new Level();
-	m_pLevel->LoadLevel("Assets/TestLevel.xml");
-
-
 
 
 	//Load Audio
@@ -127,9 +124,6 @@ void GameplayState::Enter(void) //Load Resources
 
 	//Create player with factory method
 	m_pPlayer = CreatePlayer();
-
-	//Load the game
-	LoadGame();
 
 	Camera::GetInstance()->SetPlayer(m_pPlayer);
 
@@ -166,10 +160,14 @@ void GameplayState::Enter(void) //Load Resources
 
 
 
-	
+
 	//For Particle Testing
 	//m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test");
 	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/C++Test.xml", "Test", { -100, -100 });
+
+	// Load in map for the levels and start the first level
+	LoadLevelMap();
+	LoadLevel("HubLevel");
 }
 
 
@@ -182,7 +180,7 @@ void GameplayState::Exit(void)
 
 	//Save the game
 	SaveGame();
-	
+
 
 	if (m_pEntities != nullptr)
 	{
@@ -200,7 +198,7 @@ void GameplayState::Exit(void)
 	//delete m_pTurret;
 	//delete m_pStalactite;
 
-	if(m_pPlayer != nullptr)
+	if (m_pPlayer != nullptr)
 	{
 		m_pPlayer->Release();
 	}
@@ -272,7 +270,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	//{
 	//	m_pDoor->SetOpen(!(m_pDoor->GetOpen()));
 	//}
-	if(pInput->IsKeyPressed(SGD::Key::H))
+	if (pInput->IsKeyPressed(SGD::Key::H))
 	{
 		m_pPlayer->SetHonorCollected(m_pPlayer->GetHonorCollected() + 50);
 		//Gained Honor event for certain doors
@@ -280,6 +278,12 @@ bool GameplayState::Input(void) //Hanlde user Input
 		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 		pATEvent = nullptr;
 
+	}
+
+	// Temporary test for level changing
+	if (pInput->IsKeyPressed(SGD::Key::T))
+	{
+		LoadLevel("Level1_1");
 	}
 
 	if (pInput->IsKeyPressed(SGD::Key::P)
@@ -310,7 +314,7 @@ void GameplayState::Update(float elapsedTime)
 	//m_pEmitter->Update(elapsedTime);
 	m_pEmitter2->Update(elapsedTime);
 	float x = elapsedTime;
-	
+
 	m_pEntities->UpdateAll(elapsedTime);
 	Camera::GetInstance()->Update(elapsedTime);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BLOCK);
@@ -325,6 +329,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_LASER);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_LAVA);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MOVING_PLATFORM);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TELEPORTER);
 
 
 
@@ -393,167 +398,186 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 	//What type of message is this
 	switch (pMsg->GetMessageID())
 	{
-	case MessageID::MSG_DESTROY_ENTITY:
-	{
-										  //Downcast to the real message type
-										  const DestroyEntityMessage* pDestroyMsg =
-											  dynamic_cast<const DestroyEntityMessage*>(pMsg);
+		case MessageID::MSG_DESTROY_ENTITY:
+		{
+			//Downcast to the real message type
+			const DestroyEntityMessage* pDestroyMsg =
+				dynamic_cast<const DestroyEntityMessage*>(pMsg);
 
-										  //Make sure the message isnt a nullptr
-										  assert(pDestroyMsg != nullptr
-											  && "GameplayState::MessageProc - MSG_DESTROY_ENTITY is not actually a DestroyEntityMessage");
+			//Make sure the message isnt a nullptr
+			assert(pDestroyMsg != nullptr
+				   && "GameplayState::MessageProc - MSG_DESTROY_ENTITY is not actually a DestroyEntityMessage");
 
-										  //get the message's entity
-										  Entity* ptr = pDestroyMsg->GetEntity();
+			//get the message's entity
+			Entity* ptr = pDestroyMsg->GetEntity();
 
-										  //Use the singleton to access the entity manager
-										  if (ptr != nullptr)
-										  {
-											  GameplayState::GetInstance()->m_pEntities->RemoveEntity(ptr);
-										  }
+			//Use the singleton to access the entity manager
+			if (ptr != nullptr)
+			{
+				GameplayState::GetInstance()->m_pEntities->RemoveEntity(ptr);
+			}
 
-										  break;
-	}
-	case MessageID::MSG_CREATE_PROJECTILE:
-	{
-											 //Downcast to the real message type
-											 const CreateProjectileMessage* pCreateMsg =
-												 dynamic_cast<const CreateProjectileMessage*>(pMsg);
+			break;
+		}
+		case MessageID::MSG_CREATE_PROJECTILE:
+		{
+			//Downcast to the real message type
+			const CreateProjectileMessage* pCreateMsg =
+				dynamic_cast<const CreateProjectileMessage*>(pMsg);
 
-											 //Make sure the message isn't a nullptr
-											 assert(pCreateMsg != nullptr
-												 && "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
+			//Make sure the message isn't a nullptr
+			assert(pCreateMsg != nullptr
+				   && "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
 
-											 //Create a local reference to the gameplaystate singleton
-											 GameplayState* pSelf = GameplayState::GetInstance();
-
-
-											 //Play the projectile's audio sound
-
-											 //Call CreateProjectile factory method sending in the messages projectile
-											 Entity* pProj = pSelf->CreateProjectile(pCreateMsg->GetOwner());
+			//Create a local reference to the gameplaystate singleton
+			GameplayState* pSelf = GameplayState::GetInstance();
 
 
-											 if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
-											 { 
-												 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
-											 }
-											 else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_TURRET)
-											 {
-												 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
-											 }
+			//Play the projectile's audio sound
 
-											 // if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
-											 // {
-											 //	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_PLAYER_PROJ);
-											 // }
-											 // else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
-											 // {
-											 //	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_ENEMY_PROJ);
-											 // }
-
-											 pProj->Release();
-											 pProj = nullptr;
+			//Call CreateProjectile factory method sending in the messages projectile
+			Entity* pProj = pSelf->CreateProjectile(pCreateMsg->GetOwner());
 
 
-											 break;
-	}
-	case MessageID::MSG_CREATE_SPRAY:
-	{
+			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+			{
+				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+			}
+			else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_TURRET)
+			{
+				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+			}
 
-										//Downcast to the real message type
-										const CreateSprayMessage* pCreateMsg =
-											dynamic_cast<const CreateSprayMessage*>(pMsg);
+			// if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+			// {
+			//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_PLAYER_PROJ);
+			// }
+			// else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+			// {
+			//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_ENEMY_PROJ);
+			// }
 
-										//Make sure the message isn't a nullptr
-										assert(pCreateMsg != nullptr
-											&& "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
-
-										//Create a local reference to the gameplaystate singleton
-										GameplayState* pSelf = GameplayState::GetInstance();
-
-
-										//Play the projectile's audio sound
-
-										//Call CreateProjectile factory method sending in the messages projectile
-										Entity* pProj = pSelf->CreateSpray(pCreateMsg->GetOwner());
-
-
-										if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
-										{
-											pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
-										}
-										else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
-										{
-											pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
-										}
-
-										// if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
-										// {
-										//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_PLAYER_PROJ);
-										// }
-										// else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
-										// {
-										//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_ENEMY_PROJ);
-										// }
-
-										pProj->Release();
-										pProj = nullptr;
+			pProj->Release();
+			pProj = nullptr;
 
 
-										break;
+			break;
+		}
+		case MessageID::MSG_CREATE_SPRAY:
+		{
 
-	}
-	case MessageID::MSG_CREATE_HAWK:
-	{
+			//Downcast to the real message type
+			const CreateSprayMessage* pCreateMsg =
+				dynamic_cast<const CreateSprayMessage*>(pMsg);
 
-									   //Downcast to the real message type
-									   const CreateHawkMessage* pCreateMsg =
-										   dynamic_cast<const CreateHawkMessage*>(pMsg);
+			//Make sure the message isn't a nullptr
+			assert(pCreateMsg != nullptr
+				   && "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
 
-									   //Make sure the message isn't a nullptr
-									   assert(pCreateMsg != nullptr
-										   && "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
-
-									   //Create a local reference to the gameplaystate singleton
-									   GameplayState* pSelf = GameplayState::GetInstance();
-
-
-									   //Play the projectile's audio sound
+			//Create a local reference to the gameplaystate singleton
+			GameplayState* pSelf = GameplayState::GetInstance();
 
 
-									   //Call CreateProjectile factory method sending in the messages projectile
-									   Entity* pProj = pSelf->CreateHawk(pCreateMsg->GetOwner());
+			//Play the projectile's audio sound
+
+			//Call CreateProjectile factory method sending in the messages projectile
+			Entity* pProj = pSelf->CreateSpray(pCreateMsg->GetOwner());
 
 
-									   if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
-									   {
-										   pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_HAWK);
+			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+			{
+				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+			}
+			else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+			{
+				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+			}
+
+			// if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+			// {
+			//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_PLAYER_PROJ);
+			// }
+			// else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+			// {
+			//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_ENEMY_PROJ);
+			// }
+
+			pProj->Release();
+			pProj = nullptr;
 
 
-									   }
-									   else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
-									   {
-										   pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_HAWK);
-									   }
+			break;
 
-									   pProj->Release();
-									   pProj = nullptr;
+		}
+		case MessageID::MSG_CREATE_HAWK:
+		{
+
+			//Downcast to the real message type
+			const CreateHawkMessage* pCreateMsg =
+				dynamic_cast<const CreateHawkMessage*>(pMsg);
+
+			//Make sure the message isn't a nullptr
+			assert(pCreateMsg != nullptr
+				   && "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
+
+			//Create a local reference to the gameplaystate singleton
+			GameplayState* pSelf = GameplayState::GetInstance();
 
 
-									   break;
+			//Play the projectile's audio sound
 
-	}
-	case MessageID::MSG_UNKNOWN:
-	{
-								   OutputDebugStringW(L"Game::MessageProc - unknown message id\n");
-								   break;
-	}
-	default:
-	{
 
-			   break;
-	}
+			//Call CreateProjectile factory method sending in the messages projectile
+			Entity* pProj = pSelf->CreateHawk(pCreateMsg->GetOwner());
+
+
+			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+			{
+				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_HAWK);
+
+
+			}
+			else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+			{
+				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_HAWK);
+			}
+
+			pProj->Release();
+			pProj = nullptr;
+
+
+			break;
+
+		}
+		case MessageID::MSG_CHANGE_LEVEL:
+		{
+			//Downcast to the real message type
+			const ChangeLevelMessage* pCreateMsg =
+				dynamic_cast<const ChangeLevelMessage*>(pMsg);
+
+			//Make sure the message isn't a nullptr
+			assert(pCreateMsg != nullptr
+				   && "GameplayState::MessageProc - MSG_CHANGE_LEVEL is not actually a CreateProjectileMessage");
+
+			//Create a local reference to the gameplaystate singleton
+			GameplayState* pSelf = GameplayState::GetInstance();
+
+			// Reference to the teleporter entity
+			Teleporter * teleporter = dynamic_cast<Teleporter*>(pCreateMsg->GetOwner());
+
+			pSelf->LoadLevel(teleporter->GetLevel());
+
+		}
+		case MessageID::MSG_UNKNOWN:
+		{
+			OutputDebugStringW(L"Game::MessageProc - unknown message id\n");
+			break;
+		}
+		default:
+		{
+
+			break;
+		}
 	}
 
 
@@ -629,7 +653,7 @@ Player* GameplayState::CreatePlayer(void)
 
 	pPlayer->SetPosition(SGD::Point(100, 100));
 	pPlayer->SetSize(SGD::Size(32, 32));
-	
+
 	return pPlayer;
 
 
@@ -956,11 +980,24 @@ void GameplayState::CreateHintStatue(int _x, int _y, std::string _message)
 	mStatue->Release();
 }
 
+/////////////////////////
+// CreateTeleporter
+// -Creates a teleporter at the given coordinates
+void GameplayState::CreateTeleporter(int _x, int _y, std::string _level)
+{
+	Teleporter * mTeleporter = new Teleporter();
+	mTeleporter->SetPosition({ (float)_x, (float)_y });
+	mTeleporter->SetSize({ 64.0f, 64.0f });
+	mTeleporter->SetLevel(_level);
+	m_pEntities->AddEntity(mTeleporter, Entity::ENT_TELEPORTER);
+	mTeleporter->Release();
+}
+
 #pragma endregion
 
 void GameplayState::SaveGame()
 {
-	
+
 	//Create the doc
 	TiXmlDocument doc;
 
@@ -996,5 +1033,71 @@ void GameplayState::LoadGame()
 	pPlayer->Attribute("x", &x);
 	pPlayer->Attribute("y", &y);
 
-	m_pPlayer->SetPosition(SGD::Point( (float)x, (float)y ));
+	//m_pPlayer->SetPosition(SGD::Point((float)x, (float)y));
+}
+
+/////////////////////////////////////////////
+// LoadLevelMap
+// - Reads in data to fill up the level map
+void GameplayState::LoadLevelMap()
+{
+	//Create the tinyxml document 
+	TiXmlDocument doc;
+
+	// Load the file
+	if (doc.LoadFile("Assets/Levels/LevelGuide.xml") == false)
+	{
+		return;
+	}
+
+	// Grab a reference to the first element
+	TiXmlElement* pLevel = doc.RootElement();
+	if (pLevel == nullptr)
+	{
+		return;
+	}
+
+	// Loop through reading each level
+	while (pLevel != nullptr)
+	{
+		// Read in data and push into the map
+		std::string key = pLevel->Attribute("key");
+		std::string path = pLevel->Attribute("path");
+		m_mLevels[key] = path;
+
+		// Move to the next node
+		pLevel = pLevel->NextSiblingElement();
+	}
+
+}
+
+/////////////////////////////////////////////
+// LoadLevel
+// - Loads the level at the path for the given key
+void GameplayState::LoadLevel(std::string _level)
+{
+	// Clear the old entities
+	m_pEntities->RemoveAll();
+
+	// Add the player back in
+	m_pEntities->AddEntity(m_pPlayer, Entity::ENT_PLAYER);
+
+	// First unload the last level
+	if (m_pLevel != nullptr)
+	{
+		m_pLevel->Exit();
+		delete m_pLevel;
+		m_pLevel = nullptr;
+	}
+
+	// Create a new level and load the correct file
+	m_pLevel = new Level();
+	m_pLevel->LoadLevel(m_mLevels[_level].c_str());
+
+	// Set the players position
+	m_pPlayer->SetPosition({ (float)m_pLevel->GetPlayerX(), (float)m_pLevel->GetPlayerY() });
+	m_pPlayer->SetStartPosition({ (float)m_pLevel->GetPlayerX(), (float)m_pLevel->GetPlayerY() });
+	m_pPlayer->SetVelocity({ 0.0f, 0.0f });
+
+	// TODO anything else to reset the player
 }
