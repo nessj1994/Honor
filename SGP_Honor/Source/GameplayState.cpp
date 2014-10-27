@@ -43,6 +43,7 @@
 #include "Squid.h"
 #include "Pouncer.h"
 #include "Teleporter.h"
+#include "Bull.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -127,6 +128,7 @@ void GameplayState::Enter(void) //Load Resources
 	//m_pPouncer = new Pouncer();
 
 
+
 	//Create player with factory method
 	m_pPlayer = CreatePlayer();
 
@@ -172,10 +174,13 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadLevel("HubLevel");
+	LoadLevel("Level1_5");
 
 	/*m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);*/
+
+	// Temporary
+	CreateBullBoss(500, 400);
 }
 
 
@@ -367,6 +372,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_HAWK);
 	m_pEntities->CheckWorldCollision(Entity::ENT_STALACTITE);
 	m_pEntities->CheckWorldCollision(Entity::ENT_LASER);
+	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_BULL);
 
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
 
@@ -1002,6 +1008,17 @@ void GameplayState::CreateTeleporter(int _x, int _y, std::string _level)
 	mTeleporter->SetLevel(_level);
 	m_pEntities->AddEntity(mTeleporter, Entity::ENT_TELEPORTER);
 	mTeleporter->Release();
+}
+
+/////////////////////////
+// CreateBullBoss
+// -Creates a bull boss at the given coordinates
+void GameplayState::CreateBullBoss(int _x, int _y)
+{
+	Bull * mBull = new Bull();
+	mBull->SetPosition({ (float)_x, (float)_y });
+	m_pEntities->AddEntity(mBull, Entity::ENT_BOSS_BULL);
+	mBull->Release();
 }
 
 #pragma endregion
