@@ -107,16 +107,16 @@ void Particle::Update(float elapsedTime)
 					int count = 0;
 					while (m_cCurrentColor.red < 255 && count != m_iColorChange)
 					{
-						m_cCurrentColor.red += 2;
+						m_cCurrentColor.red++;
 						count++;
 					}
 				}
 				if (m_cCurrentColor.green < m_cEndColor.green)
 				{
 					int count = 0;
-					while (m_cCurrentColor.green > 255 && count != m_iColorChange)
+					while (m_cCurrentColor.green < 255 && count != m_iColorChange)
 					{
-						m_cCurrentColor.green += 2;
+						m_cCurrentColor.green++;
 						count++;
 					}
 				}
@@ -125,7 +125,7 @@ void Particle::Update(float elapsedTime)
 					int count = 0;
 					while (m_cCurrentColor.blue < 255 && count != m_iColorChange)
 					{
-						m_cCurrentColor.blue += 2;
+						m_cCurrentColor.blue++;
 						count++;
 					}
 				}
@@ -133,7 +133,7 @@ void Particle::Update(float elapsedTime)
 				if (m_cCurrentColor.red > m_cEndColor.red)
 				{
 					int count = 0;
-					while (m_cCurrentColor.red > 0 && count != m_iColorChange + 10)
+					while (m_cCurrentColor.red > 2 && count != m_iColorChange + 10)
 					{
 						m_cCurrentColor.red -= 2;
 						count++;
@@ -142,7 +142,7 @@ void Particle::Update(float elapsedTime)
 				if (m_cCurrentColor.green > m_cEndColor.green)
 				{
 					int count = 0;
-					while (m_cCurrentColor.green > 0 && count != m_iColorChange + 10)
+					while (m_cCurrentColor.green > 2 && count != m_iColorChange + 10)
 					{
 						m_cCurrentColor.green -= 2;
 						count++;
@@ -151,7 +151,7 @@ void Particle::Update(float elapsedTime)
 				if (m_cCurrentColor.blue > m_cEndColor.blue)
 				{
 					int count = 0;
-					while (m_cCurrentColor.blue > 0 && count != m_iColorChange + 10)
+					while (m_cCurrentColor.blue > 2 && count != m_iColorChange + 10)
 					{
 						m_cCurrentColor.blue -= 2;
 						count++;

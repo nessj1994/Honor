@@ -18,7 +18,7 @@ public:
 	///////////////////////////////////////////////
 	////////////////////Interface/////////////////
 	void Update(float elapsedTime);
-	void Render(SGD::Point _Pos);
+	void Render(SGD::Point _Pos = {});
 	void Recylce(Particle* particle);
 	void StartParticles();
 
@@ -73,6 +73,10 @@ public:
 	void SetGravity(float _Gravity) { m_fGravitt = _Gravity; }
 	void SetRotation(float _Rotation) { m_fRotation = _Rotation; }
 	void SetColorChange(float _ColorChange) { m_fColorChange = _ColorChange; }
+	void SetEmitterShape(int _EmitterShape) { m_iEmitterShape = _EmitterShape; }
+	void SetSpinSpeed(int _SpinSpeed){ m_iSpinSpeed = _SpinSpeed; }
+	void SetRadius(int _Radius){ m_iRadius = _Radius; }
+	void PinEdges(bool _PinEdges){ m_bPinEdges = _PinEdges; }
 private:
 	std::random_device device;
 	SGD::HTexture m_hImage = SGD::INVALID_HANDLE;
@@ -85,9 +89,14 @@ private:
 	SGD::Color m_cStartColor;
 	SGD::Color m_cEndColor;
 	SGD::Point m_ptPosition = { 0, 0 };
+	SGD::Point m_EndPoint = { 0, 0 };
 	SGD::Size m_szSize = { 0, 0 };
 	SGD::Size m_szMaxParticleSize = { 0, 0 };
 	SGD::Size m_szMinParticleSize = { 0, 0 };
+	int m_iEmitterShape;
+	int m_iSpinSpeed;
+	int m_iRadius;
+	bool m_bPinEdges;
 	float m_fColorChange = 0.0f;
 	float m_fRotation = 0.0f;
 	float m_fMaxLifeSpan = 0.0f;
@@ -100,7 +109,8 @@ private:
 	float m_fMaxScaleRate = 0.0f;
 	unsigned int m_unMaxParticles = 10;
 	bool m_bLooping = false;
-
+	//Timers
+	float m_fSpinTimer = 0.0f;
 
 	std::vector<Particle> m_Particles;
 

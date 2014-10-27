@@ -3,6 +3,7 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
 #include "../SGD Wrappers/SGD_String.h"
+#include <math.h>
 #include "Camera.h"
 
 Emitter::Emitter()
@@ -21,6 +22,11 @@ Emitter::~Emitter()
 
 void Emitter::StartParticles()
 {
+	if (m_iEmitterShape)
+	{
+		m_EndPoint.y = m_ptPosition.y;
+		m_EndPoint.x = m_ptPosition.x + m_iRadius;
+	}
 	m_Particles.clear();
 	for (size_t i = 0; i < m_unMaxParticles; i++)
 	{
@@ -34,7 +40,7 @@ void Emitter::StartParticles()
 		{
 			VX += 40;
 		}
-		else
+		else if (VX != 0)
 		{
 			VX -= 40;
 		}
@@ -43,13 +49,29 @@ void Emitter::StartParticles()
 		{
 			VY += 40;
 		}
-		else
+		else if (VY != 0)
 		{
 			VY -= 40;
 		}
 						//Position																																//Life Time
 		//Particle Temp({ (m_ptPosition.x + (rand() % ((int)m_szSize.width - (0 + 1))) + 0), (m_ptPosition.y + (rand() % ((int)m_szSize.height - (0 + 1))) + 0) }, rand() % (int)(m_fMaxLifeSpan - (m_fMinLifeSpan + 1)) + m_fMinLifeSpan);
-		Particle Temp({thing(MT),thing2(MT)}, rand() % (int)(m_fMaxLifeSpan - (m_fMinLifeSpan + 1)) + m_fMinLifeSpan);
+		std::uniform_real_distribution<float>LifeSpan(m_fMinLifeSpan, m_fMaxLifeSpan);
+		Particle Temp({ thing(MT), thing2(MT) }, LifeSpan(MT));
+		if (m_iEmitterShape)
+		{
+			if (m_bPinEdges)
+			{
+				Temp.SetPosition(m_EndPoint);
+			}
+			else
+			{
+				int MAX = (int)(__max(m_ptPosition.y, m_EndPoint.y));
+				int MIN = (int)(__min(m_ptPosition.y, m_EndPoint.y));
+				Temp.SetPosition({ (float)(rand() % (((int)__max(m_ptPosition.x, m_EndPoint.x) - ((int)__min(m_ptPosition.x, m_EndPoint.x) + 1)) + (int)__min(m_ptPosition.x, m_EndPoint.x))),
+					(float)(rand() % (MAX - (MIN + 1)) + MIN) });
+			}
+
+		}
 		Temp.SetAlphaStart(m_fAlphaStart);
 		Temp.SetAlphaFade(m_fAlphaFade);
 		Temp.SetStartColor(m_cStartColor);
@@ -70,6 +92,19 @@ void Emitter::StartParticles()
 ////////////////////Interface/////////////////
 void Emitter::Update(float elapsedTime)
 {
+	if (m_iEmitterShape)
+	{
+		m_fSpinTimer += elapsedTime;
+		if (m_fSpinTimer >= .01f)
+		{
+			m_fSpinTimer = 0;
+			double A[2] = { m_EndPoint.x, m_EndPoint.y };
+			double x = (A[0] - m_ptPosition.x) * cos(((double)m_iSpinSpeed * (3.14 / 180))) - (A[1] - m_ptPosition.y) * sin(((double)m_iSpinSpeed * (3.14 / 180))) + m_ptPosition.x;
+			double y = (A[1] - m_ptPosition.y) * cos(((double)m_iSpinSpeed * (3.14 / 180))) + (A[0] - m_ptPosition.x) * sin(((double)m_iSpinSpeed * (3.14 / 180))) + m_ptPosition.y;
+			m_EndPoint.x = x;
+			m_EndPoint.y = y;
+		}
+	}
 
 		for (int i = 0; i < m_Particles.size(); i++)
 		{
@@ -85,9 +120,21 @@ void Emitter::Update(float elapsedTime)
 
 void Emitter::Render(SGD::Point _Pos)
 {
-	m_ptPosition = _Pos;
-	SGD::Rectangle Rect{ { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, m_szSize };
-	SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, {255,0,0,0}, {}, 2);
+	if (_Pos != SGD::Point(0,0))
+	{
+		m_ptPosition = _Pos;
+	}
+	
+	if (m_iEmitterShape)
+	{
+		SGD::GraphicsManager::GetInstance()->DrawLine({ m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, { m_EndPoint.x - Camera::GetInstance()->GetCameraPos().x, m_EndPoint.y - Camera::GetInstance()->GetCameraPos().y });	
+	}
+	else
+	{
+		SGD::Rectangle Rect{ { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, m_szSize };
+		SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
+	}
+
 
 	for (size_t i = 0; i < m_Particles.size(); i++)
 	{
@@ -102,10 +149,25 @@ void Emitter::Recylce(Particle* particle)
 	{
 		//Random Generator
 		std::mt19937 MT(device());
-		std::uniform_real_distribution<float>thing(m_ptPosition.x, m_ptPosition.x + m_szSize.width);
-		std::uniform_real_distribution<float>thing2(m_ptPosition.y, m_ptPosition.y + m_szSize.height);
+		std::uniform_real_distribution<float>X(m_ptPosition.x, m_ptPosition.x + m_szSize.width);
+		std::uniform_real_distribution<float>Y(m_ptPosition.y, m_ptPosition.y + m_szSize.height);
 		//
-		particle->SetPosition({ thing(MT), thing2(MT) });
+		particle->SetPosition({ X(MT), Y(MT) });
+		if (m_iEmitterShape)
+		{
+			if (m_bPinEdges)
+			{
+				particle->SetPosition(m_EndPoint);
+			}
+			else
+			{
+				int MAX = (int)(__max(m_ptPosition.y, m_EndPoint.y));
+				int MIN = (int)(__min(m_ptPosition.y, m_EndPoint.y))-1;
+				particle->SetPosition({ (float)(rand() % (((int)__max(m_ptPosition.x, m_EndPoint.x) - ((int)__min(m_ptPosition.x, m_EndPoint.x) +1)) + (int)__min(m_ptPosition.x, m_EndPoint.x))),
+					(float)(rand() % (MAX - (MIN + 1)) + MIN) });
+			}
+
+		}
 		particle->SetColorChange(m_fColorChange);
 		particle->Reset();
 	}
