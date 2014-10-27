@@ -53,12 +53,17 @@ void ParticleEngine::Terminate(void)
 		delete iterator->second;
 	}
 
+
 }
 
 /////////////////////////////////////////////////////////////////////////
 ///////////////////////////////Interface////////////////////////////////
 Emitter* ParticleEngine::LoadEmitter(std::string filePath,std::string Name,SGD::Point _Pos)
 {
+		if (m_mEmitterMap[Name])
+		{
+			return m_mEmitterMap[Name];
+		}
 		TiXmlDocument doc(filePath.c_str());
 		Emitter *ReturnEmit = new Emitter;
 		if (doc.LoadFile())
@@ -118,7 +123,9 @@ Emitter* ParticleEngine::LoadEmitter(std::string filePath,std::string Name,SGD::
 				//
 				if (ImageName.size() > 0)
 				{
-					ReturnEmit->SetImage(SGD::GraphicsManager::GetInstance()->LoadTexture(ImageName.c_str()));
+					string path = "Assets/";
+					path += ImageName.c_str();
+					ReturnEmit->SetImage(SGD::GraphicsManager::GetInstance()->LoadTexture(path.c_str()));
 				}
 				else
 				{
@@ -162,7 +169,7 @@ Emitter* ParticleEngine::LoadEmitter(std::string filePath,std::string Name,SGD::
 					ReturnEmit->SetMinVelocity({ (float)VelocityX, (float)VelocityY });
 					ReturnEmit->SetMinLifeSpan(MinLifeSpan);
 					ReturnEmit->StartParticles();
-					m_mEmitterMap["Test"] = ReturnEmit;
+					m_mEmitterMap[Name] = ReturnEmit;
 					return ReturnEmit;
 				}
 			}

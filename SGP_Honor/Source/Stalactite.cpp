@@ -18,18 +18,18 @@ Stalactite::~Stalactite()
 /////////////////Interface//////////////////////
 void Stalactite::Update(float elapsedTime)
 {
-	if (m_bIsFalling)
+	if(m_bIsFalling)
 	{
 		m_vtVelocity.y = m_fFallSpeed;
 	}
 
-	if (m_fRespawnTimer > 0.0f)
+	if(m_fRespawnTimer > 0.0f)
 	{
 		m_fRespawnTimer -= elapsedTime;
 	}
 
 
-	if (m_fRespawnTimer < 0.0f)
+	if(m_fRespawnTimer < 0.0f)
 	{
 		m_fRespawnTimer = 0.0f;
 		m_szSize = { 16, 16 };
@@ -67,18 +67,18 @@ SGD::Rectangle Stalactite::GetRect(void) const
 
 void Stalactite::HandleCollision(const IEntity* pOther)
 {
-	if (pOther->GetType() == ENT_HAWK)
+	if(pOther->GetType() == ENT_HAWK)
 	{
 		m_bIsFalling = true;
 	}
-	if (pOther->GetType() == ENT_SOLID_WALL)
-	{
-		m_bIsFalling = false;
-		m_szSize = { 0, 0 };
-		m_fRespawnTimer = 3.0f;
-		m_vtVelocity.y = 0;
-		m_ptPosition = m_ptStartPosition;
-	}
+				  if(pOther->GetType() == ENT_SOLID_WALL)
+				  {
+				  m_bIsFalling = false;
+				  m_szSize = { 0, 0 };
+				  m_fRespawnTimer = 3.0f;
+				  m_vtVelocity.y = 0;
+				  m_ptPosition = m_ptStartPosition;
+				  }
 
 
 }

@@ -5,8 +5,8 @@
 
 HintStatue::HintStatue()
 {
-	m_hSBImage = SGD::GraphicsManager::GetInstance()->LoadTexture("../Assets/graphics/speechbubble.png");
-	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("../Assets/graphics/statue.png");
+	m_hSBImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/speechbubble.png");
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/statue.png");
 	m_ptPosition = SGD::Point(400, 300);
 	SetSize(SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage));
 }

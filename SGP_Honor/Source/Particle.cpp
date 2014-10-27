@@ -1,5 +1,5 @@
 #include "Particle.h"
-
+#include "Camera.h"
 
 Particle::Particle(SGD::Point Pos, float LifeSpan)
 {
@@ -72,7 +72,6 @@ void Particle::Update(float elapsedTime)
 	}
 	//Smooth this out later
 	m_ptPosition += m_vtVelocity * (elapsedTime * 10);
-	
 	//Timer Changes
 	AlphaChangeTimer += elapsedTime;
 	ColorChangeTimer += elapsedTime;
@@ -170,7 +169,8 @@ void Particle::Render(void)
 		return;
 	}
 	//SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { (unsigned char)m_fCurrentAlpha, 0, 255, 0 }, { (unsigned char)m_fCurrentAlpha,0,255,0 }, 10);
-	SGD::Point Temp = m_ptPosition;
+	//{ GetPosition().x - Camera::GetInstance()->GetCameraPos().x, GetPosition().y - Camera::GetInstance()->GetCameraPos().y }
+	SGD::Point Temp = { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y };
 	if (m_hTexture != SGD::INVALID_HANDLE)
 	{
 		Temp.x -= (SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hTexture) / 2).width * m_szScale.width;
@@ -179,7 +179,7 @@ void Particle::Render(void)
 	}
 	else
 	{
-		SGD::Rectangle Rect{ m_ptPosition, m_szScale };
+		SGD::Rectangle Rect{ Temp, m_szScale };
 		SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, m_cCurrentColor);
 	}
 }

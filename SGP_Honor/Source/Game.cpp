@@ -74,7 +74,7 @@ bool Game::Initialize(float width, float height)
 
 	//Initialize the font
 	m_pFont = new BitmapFont();
-	m_pFont->LoadFont("../Assets/HonorFont.fnt");
+	m_pFont->LoadFont("Assets/HonorFont.fnt");
 
 	//Start the game in the proper state
 	AddState(MainMenuState::GetInstance());
@@ -101,9 +101,9 @@ int Game::Update()
 	m_ulGameTime = now;										//Store the current time
 
 	//Cap the elapsed time to 1/8th of a second
-	if(elapsedTime > 0.016f)
+	if(elapsedTime > 0.0125f)
 	{
-		elapsedTime = 0.016f;
+		elapsedTime = 0.0125f;
 	}
 
 	//Let the current state handle input
