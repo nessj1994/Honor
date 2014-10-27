@@ -46,6 +46,7 @@
 #include "Pouncer.h"
 #include "Jellyfish.h"
 #include "Teleporter.h"
+#include "Bull.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -131,6 +132,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pJellyfish = new Jellyfish();
 
 
+
 	//Create player with factory method
 	m_pPlayer = CreatePlayer();
 
@@ -170,17 +172,19 @@ void GameplayState::Enter(void) //Load Resources
 
 
 
-	//For Particle Testing
-	//m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test");*/
-	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/C++Test.xml", "Test", { -100, -100 });
+	//For Particle Testing*/
+	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/C++Test.xml", "Test", { 96, 672 });
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadLevel("HubLevel");
+	LoadLevel("Level1_5");
 
 	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
+
+	// Temporary
+	CreateBullBoss(500, 400);
 }
 
 
@@ -326,7 +330,6 @@ void GameplayState::Update(float elapsedTime)
 
 	//	m_pCamera->Update(elapsedTime);
 
-	//m_pEmitter->Update(elapsedTime);
 	m_pEmitter2->Update(elapsedTime);
 	float x = elapsedTime;
 
@@ -377,6 +380,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_HAWK);
 	m_pEntities->CheckWorldCollision(Entity::ENT_STALACTITE);
 	m_pEntities->CheckWorldCollision(Entity::ENT_LASER);
+	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_BULL);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
 
@@ -395,11 +399,10 @@ void GameplayState::Render(void)
 {
 	m_pLevel->RenderImageLayer(true);
 	m_pLevel->Render();
-	//m_pEmitter->Render();
 
 
 
-	//m_pEmitter2->Render( m_pPlayer->GetPosition());
+	m_pEmitter2->Render();
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 
@@ -1055,6 +1058,17 @@ void GameplayState::CreateTeleporter(int _x, int _y, std::string _level)
 	mTeleporter->SetLevel(_level);
 	m_pEntities->AddEntity(mTeleporter, Entity::ENT_TELEPORTER);
 	mTeleporter->Release();
+}
+
+/////////////////////////
+// CreateBullBoss
+// -Creates a bull boss at the given coordinates
+void GameplayState::CreateBullBoss(int _x, int _y)
+{
+	Bull * mBull = new Bull();
+	mBull->SetPosition({ (float)_x, (float)_y });
+	m_pEntities->AddEntity(mBull, Entity::ENT_BOSS_BULL);
+	mBull->Release();
 }
 
 #pragma endregion

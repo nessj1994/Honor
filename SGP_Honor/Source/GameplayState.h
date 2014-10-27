@@ -39,6 +39,7 @@ class Honor;
 class Armor;
 class Squid;
 class Pouncer;
+class Bull;
 class Jellyfish;
 
 //////////////////////////////////////////////////
@@ -102,6 +103,8 @@ public:
 	void CreateHintStatue(int _x, int _y, std::string _message);
 	void CreateTeleporter(int _x, int _y, std::string _level);
 
+	void CreateBullBoss(int _x, int _y);
+
 	void LoadLevel(std::string _level);
 
 private:
@@ -156,7 +159,6 @@ private:
 	std::map<std::string, std::string> m_mLevels;
 
 	AnimTimeStamp ts;
-
 	
 	//Test Entities to be removed later
 	//FallingBlock* m_pFBlock = nullptr;

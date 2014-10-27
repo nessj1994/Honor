@@ -1,4 +1,4 @@
-<Emitter Emitter_Shape="0" Emitter_Width="50" Emitter_Height="50" Max_Particles="200" Particle_Image="" Looping="True" Particle_Scale_X="20" Particle_Scale_Y="20" Start_Color_A="100" Start_Color_R="255" Start_Color_G="255" Start_Color_B="255" End_Color_A="255" End_Color_R="128" End_Color_G="0" End_Color_B="0" Color_Change_Scale="4" Alpha_Fade="2" Rotation="0" Gravity="0">
-  <Max_Particles Velocity_X="8" Velocity_Y="8" Life_Span="50" />
-  <Min_Particles Velocity_X="-8" Velocity_Y="-8" Life_Span="10" />
+<Emitter Emitter_Shape="0" Emitter_Width="900" Emitter_Height="98" Max_Particles="2000" Particle_Image="" Looping="True" Particle_Scale_X="3" Particle_Scale_Y="50" Start_Color_A="180" Start_Color_R="255" Start_Color_G="255" Start_Color_B="0" End_Color_A="255" End_Color_R="255" End_Color_G="128" End_Color_B="64" Color_Change_Scale="8" Alpha_Fade="2" Rotation="0" Gravity="5">
+  <Max_Particles Velocity_X="8" Velocity_Y="8" Life_Span="10.6" />
+  <Min_Particles Velocity_X="1" Velocity_Y="-8" Life_Span="1.00" />
 </Emitter>
