@@ -40,6 +40,8 @@
 #include "Armor.h"
 #include "Honor.h"
 #include "HintStatue.h"
+#include "Squid.h"
+#include "Pouncer.h"
 #include "Teleporter.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
@@ -121,6 +123,9 @@ void GameplayState::Enter(void) //Load Resources
 	//m_pStatue = new HintStatue();
 	//m_pStatue->SetMessageString("This is a test string");
 
+	//m_pSquid = new Squid();
+	//m_pPouncer = new Pouncer();
+
 
 	//Create player with factory method
 	m_pPlayer = CreatePlayer();
@@ -156,18 +161,21 @@ void GameplayState::Enter(void) //Load Resources
 	m_pEntities->AddEntity(m_pHonor, Entity::ENT_HONOR);
 	m_pEntities->AddEntity(m_pPendulum, Entity::ENT_PENDULUM);
 	m_pEntities->AddEntity(m_pStatue, Entity::ENT_STATUE);
-	m_pDoor->SetActivator(m_pSwitch);*/
+	m_pDoor->SetActivator(m_pSwitch);
 
 
 
 
 	//For Particle Testing
-	//m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test");
+	//m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test");*/
 	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/C++Test.xml", "Test", { -100, -100 });
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadLevel("HubLevel");
+
+	/*m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
+	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);*/
 }
 
 
@@ -215,10 +223,11 @@ void GameplayState::Exit(void)
 	//if (m_pPendulum != nullptr)
 	//	m_pPendulum->Release();
 
-	//if (m_pFBlock)
-	//{
-	//	m_pFBlock->Release();
-	//}
+	if (m_pSquid != nullptr)
+		m_pSquid->Release();
+
+	if (m_pPouncer != nullptr)
+		m_pPouncer->Release();
 	//Create local references to the SGD Wrappers
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -308,8 +317,6 @@ void GameplayState::Update(float elapsedTime)
 	//	m_pEntities->RemoveEntity(m_pArmor);
 
 	//	m_pCamera->Update(elapsedTime);
-	if (testtime <= 0.3f)
-		testtime += elapsedTime;
 
 	//m_pEmitter->Update(elapsedTime);
 	m_pEmitter2->Update(elapsedTime);
@@ -377,7 +384,10 @@ void GameplayState::Render(void)
 	m_pLevel->RenderImageLayer(true);
 	m_pLevel->Render();
 	//m_pEmitter->Render();
-	m_pEmitter2->Render(m_pPlayer->GetPosition());
+
+
+
+	//m_pEmitter2->Render( m_pPlayer->GetPosition());
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 
@@ -444,6 +454,10 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 			{
 				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
 			}
+											 else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+											 {
+												 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+											 }
 
 			// if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
 			// {
@@ -649,7 +663,7 @@ Player* GameplayState::CreatePlayer(void)
 	Player* pPlayer = new Player;
 
 	pPlayer->SetPosition(SGD::Point(100, 100));
-	pPlayer->SetSize(SGD::Size(64, 64));
+	pPlayer->SetSize(SGD::Size(32, 32));
 
 	return pPlayer;
 
@@ -828,7 +842,9 @@ void GameplayState::CreateMovingPlatform(int _x, int _y, bool _vertical, float _
 	mPlatform->SetPosition({ (float)_x, (float)_y });
 	mPlatform->SetSize({ 128.0f, 32.0f });
 	mPlatform->SetVertical(_vertical);
-	mPlatform->SetTurnDistance(_turnDistance);
+	mPlatform->SetTurnDistance(100);
+
+	//mPlatform->SetTurnDistance(_turnDistance);
 	mPlatform->SetSpeed(_speed);
 	m_pEntities->AddEntity(mPlatform, Entity::ENT_MOVING_PLATFORM);
 	mPlatform->Release();

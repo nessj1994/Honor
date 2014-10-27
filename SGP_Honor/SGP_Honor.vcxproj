@@ -75,8 +75,10 @@
     <ClCompile Include="Source\PauseState.cpp" />
     <ClCompile Include="Source\Pendulum.cpp" />
     <ClCompile Include="Source\Player.cpp" />
+    <ClCompile Include="Source\Pouncer.cpp" />
     <ClCompile Include="Source\ProfileState.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
+    <ClCompile Include="Source\Squid.cpp" />
     <ClCompile Include="Source\Stalactite.cpp" />
     <ClCompile Include="Source\Teleporter.cpp" />
     <ClCompile Include="Source\Turret.cpp" />
@@ -91,6 +93,7 @@
     <ClCompile Include="TinyXML\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h" />
     <ClInclude Include="SGD Wrappers\SGD_Color.h" />
     <ClInclude Include="SGD Wrappers\SGD_Declarations.h" />
@@ -165,8 +168,10 @@
     <ClInclude Include="Source\PauseState.h" />
     <ClInclude Include="Source\Pendulum.h" />
     <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\Pouncer.h" />
     <ClInclude Include="Source\ProfileState.h" />
     <ClInclude Include="Source\Projectile.h" />
+    <ClInclude Include="Source\Squid.h" />
     <ClInclude Include="Source\Stalactite.h" />
     <ClInclude Include="Source\Teleporter.h" />
     <ClInclude Include="Source\Turret.h" />
@@ -178,7 +183,15 @@
     <ClInclude Include="TinyXML\tinyxml.h" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="Assets\SaveGame.xml" />
     <Xml Include="Source\Test.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SGP_Honor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="icon2.ico" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{25D1F010-F642-489C-B6B1-2F749EF0434F}</ProjectGuid>

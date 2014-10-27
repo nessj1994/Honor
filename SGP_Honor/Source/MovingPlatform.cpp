@@ -58,6 +58,8 @@ void MovingPlatform::Update(float elapsedTime)
 				SGD::Point position = m_vEntities[i]->GetPosition();
 				position.x -= m_fSpeed * elapsedTime;
 				m_vEntities[i]->SetPosition(position);
+				//m_vEntities[i]->SetVelocity(m_vtVelocity + m_vEntities[i]->GetVelocity());
+
 			}
 		}
 		else
@@ -70,6 +72,9 @@ void MovingPlatform::Update(float elapsedTime)
 				SGD::Point position = m_vEntities[i]->GetPosition();
 				position.x += m_fSpeed * elapsedTime;
 				m_vEntities[i]->SetPosition(position);
+
+				//m_vEntities[i]->SetVelocity(m_vtVelocity + m_vEntities[i]->GetVelocity());
+
 			}
 		}
 	}

@@ -75,67 +75,67 @@
       <Filter>Bitmap Font</Filter>
     </ClCompile>
     <ClCompile Include="Source\Boss.cpp">
-      <Filter>Entitys\Enemys\Boss</Filter>
+      <Filter>Entities\Enemies\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy.cpp">
-      <Filter>Entitys\Enemys</Filter>
+      <Filter>Entities\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Source\Crab.cpp">
-      <Filter>Entitys\Enemys\Boss</Filter>
+      <Filter>Entities\Enemies\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Source\EntityManager.cpp">
-      <Filter>Entitys\Manager &amp; Main Entity</Filter>
+      <Filter>Entities\Manager &amp; Main Entity</Filter>
     </ClCompile>
     <ClCompile Include="Source\Entity.cpp">
-      <Filter>Entitys\Manager &amp; Main Entity</Filter>
+      <Filter>Entities\Manager &amp; Main Entity</Filter>
     </ClCompile>
     <ClCompile Include="Source\Bull.cpp">
-      <Filter>Entitys\Enemys\Boss</Filter>
+      <Filter>Entities\Enemies\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Source\BuzzSaw.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Block.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\ExitState.cpp">
       <Filter>Game States</Filter>
     </ClCompile>
     <ClCompile Include="Source\Armor.cpp">
-      <Filter>Entitys\Collectibles</Filter>
+      <Filter>Entities\Collectibles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Honor.cpp">
-      <Filter>Entitys\Collectibles</Filter>
+      <Filter>Entities\Collectibles</Filter>
     </ClCompile>
     <ClCompile Include="Source\HintStatue.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Geyser.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Ice.cpp">
-      <Filter>Entitys\Spells</Filter>
+      <Filter>Entities\Spells</Filter>
     </ClCompile>
     <ClCompile Include="Source\Hawk.cpp">
-      <Filter>Entitys\Spells</Filter>
+      <Filter>Entities\Spells</Filter>
     </ClCompile>
     <ClCompile Include="Source\Bounce.cpp">
-      <Filter>Entitys\Spells</Filter>
+      <Filter>Entities\Spells</Filter>
     </ClCompile>
     <ClCompile Include="Source\Activator.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\BossDoor.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Camera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
     <ClCompile Include="Source\Door.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Dash.cpp">
-      <Filter>Entitys\Spells</Filter>
+      <Filter>Entities\Spells</Filter>
     </ClCompile>
     <ClCompile Include="Source\Frame.cpp">
       <Filter>Engines\Animation</Filter>
@@ -144,10 +144,10 @@
       <Filter>Game States</Filter>
     </ClCompile>
     <ClCompile Include="Source\FallingBlock.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\MovingPlatform.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Particle.cpp">
       <Filter>Engines\Particle</Filter>
@@ -180,28 +180,28 @@
       <Filter>Engines\Particle</Filter>
     </ClCompile>
     <ClCompile Include="Source\Yeti.cpp">
-      <Filter>Entitys\Enemys\Boss</Filter>
+      <Filter>Entities\Enemies\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Source\Caveman.cpp">
-      <Filter>Entitys\Enemys\Boss</Filter>
+      <Filter>Entities\Enemies\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Source\Turret.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\World.cpp">
       <Filter>Levels</Filter>
     </ClCompile>
     <ClCompile Include="Source\Wizard.cpp">
-      <Filter>Entitys\Enemys\Boss</Filter>
+      <Filter>Entities\Enemies\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Source\Stalactite.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player.cpp">
-      <Filter>Entitys\Player</Filter>
+      <Filter>Entities\Player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Pendulum.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Level.cpp">
       <Filter>Levels</Filter>
@@ -210,22 +210,22 @@
       <Filter>Engines\Tile</Filter>
     </ClCompile>
     <ClCompile Include="Source\Laser.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Lava.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\FreezeableGround.cpp">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Unit.cpp">
-      <Filter>Entitys\Enemys</Filter>
+      <Filter>Entities\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Source\LevelCollider.cpp">
       <Filter>Engines\Tile</Filter>
     </ClCompile>
     <ClCompile Include="Source\Projectile.cpp">
-      <Filter>Entitys</Filter>
+      <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="Source\Teleporter.cpp">
       <Filter>Levels</Filter>
@@ -233,6 +233,8 @@
     <ClCompile Include="Source\ChangeLevelMessage.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Squid.cpp" />
+    <ClCompile Include="Source\Pouncer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -329,76 +331,76 @@
       <Filter>Bitmap Font</Filter>
     </ClInclude>
     <ClInclude Include="Source\Boss.h">
-      <Filter>Entitys\Enemys\Boss</Filter>
+      <Filter>Entities\Enemies\Boss</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
-      <Filter>Entitys\Enemys</Filter>
+      <Filter>Entities\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Source\Crab.h">
-      <Filter>Entitys\Enemys\Boss</Filter>
+      <Filter>Entities\Enemies\Boss</Filter>
     </ClInclude>
     <ClInclude Include="Source\EntityManager.h">
-      <Filter>Entitys\Manager &amp; Main Entity</Filter>
+      <Filter>Entities\Manager &amp; Main Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\Entity.h">
-      <Filter>Entitys\Manager &amp; Main Entity</Filter>
+      <Filter>Entities\Manager &amp; Main Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\Bull.h">
-      <Filter>Entitys\Enemys\Boss</Filter>
+      <Filter>Entities\Enemies\Boss</Filter>
     </ClInclude>
     <ClInclude Include="Source\BuzzSaw.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\Block.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\ExitState.h">
       <Filter>Game States</Filter>
     </ClInclude>
     <ClInclude Include="Source\Armor.h">
-      <Filter>Entitys\Collectibles</Filter>
+      <Filter>Entities\Collectibles</Filter>
     </ClInclude>
     <ClInclude Include="Source\Honor.h">
-      <Filter>Entitys\Collectibles</Filter>
+      <Filter>Entities\Collectibles</Filter>
     </ClInclude>
     <ClInclude Include="Source\HintStatue.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\Hawk.h">
-      <Filter>Entitys\Spells</Filter>
+      <Filter>Entities\Spells</Filter>
     </ClInclude>
     <ClInclude Include="Source\Ice.h">
-      <Filter>Entitys\Spells</Filter>
+      <Filter>Entities\Spells</Filter>
     </ClInclude>
     <ClInclude Include="Source\Bounce.h">
-      <Filter>Entitys\Spells</Filter>
+      <Filter>Entities\Spells</Filter>
     </ClInclude>
     <ClInclude Include="Source\Activator.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\BossDoor.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\Camera.h">
       <Filter>Camera</Filter>
     </ClInclude>
     <ClInclude Include="Source\Door.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\Dash.h">
-      <Filter>Entitys\Spells</Filter>
+      <Filter>Entities\Spells</Filter>
     </ClInclude>
     <ClInclude Include="Source\Frame.h">
       <Filter>Engines\Animation</Filter>
     </ClInclude>
     <ClInclude Include="Source\Geyser.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\IGameState.h">
       <Filter>Game States</Filter>
     </ClInclude>
     <ClInclude Include="Source\MovingPlatform.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\ParticleEngine.h">
       <Filter>Engines\Particle</Filter>
@@ -425,37 +427,37 @@
       <Filter>Engines\Particle</Filter>
     </ClInclude>
     <ClInclude Include="Source\IEntity.h">
-      <Filter>Entitys\Manager &amp; Main Entity</Filter>
+      <Filter>Entities\Manager &amp; Main Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameplayState.h">
       <Filter>Game States</Filter>
     </ClInclude>
     <ClInclude Include="Source\FallingBlock.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\Yeti.h">
-      <Filter>Entitys\Enemys\Boss</Filter>
+      <Filter>Entities\Enemies\Boss</Filter>
     </ClInclude>
     <ClInclude Include="Source\Caveman.h">
-      <Filter>Entitys\Enemys\Boss</Filter>
+      <Filter>Entities\Enemies\Boss</Filter>
     </ClInclude>
     <ClInclude Include="Source\World.h">
       <Filter>Levels</Filter>
     </ClInclude>
     <ClInclude Include="Source\Wizard.h">
-      <Filter>Entitys\Enemys\Boss</Filter>
+      <Filter>Entities\Enemies\Boss</Filter>
     </ClInclude>
     <ClInclude Include="Source\Turret.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\Stalactite.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\Player.h">
-      <Filter>Entitys\Player</Filter>
+      <Filter>Entities\Player</Filter>
     </ClInclude>
     <ClInclude Include="Source\Pendulum.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\Level.h">
       <Filter>Levels</Filter>
@@ -464,25 +466,25 @@
       <Filter>Engines\Tile</Filter>
     </ClInclude>
     <ClInclude Include="Source\Laser.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\Lava.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\FreezeableGround.h">
-      <Filter>Entitys\Obstacles</Filter>
+      <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\MessageID.h">
       <Filter>Messages</Filter>
     </ClInclude>
     <ClInclude Include="Source\Unit.h">
-      <Filter>Entitys\Enemys</Filter>
+      <Filter>Entities\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Source\LevelCollider.h">
       <Filter>Engines\Tile</Filter>
     </ClInclude>
     <ClInclude Include="Source\Projectile.h">
-      <Filter>Entitys</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Source\Teleporter.h">
       <Filter>Levels</Filter>
@@ -490,9 +492,13 @@
     <ClInclude Include="Source\ChangeLevelMessage.h">
       <Filter>Messages</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Source\Squid.h" />
+    <ClInclude Include="Source\Pouncer.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />
+    <Xml Include="Assets\SaveGame.xml" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Game States">
@@ -519,27 +525,6 @@
     <Filter Include="Core">
       <UniqueIdentifier>{fefeb2e8-9f83-4fc6-90dd-97adf674649d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Entitys">
-      <UniqueIdentifier>{fdaa5d7b-02e0-438a-812f-0514091e274e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Entitys\Enemys">
-      <UniqueIdentifier>{10f7e670-9452-4eae-b511-d8c8637a2361}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Entitys\Enemys\Boss">
-      <UniqueIdentifier>{9f204dd9-b5d1-4d23-b717-1e3906641a78}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Entitys\Manager &amp; Main Entity">
-      <UniqueIdentifier>{1b61be91-c7ef-49ed-b548-43a4670c1ae4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Entitys\Obstacles">
-      <UniqueIdentifier>{d6839c8f-25ee-4098-a627-def40ef8bf64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Entitys\Collectibles">
-      <UniqueIdentifier>{9b82204d-a544-4473-9b2e-3c45a3614e80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Entitys\Spells">
-      <UniqueIdentifier>{2a349dd5-c16d-46a9-8dc8-fc8007757778}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Camera">
       <UniqueIdentifier>{5cf997fc-804e-44c9-bf0f-5c3fce0ca42b}</UniqueIdentifier>
     </Filter>
@@ -549,11 +534,39 @@
     <Filter Include="Levels">
       <UniqueIdentifier>{9e6ba401-cc07-4903-83c6-d49025c2c4e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Entitys\Player">
-      <UniqueIdentifier>{34dea155-ea5c-4ac3-ae83-c1ccb39c1fca}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engines\Tile">
       <UniqueIdentifier>{5b6c2fb7-a473-48de-8e4f-879d7707701b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{fdaa5d7b-02e0-438a-812f-0514091e274e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Manager &amp; Main Entity">
+      <UniqueIdentifier>{1b61be91-c7ef-49ed-b548-43a4670c1ae4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Obstacles">
+      <UniqueIdentifier>{d6839c8f-25ee-4098-a627-def40ef8bf64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Collectibles">
+      <UniqueIdentifier>{9b82204d-a544-4473-9b2e-3c45a3614e80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Spells">
+      <UniqueIdentifier>{2a349dd5-c16d-46a9-8dc8-fc8007757778}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Player">
+      <UniqueIdentifier>{34dea155-ea5c-4ac3-ae83-c1ccb39c1fca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Enemies">
+      <UniqueIdentifier>{10f7e670-9452-4eae-b511-d8c8637a2361}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Enemies\Boss">
+      <UniqueIdentifier>{9f204dd9-b5d1-4d23-b717-1e3906641a78}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SGP_Honor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="icon2.ico" />
   </ItemGroup>
 </Project>

@@ -59,7 +59,6 @@ private:
 	
 	std::map<Animation, std::string> m_mAnimations;
 	std::string m_stCurrentAnimation;
-	bool m_bFacingRight = true;
 	
 	bool m_bDashing = false;
 	bool m_bIcing = false;
@@ -75,5 +74,6 @@ private:
 
 protected:
 	AnimTimeStamp m_ts;
+	bool m_bFacingRight = true;
 };
 
