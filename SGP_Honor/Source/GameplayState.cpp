@@ -44,6 +44,7 @@
 #include "HintStatue.h"
 #include "Squid.h"
 #include "Pouncer.h"
+#include "Jellyfish.h"
 #include "Teleporter.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
@@ -127,6 +128,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	m_pSquid = new Squid();
 	m_pPouncer = new Pouncer();
+	m_pJellyfish = new Jellyfish();
 
 
 	//Create player with factory method
@@ -178,6 +180,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
+	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
 }
 
 
@@ -230,6 +233,9 @@ void GameplayState::Exit(void)
 
 	if (m_pPouncer != nullptr)
 		m_pPouncer->Release();
+
+	if (m_pJellyfish != nullptr)
+		m_pJellyfish->Release();
 	//Create local references to the SGD Wrappers
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -340,6 +346,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MOVING_PLATFORM);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TELEPORTER);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ENEMY);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_JELLYFISH);
 
 
 

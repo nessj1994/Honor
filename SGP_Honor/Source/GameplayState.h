@@ -39,6 +39,7 @@ class Honor;
 class Armor;
 class Squid;
 class Pouncer;
+class Jellyfish;
 
 //////////////////////////////////////////////////
 // GameplayState class
@@ -174,6 +175,7 @@ private:
 
 	Squid* m_pSquid = nullptr;
 	Pouncer* m_pPouncer = nullptr;
+	Jellyfish* m_pJellyfish = nullptr;
 
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
 

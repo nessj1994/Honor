@@ -17,6 +17,7 @@
 #include "Dash.h"
 #include "Camera.h"
 #include "Honor.h"
+#include "Jellyfish.h"
 
 
 #define JOYSTICK_DEADZONE  0.2f
@@ -461,6 +462,11 @@ void Player::HandleCollision(const IEntity* pOther)
 	if(pOther->GetType() == ENT_DOOR)
 	{
 		BasicCollision(pOther);
+	}
+
+	if (pOther->GetType() == ENT_JELLYFISH)
+	{
+		JellyfishCollision(pOther);
 	}
 
 	if(pOther->GetType() == ENT_BOSS_DOOR)
@@ -1103,6 +1109,61 @@ void Player::LaserCollision(const IEntity* pOther)
 		}
 	}
 
+}
+
+void Player::JellyfishCollision(const IEntity* pOther)
+{
+	RECT rPlayer;
+	rPlayer.left = (LONG)GetRect().left;
+	rPlayer.top = (LONG)GetRect().top;
+	rPlayer.right = (LONG)GetRect().right;
+	rPlayer.bottom = (LONG)GetRect().bottom;
+
+	//Create a rectangle for the other object
+	RECT rObject;
+	rObject.left = (LONG)pOther->GetRect().left;
+	rObject.top = (LONG)pOther->GetRect().top;
+	rObject.right = (LONG)pOther->GetRect().right;
+	rObject.bottom = (LONG)pOther->GetRect().bottom;
+
+	//Create a rectangle for the intersection
+	RECT rIntersection = {};
+
+	IntersectRect(&rIntersection, &rPlayer, &rObject);
+
+	int nIntersectWidth = rIntersection.right - rIntersection.left;
+	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+	//Colliding with the side of the object
+	if (nIntersectHeight > nIntersectWidth)
+	{
+		if (rPlayer.right == rIntersection.right)
+		{
+
+			SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
+			SetVelocity({ 0, GetVelocity().y });
+		}
+		if (rPlayer.left == rIntersection.left)
+		{
+			SetPosition({ (float)rObject.right, GetPosition().y });
+			SetVelocity({ 0, GetVelocity().y });
+		}
+	}
+
+	if (nIntersectWidth > nIntersectHeight)
+	{
+		if (rPlayer.bottom == rIntersection.bottom)
+		{
+			const Jellyfish* jfish = dynamic_cast<const Jellyfish*>(pOther);
+			SetVelocity({ GetVelocity().x, GetVelocity().y * (-1.0f - (0.1f * jfish->GetBounceCount())) });
+			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height /*- nIntersectHeight*/ });
+		}
+		if (rPlayer.top == rIntersection.top)
+		{
+			SetPosition({ GetPosition().x, (float)rObject.bottom });
+			SetVelocity({ GetVelocity().x, 0 });
+		}
+	}
 }
 
 ////////////////////////////////////////////////
