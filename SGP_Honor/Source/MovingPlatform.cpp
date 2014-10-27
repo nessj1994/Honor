@@ -25,7 +25,7 @@ void MovingPlatform::Update(float elapsedTime)
 			m_fDistanceTraveled += m_fSpeed * elapsedTime;
 			SetVelocity({ 0.0f, -m_fSpeed });
 			// Move each entity
-			for(int i = 0; i < m_vEntities.size(); ++i)
+			for(unsigned int i = 0; i < m_vEntities.size(); ++i)
 			{
 				SGD::Point position = m_vEntities[i]->GetPosition();
 				position.y -= m_fSpeed * elapsedTime;
@@ -37,7 +37,7 @@ void MovingPlatform::Update(float elapsedTime)
 			m_fDistanceTraveled += m_fSpeed * elapsedTime;
 			SetVelocity({ 0.0f, m_fSpeed });
 			// Move each entity
-			for(int i = 0; i < m_vEntities.size(); ++i)
+			for (unsigned int i = 0; i < m_vEntities.size(); ++i)
 			{
 				SGD::Point position = m_vEntities[i]->GetPosition();
 				position.y += m_fSpeed * elapsedTime;
@@ -53,7 +53,7 @@ void MovingPlatform::Update(float elapsedTime)
 			m_fDistanceTraveled += m_fSpeed * elapsedTime;
 			SetVelocity({ -m_fSpeed, 0.0f });
 			// Move each entity
-			for(int i = 0; i < m_vEntities.size(); ++i)
+			for (unsigned int i = 0; i < m_vEntities.size(); ++i)
 			{
 				SGD::Point position = m_vEntities[i]->GetPosition();
 				position.x -= m_fSpeed * elapsedTime;
@@ -65,7 +65,7 @@ void MovingPlatform::Update(float elapsedTime)
 			m_fDistanceTraveled += m_fSpeed * elapsedTime;
 			SetVelocity({ m_fSpeed, 0.0f });
 			// Move each entity
-			for(int i = 0; i < m_vEntities.size(); ++i)
+			for (unsigned int i = 0; i < m_vEntities.size(); ++i)
 			{
 				SGD::Point position = m_vEntities[i]->GetPosition();
 				position.x += m_fSpeed * elapsedTime;
