@@ -1,5 +1,5 @@
 #include "Squid.h"
-#include "CreateProjectileMessage.h"
+#include "CreateGravProjectileMessage.h"
 #include "../SGD Wrappers/SGD_MessageManager.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
@@ -36,7 +36,7 @@ void Squid::Update(float elapsedTime)
 	if (shotTimer >= ShootSpeed)
 	{
 		shotTimer = 0.0f;
-		CreateProjectileMessage* pMsg = new CreateProjectileMessage(this);
+		CreateGravProjectileMessage* pMsg = new CreateGravProjectileMessage(this);
 		pMsg->QueueMessage();
 		pMsg = nullptr;
 	}

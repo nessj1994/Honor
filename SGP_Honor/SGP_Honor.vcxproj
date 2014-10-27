@@ -37,6 +37,7 @@
     <ClCompile Include="Source\Caveman.cpp" />
     <ClCompile Include="Source\ChangeLevelMessage.cpp" />
     <ClCompile Include="Source\Crab.cpp" />
+    <ClCompile Include="Source\CreateGravProjectileMessage.cpp" />
     <ClCompile Include="Source\CreateHawkMessage.cpp" />
     <ClCompile Include="Source\CreateProjectileMessage.cpp" />
     <ClCompile Include="Source\CreateSprayMessage.cpp" />
@@ -56,6 +57,7 @@
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\GameplayState.cpp" />
     <ClCompile Include="Source\Geyser.cpp" />
+    <ClCompile Include="Source\GravProjectile.cpp" />
     <ClCompile Include="Source\Hawk.cpp" />
     <ClCompile Include="Source\HintStatue.cpp" />
     <ClCompile Include="Source\Honor.cpp" />
@@ -127,6 +129,7 @@
     <ClInclude Include="Source\Caveman.h" />
     <ClInclude Include="Source\ChangeLevelMessage.h" />
     <ClInclude Include="Source\Crab.h" />
+    <ClInclude Include="Source\CreateGravProjectileMessage.h" />
     <ClInclude Include="Source\CreateHawkMessage.h" />
     <ClInclude Include="Source\CreateProjectileMessage.h" />
     <ClInclude Include="Source\CreateSprayMessage.h" />
@@ -146,6 +149,7 @@
     <ClInclude Include="Source\Game.h" />
     <ClInclude Include="Source\GameplayState.h" />
     <ClInclude Include="Source\Geyser.h" />
+    <ClInclude Include="Source\GravProjectile.h" />
     <ClInclude Include="Source\Hawk.h" />
     <ClInclude Include="Source\HintStatue.h" />
     <ClInclude Include="Source\Honor.h" />

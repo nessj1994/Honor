@@ -120,6 +120,7 @@ private:
 
 	Player* CreatePlayer(void);
 	Entity* CreateProjectile(Entity* pOwner) const;
+	Entity* CreateGravProjectile(Entity* pOwner) const;
 	Entity* CreateSpray(Entity* pOwner) const;
 	Hawk* CreateHawk(Entity* pOwner) const;
 

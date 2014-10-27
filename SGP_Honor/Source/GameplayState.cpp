@@ -9,6 +9,7 @@
 #include "MessageID.h"
 #include "DestroyEntityMessage.h"
 #include "CreateProjectileMessage.h"
+#include "CreateGravProjectileMessage.h"
 #include "CreateSprayMessage.h"
 #include "CreateHawkMessage.h"
 #include "ChangeLevelMessage.h"
@@ -16,6 +17,7 @@
 
 #include "Entity.h"
 #include "Projectile.h"
+#include "GravProjectile.h"
 #include "Player.h"
 #include "EntityManager.h"
 #include "Camera.h"
@@ -123,8 +125,8 @@ void GameplayState::Enter(void) //Load Resources
 	//m_pStatue = new HintStatue();
 	//m_pStatue->SetMessageString("This is a test string");
 
-	//m_pSquid = new Squid();
-	//m_pPouncer = new Pouncer();
+	m_pSquid = new Squid();
+	m_pPouncer = new Pouncer();
 
 
 	//Create player with factory method
@@ -174,8 +176,8 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadLevel("HubLevel");
 
-	/*m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
-	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);*/
+	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
+	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 }
 
 
@@ -337,6 +339,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_LAVA);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MOVING_PLATFORM);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TELEPORTER);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ENEMY);
 
 
 
@@ -367,6 +370,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_HAWK);
 	m_pEntities->CheckWorldCollision(Entity::ENT_STALACTITE);
 	m_pEntities->CheckWorldCollision(Entity::ENT_LASER);
+
+	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
 
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
 
@@ -454,10 +459,6 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 			{
 				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
 			}
-											 else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
-											 {
-												 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
-											 }
 
 			// if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
 			// {
@@ -467,6 +468,36 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 			// {
 			//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_ENEMY_PROJ);
 			// }
+
+			pProj->Release();
+			pProj = nullptr;
+
+
+			break;
+		}
+		case MessageID::MSG_CREATE_GRAVPROJECTILE:
+		{
+			//Downcast to the real message type
+			const CreateGravProjectileMessage* pCreateMsg = dynamic_cast<const CreateGravProjectileMessage*>(pMsg);
+
+			//Make sure the message isn't a nullptr
+			assert(pCreateMsg != nullptr
+				 && "GameplayState::MessageProc - MSG_CREATE_GRAVPROJECTILE is not actually a CreateGravProjectileMessage");
+
+			//Create a local reference to the gameplaystate singleton
+			GameplayState* pSelf = GameplayState::GetInstance();
+
+
+			//Play the projectile's audio sound
+
+			//Call CreateProjectile factory method sending in the messages projectile
+			Entity* pProj = pSelf->CreateGravProjectile(pCreateMsg->GetOwner());
+
+
+			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+			{
+				 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+			}
 
 			pProj->Release();
 			pProj = nullptr;
@@ -614,6 +645,21 @@ Entity* GameplayState::CreateProjectile(Entity* pOwner) const
 
 	return proj;
 
+}
+
+Entity* GameplayState::CreateGravProjectile(Entity* pOwner) const
+{
+	GravProjectile* proj = new GravProjectile();
+	if (pOwner->GetDirection().x == 1)
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+	else
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+
+	proj->SetSize({ 40, 40 });
+	proj->SetDirection({ pOwner->GetDirection() });
+	proj->SetOwner(pOwner);
+
+	return proj;
 }
 
 //Creates a new projectile to be added to the entity manager

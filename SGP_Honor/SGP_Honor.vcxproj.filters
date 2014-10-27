@@ -235,6 +235,10 @@
     </ClCompile>
     <ClCompile Include="Source\Squid.cpp" />
     <ClCompile Include="Source\Pouncer.cpp" />
+    <ClCompile Include="Source\GravProjectile.cpp" />
+    <ClCompile Include="Source\CreateGravProjectileMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -495,6 +499,10 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Source\Squid.h" />
     <ClInclude Include="Source\Pouncer.h" />
+    <ClInclude Include="Source\GravProjectile.h" />
+    <ClInclude Include="Source\CreateGravProjectileMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />

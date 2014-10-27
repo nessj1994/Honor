@@ -22,5 +22,8 @@ public:
 
 private:
 	Player* target = nullptr;
+	bool isPouncing = false;
+	float apex = 0.0f;
+	bool inAir = false;
 };
 

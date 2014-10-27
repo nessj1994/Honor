@@ -581,7 +581,6 @@ void Player::HandleCollision(const IEntity* pOther)
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}
 
-
 }
 
 
