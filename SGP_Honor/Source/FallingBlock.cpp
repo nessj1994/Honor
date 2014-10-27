@@ -6,6 +6,7 @@ FallingBlock::FallingBlock() : Listener(this)
 {
 	//Listen for the player to be in range
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/Graphics/FallingBlock.png");
 }
 
 
@@ -81,8 +82,10 @@ void FallingBlock::Render(void)
 	rMyRect.Offset({-camPos.x, -camPos.y});
 
 	//Render us with the camera
-	Camera::GetInstance()->Draw(rMyRect,
-		SGD::Color::Color(255, 0, 255, 0));
+	//Camera::GetInstance()->Draw(rMyRect,
+	//	SGD::Color::Color(255, 0, 255, 0));
+		Camera::GetInstance()->DrawTexture(m_ptPosition, 0.0f, m_hImage, false);
+
 
 }
 

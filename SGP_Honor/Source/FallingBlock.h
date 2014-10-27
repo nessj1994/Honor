@@ -47,7 +47,7 @@ public:
 
 private:
 
-	SGD::Point m_ptStartPosition = { 200, 50 };
+	SGD::Point m_ptStartPosition = { 0, 0 };
 	SGD::Point m_ptPosition = m_ptStartPosition;
 	SGD::Size m_szSize = { 32, 32 };
 	Entity* m_pTarget = nullptr;
