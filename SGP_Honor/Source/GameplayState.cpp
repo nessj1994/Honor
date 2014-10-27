@@ -168,9 +168,8 @@ void GameplayState::Enter(void) //Load Resources
 
 
 
-	//For Particle Testing
-	//m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test");*/
-	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/C++Test.xml", "Test", { -100, -100 });
+	//For Particle Testing*/
+	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/C++Test.xml", "Test", { 96, 672 });
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
@@ -323,7 +322,6 @@ void GameplayState::Update(float elapsedTime)
 
 	//	m_pCamera->Update(elapsedTime);
 
-	//m_pEmitter->Update(elapsedTime);
 	m_pEmitter2->Update(elapsedTime);
 	float x = elapsedTime;
 
@@ -389,11 +387,10 @@ void GameplayState::Render(void)
 {
 	m_pLevel->RenderImageLayer(true);
 	m_pLevel->Render();
-	//m_pEmitter->Render();
 
 
 
-	//m_pEmitter2->Render( m_pPlayer->GetPosition());
+	m_pEmitter2->Render();
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 
