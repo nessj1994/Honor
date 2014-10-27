@@ -39,6 +39,8 @@
 #include "Armor.h"
 #include "Honor.h"
 #include "HintStatue.h"
+#include "Squid.h"
+#include "Pouncer.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -124,6 +126,9 @@ void GameplayState::Enter(void) //Load Resources
 	m_pStatue = new HintStatue();
 	m_pStatue->SetMessageString("This is a test string");
 
+	m_pSquid = new Squid();
+	m_pPouncer = new Pouncer();
+
 
 	//Create player with factory method
 	m_pPlayer = CreatePlayer();
@@ -162,6 +167,8 @@ void GameplayState::Enter(void) //Load Resources
 	m_pEntities->AddEntity(m_pHonor, Entity::ENT_HONOR);
 	m_pEntities->AddEntity(m_pPendulum, Entity::ENT_PENDULUM);
 	m_pEntities->AddEntity(m_pStatue, Entity::ENT_STATUE);
+	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
+	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 	m_pDoor->SetActivator(m_pSwitch);
 
 
@@ -216,6 +223,12 @@ void GameplayState::Exit(void)
 
 	if (m_pPendulum != nullptr)
 		m_pPendulum->Release();
+
+	if (m_pSquid != nullptr)
+		m_pSquid->Release();
+
+	if (m_pPouncer != nullptr)
+		m_pPouncer->Release();
 
 	if (m_pFBlock)
 	{
@@ -304,8 +317,6 @@ void GameplayState::Update(float elapsedTime)
 		m_pEntities->RemoveEntity(m_pArmor);
 
 	//	m_pCamera->Update(elapsedTime);
-	if (testtime <= 0.3f)
-		testtime += elapsedTime;
 
 	//m_pEmitter->Update(elapsedTime);
 	m_pEmitter2->Update(elapsedTime);

@@ -37,6 +37,8 @@ class Pendulum;
 class HintStatue;
 class Honor;
 class Armor;
+class Squid;
+class Pouncer;
 
 //////////////////////////////////////////////////
 // GameplayState class
@@ -153,10 +155,7 @@ private:
 	Player* m_pPlayer								= nullptr;
 
 	AnimTimeStamp ts;
-	AnimTimeStamp ts2;
-	AnimTimeStamp ts3;
 
-	float testtime = 0;
 	
 	//Test Entities to be removed later
 	FallingBlock* m_pFBlock = nullptr;
@@ -172,6 +171,9 @@ private:
 	HintStatue * m_pStatue = nullptr;
 	Honor * m_pHonor = nullptr;
 	Armor * m_pArmor = nullptr;
+
+	Squid* m_pSquid = nullptr;
+	Pouncer* m_pPouncer = nullptr;
 
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
 
