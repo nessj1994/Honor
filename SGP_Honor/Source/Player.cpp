@@ -629,24 +629,24 @@ void Player::BasicCollision(const IEntity* pOther)
 	//Create a rectangle for the intersection
 	RECT rIntersection = {};
 
-	//	RECT rPlayerWall;
-	//	rPlayerWall.left = (LONG)GetRect().left - 1;
-	//	rPlayerWall.top = (LONG)GetRect().top;
-	//	rPlayerWall.right = (LONG)GetRect().right + 1;
-	//	rPlayerWall.bottom = (LONG)GetRect().bottom;
-	//
-	//	IntersectRect(&rIntersection, &rPlayer, &rPlayerWall);
+		RECT rPlayerWall;
+		rPlayerWall.left = (LONG)GetRect().left -1;
+		rPlayerWall.top = (LONG)GetRect().top;
+		rPlayerWall.right = (LONG)GetRect().right + 1;
+		rPlayerWall.bottom = (LONG)GetRect().bottom;
+	
+		IntersectRect(&rIntersection, &rObject, &rPlayerWall);
 
 	int nIntersectWidth = rIntersection.right - rIntersection.left;
 	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
-	//if (nIntersectHeight > nIntersectWidth)
-	//{
-	//	if (GetIsFalling() == true
-	//		|| GetIsJumping() == true)
-	//		SetIsInputStuck(true);
-	//
-	//}
+	if (nIntersectHeight > nIntersectWidth)
+	{
+		if (GetIsFalling() == true
+			|| GetIsJumping() == true)
+			SetIsInputStuck(true);
+	
+	}
 
 	IntersectRect(&rIntersection, &rPlayer, &rObject);
 
