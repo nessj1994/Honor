@@ -233,11 +233,17 @@
     <ClCompile Include="Source\ChangeLevelMessage.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Squid.cpp" />
-    <ClCompile Include="Source\Pouncer.cpp" />
-    <ClCompile Include="Source\GravProjectile.cpp" />
     <ClCompile Include="Source\CreateGravProjectileMessage.cpp">
       <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GravProjectile.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Pouncer.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Squid.cpp">
+      <Filter>Entities\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -497,11 +503,17 @@
       <Filter>Messages</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Source\Squid.h" />
-    <ClInclude Include="Source\Pouncer.h" />
-    <ClInclude Include="Source\GravProjectile.h" />
     <ClInclude Include="Source\CreateGravProjectileMessage.h">
       <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GravProjectile.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Pouncer.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Squid.h">
+      <Filter>Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

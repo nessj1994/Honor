@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations Character="Squid">
+  <Animation name="Squid Idle" spritesheet="Squid.png" looping="0">
+    <Frame RenderRectLeft="5" RenderRectTop="311" RenderRectRight="107" RenderRectBottom="387" CollisionRectLeft="13" CollisionRectTop="311" CollisionRectRight="107" CollisionRectBottom="387" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="45" anchorpointY="73" />
+  </Animation>
+  <Animation name="Squid Shooting" spritesheet="Squid.png" looping="0">
+    <Frame RenderRectLeft="120" RenderRectTop="310" RenderRectRight="225" RenderRectBottom="387" CollisionRectLeft="133" CollisionRectTop="310" CollisionRectRight="225" CollisionRectBottom="387" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="45" anchorpointY="74" />
+    <Frame RenderRectLeft="239" RenderRectTop="308" RenderRectRight="347" RenderRectBottom="386" CollisionRectLeft="256" CollisionRectTop="308" CollisionRectRight="347" CollisionRectBottom="386" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="47" anchorpointY="76" />
+    <Frame RenderRectLeft="362" RenderRectTop="309" RenderRectRight="470" RenderRectBottom="387" CollisionRectLeft="380" CollisionRectTop="309" CollisionRectRight="470" CollisionRectBottom="387" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="45" anchorpointY="75" />
+    <Frame RenderRectLeft="490" RenderRectTop="302" RenderRectRight="611" RenderRectBottom="379" CollisionRectLeft="511" CollisionRectTop="302" CollisionRectRight="611" CollisionRectBottom="379" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="74" anchorpointY="74" />
+    <Frame RenderRectLeft="631" RenderRectTop="304" RenderRectRight="758" RenderRectBottom="385" CollisionRectLeft="657" CollisionRectTop="304" CollisionRectRight="758" CollisionRectBottom="385" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="78" anchorpointY="73" />
+    <Frame RenderRectLeft="782" RenderRectTop="301" RenderRectRight="906" RenderRectBottom="386" CollisionRectLeft="810" CollisionRectTop="301" CollisionRectRight="906" CollisionRectBottom="375" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="76" anchorpointY="71" />
+  </Animation>
+</Animations>
