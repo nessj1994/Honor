@@ -19,8 +19,8 @@
 
 //*********************************************************************//
 // Preprocessor Constants
-#define WINDOW_CLASS_NAME	((const wchar_t*)L"SGD Game Project")		// window class name
-#define WINDOW_TITLE		((const wchar_t*)L"SGD Game Project")		// window title
+#define WINDOW_CLASS_NAME	((const wchar_t*)L"SGP Game Project")		// window class name
+#define WINDOW_TITLE		((const wchar_t*)L"SGP Game Project")		// window title
 #define WINDOW_WIDTH		((int)1024)									// window width
 #define WINDOW_HEIGHT		((int)768)									// window height
 

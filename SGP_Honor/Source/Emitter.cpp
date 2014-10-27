@@ -3,7 +3,7 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
 #include "../SGD Wrappers/SGD_String.h"
-
+#include "Camera.h"
 
 Emitter::Emitter()
 {
@@ -68,7 +68,7 @@ void Emitter::Update(float elapsedTime)
 void Emitter::Render(SGD::Point _Pos)
 {
 	m_ptPosition = _Pos;
-	SGD::Rectangle Rect{ _Pos, m_szSize};
+	SGD::Rectangle Rect{ { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, m_szSize };
 	SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, {255,0,0,0}, {}, 2);
 
 	for (size_t i = 0; i < m_Particles.size(); i++)

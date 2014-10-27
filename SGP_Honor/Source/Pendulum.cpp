@@ -9,8 +9,8 @@
 Pendulum::Pendulum()
 {
 	m_ptPosition = SGD::Point(900, 400);
-	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("../Assets/graphics/Pendulum.png");
-	AnimationEngine::GetInstance()->LoadAnimation("../Assets/pendulum.xml");
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/Pendulum.png");
+	AnimationEngine::GetInstance()->LoadAnimation("Assets/pendulum.xml");
 	m_ts.SetCurrAnimation("pendulum swing");
 	m_ts.SetPlaying(true);
 	m_ts.ResetCurrFrame();

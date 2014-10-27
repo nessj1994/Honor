@@ -298,6 +298,11 @@ void EntityManager::CheckCollisions(unsigned int bucket1, unsigned int bucket2)
 //	- check collision between the given bucket and the world
 void EntityManager::CheckWorldCollision(unsigned int _bucket)
 {
+	// Make sure there is something in the bucket to check
+	if (_bucket >= m_tEntities.size()
+		|| m_tEntities[_bucket].size() == 0)
+		return;
+
 	// Reference to the level
 	Level * level = GameplayState::GetInstance()->GetCurrentLevel();
 
@@ -309,5 +314,24 @@ void EntityManager::CheckWorldCollision(unsigned int _bucket)
 	{
 		// Call the check collision function and pass in each entity
 		level->CheckCollision(vec[i]);
+	}
+}
+
+/**************************************************************/
+// CheckEvents
+//	- check collision between the given bucket and the world
+void EntityManager::CheckWorldEvent(unsigned int _bucket)
+{
+	// Reference to the level
+	Level * level = GameplayState::GetInstance()->GetCurrentLevel();
+
+	// The vector of the given bucket
+	EntityVector vec = m_tEntities[_bucket];
+
+	// Loop through the bucket
+	for (unsigned int i = 0; i < vec.size(); ++i)
+	{
+		// Call the check collision function and pass in each entity
+		level->CheckEvent(vec[i]);
 	}
 }

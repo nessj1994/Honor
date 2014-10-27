@@ -11,4 +11,8 @@
   <Animation name="Idle" spritesheet="Skeleton.png" looping="0">
     <Frame RenderRectLeft="324" RenderRectTop="344" RenderRectRight="407" RenderRectBottom="397" CollisionRectLeft="336" CollisionRectTop="344" CollisionRectRight="369" CollisionRectBottom="397" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="21" anchorpointY="50" />
   </Animation>
+  <Animation name="dashing" spritesheet="Skeleton.png" looping="0">
+    <Frame RenderRectLeft="502" RenderRectTop="448" RenderRectRight="552" RenderRectBottom="498" CollisionRectLeft="521" CollisionRectTop="448" CollisionRectRight="546" CollisionRectBottom="498" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="25" anchorpointY="49" />
+    <Frame RenderRectLeft="340" RenderRectTop="446" RenderRectRight="395" RenderRectBottom="497" CollisionRectLeft="354" CollisionRectTop="446" CollisionRectRight="382" CollisionRectBottom="497" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="25" anchorpointY="49" />
+  </Animation>
 </Animations>

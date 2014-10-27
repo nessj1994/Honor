@@ -43,7 +43,7 @@ void OptionsState::Enter(void) //Load Resources
 {
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
-	m_hBGM = pAudio->LoadAudio(L"../Assets/Audio/HonorBGM.xwm");
+	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/HonorBGM.xwm");
 
 	pAudio->PlayAudio(m_hBGM);
 }
@@ -73,10 +73,10 @@ void OptionsState::Exit(void)
 	TiXmlElement* element = new TiXmlElement("option");
 	rootElement->LinkEndChild(element);
 	element->SetAttribute("music_volume", nMusicVol);
-	doc.SaveFile("../Assets/Options.xml");
+	doc.SaveFile("Assets/Options.xml");
 
 
-	
+	pAudio->StopAudio(m_hBGM);
 	pAudio->UnloadAudio(m_hBGM);
 }
 

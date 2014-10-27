@@ -22,5 +22,5 @@ public:
 
 private:
 	bool isCollected = false;
-	unsigned int m_HonorAmount = 1;
+	unsigned int m_HonorAmount = 50;
 };

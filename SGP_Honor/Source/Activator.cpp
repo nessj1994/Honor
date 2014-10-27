@@ -28,11 +28,11 @@ void Activator::Update(float elapsedTime)
 	}
 
 
-	if (m_fSwitchTimer < 0.0f && m_bPressurePlate == false)
+	if(m_fSwitchTimer < 0.0f && m_bPressurePlate == false)
 	{
 		m_fSwitchTimer = 0.0f;
 	}
-	else if (m_fSwitchTimer < 0.0f && m_bPressurePlate == true)
+	else if(m_fSwitchTimer < 0.0f && m_bPressurePlate == true)
 	{
 		m_fSwitchTimer = 0.0f;
 		//Close Door
@@ -80,7 +80,7 @@ void Activator::HandleCollision(const IEntity* pOther)
 {
 	if (pOther->GetType() == ENT_PLAYER)
 	{
-		if (m_bPressurePlate == false && m_fSwitchTimer == 0.0f)
+		if(m_bPressurePlate == false && m_fSwitchTimer == 0.0f)
 		{
 			//Open Door
 			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
@@ -89,7 +89,7 @@ void Activator::HandleCollision(const IEntity* pOther)
 			m_fSwitchTimer = 3.0f;
 
 		}
-		else if (m_bPressurePlate == true)
+		else if(m_bPressurePlate == true)
 		{
 			//Open Door
 			SGD::Event* pATEvent = new SGD::Event("OPEN_DOOR", nullptr, this);

@@ -101,20 +101,19 @@ SGD::Rectangle FallingBlock::GetRect(void) const
 
 void FallingBlock::HandleCollision(const IEntity* pOther)
 {
-	//Did the block collide with the ground
-	if(pOther->GetType() == ENT_BLOCK)
-	{
-		//If so move back up
-		m_unCurrentState = RISING_STATE;
-	}
+
 	//Did the block collide with the player
-	else if(pOther->GetType() == ENT_PLAYER)
+	if(pOther->GetType() == ENT_PLAYER)
 	{
 		//if so move back up but kill the player
 		m_unCurrentState = RISING_STATE;
 		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 		
+	}
+	else if(pOther->GetType() == Entity::ENT_SOLID_WALL)
+	{
+		m_unCurrentState = RISING_STATE;
 	}
 
 

@@ -65,7 +65,7 @@ void Level::Update(float _dt)
 
 //////////////////////////////
 // Render
-// - Draw the image layer to the screen
+// - Draw the collision layer to the screen
 void Level::Render()
 {
 	// Handle to graphics manager
@@ -90,27 +90,27 @@ void Level::Render()
 				case 0:
 					color = { 150, 150, 150 }; // gray
 					break;
-				// Death
+					// Death
 				case 1:
 					color = { 255, 150, 150 }; // red
 					break;
-				// Left ramp
+					// Left ramp
 				case 2:
 					color = { 160, 80, 250 }; // purple
 					break;
-				// Right ramp
+					// Right ramp
 				case 3:
 					color = { 250, 70, 210 }; // pink
 					break;
-				// Ice
+					// Ice
 				case 4:
 					color = { 0, 220, 220 }; // Cyan
 					break;
-				// Ice left ramp
+					// Ice left ramp
 				case 5:
 					color = { 50, 110, 0 }; // dark green
 					break;
-				// Ice right ramp
+					// Ice right ramp
 				case 6:
 					color = { 30, 220, 0 }; // light green
 					break;
@@ -158,6 +158,8 @@ void Level::RenderImageLayer(bool background)
 			int startY = (int)(Camera::GetInstance()->GetCameraPos().y / 32 * layer->GetScrollSpeed()) - 1;
 			int mapWidth = (int)(Game::GetInstance()->GetScreenWidth() / 32);
 			int mapHeight = (int)(Game::GetInstance()->GetScreenHeight() / 32);
+
+			// TODO fix culling
 
 			// Loop through the map
 			for (int xx = startX; xx < startX + mapWidth + 2; ++xx)
@@ -293,8 +295,9 @@ bool Level::LoadLevel(const char * _path)
 		imageLayer->SetTileSetSize(tileSetSize);
 
 		// tileset texture
-		std::string path = "..";
+		std::string path = "";
 		path += pImageLayer->Attribute("image");
+		path = path.erase(0, 1);
 		SGD::HTexture texture = SGD::GraphicsManager::GetInstance()->LoadTexture(path.c_str());
 		imageLayer->SetTileSet(texture);
 
@@ -346,7 +349,7 @@ bool Level::LoadLevel(const char * _path)
 
 	// Read in tiles
 	m_stEventLayer = new std::string*[m_nWidth];
-	pTile = pCollisionLayer->FirstChildElement();
+	pTile = pEventLayer->FirstChildElement();
 	for (int xx = 0; xx < m_nWidth; ++xx)
 	{
 		m_stEventLayer[xx] = new std::string[m_nHeight];
@@ -356,6 +359,9 @@ bool Level::LoadLevel(const char * _path)
 			/*char * value = nullptr;
 			pTile->Attribute(
 			collisionInfo[xx][yy] = value;*/
+			std::string value = "";
+			value = pTile->Attribute("event");
+			m_stEventLayer[xx][yy] = value;
 			pTile = pTile->NextSiblingElement();
 		}
 	}
@@ -381,97 +387,177 @@ bool Level::LoadLevel(const char * _path)
 			pEntity->Attribute("y", &y);
 			int numArgs;
 			pEntity->Attribute("numArgs", &numArgs);
-
+			
 			// TODO when all entities are done, call each ones create method
 
 #pragma region Switch for each type of entity
 			switch (type)
 			{
-				// Honor
-				case 0:
-					// TODO: parse args
-					break;
-				// Activator
-				case 1:
-					// TODO: parse args
-					break;
-				// Laser
-				case 2:
-					// TODO: parse args
-					break;
-				// Turret
-				case 3:
-					// TODO: parse args
-					break;
-				// Door
-				case 4:
-					// TODO: parse args
-					break;
-				// Moving platform
-				case 5:
+				case 0: // Honor
 				{
-						  // TODO: parse args
-
-						  TiXmlElement * pArg = pEntity->FirstChildElement();
-						  int vertical;
-						  pArg->Attribute("value", &vertical);
-						  pArg = pArg->NextSiblingElement();
-						  double turnDistance;
-						  pArg->Attribute("value", &turnDistance);
-						  pArg = pArg->NextSiblingElement();
-						  double speed;
-						  pArg->Attribute("value", &speed);
-						  GameplayState::GetInstance()->CreateMovingPlatform(x, y, (bool)vertical, (float)turnDistance, (float)speed);
-						  break;
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					int amount;
+					pArg->Attribute("value", &amount);
+					GameplayState::GetInstance()->CreateHonor(x, y, amount);
+					// TODO: parse args
+					break;
 				}
-				// Geyser
-				case 6:
-					// TODO: parse args
+				case 1: // Activator
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					int pressurePlate;
+					pArg->Attribute("value", &pressurePlate);
+					pArg = pArg->NextSiblingElement();
+					int active;
+					pArg->Attribute("value", &active);
+					pArg = pArg->NextSiblingElement();
+					int ID;
+					pArg->Attribute("value", &ID);
+					GameplayState::GetInstance()->CreateActivator(x, y, pressurePlate ? true : false, active ? true : false, ID);
 					break;
-				// Lava
-				case 7:
-					// TODO: parse args
+				}
+				case 2: // Laser
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					int direction;
+					pArg->Attribute("value", &direction);
+					pArg = pArg->NextSiblingElement();
+					int ID;
+					pArg->Attribute("value", &ID);
+					GameplayState::GetInstance()->CreateLaser(x, y, { 0, 0 }, ID);
+				}
+				case 3: // Turret
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					int direction;
+					pArg->Attribute("value", &direction);
+					pArg = pArg->NextSiblingElement();
+					double timer;
+					pArg->Attribute("value", &timer);
+					GameplayState::GetInstance()->CreateTurret(x, y, direction, (float)timer);
 					break;
-				// Falling block
-				case 8:
+				}
+				case 4: // Door
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					int horizontal;
+					pArg->Attribute("value", &horizontal);
+					pArg = pArg->NextSiblingElement();
+					int ID;
+					pArg->Attribute("value", &ID);
+					GameplayState::GetInstance()->CreateDoor(x, y, horizontal ? true : false, ID);
+					break;
+				}
+				case 5: // Moving platforms
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					int vertical;
+					pArg->Attribute("value", &vertical);
+					pArg = pArg->NextSiblingElement();
+					double turnDistance;
+					pArg->Attribute("value", &turnDistance);
+					pArg = pArg->NextSiblingElement();
+					double speed;
+					pArg->Attribute("value", &speed);
+					GameplayState::GetInstance()->CreateMovingPlatform(x, y, vertical ? true : false, (float)turnDistance, (float)speed);
+					break;
+				}
+				case 6: // Geyser
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					double speed;
+					pArg->Attribute("value", &speed);
+					pArg = pArg->NextSiblingElement();
+					double maxHeight;
+					pArg->Attribute("value", &maxHeight);
+					pArg = pArg->NextSiblingElement();
+					int currState;
+					pArg->Attribute("value", &currState);
+					GameplayState::GetInstance()->CreateGeyser(x, y, (float)speed, (float)maxHeight, currState);
+					break;
+				}
+				case 7: // Lava
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					double speed;
+					pArg->Attribute("value", &speed);
+					pArg = pArg->NextSiblingElement();
+					double maxHeight;
+					pArg->Attribute("value", &maxHeight);
+					pArg = pArg->NextSiblingElement();
+					int currState;
+					pArg->Attribute("value", &currState);
+					GameplayState::GetInstance()->CreateLava(x, y, (float)speed, (float)maxHeight, currState);
+					break;
+				}
+				case 8: // Falling block
+				{
 					GameplayState::GetInstance()->CreateFallingBlock(x, y);
 					break;
-				// Block
-				case 9:
-					// Nothing!
+				}
+				case 9: // Block
+				{
+					GameplayState::GetInstance()->CreateBlock(x, y);
 					break;
-				// Pendulum
-				case 10:
-					// Nothing!
+				}
+				case 10: // Pendulum
+				{
+					GameplayState::GetInstance()->CreatePendulum(x, y);
 					break;
-				// Buzz saw
-				case 11:
-					// TODO: parse args
+				}
+				case 11: // Buzz saw
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					int horizontal;
+					pArg->Attribute("value", &horizontal);
+					pArg = pArg->NextSiblingElement();
+					int returnDistance;
+					pArg->Attribute("value", &returnDistance);
+					GameplayState::GetInstance()->CreateBuzzsaw(x, y, horizontal ? true : false, returnDistance);
 					break;
-				// Stalactite
-				case 12:
-					// Nothing!
+				}
+				case 12: // Stalactite
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					double timer;
+					pArg->Attribute("value", &timer);
+					GameplayState::GetInstance()->CreateStalactite(x, y, (float)timer);
 					break;
-				// Armor
-				case 13:
-					// Nothing!
+				}
+				case 13: // Armor
+				{
+					GameplayState::GetInstance()->CreateArmor(x, y);
 					break;
-				// Freezable ground
-				case 14:
-					// Nothing!
+				}
+				case 14: // Freezable ground
+				{
+					GameplayState::GetInstance()->CreateFreezableGround(x, y);
 					break;
-				// Freezable left ramp
-				case 15:
-					// Nothing!
+				}
+				case 15: // Freezable left ramp
+				{
+					GameplayState::GetInstance()->CreateFreezableLeftRamp(x, y);
 					break;
-				// Freezable right ramp
-				case 16:
-					// Nothing!
+				}
+				case 16: // Freezable right ramp
+				{
+					GameplayState::GetInstance()->CreateFreezableRightRamp(x, y);
 					break;
-				// Hint statue
+				}
+					// Hint statue
 				case 17:
-					// TODO: parse args
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					std::string message = pArg->Attribute("value");
+					GameplayState::GetInstance()->CreateHintStatue(x, y, message);
 					break;
+				}
+			}
+
+			// Go to next node
+			if (i != numEntities - 1)
+			{
+				pEntity = pEntity->NextSiblingElement();
 			}
 #pragma endregion
 		}
@@ -493,13 +579,16 @@ void Level::CheckCollision(IEntity * _entity)
 	int y = (int)(rect.top / 32);
 
 	// Determine how far to check
-	int width = (int)((rect.right - rect.left) / 32);
-	int height = (int)((rect.bottom - rect.top) / 32);
+	int width = (int)((rect.right - 1 - rect.left) / 32);
+	int height = (int)((rect.bottom - 1 - rect.top) / 32);
+
+	//int x2 = (int)((rect.right - 1) / 32);
+	//int y2 = (int)((rect.bottom - 1) / 32);
 
 	// loop through all adjacent collision pieces
-	for (int xx = x - 1; xx < x + width + 1; ++xx)
+	for (int xx = x; xx <= x + width + 1; ++xx)
 	{
-		for (int yy = y - 1; yy < y + height + 1; ++yy)
+		for (int yy = y; yy <= y + height + 1; ++yy)
 		{
 			// Check if the current piece is in the bounds of the array
 			if (xx >= 0 && xx < m_nWidth && yy >= 0 && yy < m_nHeight)
@@ -512,7 +601,7 @@ void Level::CheckCollision(IEntity * _entity)
 					LevelCollider * collider = new LevelCollider();
 					collider->SetPosition({ xx * 32.0f, yy * 32.0f });
 					collider->SetSize({ 32, 32 });
-					if (collider->GetRect().IsIntersecting(_entity->GetRect()))
+					//if (collider->GetRect().IsIntersecting(_entity->GetRect()))
 					{
 						collider->SetCollide(id);
 						_entity->HandleCollision(collider);
@@ -535,31 +624,29 @@ void Level::CheckEvent(IEntity * _entity)
 	int y = (int)(rect.top / 32);
 
 	// Determine how far to check
-	int width = (int)((rect.right - rect.left) / 32);
-	int height = (int)((rect.bottom - rect.top) / 32);
+	int width = (int)((rect.right - 1 - rect.left) / 32);
+	int height = (int)((rect.bottom - 1 - rect.top) / 32);
+
+	//int x2 = (int)((rect.right - 1) / 32);
+	//int y2 = (int)((rect.bottom - 1) / 32);
 
 	// loop through all adjacent collision pieces
-	for (int xx = x - 1; xx < x + width + 1; ++xx)
+	for (int xx = x; xx <= x + width + 1; ++xx)
 	{
-		for (int yy = y - 1; yy < y + height + 1; ++yy)
+		for (int yy = y; yy <= y + height + 1; ++yy)
 		{
 			// Check if the current piece is in the bounds of the array
 			if (xx >= 0 && xx < m_nWidth && yy >= 0 && yy < m_nHeight)
 			{
-				// Create a rectangle and see if the entity is touching it
-				SGD::Rectangle rect = SGD::Rectangle(xx * 32, yy * 32, xx * 32 + 32, yy * 32 + 32);
-				if (_entity->GetRect().IsIntersecting(rect))
-				{
-					// Figure out what is at this position
-					std::string levelEvent = m_stEventLayer[xx][yy];
+				// Figure out what is at this position
+				std::string levelEvent = m_stEventLayer[xx][yy];
 
-					if (levelEvent != "") // only throw non blank events
-					{
-						// Throw event
-						SGD::Event* pATEvent = new SGD::Event(levelEvent.c_str(), nullptr, this);
-						SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-						pATEvent = nullptr;
-					}
+				if (levelEvent != "") // only throw non blank events
+				{
+					// Throw event
+					SGD::Event* pATEvent = new SGD::Event(levelEvent.c_str(), nullptr, this);
+					SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+					pATEvent = nullptr;
 				}
 			}
 		}

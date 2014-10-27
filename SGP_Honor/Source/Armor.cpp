@@ -7,7 +7,7 @@
 
 Armor::Armor()
 {
-	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("../Assets/graphics/armor.png");
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/armor.png");
 	SetSize(SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage));
 	m_ptPosition = SGD::Point(100, 300);
 }
