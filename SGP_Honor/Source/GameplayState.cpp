@@ -167,7 +167,7 @@ void GameplayState::Enter(void) //Load Resources
 
 
 	//For Particle Testing*/
-	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/CircleTest.xml", "Test", { 96, 672 });
+	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/C++Test.xml", "Test", { 96, 672 });
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();

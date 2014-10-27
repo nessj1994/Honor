@@ -82,6 +82,7 @@ void Emitter::StartParticles()
 		Temp.SetScale({Width,Height});
 		Temp.SetVelocity({ VX, VY });
 		Temp.SetImage(m_hImage);
+		Temp.SetGravity(m_fGravity);
 		Temp.SetColorChange(m_fColorChange);
 		Temp.Reset();
 		m_Particles.push_back(Temp);

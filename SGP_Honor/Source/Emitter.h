@@ -70,7 +70,7 @@ public:
 	void SetMinSize(SGD::Size _Size) { m_szMinParticleSize = _Size; }
 	void SetAlphaStart(float _AlphaStart) { m_fAlphaStart = _AlphaStart; }
 	void SetAlphaFade(float _AlphaFade) { m_fAlphaFade = _AlphaFade; }
-	void SetGravity(float _Gravity) { m_fGravitt = _Gravity; }
+	void SetGravity(float _Gravity) { m_fGravity = _Gravity; }
 	void SetRotation(float _Rotation) { m_fRotation = _Rotation; }
 	void SetColorChange(float _ColorChange) { m_fColorChange = _ColorChange; }
 	void SetEmitterShape(int _EmitterShape) { m_iEmitterShape = _EmitterShape; }
@@ -101,7 +101,7 @@ private:
 	float m_fRotation = 0.0f;
 	float m_fMaxLifeSpan = 0.0f;
 	float m_fMinLifeSpan = 0.0f;
-	float m_fGravitt = 0.0f;
+	float m_fGravity = 0.0f;
 	SGD::Size m_szScale = { 0, 0 };
 	float m_fAlphaStart = 0.0f;
 	float m_fAlphaFade = 0.0f;

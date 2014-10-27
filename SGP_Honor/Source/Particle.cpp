@@ -71,7 +71,8 @@ void Particle::Update(float elapsedTime)
 		m_fCurLifeSpan += elapsedTime;
 	}
 	//Smooth this out later
-	m_ptPosition += m_vtVelocity * elapsedTime;
+	m_ptPosition.x += m_vtVelocity.x * elapsedTime;
+	m_ptPosition.y += (m_vtVelocity.y * elapsedTime) + m_vtGravity/15;
 	//Timer Changes
 	AlphaChangeTimer += elapsedTime;
 	ColorChangeTimer += elapsedTime;
