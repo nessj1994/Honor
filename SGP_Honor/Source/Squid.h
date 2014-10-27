@@ -1,10 +1,10 @@
 #pragma once
-#include "Unit.h"
+#include "Enemy.h"
 #include "../SGD Wrappers/SGD_Listener.h"
 
 class Player;
 
-class Squid : public Unit, SGD::Listener
+class Squid : public Enemy, SGD::Listener
 {
 public:
 	Squid();

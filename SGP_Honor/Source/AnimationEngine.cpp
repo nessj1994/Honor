@@ -137,8 +137,8 @@ SGD::Rectangle AnimationEngine::GetAttackRect(const AnimTimeStamp& ts, bool faci
 	SGD::Rectangle rect;
 	rect.left = plrAnchor.x - plrAtkOffset.x;
 	rect.top = plrAnchor.y - plrAtkOffset.y;
-	rect.right = rect.left + renderRect.ComputeWidth();
-	rect.bottom = rect.top + renderRect.ComputeHeight();
+	rect.right = rect.left + atkRect.ComputeWidth();
+	rect.bottom = rect.top + atkRect.ComputeHeight();
 
 	if (facingRight == false)
 	{

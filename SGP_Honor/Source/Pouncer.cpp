@@ -4,6 +4,7 @@
 #include "../SGD Wrappers/SGD_MessageManager.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include <cmath>
 
 Pouncer::Pouncer() : Listener(this)
 {
@@ -15,14 +16,15 @@ Pouncer::Pouncer() : Listener(this)
 
 Pouncer::~Pouncer()
 {
+	SetTarget(nullptr);
 }
 
 void Pouncer::Update(float elapsedTime)
 {
 	if (target != nullptr)
 	{
-		SGD::Vector distance = target->GetPosition() - m_ptPosition;
-		if (distance.ComputeLength() < 250)
+		float distance = target->GetPosition().x - m_ptPosition.x;
+		if (fabsf(distance) < 250)
 		{
 			if (target->GetPosition().x < m_ptPosition.x)
 				m_ptPosition.x -= 1;

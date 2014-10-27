@@ -167,16 +167,17 @@ void GameplayState::Enter(void) //Load Resources
 	m_pEntities->AddEntity(m_pHonor, Entity::ENT_HONOR);
 	m_pEntities->AddEntity(m_pPendulum, Entity::ENT_PENDULUM);
 	m_pEntities->AddEntity(m_pStatue, Entity::ENT_STATUE);
-	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
-	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 	m_pDoor->SetActivator(m_pSwitch);
 
 
 
 	
 	//For Particle Testing
-	//m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test");
+	//m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test");*/
 	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/C++Test.xml", "Test", { -100, -100 });
+
+	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
+	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 }
 
 
@@ -442,6 +443,10 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 												 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
 											 }
 											 else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_TURRET)
+											 {
+												 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+											 }
+											 else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
 											 {
 												 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
 											 }
