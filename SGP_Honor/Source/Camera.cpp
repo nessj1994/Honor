@@ -35,7 +35,7 @@ void Camera::Draw(SGD::Rectangle _rect, SGD::Color _color)
 
 void Camera::DrawAnimation(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped)
 {
-	AnimationEngine::GetInstance()->Render({ position.x , position.y }, rotation, ts, flipped, m_szZoomScale.width, m_ptCameraPosition);
+	AnimationEngine::GetInstance()->Render({ position.x, position.y }, rotation, ts, flipped, m_fScale, m_ptCameraPosition);
 }
 
 void Camera::DrawString(std::string str, SGD::Point position)
@@ -68,7 +68,7 @@ void Camera::DrawTextureSection(SGD::HTexture handle, SGD::Point position, SGD::
 	SGD::GraphicsManager::GetInstance()->DrawTextureSection(handle,
 	{	(position.x /** m_szZoomScale.width*/)	/*- Camera::GetInstance()->GetCameraPos().x*/, 
 		(position.y /** m_szZoomScale.height*/) /*- Camera::GetInstance()->GetCameraPos().y*/ },
-	section, rotation, rotationOffset, color, { m_szZoomScale.width, m_szZoomScale.height });
+		section, rotation, rotationOffset, color, { m_fScale, m_fScale });
 }
 
 

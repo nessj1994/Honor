@@ -109,9 +109,9 @@ private:
 	bool m_bHasArmor = false;
 	bool m_bHawkCast = false;
 
-//	bool is_Jumping = false;
-//	bool is_Falling = true;
-//	bool has_landed = true;
+	bool is_Jumping = false;
+	bool is_Falling = true;
+	bool has_landed = true;
 
 	bool is_Stuck = false;
 	bool is_Left_Coll = false;
