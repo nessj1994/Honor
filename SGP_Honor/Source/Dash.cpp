@@ -3,13 +3,14 @@
 
 Dash::Dash()
 {
-	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/DashEffect.wav");
+	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/DashEffect.wav");
 }
 
 
 Dash::~Dash()
 {
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
+	m_hEffect = SGD::INVALID_HANDLE;
 }
 
 

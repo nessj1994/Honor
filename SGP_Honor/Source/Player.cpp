@@ -5,6 +5,7 @@
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include "../SGD Wrappers/SGD_String.h"
 #include "DestroyEntityMessage.h"
 #include "CreateProjectileMessage.h"
 #include "CreateSprayMessage.h"
@@ -12,6 +13,9 @@
 #include "LevelCollider.h"
 #include "Hawk.h"
 #include "AnimationEngine.h"
+#include "Font.h"
+#include "BitmapFont.h"
+#include "Game.h"
 
 #include <Windows.h>
 #include "Dash.h"
@@ -26,7 +30,7 @@ Player::Player() : Listener(this)
 {
 	Listener::RegisterForEvent("KILL_PLAYER");
 	SetDirection({ 1, 0 });
-	m_pDash = new Dash;
+	m_pDash = new Dash();
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/PlayerAnimations.xml");
 	m_ts.SetCurrAnimation("Idle");
 }
@@ -469,6 +473,16 @@ void Player::Render(void)
 		SGD::Color::Color(255, 255, 0, 0));
 
 	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight());
+
+	// Draw gui for amount of honor
+	SGD::OStringStream output;
+	output << "Honor: " << m_unHonorCollected;
+	//Local refernce to the font
+	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+
+	//Draw the title
+	font.DrawString(output.str().c_str(), 32, 32, 1, SGD::Color{ 255, 255, 0, 0 });
+
 }
 
 
@@ -501,7 +515,10 @@ void Player::HandleCollision(const IEntity* pOther)
 	if(pOther->GetType() == Entity::ENT_HONOR)
 	{
 		const Honor* honor = dynamic_cast<const Honor*>(pOther);
-		IncreaseHonorCount(honor->GetHonorAmount());
+		if (!honor->GetIsCollected())
+		{
+			IncreaseHonorCollected(honor->GetHonorAmount());
+		}
 	}
 
 	if(pOther->GetType() == Entity::ENT_ARMOR)

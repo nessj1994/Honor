@@ -29,10 +29,12 @@ void Honor::Update(float elapsedTime)
 void Honor::Render(void)
 {
 	if (isCollected == false)
+	{
 		Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false);
-	//SGD::GraphicsManager::GetInstance()->DrawTexture(m_hImage, SGD::Point(200, 400));
-	SGD::Point midPoint = SGD::Point(m_ptPosition.x + m_szSize.width / 4, m_ptPosition.y + m_szSize.height / 4);
-	m_eEffect->Render(midPoint);
+		//SGD::GraphicsManager::GetInstance()->DrawTexture(m_hImage, SGD::Point(200, 400));
+		SGD::Point midPoint = SGD::Point(m_ptPosition.x + m_szSize.width / 4, m_ptPosition.y + m_szSize.height / 4);
+		m_eEffect->Render(midPoint);
+	}
 }
 
 SGD::Rectangle Honor::GetRect(void) const

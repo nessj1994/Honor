@@ -94,7 +94,7 @@ public:
 
 	//void SetJumpCapTime(float _capTime) { m_fJumpVelCap = _capTime; }
 	void SetJumpVelCur(float _velCur) { m_fJumpVelCur = _velCur; }
-	void IncreaseHonorCount(unsigned int amount) { m_HonorCount += amount; }
+	void IncreaseHonorCollected(unsigned int amount) { m_unHonorCollected += amount; }
 
 private:
 
@@ -137,7 +137,6 @@ private:
 	Ice* m_pIce;
 	Bounce* m_pBounce;
 
-	unsigned int m_HonorCount = 0;
 	SGD::HTexture m_hImage = SGD::INVALID_HANDLE;
 };
 

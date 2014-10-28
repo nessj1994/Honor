@@ -335,6 +335,7 @@ void GameplayState::Update(float elapsedTime)
 
 	m_pEntities->UpdateAll(elapsedTime);
 	Camera::GetInstance()->Update(elapsedTime);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BLOCK);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PERM_FREEZE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TEMP_FREEZE);
