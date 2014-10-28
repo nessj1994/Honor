@@ -30,8 +30,8 @@ Player::Player() : Listener(this)
 {
 	Listener::RegisterForEvent("KILL_PLAYER");
 	SetDirection({ 1, 0 });
-	m_pDash = new Dash;
-	AnimationEngine::GetInstance()->LoadAnimation("Assets/CollisionTesting.xml");
+	m_pDash = new Dash();
+	AnimationEngine::GetInstance()->LoadAnimation("Assets/PlayerAnimations.xml");
 	m_ts.SetCurrAnimation("Idle");
 }
 
@@ -138,46 +138,52 @@ void Player::Update(float elapsedTime)
 		/////////////////////////////////////////////////
 		/////////////////Movement////////////////////////
 		//reset currframe to 0 & set the animation playing to true
-		if (IsDashing() == false)
+		if(IsDashing() == false)
 		{
-			if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false))
+			if(pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false))
 			{
 				stickFrame = 1;
 				m_ts.ResetCurrFrame();
 				m_ts.SetPlaying(true);
 			}
 			//reset currframe to 0 & set the animation playing to false
-			if ((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true))
+			if((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true) || pInput->IsKeyDown(SGD::Key::Space) == true)
 			{
 				leftClamped = false;
 			}
-			if (pInput->IsKeyReleased(SGD::Key::E) == true || pInput->IsKeyReleased(SGD::Key::Q) == true)
+			if(pInput->IsKeyReleased(SGD::Key::E) == true || pInput->IsKeyReleased(SGD::Key::Q) == true)
 			{
-				m_ts.SetPlaying(false);
-				m_ts.ResetCurrFrame();
-				m_ts.SetCurrAnimation("Idle");
+				if(!is_Jumping)
+				{
+					m_ts.SetPlaying(false);
+					m_ts.ResetCurrFrame();
+					m_ts.SetCurrAnimation("Idle");
+					m_ts.SetPlaying(true);
+				}
 			}
-			else if (leftClamped == true)
+			else if(leftClamped == true)
 			{
 				m_ts.SetPlaying(false);
-				m_ts.ResetCurrFrame();
-				m_ts.SetCurrAnimation("Idle");
+				//m_ts.ResetCurrFrame();
+				//m_ts.SetCurrAnimation("Idle");
+				m_ts.SetPlaying(true);
+
 			}
 
 
 			//Right Movement
-			if (pInput->IsKeyDown(SGD::Key::E) == true
+			if(pInput->IsKeyDown(SGD::Key::E) == true
 				|| leftStickXOff > JOYSTICK_DEADZONE)
 			{
 
-				if (GetIsInputStuck() == true)
+				if(GetIsInputStuck() == true)
 					m_fInputTimer += elapsedTime;
 
 
-				if (m_fInputTimer > 0.20f
+				if(m_fInputTimer > 0.20f
 					|| GetIsInputStuck() == false)
 				{
-					if (GetVelocity().x < 0)
+					if(GetVelocity().x < 0)
 					{
 						SetVelocity(SGD::Vector(GetVelocity().x + (5 * GetSpeed() * elapsedTime), GetVelocity().y));
 
@@ -186,21 +192,24 @@ void Player::Update(float elapsedTime)
 						SetVelocity(SGD::Vector(GetVelocity().x + GetSpeed() * elapsedTime, GetVelocity().y));
 					SetDirection({ 1, 0 });
 				}
-				m_ts.SetCurrAnimation("Walking");
+				if(!is_Jumping)
+				{
+					m_ts.SetCurrAnimation("Walking");
+				}
 				SetFacingRight(true);
 			}
 
 			//Left Movement
-			if (pInput->IsKeyDown(SGD::Key::Q) == true
+			if(pInput->IsKeyDown(SGD::Key::Q) == true
 				|| leftStickXOff < -JOYSTICK_DEADZONE)
 			{
-				if (GetIsInputStuck() == true)
+				if(GetIsInputStuck() == true)
 					m_fInputTimer += elapsedTime;
 
-				if (m_fInputTimer > 0.20f
+				if(m_fInputTimer > 0.20f
 					|| GetIsInputStuck() == false)
 				{
-					if (GetVelocity().x > 0)
+					if(GetVelocity().x > 0)
 					{
 						SetVelocity(SGD::Vector(GetVelocity().x - (5 * GetSpeed() * elapsedTime), GetVelocity().y));
 					}
@@ -210,7 +219,10 @@ void Player::Update(float elapsedTime)
 					}
 					SetDirection({ -1, 0 });
 				}
-				m_ts.SetCurrAnimation("Walking");
+				if(!is_Jumping)
+				{
+					m_ts.SetCurrAnimation("Walking");
+				}
 				SetFacingRight(false);
 			}
 		}
@@ -226,6 +238,14 @@ void Player::Update(float elapsedTime)
 			m_ts.ResetCurrFrame();
 			m_ts.SetCurrAnimation("dashing");
 		}
+		if(this->IsDashing() == false && m_ts.GetCurrAnimation() == "dashing")
+		{
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+			m_ts.SetCurrAnimation("Idle");
+		}
+
+
 
 		/////////////////////////////////////////////////
 		////////////////////Jump/////////////////////////
@@ -242,9 +262,12 @@ void Player::Update(float elapsedTime)
 		{
 			if(GetIsJumping() == false)
 			{
+				m_ts.ResetCurrFrame();
+				m_ts.SetPlaying(false);
+				m_ts.SetCurrAnimation("Jump");
 				m_fJumpTimer = 0.4f;
 
-			//	SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
+				//	SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
 				//SetVelocity({ GetVelocity().x, -450});
 				//SetIsJumping(true);
 				SetVelocity({ GetVelocity().x, -900 });
@@ -256,11 +279,11 @@ void Player::Update(float elapsedTime)
 			{
 				//SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
 				//SetVelocity({ GetVelocity().x, GetJumpVelCur() });
-				
-				if (m_fJumpTimer < 0.1f)
+
+				if(m_fJumpTimer < 0.1f)
 				{
 					SetVelocity({ GetVelocity().x, GetVelocity().y + (9000 * elapsedTime) });
-					if (GetVelocity().y > 0)
+					if(GetVelocity().y > 0)
 					{
 						SetVelocity({ GetVelocity().x, 0 });
 
@@ -393,11 +416,11 @@ void Player::Update(float elapsedTime)
 		{
 			SetGravity(-3000);
 
-
+			m_ts.SetPlaying(false);
 			SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
 		}
 
-		if ((m_fJumpTimer == 0.0f
+		if((m_fJumpTimer == 0.0f
 			|| pInput->IsKeyDown(SGD::Key::Space) == false
 			&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
 			&& GetVelocity().y <= 0
@@ -405,9 +428,10 @@ void Player::Update(float elapsedTime)
 		{
 			SetIsFalling(true);
 
-			if (GetVelocity().y < 0)
+			if(GetVelocity().y < 0)
 			{
 				SetVelocity({ GetVelocity().x, 0 });
+
 			}
 
 		}
@@ -434,7 +458,7 @@ void Player::Update(float elapsedTime)
 	Unit::Update(elapsedTime);
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 
-		SetGravity(-3000);
+	SetGravity(-3000);
 }
 
 void Player::Render(void)
@@ -448,7 +472,7 @@ void Player::Render(void)
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
 		SGD::Color::Color(255, 255, 0, 0));
 
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, IsFacingRight());
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight());
 
 	// Draw gui for amount of honor
 	SGD::OStringStream output;
@@ -488,7 +512,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		BasicCollision(pOther);
 	}
 
-	if (pOther->GetType() == Entity::ENT_HONOR)
+	if(pOther->GetType() == Entity::ENT_HONOR)
 	{
 		const Honor* honor = dynamic_cast<const Honor*>(pOther);
 		if (!honor->GetIsCollected())
@@ -497,7 +521,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		}
 	}
 
-	if (pOther->GetType() == Entity::ENT_ARMOR)
+	if(pOther->GetType() == Entity::ENT_ARMOR)
 	{
 		m_bHasArmor = true;
 	}
@@ -509,28 +533,28 @@ void Player::HandleCollision(const IEntity* pOther)
 		SetFriction(1.0f);
 	}
 
-	if (pOther->GetType() == Entity::ENT_MOVING_PLATFORM)
+	if(pOther->GetType() == Entity::ENT_MOVING_PLATFORM)
 	{
 		is_Platform = true;
 		BasicCollision(pOther);
 		SetFriction(1.0f);
 	}
 
-	if (pOther->GetType() == Entity::ENT_BLOCK)
+	if(pOther->GetType() == Entity::ENT_BLOCK)
 	{
 		is_Platform = true;
 		BasicCollision(pOther);
 		SetFriction(1.0f);
 	}
 
-	if (pOther->GetType() == Entity::ENT_FROZEN)
+	if(pOther->GetType() == Entity::ENT_FROZEN)
 	{
 		is_Platform = true;
 		BasicCollision(pOther);
 		SetFriction(0.1f);
 	}
 
-	if (pOther->GetType() == Entity::ENT_NOT_FROZEN)
+	if(pOther->GetType() == Entity::ENT_NOT_FROZEN)
 	{
 		is_Platform = true;
 		BasicCollision(pOther);
@@ -576,7 +600,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		is_Ramp = true;
 	}
 
-	if (pOther->GetType() == Entity::ENT_GEYSER)
+	if(pOther->GetType() == Entity::ENT_GEYSER)
 	{
 		is_Platform = true;
 		GeyserCollision(pOther);
@@ -585,9 +609,9 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	}
 
-	if (pOther->GetType() == Entity::ENT_LASER)
+	if(pOther->GetType() == Entity::ENT_LASER)
 	{
-		if (IsDashing() == true)
+		if(IsDashing() == true)
 		{
 
 		}
@@ -597,7 +621,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		}
 	}
 
-	if (pOther->GetType() == Entity::ENT_LAVA)
+	if(pOther->GetType() == Entity::ENT_LAVA)
 	{
 		//if so move back up but kill the player
 		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
@@ -631,23 +655,23 @@ void Player::BasicCollision(const IEntity* pOther)
 	//Create a rectangle for the intersection
 	RECT rIntersection = {};
 
-		RECT rPlayerWall;
-		rPlayerWall.left = (LONG)GetRect().left -1;
-		rPlayerWall.top = (LONG)GetRect().top;
-		rPlayerWall.right = (LONG)GetRect().right + 1;
-		rPlayerWall.bottom = (LONG)GetRect().bottom;
-	
-		IntersectRect(&rIntersection, &rObject, &rPlayerWall);
+	RECT rPlayerWall;
+	rPlayerWall.left = (LONG)GetRect().left - 1;
+	rPlayerWall.top = (LONG)GetRect().top;
+	rPlayerWall.right = (LONG)GetRect().right + 1;
+	rPlayerWall.bottom = (LONG)GetRect().bottom;
+
+	IntersectRect(&rIntersection, &rObject, &rPlayerWall);
 
 	int nIntersectWidth = rIntersection.right - rIntersection.left;
 	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
-	if (nIntersectHeight > nIntersectWidth)
+	if(nIntersectHeight > nIntersectWidth)
 	{
-		if (GetIsFalling() == true
+		if(GetIsFalling() == true
 			|| GetIsJumping() == true)
 			SetIsInputStuck(true);
-	
+
 	}
 
 	IntersectRect(&rIntersection, &rPlayer, &rObject);
@@ -656,33 +680,34 @@ void Player::BasicCollision(const IEntity* pOther)
 	nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
 	//Colliding with the side of the object
-	if (nIntersectHeight > nIntersectWidth)
+	if(nIntersectHeight > nIntersectWidth)
 	{
-		if (rPlayer.right == rIntersection.right)
+		if(rPlayer.right == rIntersection.right)
 		{
 
 			SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
 			SetVelocity({ 0, GetVelocity().y });
-			//SetDashTimer(0);
+			SetDashTimer(0);
 
 			is_Right_Coll = true;
 		}
-		if (rPlayer.left == rIntersection.left)
+		if(rPlayer.left == rIntersection.left)
 		{
 			SetPosition({ (float)rObject.right, GetPosition().y });
 			SetVelocity({ 0, GetVelocity().y });
-			//SetDashTimer(0);
+			SetDashTimer(0);
+
 
 			is_Left_Coll = true;
 
 		}
 	}
 
-	if (nIntersectWidth > nIntersectHeight)
+	if(nIntersectWidth > nIntersectHeight)
 	{
-		if (rPlayer.bottom == rIntersection.bottom)
+		if(rPlayer.bottom == rIntersection.bottom)
 		{
-			if (IsBouncing() == true)
+			if(IsBouncing() == true)
 			{
 				SetVelocity({ GetVelocity().x, GetVelocity().y * -1 });
 				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height  /*- nIntersectHeight*/ });
@@ -694,8 +719,16 @@ void Player::BasicCollision(const IEntity* pOther)
 				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 /*- nIntersectHeight*/ });
 			}
 
+			if(is_Jumping)
+			{
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Idle");
+				m_ts.SetPlaying(true);
+
+			}
 
 			SetJumpVelCur(0);
+
 			SetIsJumping(false);
 			SetIsFalling(false);
 			SetIsInputStuck(false);
@@ -703,7 +736,7 @@ void Player::BasicCollision(const IEntity* pOther)
 			is_Left_Coll = false;
 			is_Right_Coll = false;
 		}
-		if (rPlayer.top == rIntersection.top)
+		if(rPlayer.top == rIntersection.top)
 		{
 			SetPosition({ GetPosition().x, (float)rObject.bottom });
 			SetVelocity({ GetVelocity().x, 0 });
@@ -996,18 +1029,18 @@ void Player::GeyserCollision(const IEntity* pOther)
 	nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
 	//Colliding with the side of the object
-	if (nIntersectHeight > nIntersectWidth)
+	if(nIntersectHeight > nIntersectWidth)
 	{
-		if (rPlayer.right == rIntersection.right)
+		if(rPlayer.right == rIntersection.right)
 		{
 
 			//SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
 			SetVelocity({ 500 * GetDirection().x * -1, GetVelocity().y - 300 });
-			//SetDashTimer(0);
+			SetDashTimer(0);
 
 			is_Right_Coll = true;
 		}
-		if (rPlayer.left == rIntersection.left)
+		if(rPlayer.left == rIntersection.left)
 		{
 
 			//SetPosition({ (float)rObject.right, GetPosition().y });
@@ -1015,21 +1048,29 @@ void Player::GeyserCollision(const IEntity* pOther)
 			SetVelocity({ 500 * GetDirection().x * -1, GetVelocity().y - 300 });
 
 			//SetVelocity({ 0, GetVelocity().y });
-			//SetDashTimer(0);
+			SetDashTimer(0);
+
+			if(m_fDashTime == 0)
+			{
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+			m_ts.SetCurrAnimation("Idle");
+
+			}
 
 			is_Left_Coll = true;
 
 		}
 	}
 
-	if (nIntersectWidth > nIntersectHeight)
+	if(nIntersectWidth > nIntersectHeight)
 	{
-		if (rPlayer.bottom == rIntersection.bottom)
+		if(rPlayer.bottom == rIntersection.bottom)
 		{
 
-			if (IsBouncing() == true)
+			if(IsBouncing() == true)
 			{
-			//	SetVelocity({ GetVelocity().x, GetVelocity().y * -1 });
+				//	SetVelocity({ GetVelocity().x, GetVelocity().y * -1 });
 				//				SetJumpVelCur(GetJumpVelCur() * -1);
 				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height  /*- nIntersectHeight*/ });
 
@@ -1050,7 +1091,7 @@ void Player::GeyserCollision(const IEntity* pOther)
 			is_Left_Coll = false;
 			is_Right_Coll = false;
 		}
-		if (rPlayer.top == rIntersection.top)
+		if(rPlayer.top == rIntersection.top)
 		{
 			SetPosition({ GetPosition().x, (float)rObject.bottom });
 			SetVelocity({ GetVelocity().x, 0 });
@@ -1061,7 +1102,7 @@ void Player::GeyserCollision(const IEntity* pOther)
 void Player::LaserCollision(const IEntity* pOther)
 {
 
-	
+
 
 
 	RECT rPlayer;
@@ -1088,9 +1129,9 @@ void Player::LaserCollision(const IEntity* pOther)
 	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
 	//Colliding with the side of the object
-	if (nIntersectHeight > nIntersectWidth)
+	if(nIntersectHeight > nIntersectWidth)
 	{
-		if (rPlayer.right == rIntersection.right)
+		if(rPlayer.right == rIntersection.right)
 		{
 
 			//if so move back up but kill the player
@@ -1098,7 +1139,7 @@ void Player::LaserCollision(const IEntity* pOther)
 			SGD::EventManager::GetInstance()->SendEventNow(&Event);
 
 		}
-		if (rPlayer.left == rIntersection.left)
+		if(rPlayer.left == rIntersection.left)
 		{
 			//if so move back up but kill the player
 			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
@@ -1107,16 +1148,16 @@ void Player::LaserCollision(const IEntity* pOther)
 		}
 	}
 
-	if (nIntersectWidth > nIntersectHeight)
+	if(nIntersectWidth > nIntersectHeight)
 	{
-		if (rPlayer.bottom == rIntersection.bottom)
+		if(rPlayer.bottom == rIntersection.bottom)
 		{
 
 			//if so move back up but kill the player
 			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 			SGD::EventManager::GetInstance()->SendEventNow(&Event);
 		}
-		if (rPlayer.top == rIntersection.top)
+		if(rPlayer.top == rIntersection.top)
 		{
 
 			//if so move back up but kill the player
@@ -1220,9 +1261,9 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 
 	//Set the player back to his last checkpoint 
 	//This is usually back to the level start
-	if (pEvent->GetEventID() == "KILL_PLAYER")
+	if(pEvent->GetEventID() == "KILL_PLAYER")
 	{
-		if (m_bHasArmor == false)
+		if(m_bHasArmor == false)
 		{
 			m_ptPosition = m_ptStartPosition;
 		}
