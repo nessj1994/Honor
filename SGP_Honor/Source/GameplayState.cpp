@@ -233,7 +233,7 @@ void GameplayState::Exit(void)
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 	ParticleEngine::GetInstance()->Terminate();
 	ParticleEngine::GetInstance()->DeleteInstance();
-
+	delete m_pEmitter2;
 
 
 
@@ -384,7 +384,7 @@ void GameplayState::Render(void)
 
 
 
-	m_pEmitter2->Render();
+	//m_pEmitter2->Render();
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 

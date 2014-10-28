@@ -8,13 +8,14 @@
 
 Ice::Ice()
 {
-	m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("C++Test.xml", "Test",m_ptPosition);
+	m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("Assets/SprayParticle.xml", "Spray", {96,672});
 
 }
 
 
 Ice::~Ice()
 {
+	delete m_pEmitter;
 }
 
 void Ice::Update(float elapsedTime) 
@@ -70,11 +71,5 @@ void Ice::Update(float elapsedTime)
 
 void Ice::Render(void)
 {
-	m_pEmitter->SetPosition({ GetPosition().x - Camera::GetInstance()->GetCameraPos().x, GetPosition().y - Camera::GetInstance()->GetCameraPos().y });
-	m_pEmitter->StartParticles();
-		//this->GetPosition());
-
-
-
 	m_pEmitter->Render(m_ptPosition);
 }
