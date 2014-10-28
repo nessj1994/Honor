@@ -169,7 +169,7 @@ void GameplayState::Enter(void) //Load Resources
 
 
 	//For Particle Testing*/
-	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/C++Test.xml", "Test", { 96, 672 });
+	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/C++Test.xml", "Test", { 96, 672 });
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
@@ -179,7 +179,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);*/
 
 	// Temporary
-	CreateBullBoss(500, 400);
+	//CreateBullBoss(500, 400);
 }
 
 
