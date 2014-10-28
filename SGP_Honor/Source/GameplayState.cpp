@@ -815,6 +815,7 @@ void GameplayState::CreateHonor(int _x, int _y, int _amount)
 	Honor * mHonor = new Honor();
 	mHonor->SetPosition({ (float)_x, (float)_y });
 	mHonor->SetHonorAmount(_amount);
+	mHonor->SetEmitter();
 	m_pEntities->AddEntity(mHonor, Entity::ENT_HONOR);
 	mHonor->Release();
 }
