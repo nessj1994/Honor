@@ -1,13 +1,15 @@
 #include "Dash.h"
-
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 Dash::Dash()
 {
+	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/DashEffect.wav");
 }
 
 
 Dash::~Dash()
 {
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
 }
 
 
@@ -15,6 +17,7 @@ void Dash:: CastDash(Unit* pOther)
 {
 	if (pOther->GetType() == ENT_PLAYER)
 	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
 		pOther->SetIsDashing(true);
 		
 		if (pOther->IsFacingRight() == true)

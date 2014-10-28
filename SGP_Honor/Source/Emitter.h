@@ -13,6 +13,8 @@ class Emitter
 {
 public:
 	Emitter();
+	Emitter(const Emitter& _Emitter);
+	Emitter& operator= (const Emitter& _other);
 	~Emitter();
 
 	///////////////////////////////////////////////
@@ -113,7 +115,8 @@ private:
 	float m_fSpinTimer = 0.0f;
 
 	std::vector<Particle> m_Particles;
-
+	//CHecks
+	bool m_bStarted = false;
 
 };
 

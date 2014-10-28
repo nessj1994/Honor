@@ -44,7 +44,7 @@ public:
 	void RightRampCollision(const IEntity* pOther);
 	void GeyserCollision(const IEntity* pOther);
 	void LaserCollision(const IEntity* pOther);
-
+	void JellyfishCollision(const IEntity* pOther);
 
 
 
