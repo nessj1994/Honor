@@ -2,28 +2,22 @@
 #include "Enemy.h"
 #include "../SGD Wrappers/SGD_Listener.h"
 
-class Player;
-
-class Pouncer : public Enemy, SGD::Listener
+class Jellyfish : public Enemy, SGD::Listener
 {
 public:
-	Pouncer();
-	virtual ~Pouncer();
+	Jellyfish();
+	virtual ~Jellyfish();
 
 	virtual void Update(float elapsedTime)  override;
 	virtual void Render(void) override;
 
-	int GetType(void) const override { return ENT_ENEMY; }
+	int GetType(void) const override { return ENT_JELLYFISH; }
 	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
-
 	void HandleEvent(const SGD::Event* pEvent);
-	void SetTarget(Player* plr);
+	int GetBounceCount() const { return numOfBounces; }
 
 private:
-	Player* target = nullptr;
-	bool isPouncing = false;
-	float apex = 0.0f;
-	bool inAir = false;
+	int numOfBounces = 0;
 };
 
