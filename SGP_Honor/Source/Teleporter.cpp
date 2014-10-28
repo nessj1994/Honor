@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "GameplayState.h"
 #include "ChangeLevelMessage.h"
+#include "../SGD Wrappers/SGD_InputManager.h"
 
 /////////////////////////////////////////////////
 // Ctor/dtor
@@ -38,8 +39,11 @@ void Teleporter::HandleCollision(const IEntity* pOther)
 {
 	if (pOther->GetType() == ENT_PLAYER)
 	{
-		ChangeLevelMessage* pMsg = new ChangeLevelMessage{ this };
-		pMsg->QueueMessage();
-		pMsg = nullptr;
+		if (SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::W))
+		{
+			ChangeLevelMessage* pMsg = new ChangeLevelMessage{ this };
+			pMsg->QueueMessage();
+			pMsg = nullptr;
+		}
 	}
 }
