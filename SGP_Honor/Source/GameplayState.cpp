@@ -286,7 +286,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 		LoadLevel("Level1_1");
 	}
 
-	if (pInput->IsKeyPressed(SGD::Key::P)
+	if (pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());

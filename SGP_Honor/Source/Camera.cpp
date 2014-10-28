@@ -66,16 +66,16 @@ void Camera::DrawTextureSection(SGD::HTexture handle, SGD::Point position, SGD::
 
 
 	SGD::GraphicsManager::GetInstance()->DrawTextureSection(handle,
-	{ (position.x * m_szZoomScale.width) - Camera::GetInstance()->GetCameraPos().x, 
-	(position.y * m_szZoomScale.height) - Camera::GetInstance()->GetCameraPos().y },
+	{	(position.x /** m_szZoomScale.width*/)	- Camera::GetInstance()->GetCameraPos().x, 
+		(position.y /** m_szZoomScale.height*/) - Camera::GetInstance()->GetCameraPos().y },
 	section, rotation, rotationOffset, color, { m_szZoomScale.width, m_szZoomScale.height });
 }
 
 
 void Camera::Update(float _elapsedTime)
 {
-	m_ptCameraPosition.x = (m_pPlayer->GetPosition().x - Game::GetInstance()->GetScreenWidth() / 3)  / m_szZoomScale.width  /** m_fScale*/; // Divide by Scale
-	m_ptCameraPosition.y = (m_pPlayer->GetPosition().y - Game::GetInstance()->GetScreenHeight() / 2) / m_szZoomScale.height  /** m_fScale*/;// Divide by Scale
+	m_ptCameraPosition.x = (m_pPlayer->GetPosition().x - Game::GetInstance()->GetScreenWidth()  / 3)  /** m_fScale*/; // Divide by Scale
+	m_ptCameraPosition.y = (m_pPlayer->GetPosition().y - Game::GetInstance()->GetScreenHeight() / 2)  /** m_fScale*/;// Divide by Scale
 
 }
 

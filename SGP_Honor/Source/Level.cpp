@@ -125,8 +125,8 @@ void Level::Render()
 				//pGraphics->DrawRectangle(rect, color, { 0, 0, 0 }, 2);
 
 				Camera::GetInstance()->Draw(SGD::Rectangle(
-					xx * 32.0f - Camera::GetInstance()->GetCameraPos().x, yy * 32.0f - Camera::GetInstance()->GetCameraPos().y,
-					xx * 32.0f - Camera::GetInstance()->GetCameraPos().x + 32.0f, yy * 32.0f - Camera::GetInstance()->GetCameraPos().y + 32.0f),
+					xx * 32.0f - Camera::GetInstance()->GetCameraPos().x, yy * 32.0f			- Camera::GetInstance()->GetCameraPos().y,
+					xx * 32.0f - Camera::GetInstance()->GetCameraPos().x + 32.0f, yy * 32.0f	- Camera::GetInstance()->GetCameraPos().y + 32.0f),
 					color);
 			}
 		}

@@ -462,15 +462,28 @@ void Player::Render(void)
 
 	////Camera::GetInstance()->Draw(SGD::Rectangle(10, 300, 20, 320), SGD::Color::Color(255, 0, 0, 255));
 
+
+	// * Camera::GetInstance()->GetZoomScale().width
+	// * Camera::GetInstance()->GetZoomScale().height
+
+
+
+	
+
 	Camera::GetInstance()->Draw(SGD::Rectangle(
-		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
-		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
+		(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x)						/** Camera::GetInstance()->GetZoomScale().width*/     ,
+		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y)						/** Camera::GetInstance()->GetZoomScale().width*/     ,
+		(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width )	/** Camera::GetInstance()->GetZoomScale().width*/     ,
+		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height)	/** Camera::GetInstance()->GetZoomScale().height*/),
 		SGD::Color::Color(255, 255, 0, 0));
 
 //	Camera::GetInstance()->DrawAnimation({ (m_ptPosition.x /*+ GetSize().width / 2*/)/* - Camera::GetInstance()->GetCameraPos().x*/,
 //		(m_ptPosition.y /*+ GetSize().height - 4*/) /*- Camera::GetInstance()->GetCameraPos().y*/ }, 0, m_ts, IsFacingRight());
 
-	Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + GetSize().width /2, m_ptPosition.y + GetSize().height }, 0, m_ts, IsFacingRight());
+	Camera::GetInstance()->DrawAnimation({ 
+		(m_ptPosition.x + GetSize().width / 2) /** Camera::GetInstance()->GetZoomScale().width*/,
+		(m_ptPosition.y + GetSize().height)    /** Camera::GetInstance()->GetZoomScale().width*/ },
+		0, m_ts, IsFacingRight());
 	
 }
 
