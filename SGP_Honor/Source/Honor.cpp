@@ -30,7 +30,7 @@ void Honor::Render(void)
 {
 	if (isCollected == false)
 	{
-		Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false);
+		Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1.0f, {});
 		//SGD::GraphicsManager::GetInstance()->DrawTexture(m_hImage, SGD::Point(200, 400));
 		SGD::Point midPoint = SGD::Point(m_ptPosition.x + m_szSize.width / 4, m_ptPosition.y + m_szSize.height / 4);
 		m_eEffect->Render(midPoint);
