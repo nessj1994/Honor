@@ -167,7 +167,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadLevel("HubLevel");
+	LoadLevel("Level1_3");
 }
 
 
@@ -652,7 +652,7 @@ Player* GameplayState::CreatePlayer(void)
 	Player* pPlayer = new Player;
 
 	pPlayer->SetPosition(SGD::Point(100, 100));
-	pPlayer->SetSize(SGD::Size(32, 32));
+	pPlayer->SetSize(SGD::Size(64, 64));
 
 	return pPlayer;
 

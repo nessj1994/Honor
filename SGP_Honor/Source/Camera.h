@@ -23,7 +23,7 @@ public:
 
 	unsigned int GetHorizontalBuffer(void) const { return m_nHorizontalBuffer; }
 	unsigned int GetVerticalBuffer(void) const { return m_nVerticalBuffer; }
-
+	SGD::Size GetZoomScale() const { return m_szZoomScale; }
 
 
 
@@ -43,6 +43,7 @@ public:
 	void Draw(SGD::Rectangle _rect, SGD::Color _color);
 	void DrawAnimation(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped);
 	void DrawTexture(SGD::Point position, float rotation, SGD::HTexture m_hImage, bool flipped);
+	void DrawTextureSection(SGD::HTexture handle, SGD::Point position, SGD::Rectangle section, float rotation, SGD::Vector rotationOffset, SGD::Color color, SGD::Size scale);
 	void DrawString(std::string str, SGD::Point position);
 
 	void Update(float _elapsedTime);
@@ -67,7 +68,7 @@ private:
 
 	SGD::Point m_ptCameraPosition = { 0, 0 };
 
-	SGD::Size m_szZoomScale = { 2, 2 };
+	SGD::Size m_szZoomScale = { 0.5f, 0.5f };
 	float m_fScale = 5;
 	
 };

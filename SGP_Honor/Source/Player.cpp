@@ -46,9 +46,13 @@ void Player::Update(float elapsedTime)
 
 	m_fJumpTimer -= elapsedTime;
 
+	m_fLandTimer -= elapsedTime;
+
 	if(m_fJumpTimer < 0.0f)
 		m_fJumpTimer = 0;
 
+	if (m_fLandTimer < 0.0f)
+		m_fLandTimer = 0;
 
 	m_fHawkTimer += elapsedTime;
 
@@ -86,8 +90,9 @@ void Player::Update(float elapsedTime)
 	if(IsDashing() == false)///////////////Dash check begins
 	{
 
-		if(GetIsFalling() == false
-			&& GetIsJumping() == false)
+	//	if(GetIsFalling() == false
+	//		&& GetIsJumping() == false)
+		if (m_unCurrentState == RESTING_STATE)
 		{
 			/////////////////////////////////////////////////
 			/////////////////Friction////////////////////////
@@ -116,7 +121,7 @@ void Player::Update(float elapsedTime)
 				SetVelocity(SGD::Vector(GetVelocity().x - GetFriction(), GetVelocity().y));
 
 				if(GetVelocity().x < 0
-					&& GetVelocity().x > -10)
+					&& GetVelocity().x > -100)
 				{
 					SetVelocity(SGD::Vector(0, GetVelocity().y));
 				}
@@ -178,7 +183,11 @@ void Player::Update(float elapsedTime)
 
 					}
 					else
+					{
 						SetVelocity(SGD::Vector(GetVelocity().x + GetSpeed() * elapsedTime, GetVelocity().y));
+						//SetVelocity(SGD::Vector(1050, GetVelocity().y));
+
+					}
 					SetDirection({ 1, 0 });
 				}
 				m_ts.SetCurrAnimation("Walking");
@@ -202,6 +211,7 @@ void Player::Update(float elapsedTime)
 					else
 					{
 						SetVelocity(SGD::Vector(GetVelocity().x - GetSpeed() * elapsedTime, GetVelocity().y));
+						//SetVelocity(SGD::Vector(-1050, GetVelocity().y));
 					}
 					SetDirection({ -1, 0 });
 				}
@@ -235,26 +245,21 @@ void Player::Update(float elapsedTime)
 			|| pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)
 
 		{
-			if(GetIsJumping() == false)
+			//if(GetIsJumping() == false)
+			if (m_unCurrentState == RESTING_STATE)
 			{
-				m_fJumpTimer = 0.4f;
-
-			//	SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
-				//SetVelocity({ GetVelocity().x, -450});
-				//SetIsJumping(true);
-				SetVelocity({ GetVelocity().x, -900 });
+				m_fJumpTimer = 0.3f;
+				m_unCurrentState = JUMPING_STATE;
 
 
 			}
 
-			if(GetIsFalling() == false)
+			if(m_unCurrentState == JUMPING_STATE)
 			{
-				//SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
-				//SetVelocity({ GetVelocity().x, GetJumpVelCur() });
 				
-				if (m_fJumpTimer < 0.1f)
+				if (m_fJumpTimer < 0.2f)
 				{
-					SetVelocity({ GetVelocity().x, GetVelocity().y + (9000 * elapsedTime) });
+					SetVelocity({ GetVelocity().x, GetVelocity().y + (2200 * elapsedTime) });
 					if (GetVelocity().y > 0)
 					{
 						SetVelocity({ GetVelocity().x, 0 });
@@ -262,9 +267,9 @@ void Player::Update(float elapsedTime)
 					}
 
 				}
+				else
+					SetVelocity({ GetVelocity().x, -600 });
 
-
-				SetIsJumping(true);
 			}
 
 			if(m_fInputTimer <= 0.20f)
@@ -272,15 +277,13 @@ void Player::Update(float elapsedTime)
 				if(GetIsInputStuck() == true)
 				{
 
-					if(/*pInput->IsKeyDown(SGD::Key::Q) == true
-						&&*/ is_Right_Coll == true)
+					if(is_Right_Coll == true)
 					{
 						SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
 						SetVelocity({ -600, GetJumpVelCur() });
 					}
 
-					if(/*pInput->IsKeyDown(SGD::Key::E) == true
-						&&*/ is_Left_Coll == true)
+					if(is_Left_Coll == true)
 					{
 						SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
 						SetVelocity({ 600, GetJumpVelCur() });
@@ -302,8 +305,7 @@ void Player::Update(float elapsedTime)
 		}
 
 
-		if(pInput->IsKeyDown(SGD::Key::D) == true
-			/*&& m_fShotTimer > 0.25f*/)
+		if(pInput->IsKeyDown(SGD::Key::D) == true)
 		{
 
 			if(m_bHawkCast == false
@@ -344,8 +346,7 @@ void Player::Update(float elapsedTime)
 			}
 
 		}
-		if(pInput->IsKeyDown(SGD::Key::D) == false
-			/*&& m_fShotTimer > 0.25f*/)
+		if(pInput->IsKeyDown(SGD::Key::D) == false)
 		{
 			m_bHawkCast = false;
 
@@ -384,7 +385,7 @@ void Player::Update(float elapsedTime)
 		/////////////////////////////////////////////////
 		//////////////Constant Updates///////////////////
 
-		if(GetIsFalling() == true)
+		if (m_unCurrentState != JUMPING_STATE)
 		{
 			SetGravity(-3000);
 
@@ -392,13 +393,17 @@ void Player::Update(float elapsedTime)
 			SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
 		}
 
-		if ((m_fJumpTimer == 0.0f
+		if ((m_unCurrentState == JUMPING_STATE
+			&& m_fJumpTimer == 0.0f
 			|| pInput->IsKeyDown(SGD::Key::Space) == false
 			&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
 			&& GetVelocity().y <= 0
+			&& m_unCurrentState == JUMPING_STATE
 			/*&& GetIsInputStuck() == true*/)
 		{
-			SetIsFalling(true);
+			//SetIsFalling(true);
+			m_unCurrentState = FALLING_STATE;
+
 
 			if (GetVelocity().y < 0)
 			{
@@ -410,10 +415,29 @@ void Player::Update(float elapsedTime)
 
 	}
 
+	if (m_unCurrentState == LANDING_STATE
+		&& m_fLandTimer <= 0
+		&&  pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
+	{
+		m_unCurrentState = RESTING_STATE;
+	}
+
 
 	if(GetVelocity().y > 1050)
 	{
 		SetVelocity(SGD::Vector(GetVelocity().x, 1050));
+	}
+
+	if (GetVelocity().x > 850)
+	{
+		if (IsDashing() == false)
+		SetVelocity(SGD::Vector(850, GetVelocity().y));
+	}
+
+	if (GetVelocity().x < -850)
+	{
+		if (IsDashing() == false)
+		SetVelocity(SGD::Vector(-850, GetVelocity().y));
 	}
 
 	SetIsInputStuck(false);
@@ -443,7 +467,11 @@ void Player::Render(void)
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
 		SGD::Color::Color(255, 255, 0, 0));
 
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, IsFacingRight());
+//	Camera::GetInstance()->DrawAnimation({ (m_ptPosition.x /*+ GetSize().width / 2*/)/* - Camera::GetInstance()->GetCameraPos().x*/,
+//		(m_ptPosition.y /*+ GetSize().height - 4*/) /*- Camera::GetInstance()->GetCameraPos().y*/ }, 0, m_ts, IsFacingRight());
+
+	Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + GetSize().width /2, m_ptPosition.y + GetSize().height }, 0, m_ts, IsFacingRight());
+	
 }
 
 
@@ -483,7 +511,7 @@ void Player::HandleCollision(const IEntity* pOther)
 	{
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(1.0f);
+		SetFriction(7.0f);
 	}
 
 	if (pOther->GetType() == Entity::ENT_MOVING_PLATFORM)
@@ -622,8 +650,8 @@ void Player::BasicCollision(const IEntity* pOther)
 
 	if (nIntersectHeight > nIntersectWidth)
 	{
-		if (GetIsFalling() == true
-			|| GetIsJumping() == true)
+		if (m_unCurrentState == JUMPING_STATE
+			|| m_unCurrentState == FALLING_STATE)
 			SetIsInputStuck(true);
 	
 	}
@@ -640,16 +668,32 @@ void Player::BasicCollision(const IEntity* pOther)
 		{
 
 			SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
-			SetVelocity({ 0, GetVelocity().y });
+			if (m_unCurrentState == RESTING_STATE)
+			{
+				SetVelocity({ 0, GetVelocity().y });
+
+			}
 			//SetDashTimer(0);
+
+
+			//SetFriction(11.0f);
 
 			is_Right_Coll = true;
 		}
 		if (rPlayer.left == rIntersection.left)
 		{
 			SetPosition({ (float)rObject.right, GetPosition().y });
-			SetVelocity({ 0, GetVelocity().y });
+			//SetVelocity({ 0, GetVelocity().y });
 			//SetDashTimer(0);
+
+			if (m_unCurrentState == RESTING_STATE)
+			{
+				SetVelocity({ 0, GetVelocity().y });
+
+			}
+
+			//SetFriction(11.0f);
+
 
 			is_Left_Coll = true;
 
@@ -670,12 +714,25 @@ void Player::BasicCollision(const IEntity* pOther)
 			{
 				SetVelocity({ GetVelocity().x, 0 });
 				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 /*- nIntersectHeight*/ });
+				if (m_unCurrentState == FALLING_STATE)
+				{
+					// Landing is constantly setting it to 0.4f
+					// 
+
+					m_fLandTimer = 0.001f;
+					m_unCurrentState = LANDING_STATE;
+				}
+				//if (m_fLandTimer <= 0)
+				//	m_unCurrentState = RESTING_STATE;
+				
 			}
 
 
 			SetJumpVelCur(0);
-			SetIsJumping(false);
-			SetIsFalling(false);
+
+
+			//SetIsJumping(false);
+			//SetIsFalling(false);
 			SetIsInputStuck(false);
 
 			is_Left_Coll = false;
@@ -1021,8 +1078,12 @@ void Player::GeyserCollision(const IEntity* pOther)
 			}
 
 			SetJumpVelCur(0);
-			SetIsJumping(false);
-			SetIsFalling(false);
+
+			m_unCurrentState = RESTING_STATE;
+
+
+			//SetIsJumping(false);
+			//SetIsFalling(false);
 			SetIsInputStuck(false);
 
 			is_Left_Coll = false;

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level name="NewLevel" width="32" height="24" fixed="0" playerX="188" playerY="648">
+<Level name="NewLevel" width="32" height="24" fixed="0" playerX="182" playerY="630">
 	<ImageLayers numLayers="0" />
 	<CollisionLayer>
 		<CollisionTile type="0" />
@@ -1541,7 +1541,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="3">
+	<Entities numEntities="4">
 		<Entity type="18" x="352" y="672" numArgs="1" name="Teleporter_1">
 			<Argument type="3" name="Level" value="Level1_1" />
 		</Entity>
@@ -1550,6 +1550,9 @@
 		</Entity>
 		<Entity type="18" x="64" y="672" numArgs="1" name="Teleporter_5">
 			<Argument type="3" name="Level" value="HubLevel" />
+		</Entity>
+		<Entity type="18" x="672" y="672" numArgs="1" name="Teleporter_3">
+			<Argument type="3" name="Level" value="Level1_3" />
 		</Entity>
 	</Entities>
 </Level>
