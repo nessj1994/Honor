@@ -39,12 +39,12 @@ public:
 	void CastHawk();
 	void CastIce();
 	void CastBounce();
-	void BasicCollision(const IEntity* pOther);
+	void BasicCollision(const IEntity* pOther) override;
 	void LeftRampCollision(const IEntity* pOther);
 	void RightRampCollision(const IEntity* pOther);
 	void GeyserCollision(const IEntity* pOther);
 	void LaserCollision(const IEntity* pOther);
-
+	void JellyfishCollision(const IEntity* pOther);
 
 
 

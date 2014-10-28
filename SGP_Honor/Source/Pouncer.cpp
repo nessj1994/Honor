@@ -5,12 +5,16 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include <cmath>
+#include <Windows.h>
+
+#define MaxJumpTime 0.6f
 
 Pouncer::Pouncer() : Listener(this)
 {
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
 	m_ptPosition = { 800, 600 };
 	m_szSize = { 32, 32 };
+	SetGravity(-500.0f);
 }
 
 
@@ -23,14 +27,38 @@ void Pouncer::Update(float elapsedTime)
 {
 	if (target != nullptr)
 	{
-		float distance = target->GetPosition().x - m_ptPosition.x;
-		if (fabsf(distance) < 250)
+		SGD::Vector distance = target->GetPosition() - m_ptPosition;
+		if (distance.ComputeLength() < 250)
 		{
-			if (target->GetPosition().x < m_ptPosition.x)
-				m_ptPosition.x -= 1;
-			else if (target->GetPosition().x > m_ptPosition.x)
-				m_ptPosition.x += 1;
+			if (target->GetPosition().x < m_ptPosition.x && fabsf(distance.y) < 10 && inAir == false)
+			{
+				m_bFacingRight = false;
+				SetVelocity({ -200, -300 });
+				isPouncing = true;
+				inAir = true;
+			}
+			else if (target->GetPosition().x > m_ptPosition.x && fabsf(distance.y) < 10 && inAir == false)
+			{
+				m_bFacingRight = true;
+				SetVelocity({ 200, -300 });
+				isPouncing = true;
+				inAir = true;
+			}
 		}
+
+		if (apex >= MaxJumpTime && isPouncing == true)
+		{
+			apex = 0.0f;
+			isPouncing = false;
+		}
+		else if (apex < MaxJumpTime && isPouncing == true)
+		{
+			apex += elapsedTime;
+		}
+
+		SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
+
+		Unit::Update(elapsedTime);
 	}
 }
 
@@ -57,7 +85,65 @@ SGD::Rectangle Pouncer::GetRect(void) const
 
 void Pouncer::HandleCollision(const IEntity* pOther)
 {
+	if (pOther->GetType() == Entity::ENT_SOLID_WALL)
+		inAir = false;
 
+	if (pOther->GetType() == Entity::ENT_PLAYER && GetRect().IsIntersecting(pOther->GetRect()) == true)
+	{
+		//if so move back up but kill the player
+		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+		SGD::EventManager::GetInstance()->SendEventNow(&Event);
+	}
+
+	RECT rPouncer;
+	rPouncer.left = (LONG)GetRect().left;
+	rPouncer.top = (LONG)GetRect().top;
+	rPouncer.right = (LONG)GetRect().right;
+	rPouncer.bottom = (LONG)GetRect().bottom;
+
+	//Create a rectangle for the other object
+	RECT rObject;
+	rObject.left = (LONG)pOther->GetRect().left;
+	rObject.top = (LONG)pOther->GetRect().top;
+	rObject.right = (LONG)pOther->GetRect().right;
+	rObject.bottom = (LONG)pOther->GetRect().bottom;
+
+	//Create a rectangle for the intersection
+	RECT rIntersection = {};
+
+	IntersectRect(&rIntersection, &rPouncer, &rObject);
+
+	int nIntersectWidth = rIntersection.right - rIntersection.left;
+	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+	//Colliding with the side of the object
+	if (nIntersectHeight > nIntersectWidth)
+	{
+		if (rPouncer.right == rIntersection.right)
+		{
+			SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
+			SetVelocity({ 0, GetVelocity().y });
+		}
+		if (rPouncer.left == rIntersection.left)
+		{
+			SetPosition({ (float)rObject.right, GetPosition().y });
+			SetVelocity({ 0, GetVelocity().y });
+		}
+	}
+
+	if (nIntersectWidth > nIntersectHeight)
+	{
+		if (rPouncer.bottom == rIntersection.bottom)
+		{
+			SetVelocity({ GetVelocity().x, 0 });
+			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 /*- nIntersectHeight*/ });
+		}
+		if (rPouncer.top == rIntersection.top)
+		{
+			SetPosition({ GetPosition().x, (float)rObject.bottom });
+			SetVelocity({ GetVelocity().x, 0 });
+		}
+	}
 }
 
 void Pouncer::HandleEvent(const SGD::Event* pEvent)
