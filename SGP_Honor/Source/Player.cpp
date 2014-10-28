@@ -43,6 +43,8 @@ void Player::Update(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
+	//Timers
+	m_fIceTimer += elapsedTime;
 
 
 	m_fJumpTimer -= elapsedTime;
@@ -372,11 +374,13 @@ void Player::Update(float elapsedTime)
 			/*&& m_fShotTimer > 0.25f*/)
 		{
 			//m_fShotTimer = 0.0f;
-
-
-			CreateSprayMessage* pMsg = new CreateSprayMessage(this);
-			pMsg->QueueMessage();
-			pMsg = nullptr;
+			if (m_fIceTimer > .05f)
+			{
+				m_fIceTimer = 0;
+				CreateSprayMessage* pMsg = new CreateSprayMessage(this);
+				pMsg->QueueMessage();
+				pMsg = nullptr;
+			}
 		}
 
 

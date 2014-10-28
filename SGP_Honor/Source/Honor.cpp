@@ -7,7 +7,7 @@
 Honor::Honor()
 {
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/HonorPiece.png");
-	//m_ptPosition = SGD::Point(200, 300);
+	m_ptPosition = SGD::Point(200, 300);
 	SetSize(SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage));
 	m_eEffect = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/GreenHonor.xml", "GreenHonor", m_ptPosition);
 }
@@ -15,6 +15,7 @@ Honor::Honor()
 
 Honor::~Honor()
 {
+	delete m_eEffect;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
