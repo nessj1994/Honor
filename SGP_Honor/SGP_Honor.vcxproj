@@ -37,6 +37,7 @@
     <ClCompile Include="Source\Caveman.cpp" />
     <ClCompile Include="Source\ChangeLevelMessage.cpp" />
     <ClCompile Include="Source\Crab.cpp" />
+    <ClCompile Include="Source\CreateGravProjectileMessage.cpp" />
     <ClCompile Include="Source\CreateHawkMessage.cpp" />
     <ClCompile Include="Source\CreateProjectileMessage.cpp" />
     <ClCompile Include="Source\CreateSprayMessage.cpp" />
@@ -56,11 +57,13 @@
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\GameplayState.cpp" />
     <ClCompile Include="Source\Geyser.cpp" />
+    <ClCompile Include="Source\GravProjectile.cpp" />
     <ClCompile Include="Source\Hawk.cpp" />
     <ClCompile Include="Source\HintStatue.cpp" />
     <ClCompile Include="Source\Honor.cpp" />
     <ClCompile Include="Source\Ice.cpp" />
     <ClCompile Include="Source\InstructionsState.cpp" />
+    <ClCompile Include="Source\Jellyfish.cpp" />
     <ClCompile Include="Source\Laser.cpp" />
     <ClCompile Include="Source\Lava.cpp" />
     <ClCompile Include="Source\Layer.cpp" />
@@ -75,8 +78,10 @@
     <ClCompile Include="Source\PauseState.cpp" />
     <ClCompile Include="Source\Pendulum.cpp" />
     <ClCompile Include="Source\Player.cpp" />
+    <ClCompile Include="Source\Pouncer.cpp" />
     <ClCompile Include="Source\ProfileState.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
+    <ClCompile Include="Source\Squid.cpp" />
     <ClCompile Include="Source\Stalactite.cpp" />
     <ClCompile Include="Source\Teleporter.cpp" />
     <ClCompile Include="Source\Turret.cpp" />
@@ -91,6 +96,7 @@
     <ClCompile Include="TinyXML\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h" />
     <ClInclude Include="SGD Wrappers\SGD_Color.h" />
     <ClInclude Include="SGD Wrappers\SGD_Declarations.h" />
@@ -124,6 +130,7 @@
     <ClInclude Include="Source\Caveman.h" />
     <ClInclude Include="Source\ChangeLevelMessage.h" />
     <ClInclude Include="Source\Crab.h" />
+    <ClInclude Include="Source\CreateGravProjectileMessage.h" />
     <ClInclude Include="Source\CreateHawkMessage.h" />
     <ClInclude Include="Source\CreateProjectileMessage.h" />
     <ClInclude Include="Source\CreateSprayMessage.h" />
@@ -143,6 +150,7 @@
     <ClInclude Include="Source\Game.h" />
     <ClInclude Include="Source\GameplayState.h" />
     <ClInclude Include="Source\Geyser.h" />
+    <ClInclude Include="Source\GravProjectile.h" />
     <ClInclude Include="Source\Hawk.h" />
     <ClInclude Include="Source\HintStatue.h" />
     <ClInclude Include="Source\Honor.h" />
@@ -150,6 +158,7 @@
     <ClInclude Include="Source\IEntity.h" />
     <ClInclude Include="Source\IGameState.h" />
     <ClInclude Include="Source\InstructionsState.h" />
+    <ClInclude Include="Source\Jellyfish.h" />
     <ClInclude Include="Source\Laser.h" />
     <ClInclude Include="Source\Lava.h" />
     <ClInclude Include="Source\Layer.h" />
@@ -165,8 +174,10 @@
     <ClInclude Include="Source\PauseState.h" />
     <ClInclude Include="Source\Pendulum.h" />
     <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\Pouncer.h" />
     <ClInclude Include="Source\ProfileState.h" />
     <ClInclude Include="Source\Projectile.h" />
+    <ClInclude Include="Source\Squid.h" />
     <ClInclude Include="Source\Stalactite.h" />
     <ClInclude Include="Source\Teleporter.h" />
     <ClInclude Include="Source\Turret.h" />
@@ -180,6 +191,13 @@
   <ItemGroup>
     <Xml Include="Assets\SaveGame.xml" />
     <Xml Include="Source\Test.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SGP_Honor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="icon2.ico" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{25D1F010-F642-489C-B6B1-2F749EF0434F}</ProjectGuid>

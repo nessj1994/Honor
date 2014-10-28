@@ -2,7 +2,7 @@
 #include "Entity.h"
 #include "Unit.h"
 #include "AnimTimeStamp.h"
-
+#include "../SGD Wrappers/SGD_Handle.h"
 
 //#include "an"
 
@@ -23,6 +23,7 @@ public:
 
 private:
 	//Entity* m_pOwner = nullptr;
+	SGD::HAudio m_hEffect = SGD::INVALID_HANDLE;
 
 };
 
