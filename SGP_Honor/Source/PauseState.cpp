@@ -186,9 +186,13 @@ bool PauseState::Input(void)
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 1 /*Button B on xbox controller*/))
 	{
-		GameplayState::GetInstance()->ResetAudio();
 
-		Game::GetInstance()->RemoveState();
+		m_nCursor = 4;
+		
+
+	//	GameplayState::GetInstance()->ResetAudio();
+	//
+	//	Game::GetInstance()->RemoveState();
 	}
 
 	return true;
@@ -213,10 +217,10 @@ void PauseState::Render(void)
 
 	GameplayState::GetInstance()->Render();
 
-	int windowWidth = Game::GetInstance()->GetScreenWidth();
-	int windowHeight = Game::GetInstance()->GetScreenHeight();
+	float windowWidth = Game::GetInstance()->GetScreenWidth();
+	float windowHeight = Game::GetInstance()->GetScreenHeight();
 
-	SGD::GraphicsManager::GetInstance()->DrawRectangle(SGD::Rectangle(0, 0, windowWidth, windowHeight), SGD::Color(150, 255, 255, 255), {}, {});
+	SGD::GraphicsManager::GetInstance()->DrawRectangle(SGD::Rectangle(0.0f, 0.0f, windowWidth, windowHeight), SGD::Color(150, 255, 255, 255), {}, {});
 
 	//Draw Pause
 	font.DrawString("Pause", 370, 100, 3, SGD::Color{ 255, 255, 0, 0 });

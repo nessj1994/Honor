@@ -17,7 +17,7 @@ public:
 		ENT_FALLING_BLOCK, ENT_SPRAY, ENT_DOOR, ENT_BOSS_DOOR, ENT_SWITCH,
 		ENT_PRESSURE_PLATE, ENT_MOVING_PLATFORM, ENT_STALACTITE, ENT_SOLID_WALL, ENT_DEATH,
 		ENT_LEFT_RAMP, ENT_RIGHT_RAMP, ENT_ICE, ENT_ICE_LEFT_RAMP, ENT_ICE_RIGHT_RAMP, ENT_TURRET, ENT_BUZZSAW,
-		ENT_ARMOR, ENT_HONOR, ENT_STATUE, ENT_PENDULUM, ENT_GEYSER, ENT_LASER, ENT_LAVA,
+		ENT_ARMOR, ENT_HONOR, ENT_STATUE, ENT_PENDULUM, ENT_GEYSER, ENT_LASER, ENT_LAVA, ENT_TELEPORTER,
 	};
 
 	/////////////////////////////////////////////////
@@ -82,7 +82,7 @@ protected:
 	SGD::Vector			m_vtDirection			= { 0, 0 };     //1,0 right 0,1 down
 	SGD::Size			m_szSize				= SGD::Size{ 0, 0 }; //2D size
 	SGD::Size			m_szScale				= SGD::Size{ 1, 1 };//2D Scale
-	float				m_fSpeed				= 750.0f;// 250.0f;
+	float				m_fSpeed				= 2550.0f;// 250.0f;
 	float				m_fFriction = 10.0f;
 
 

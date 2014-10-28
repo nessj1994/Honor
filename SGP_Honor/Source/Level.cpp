@@ -125,8 +125,10 @@ void Level::Render()
 				//pGraphics->DrawRectangle(rect, color, { 0, 0, 0 }, 2);
 
 				Camera::GetInstance()->Draw(SGD::Rectangle(
-					xx * 32.0f - Camera::GetInstance()->GetCameraPos().x, yy * 32.0f - Camera::GetInstance()->GetCameraPos().y,
-					xx * 32.0f - Camera::GetInstance()->GetCameraPos().x + 32.0f, yy * 32.0f - Camera::GetInstance()->GetCameraPos().y + 32.0f),
+					xx * 32.0f - Camera::GetInstance()->GetCameraPos().x				/** Camera::GetInstance()->GetZoomScale()*/,
+					yy * 32.0f - Camera::GetInstance()->GetCameraPos().y				/** Camera::GetInstance()->GetZoomScale()*/,
+					xx * 32.0f - Camera::GetInstance()->GetCameraPos().x + 32.0f		/** Camera::GetInstance()->GetZoomScale()*/,
+					yy * 32.0f - Camera::GetInstance()->GetCameraPos().y + 32.0f		/** Camera::GetInstance()->GetZoomScale()*/),
 					color);
 			}
 		}
@@ -156,8 +158,8 @@ void Level::RenderImageLayer(bool background)
 			// Variables to help with culling
 			int startX = (int)(Camera::GetInstance()->GetCameraPos().x / 32 * layer->GetScrollSpeed()) - 1;
 			int startY = (int)(Camera::GetInstance()->GetCameraPos().y / 32 * layer->GetScrollSpeed()) - 1;
-			int mapWidth = (int)(Game::GetInstance()->GetScreenWidth() / 32);
-			int mapHeight = (int)(Game::GetInstance()->GetScreenHeight() / 32);
+			int mapWidth = (int)(Game::GetInstance()->GetScreenWidth() / 32)	/   Camera::GetInstance()->GetZoomScale();
+			int mapHeight = (int)(Game::GetInstance()->GetScreenHeight() / 32) / Camera::GetInstance()->GetZoomScale();
 
 			// TODO fix culling
 
@@ -187,15 +189,18 @@ void Level::RenderImageLayer(bool background)
 								);
 
 							// Draw the tile
-							pGraphics->DrawTextureSection(
+							Camera::GetInstance()->DrawTextureSection(
 								layer->GetTileSet(),
-								{ xx * 32.0f - Camera::GetInstance()->GetCameraPos().x * layer->GetScrollSpeed(),
-								yy * 32.0f - Camera::GetInstance()->GetCameraPos().y * layer->GetScrollSpeed() },
+								{ xx * 32.0f - Camera::GetInstance()->GetCameraPos().x * layer->GetScrollSpeed() /** Camera::GetInstance()->GetZoomScale()*/,
+								yy * 32.0f - Camera::GetInstance()->GetCameraPos().y * layer->GetScrollSpeed()  /* * Camera::GetInstance()->GetZoomScale() */},
 								section,
 								0.0f,
 								{ 0.0f, 0.0f },
 								{ 255, 255, 255 },
 								{ 1.0f, 1.0f });
+
+						//	Camera::GetInstance()->DrawTexture({ xx * 32.0f - Camera::GetInstance()->GetCameraPos().x * layer->GetScrollSpeed(),
+						//		yy * 32.0f - Camera::GetInstance()->GetCameraPos().y * layer->GetScrollSpeed() }, 0.0f, layer->GetTileSet(), false);
 						}
 					}
 				}
@@ -258,6 +263,15 @@ bool Level::LoadLevel(const char * _path)
 	// Read in width and height of the map
 	pRoot->Attribute("width", &m_nWidth);
 	pRoot->Attribute("height", &m_nHeight);
+
+	// Read in if fixed
+	int fixed;
+	pRoot->Attribute("fixed", &fixed);
+	m_bFixed = fixed ? true : false;
+
+	// Read in players start coordinates
+	pRoot->Attribute("playerX", &m_nPlayerX);
+	pRoot->Attribute("playerY", &m_nPlayerY);
 
 	// Load in the image layers by finding out how many there are
 	TiXmlElement* pImageLayers = pRoot->FirstChildElement();
@@ -544,13 +558,18 @@ bool Level::LoadLevel(const char * _path)
 					GameplayState::GetInstance()->CreateFreezableRightRamp(x, y);
 					break;
 				}
-					// Hint statue
-				case 17:
+				case 17: // Hint statue
 				{
 					TiXmlElement * pArg = pEntity->FirstChildElement();
 					std::string message = pArg->Attribute("value");
 					GameplayState::GetInstance()->CreateHintStatue(x, y, message);
 					break;
+				}
+				case 18: // Teleporter
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					std::string level = pArg->Attribute("value");
+					GameplayState::GetInstance()->CreateTeleporter(x, y, level);
 				}
 			}
 
