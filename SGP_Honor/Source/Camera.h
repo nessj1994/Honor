@@ -23,7 +23,7 @@ public:
 
 	unsigned int GetHorizontalBuffer(void) const { return m_nHorizontalBuffer; }
 	unsigned int GetVerticalBuffer(void) const { return m_nVerticalBuffer; }
-	SGD::Size GetZoomScale() const { return m_szZoomScale; }
+	float GetZoomScale() const { return m_fScale; }
 
 
 
@@ -35,7 +35,7 @@ public:
 
 	void SetHorizontalBuffer(unsigned int _buffer) { m_nHorizontalBuffer = _buffer; }
 	void SetVerticalBuffer(unsigned int _buffer) { m_nVerticalBuffer = _buffer; }
-	void SetZoomScale(SGD::Size _zoom) { m_szZoomScale = _zoom; }
+	void SetZoomScale(float _zoom) { m_fScale = _zoom; }
 
 	void SetPlayer(Player* _player) { m_pPlayer = _player; }
 
@@ -68,8 +68,8 @@ private:
 
 	SGD::Point m_ptCameraPosition = { 0, 0 };
 
-	SGD::Size m_szZoomScale = { 0.5f, 0.5f };
-	float m_fScale = 5;
+	//SGD::Size m_szZoomScale = { 0.5f, 0.5f };
+	float m_fScale = 0.5f;
 	
 };
 
