@@ -37,6 +37,11 @@ public:
 	void CheckCollision(IEntity * _entity);
 	void CheckEvent(IEntity * _entity);
 
+	//////////////////////////////
+	// Accessors
+	int GetPlayerX() const { return m_nPlayerX; }
+	int GetPlayerY() const { return m_nPlayerY; }
+
 private:
 	//////////////////////////////
 	// Member fields
@@ -50,6 +55,8 @@ private:
 	Camera *				m_pCamera;
 	std::vector<Honor*>		m_vHonor;
 	std::vector<Armor*>		m_vArmor;
+	int						m_nPlayerX;
+	int						m_nPlayerY;
 
 };
 

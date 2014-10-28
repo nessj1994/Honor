@@ -101,9 +101,9 @@ int Game::Update()
 	m_ulGameTime = now;										//Store the current time
 
 	//Cap the elapsed time to 1/8th of a second
-	if(elapsedTime > 0.016f)
+	if(elapsedTime > 0.0125f)
 	{
-		elapsedTime = 0.016f;
+		elapsedTime = 0.0125f;
 	}
 
 	//Let the current state handle input

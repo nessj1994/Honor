@@ -73,11 +73,39 @@ Emitter* ParticleEngine::LoadEmitter(std::string filePath,std::string Name,SGD::
 			{
 				string ImageName = root->Attribute("Particle_Image");
 				int EmitterShape;
-				root->Attribute("Emitter_Width", &EmitterShape);
-				int EWidth;
-				root->Attribute("Emitter_Width", &EWidth);
-				int EHeight;
-				root->Attribute("Emitter_Height", &EHeight);
+				root->Attribute("Emitter_Shape", &EmitterShape);
+				if (EmitterShape)
+				{
+					int SpinSpeed;
+					root->Attribute("Spin_Speed", &SpinSpeed);
+					if (SpinSpeed > 0)
+					{
+						SpinSpeed += 3;
+					}
+					int Radius;
+					root->Attribute("Radius", &Radius);
+					string PinEdges;
+					PinEdges = root->Attribute("Pin_Edges");
+					if (PinEdges == "True")
+					{
+						ReturnEmit->PinEdges(true);
+					}
+					else
+					{
+						ReturnEmit->PinEdges(false);
+					}
+					ReturnEmit->SetSpinSpeed(SpinSpeed);
+					ReturnEmit->SetRadius(Radius);
+					
+				}
+				else
+				{
+					int EWidth;
+					root->Attribute("Emitter_Width", &EWidth);
+					int EHeight;
+					root->Attribute("Emitter_Height", &EHeight);
+					ReturnEmit->SetSize({ (float)EWidth, (float)EHeight });
+				}				
 				string isLooping = root->Attribute("Looping");
 				bool Looping;
 				if (isLooping == "True")
@@ -131,7 +159,7 @@ Emitter* ParticleEngine::LoadEmitter(std::string filePath,std::string Name,SGD::
 				{
 					ReturnEmit->SetImage(SGD::INVALID_HANDLE);
 				}
-				ReturnEmit->SetSize({ (float)EWidth, (float)EHeight });
+				ReturnEmit->SetEmitterShape(EmitterShape);
 				ReturnEmit->SetLooping(Looping);
 				ReturnEmit->SetMaxParticles(MaxParticles);
 				ReturnEmit->SetAlphaStart(StartColorA);
@@ -151,7 +179,7 @@ Emitter* ParticleEngine::LoadEmitter(std::string filePath,std::string Name,SGD::
 					MaxParticle->Attribute("Velocity_X", &VelocityX);
 					int VelocityY;
 					MaxParticle->Attribute("Velocity_Y", &VelocityY);
-					int MaxLifeSpan;
+					double MaxLifeSpan;
 					MaxParticle->Attribute("Life_Span", &MaxLifeSpan);
 					ReturnEmit->SetMaxVelocity({ (float)VelocityX, (float)VelocityY });
 					ReturnEmit->SetMaxLifeSpan(MaxLifeSpan);
@@ -164,7 +192,7 @@ Emitter* ParticleEngine::LoadEmitter(std::string filePath,std::string Name,SGD::
 					MinParticle->Attribute("Velocity_X", &VelocityX);
 					int VelocityY;
 					MinParticle->Attribute("Velocity_Y", &VelocityY);
-					int MinLifeSpan;
+					double MinLifeSpan;
 					MinParticle->Attribute("Life_Span", &MinLifeSpan);
 					ReturnEmit->SetMinVelocity({ (float)VelocityX, (float)VelocityY });
 					ReturnEmit->SetMinLifeSpan(MinLifeSpan);

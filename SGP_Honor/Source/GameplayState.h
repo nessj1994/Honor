@@ -13,7 +13,7 @@
 #include "../SGD Wrappers/SGD_Message.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "AnimTimeStamp.h"
-
+#include <map>
 
 
 
@@ -37,6 +37,9 @@ class Pendulum;
 class HintStatue;
 class Honor;
 class Armor;
+class Squid;
+class Pouncer;
+class Bull;
 
 //////////////////////////////////////////////////
 // GameplayState class
@@ -97,11 +100,11 @@ public:
 	void CreateFreezableLeftRamp(int _x, int _y);
 	void CreateFreezableRightRamp(int _x, int _y);
 	void CreateHintStatue(int _x, int _y, std::string _message);
+	void CreateTeleporter(int _x, int _y, std::string _level);
 
-	
+	void CreateBullBoss(int _x, int _y);
 
-	//void CreateGeyser(int x, int y);
-	//void CreateLava(int x, int y);
+	void LoadLevel(std::string _level);
 
 private:
 
@@ -133,6 +136,7 @@ private:
 	//////////////////// Save and Load ///////////////////////
 	void SaveGame();
 	void LoadGame();
+	void LoadLevelMap();
 
 	
 	//////////////////////////////////////////////////////////
@@ -150,11 +154,9 @@ private:
 	Level* m_pLevel									= nullptr;
 	Player* m_pPlayer								= nullptr;
 
-	AnimTimeStamp ts;
-	AnimTimeStamp ts2;
-	AnimTimeStamp ts3;
+	std::map<std::string, std::string> m_mLevels;
 
-	float testtime = 0;
+	AnimTimeStamp ts;
 	
 	//Test Entities to be removed later
 	//FallingBlock* m_pFBlock = nullptr;
@@ -170,6 +172,9 @@ private:
 	//HintStatue * m_pStatue = nullptr;
 	//Honor * m_pHonor = nullptr;
 	//Armor * m_pArmor = nullptr;
+
+	Squid* m_pSquid = nullptr;
+	Pouncer* m_pPouncer = nullptr;
 
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
 

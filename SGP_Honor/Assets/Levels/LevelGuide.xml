@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Level key="TestLevel" path="Assets/Levels/TestLevel.xml" />
+<Level key="TutorialLevel" path="Assets/Levels/TutorialLevel.xml" />
+<Level key="HubLevel" path="Assets/Levels/HubLevel.xml" />
+
+<Level key="World1Level" path="Assets/Levels/World1Level.xml" />
+<Level key="World2Level" path="Assets/Levels/World2Level.xml" />
+<Level key="World3Level" path="Assets/Levels/World3Level.xml" />
+<Level key="World4Level" path="Assets/Levels/World4Level.xml" />
+<Level key="World5Level" path="Assets/Levels/World5Level.xml" />
+
+<Level key="Level1_1" path="Assets/Levels/Level1_1.xml" />
+<Level key="Level1_2" path="Assets/Levels/Level1_2.xml" />
+<Level key="Level1_3" path="Assets/Levels/Level1_3.xml" />
+<Level key="Level1_4" path="Assets/Levels/Level1_4.xml" />
+<Level key="Level1_5" path="Assets/Levels/Level1_5.xml" />
+
+<Level key="Level2_1" path="Assets/Levels/Level2_1.xml" />
+<Level key="Level2_2" path="Assets/Levels/Level2_2.xml" />
+<Level key="Level2_3" path="Assets/Levels/Level2_3.xml" />
+<Level key="Level2_4" path="Assets/Levels/Level2_4.xml" />
+<Level key="Level2_5" path="Assets/Levels/Level2_5.xml" />
+
+<Level key="Level3_1" path="Assets/Levels/Level3_1.xml" />
+<Level key="Level3_2" path="Assets/Levels/Level3_2.xml" />
+<Level key="Level3_3" path="Assets/Levels/Level3_3.xml" />
+<Level key="Level3_4" path="Assets/Levels/Level3_4.xml" />
+<Level key="Level3_5" path="Assets/Levels/Level3_5.xml" />
+
+<Level key="Level4_1" path="Assets/Levels/Level4_1.xml" />
+<Level key="Level4_2" path="Assets/Levels/Level4_2.xml" />
+<Level key="Level4_3" path="Assets/Levels/Level4_3.xml" />
+<Level key="Level4_4" path="Assets/Levels/Level4_4.xml" />
+<Level key="Level4_5" path="Assets/Levels/Level4_5.xml" />
+
+<Level key="Level5_1" path="Assets/Levels/Level5_1.xml" />
+<Level key="Level5_2" path="Assets/Levels/Level5_2.xml" />
+<Level key="Level5_3" path="Assets/Levels/Level5_3.xml" />
+<Level key="Level5_4" path="Assets/Levels/Level5_4.xml" />
+<Level key="Level5_5" path="Assets/Levels/Level5_5.xml" />
