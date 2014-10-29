@@ -196,8 +196,7 @@
     <ResourceCompile Include="SGP_Honor.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon1.ico" />
-    <Image Include="icon2.ico" />
+    <Image Include="HonorIcon.ico" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{25D1F010-F642-489C-B6B1-2F749EF0434F}</ProjectGuid>
