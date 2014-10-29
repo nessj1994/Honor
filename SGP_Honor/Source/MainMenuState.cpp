@@ -60,7 +60,7 @@ void MainMenuState::Enter(void) //Load Resources
 
 
 	SGD::AudioManager::GetInstance()->SetMasterVolume(SGD::AudioGroup::Music, nMusicVol);
-
+	m_hSword = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/SwordButton.png");
 }
 
 
@@ -70,7 +70,7 @@ void MainMenuState::Enter(void) //Load Resources
 // - unload all resources
 void MainMenuState::Exit(void)
 {
-
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
 }
 
 
@@ -243,13 +243,14 @@ void MainMenuState::Render(void)
 	if(m_nCursor == 0)
 	{
 		pGraphics->DrawRectangle(m_rPlay, { 255, 255, 255, 255 }, {}, {});
-
+		pGraphics->DrawTexture(m_hSword, { m_rPlay.left - 50, m_rPlay.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		font.DrawString("Play", 450, 250, 1, SGD::Color{ 255, 255, 0, 0 });
 
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rPlay, { 255, 255, 255, 30 }, {}, {});
+		pGraphics->DrawTexture(m_hSword, { m_rPlay.left - 50, m_rPlay.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
 
 		font.DrawString("Play", 450, 250, 1, SGD::Color{ 255, 0, 0, 255 });
 	}
