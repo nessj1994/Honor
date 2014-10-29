@@ -44,6 +44,7 @@ namespace SGD
 		// ARGB constructor
 		Color( unsigned char A, unsigned char R, unsigned char G, unsigned char B )
 			: alpha( A ), red( R ), green( G ), blue( B )
+
 		{	}
 
 
