@@ -83,7 +83,7 @@ public:
 
 	///////////////////////////////////////////////////////////
 	///////////////////// Factory Methods  ////////////////////
-	void CreateHonor(int x, int y, int _amount);
+	void CreateHonor(int x, int y, int _amount, unsigned int _index);
 	void CreateActivator(int x, int y, bool _pressurePlate, bool _active, int _ID);
 	void CreateLaser(int x, int y, SGD::Vector _direction, int _ID);
 	void CreateTurret(int x, int y, int _direction, float _timer);
@@ -106,6 +106,11 @@ public:
 	void CreateBullBoss(int _x, int _y);
 
 	void LoadLevel(std::string _level);
+	void SetHonorVector(std::vector<bool> _value);
+	void SaveHonorVector();
+	void LoadHonorVector();
+	bool GetHonorValue(int _index);
+	unsigned int GetHonorVectorSize();
 
 private:
 
@@ -156,7 +161,10 @@ private:
 	Level* m_pLevel									= nullptr;
 	Player* m_pPlayer								= nullptr;
 
+	std::string m_strCurrLevel						= "";
+
 	std::map<std::string, std::string> m_mLevels;
+	std::map<std::string, std::vector<bool>> m_mCollectedHonor;
 
 	AnimTimeStamp ts;
 	

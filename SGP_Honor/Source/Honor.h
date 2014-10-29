@@ -22,12 +22,23 @@ public:
 
 	void SetEmitter();
 
-	bool GetIsCollected() const { return isCollected; }
+	/////////////////////////////////////////////////
+	/////////////////Accessors//////////////////////
+
 	void SetHonorAmount(unsigned int amount) { m_HonorAmount = amount; }
+	void SetVectorID(unsigned int _ID) { m_unVectorID = _ID; }
+	void SetIsCollected(bool _collected) { m_bIsCollected = _collected; }
+
+	/////////////////////////////////////////////////
+	/////////////////Mutators//////////////////////
+
 	unsigned int GetHonorAmount() const { return m_HonorAmount; }
+	bool GetIsCollected() const { return m_bIsCollected; }
+	unsigned int GetVectorID() const { return m_unVectorID; }
 
 private:
-	bool isCollected = false;
+	bool m_bIsCollected = false;
 	unsigned int m_HonorAmount = 50;
+	unsigned int m_unVectorID = 0;
 	Emitter * m_eEffect;
 };

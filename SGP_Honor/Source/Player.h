@@ -10,6 +10,7 @@ class Hawk;
 class Ice;
 class Bounce;
 class Dash;
+class Emitter;
 
 class Player :
 	public Unit, SGD::Listener
@@ -120,6 +121,7 @@ private:
 	bool is_Ramp = false;
 
 	float m_fDashTime = 0.0f;
+	float m_fIceTimer = 0.0f;
 	//float m_fJumpVelCap = 250;
 	float m_fJumpVelCur = 0;
 	float m_fJumpTimer = 0.4f;
@@ -144,6 +146,11 @@ private:
 	Bounce* m_pBounce;
 
 	SGD::HTexture m_hImage = SGD::INVALID_HANDLE;
+	//Honor Particle Image for the HUD
+	SGD::HTexture m_hHonorParticleHUD = SGD::INVALID_HANDLE;
+	//Emitters
+	//Honor emitter for HUD
+	Emitter* m_emHonor;
 };
 
 

@@ -12,13 +12,17 @@
 #include "CreateHawkMessage.h"
 #include "LevelCollider.h"
 #include "Hawk.h"
+#include "Emitter.h"
+#include "ParticleEngine.h"
 #include "AnimationEngine.h"
 #include "Font.h"
 #include "BitmapFont.h"
 #include "Game.h"
 
+
 #include <Windows.h>
 #include "Dash.h"
+#include "Bounce.h"
 #include "Camera.h"
 #include "Honor.h"
 #include "Jellyfish.h"
@@ -31,22 +35,35 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("KILL_PLAYER");
 	SetDirection({ 1, 0 });
 	m_pDash = new Dash();
+	m_pBounce = new Bounce();
+	m_hHonorParticleHUD = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/HonorPiece.png");
+	m_emHonor = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/SilverHonor.xml", "SilverHonor", { (32 ), (32 ) });
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/PlayerAnimations.xml");
 	m_ts.SetCurrAnimation("Idle");
+	
 }
 
 
 Player::~Player()
 {
 	delete m_pDash;
+	delete m_pBounce;
+	//delete m_emHonor;
 }
 
 /////////////////////////////////////////////////
 /////////////////Interface///////////////////////
 void Player::Update(float elapsedTime)
 {
+	//Emitter Updates
+	m_pBounce->GetEMBubbles()->Update(elapsedTime);
+	m_pDash->GetEMDash()->Update(elapsedTime);
+	m_emHonor->Update(elapsedTime);
+	//
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
+	//Timers
+	m_fIceTimer += elapsedTime;
 
 
 	m_fJumpTimer -= elapsedTime;
@@ -137,7 +154,13 @@ void Player::Update(float elapsedTime)
 
 		if (pInput->IsKeyDown(SGD::Key::W) == true)
 		{
+
 			SetIsBouncing(true);
+		}
+		else
+		{
+			//Reseting particles for the bounce since its false
+			GetBounce()->GetEMBubbles()->KillParticles(m_ptPosition);
 		}
 
 
@@ -150,6 +173,7 @@ void Player::Update(float elapsedTime)
 			{
 				stickFrame = 1;
 				m_ts.ResetCurrFrame();
+				
 				m_ts.SetPlaying(true);
 			}
 			//reset currframe to 0 & set the animation playing to false
@@ -159,7 +183,7 @@ void Player::Update(float elapsedTime)
 			}
 			if(pInput->IsKeyReleased(SGD::Key::E) == true || pInput->IsKeyReleased(SGD::Key::Q) == true)
 			{
-				if(!is_Jumping)
+				if(m_unCurrentState != JUMPING_STATE && m_unCurrentState != FALLING_STATE)
 				{
 					m_ts.SetPlaying(false);
 					m_ts.ResetCurrFrame();
@@ -167,11 +191,11 @@ void Player::Update(float elapsedTime)
 					m_ts.SetPlaying(true);
 				}
 			}
-			else if(leftClamped == true)
+			else if(leftClamped == true && m_unCurrentState == RESTING_STATE)
 			{
 				m_ts.SetPlaying(false);
-				//m_ts.ResetCurrFrame();
-				//m_ts.SetCurrAnimation("Idle");
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Idle");
 				m_ts.SetPlaying(true);
 
 			}
@@ -213,7 +237,7 @@ void Player::Update(float elapsedTime)
 					
 					SetDirection({ 1, 0 });
 				}
-				if(!is_Jumping)
+				if(m_unCurrentState == RESTING_STATE)
 				{
 					m_ts.SetCurrAnimation("Walking");
 				}
@@ -252,7 +276,7 @@ void Player::Update(float elapsedTime)
 						}
 					SetDirection({ -1, 0 });
 				}
-				if(!is_Jumping)
+				if(m_unCurrentState == RESTING_STATE)
 				{
 					m_ts.SetCurrAnimation("Walking");
 				}
@@ -270,6 +294,11 @@ void Player::Update(float elapsedTime)
 			m_ts.SetPlaying(true);
 			m_ts.ResetCurrFrame();
 			m_ts.SetCurrAnimation("dashing");
+		}
+		else
+		{
+			//Reset Dash Particles to the players position
+			GetDash()->GetEMDash()->KillParticles(m_ptPosition);
 		}
 		if(this->IsDashing() == false && m_ts.GetCurrAnimation() == "dashing")
 		{
@@ -429,11 +458,13 @@ void Player::Update(float elapsedTime)
 			/*&& m_fShotTimer > 0.25f*/)
 		{
 			//m_fShotTimer = 0.0f;
-
-
-			CreateSprayMessage* pMsg = new CreateSprayMessage(this);
-			pMsg->QueueMessage();
-			pMsg = nullptr;
+			if (m_fIceTimer > .05f)
+			{
+				m_fIceTimer = 0;
+				CreateSprayMessage* pMsg = new CreateSprayMessage(this);
+				pMsg->QueueMessage();
+				pMsg = nullptr;
+			}
 		}
 
 
@@ -446,7 +477,6 @@ void Player::Update(float elapsedTime)
 		{
 			SetGravity(-3000);
 
-			m_ts.SetPlaying(false);
 			SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
 		}
 
@@ -476,6 +506,7 @@ void Player::Update(float elapsedTime)
 		&& m_fLandTimer <= 0
 		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
 	{
+		m_ts.SetCurrAnimation("Idle");
 		m_unCurrentState = RESTING_STATE;
 	}
 
@@ -536,6 +567,16 @@ void Player::Update(float elapsedTime)
 
 void Player::Render(void)
 {
+	//Emitter Renders
+	if (IsBouncing())
+	{
+		GetBounce()->GetEMBubbles()->Render(m_ptPosition);
+	}	
+	if (IsDashing())
+	{
+		GetDash()->GetEMDash()->Render(m_ptPosition);
+	}
+	//
 	//SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 
 	////Camera::GetInstance()->Draw(SGD::Rectangle(10, 300, 20, 320), SGD::Color::Color(255, 0, 0, 255));
@@ -556,12 +597,18 @@ void Player::Render(void)
 
 	// Draw gui for amount of honor
 	SGD::OStringStream output;
-	output << "Honor: " << m_unHonorCollected;
+	//Render Honor emitter in world
+	m_emHonor->RenderINworld();
+	//Render Honor image
+	SGD::GraphicsManager::GetInstance()->DrawTexture(m_hHonorParticleHUD,{ 25, 34 });
+
+	output << ": " << m_unHonorCollected;
 	//Local refernce to the font
 	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
-
+	
+	
 	//Draw the title
-	font.DrawString(output.str().c_str(), 32, 32, 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString(output.str().c_str(), 60, 25, 1, SGD::Color{ 255, 255, 0, 0 });
 
 }
 

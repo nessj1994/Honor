@@ -3,11 +3,13 @@
 #include "Camera.h"
 #include "ParticleEngine.h"
 #include "Player.h"
+#include "GameplayState.h"
+#include "Level.h"
 
 Honor::Honor()
 {
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/HonorPiece.png");
-	//m_ptPosition = SGD::Point(200, 300);
+	m_ptPosition = SGD::Point(200, 300);
 	SetSize(SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage));
 	SGD::Point midPoint = SGD::Point(m_ptPosition.x + m_szSize.width / 4, m_ptPosition.y + m_szSize.height / 4);
 	m_eEffect = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/GreenHonor.xml", "GreenHonor", midPoint);
@@ -16,8 +18,8 @@ Honor::Honor()
 
 Honor::~Honor()
 {
-	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 	delete m_eEffect;
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 /////////////////////////////////////////////////
@@ -28,7 +30,7 @@ void Honor::Update(float elapsedTime)
 }
 void Honor::Render(void)
 {
-	if (isCollected == false)
+	if (m_bIsCollected == false)
 	{
 		Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1.0f, {}, {});
 		//SGD::GraphicsManager::GetInstance()->DrawTexture(m_hImage, SGD::Point(200, 400));
@@ -72,10 +74,12 @@ void Honor::SetEmitter()
 
 void Honor::HandleCollision(const IEntity* pOther)
 {
-	if (pOther->GetType() == Entity::ENT_PLAYER)
+	if (!m_bIsCollected && pOther->GetType() == Entity::ENT_PLAYER)
 	{
 		if (GetRect().IsIntersecting(pOther->GetRect()) == true)
-			isCollected = true;
-
+		{
+			m_bIsCollected = true;
+			GameplayState::GetInstance()->GetCurrentLevel()->UpdateHonorVector(m_unVectorID, m_bIsCollected);
+		}
 	}
 }

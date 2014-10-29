@@ -185,6 +185,28 @@ void Particle::Render(void)
 	}
 }
 
+void Particle::RenderINworld()
+{
+	if (m_blDead)
+	{
+		return;
+	}
+	//SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { (unsigned char)m_fCurrentAlpha, 0, 255, 0 }, { (unsigned char)m_fCurrentAlpha,0,255,0 }, 10);
+	//{ GetPosition().x - Camera::GetInstance()->GetCameraPos().x, GetPosition().y - Camera::GetInstance()->GetCameraPos().y }
+	SGD::Point Temp = { m_ptPosition.x , m_ptPosition.y  };
+	if (m_hTexture != SGD::INVALID_HANDLE)
+	{
+		Temp.x -= (SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hTexture) / 2).width * m_szScale.width;
+		Temp.y -= (SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hTexture) / 2).height * m_szScale.height;
+		SGD::GraphicsManager::GetInstance()->DrawTexture(m_hTexture, Temp, m_fCurRotation, { Temp.x / 2, Temp.y / 2 }, m_cCurrentColor, m_szScale);
+	}
+	else
+	{
+		SGD::Rectangle Rect{ Temp, m_szScale };
+		SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, m_cCurrentColor);
+	}
+}
+
 void Particle::Reset()
 {
 	m_fCurLifeSpan = 0;
