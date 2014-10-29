@@ -36,11 +36,16 @@ public:
 	bool LoadLevel(const char * _path);
 	void CheckCollision(IEntity * _entity);
 	void CheckEvent(IEntity * _entity);
+	void UpdateHonorVector(int _index, bool _value);
 
 	//////////////////////////////
 	// Accessors
 	int GetPlayerX() const { return m_nPlayerX; }
 	int GetPlayerY() const { return m_nPlayerY; }
+
+	//////////////////////////////
+	// Mutators
+	void SetCollectedHonor(std::vector<bool> _honor) { m_vCollectedHonor = _honor; }
 
 private:
 	//////////////////////////////
@@ -53,7 +58,7 @@ private:
 	bool					m_bFixed;
 	bool					m_bUnlocked;
 	Camera *				m_pCamera;
-	std::vector<Honor*>		m_vHonor;
+	std::vector<bool>		m_vCollectedHonor;
 	std::vector<Armor*>		m_vArmor;
 	int						m_nPlayerX;
 	int						m_nPlayerY;
