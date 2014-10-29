@@ -1,6 +1,7 @@
 #pragma once
 #include "IGameState.h"
 #include "../SGD Wrappers/SGD_Geometry.h"
+#include "../SGD Wrappers/SGD_Handle.h"
 
 class PauseState :
 	public IGameState
@@ -39,5 +40,8 @@ private:
 	SGD::Rectangle m_rCredits = SGD::Rectangle(SGD::Point(450.0f, 405.0f), SGD::Point(562.0f, 437.0f));
 	SGD::Rectangle m_rExit = SGD::Rectangle(SGD::Point(450.0f, 455.0f), SGD::Point(520.0f, 487.0f));
 
+
+	SGD::HTexture m_hSword = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hButton = SGD::INVALID_HANDLE;
 };
 

@@ -258,6 +258,7 @@ void GameplayState::Exit(void)
 	//Unload Assets
 	//Level
 	delete m_pLevel;
+	m_pLevel = nullptr;
 
 	AnimationEngine::GetInstance()->Terminate();
 	AnimationEngine::GetInstance()->DeleteInstance();

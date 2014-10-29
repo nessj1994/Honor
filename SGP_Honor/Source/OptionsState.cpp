@@ -95,6 +95,29 @@ bool OptionsState::Input(void) //Hanlde user Input
 	}
 
 
+	if(pInput->IsKeyPressed(SGD::Key::Down)
+		|| pInput->IsDPadPressed(0, SGD::DPad::Down))
+	{
+		m_unCursor += 1;
+
+		if(m_unCursor > 1)
+		{
+			m_unCursor = 1;
+		}
+
+	}
+	else if(pInput->IsKeyPressed(SGD::Key::Up)
+		|| pInput->IsDPadPressed(0, SGD::DPad::Up))
+	{
+		m_unCursor -= 1;
+
+		if(m_unCursor < 0)
+		{
+			m_unCursor = 0;
+		}
+	}
+
+
 	//Adjust volume for music 
 	if(m_unCursor == 0 /*Music volume*/ && (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::Right) || SGD::InputManager::GetInstance()->IsDPadPressed(0, SGD::DPad::Right)))
 	{
@@ -111,6 +134,30 @@ bool OptionsState::Input(void) //Hanlde user Input
 		{
 			SGD::AudioManager::GetInstance()->SetMasterVolume(SGD::AudioGroup::Music,
 				SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::Music) - 5);
+
+
+
+		}
+
+
+	}
+
+	//Adjust volume for SFX 
+	if(m_unCursor == 1/*SFX volume*/ && (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::Right) || SGD::InputManager::GetInstance()->IsDPadPressed(0, SGD::DPad::Right)))
+	{
+		if(SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects) < 100)
+		{
+			SGD::AudioManager::GetInstance()->SetMasterVolume(SGD::AudioGroup::SoundEffects,
+				SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects) + 5);
+		}
+
+	}
+	else if(m_unCursor == 1 /*SFX volume*/ && (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::Left) || SGD::InputManager::GetInstance()->IsDPadPressed(0, SGD::DPad::Left)))
+	{
+		if(SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects) > 0)
+		{
+			SGD::AudioManager::GetInstance()->SetMasterVolume(SGD::AudioGroup::SoundEffects,
+				SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects) - 5);
 
 
 
@@ -143,14 +190,20 @@ void OptionsState::Render(void)
 	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
 	
 	int nMusicVol = SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::Music);
-	
+	int nEffectsVol = SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects);
+
 	SGD::OStringStream ossMus;
+	SGD::OStringStream ossSFX;
+
 
 	ossMus << nMusicVol;
+	ossSFX << nEffectsVol;
 
 	
 	
 	font.DrawString("Music Volume:", 450, 250, 1, SGD::Color{ 255, 255, 0, 0 });
 	font.DrawString(ossMus.str().c_str(), 700, 250, 1, { 255, 255, 0, 0 });
+	font.DrawString("Effects Volume:", 450, 282, 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString(ossSFX.str().c_str(), 700, 282, 1, { 255, 255, 0, 0 });
 
 }
