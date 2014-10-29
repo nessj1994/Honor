@@ -50,6 +50,7 @@ void Player::Update(float elapsedTime)
 	//Timers
 	m_fIceTimer += elapsedTime;
 
+	//m_fButtonTimer = 0;
 
 	m_fJumpTimer -= elapsedTime;
 
@@ -60,6 +61,9 @@ void Player::Update(float elapsedTime)
 
 	if (m_fLandTimer < 0.0f)
 		m_fLandTimer = 0;
+
+	//if (m_fButtonTimer < 0.0f)
+	//	m_fButtonTimer = 0;
 
 	m_fHawkTimer += elapsedTime;
 
@@ -301,6 +305,7 @@ void Player::Update(float elapsedTime)
 			|| pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)	
 
 		{
+			m_fButtonTimer += elapsedTime;
 			//if(GetIsJumping() == false)
 			if (m_unCurrentState == RESTING_STATE)
 			{
@@ -336,13 +341,15 @@ void Player::Update(float elapsedTime)
 				if (GetIsInputStuck() == true)
 				{
 
-					if (is_Right_Coll == true)
+					if (is_Right_Coll == true
+						 && m_fButtonTimer < 0.08)
 					{
 						SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
 						SetVelocity({ -900, -900 });
 					}
 
-					if (is_Left_Coll == true)
+					if (is_Left_Coll == true
+						&& m_fButtonTimer < 0.08)
 					{
 						SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
 						SetVelocity({ 900, -900 /*GetJumpVelCur() */ });
@@ -353,7 +360,7 @@ void Player::Update(float elapsedTime)
 
 		/////////////////////////////////////////////////
 		///////////////////Shoot/////////////////////////
-
+		
 		if (pInput->IsKeyDown(SGD::Key::R) == true
 			&& m_fShotTimer > 0.25f)
 		{
@@ -363,8 +370,12 @@ void Player::Update(float elapsedTime)
 			pMsg = nullptr;
 		}
 
+		float triggerOff = pInput->GetTrigger(0);
+			//= pInput->GetLeftJoystick(0).x;
 
-		if (pInput->IsKeyDown(SGD::Key::D) == true)
+
+		if (pInput->IsKeyDown(SGD::Key::D) == true
+			|| triggerOff >0 /*JOYSTICK_DEADZONE*/)
 		{
 
 			if (m_bHawkCast == false
@@ -380,24 +391,95 @@ void Player::Update(float elapsedTime)
 			{
 				if (GetHawkPtr() != nullptr)
 				{
+					float rightStickXOff = pInput->GetRightJoystick(0).x;
+					float rightStickYOff = pInput->GetRightJoystick(0).y;
 
-					if (pInput->IsKeyDown(SGD::Key::LeftArrow) == true)
+
+				//if (pInput->IsKeyDown(SGD::Key::LeftArrow) == true
+				//	|| rightStickXOff < 0)
+				//{
+				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff ) * elapsedTime, GetVelocity().y));
+				//}
+				//if (pInput->IsKeyDown(SGD::Key::RightArrow) == true
+				//	|| rightStickXOff > 0)
+				//{
+				//	GetHawkPtr()->SetVelocity(SGD::Vector(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetVelocity().y)));
+				//}
+				//
+				//if (pInput->IsKeyDown(SGD::Key::UpArrow) == true
+				//	|| rightStickYOff < 0)
+				//{
+				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff ) * elapsedTime));
+				//}
+				//if (pInput->IsKeyDown(SGD::Key::DownArrow) == true
+				//	|| rightStickYOff > 0)
+				//{
+				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
+				//}
+				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetVelocity().y));
+				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
+
+					GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
+					// X Friction
+
+					if (rightStickXOff == 0)
 					{
-						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - GetHawkPtr()->GetSpeed() * elapsedTime, GetVelocity().y));
-					}
-					if (pInput->IsKeyDown(SGD::Key::RightArrow) == true)
-					{
-						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + GetHawkPtr()->GetSpeed() * elapsedTime, GetHawkPtr()->GetVelocity().y));
+
+						if (GetHawkPtr()->GetVelocity().x < 0)
+						{
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
+
+							if (GetHawkPtr()->GetVelocity().x > 0.01f)
+							{
+								GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
+
+							}
+						}
+						if (GetHawkPtr()->GetVelocity().x > 0)
+						{
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
+
+							if (GetHawkPtr()->GetVelocity().x < -0.01f)
+							{
+								GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
+
+							}
+						}
+
 					}
 
-					if (pInput->IsKeyDown(SGD::Key::UpArrow) == true)
+
+					// Y Friction
+
+					if (rightStickYOff == 0)
 					{
-						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y - GetHawkPtr()->GetSpeed() * elapsedTime));
+						if (GetHawkPtr()->GetVelocity().y < 0)
+						{
+							//GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + GetHawkPtr()->GetAirFriction()));
+
+							if (GetHawkPtr()->GetVelocity().y > 0.007f)
+							{
+
+							}
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
+
+						}
+						if (GetHawkPtr()->GetVelocity().y > 0)
+						{
+							//GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y - GetHawkPtr()->GetAirFriction()));
+
+							if (GetHawkPtr()->GetVelocity().y < -0.007f)
+							{
+
+
+							}
+
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
+
+						}
+
 					}
-					if (pInput->IsKeyDown(SGD::Key::DownArrow) == true)
-					{
-						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + GetHawkPtr()->GetSpeed() * elapsedTime));
-					}
+
 
 
 				}
@@ -405,7 +487,8 @@ void Player::Update(float elapsedTime)
 			}
 
 		}
-		if (pInput->IsKeyDown(SGD::Key::D) == false)
+		if ( triggerOff <= 0
+			&& pInput->IsKeyDown(SGD::Key::D) == false)
 		{
 			m_bHawkCast = false;
 
@@ -449,7 +532,6 @@ void Player::Update(float elapsedTime)
 		if (m_unCurrentState != JUMPING_STATE)
 		{
 			SetGravity(-3000);
-
 			m_ts.SetPlaying(false);
 			SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
 		}
@@ -462,7 +544,7 @@ void Player::Update(float elapsedTime)
 			&& m_unCurrentState == JUMPING_STATE
 			/*&& GetIsInputStuck() == true*/)
 		{
-			//SetIsFalling(true);
+	
 			m_unCurrentState = FALLING_STATE;
 
 			if (GetVelocity().y < 0)
@@ -470,21 +552,26 @@ void Player::Update(float elapsedTime)
 				//SetVelocity({ GetVelocity().x, 0 });
 
 			}
-
 		}
-
-
 	}
+	
 
 	if (m_unCurrentState == LANDING_STATE
 		&& m_fLandTimer <= 0
 		&& pInput->IsKeyDown(SGD::Key::Space) == false
-		//pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false
+		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false
 		)
 	{
 		m_unCurrentState = RESTING_STATE;
 	}
 
+	//Buffer Input for Wall Jump so you can't jump while holding the JUMP button
+	if (pInput->IsKeyDown(SGD::Key::Space) == false
+		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
+	{
+		m_fButtonTimer = 0;
+
+	}
 
 	if (GetVelocity().y > 1050)
 	{
@@ -787,8 +874,9 @@ void Player::BasicCollision(const IEntity* pOther)
 			//	is_Right_Coll = true;
 			//}
 			
-			if (pInput->IsButtonDown(0,0) == true 
-				&& is_Right_Coll == false)
+			if ( (pInput->IsButtonDown(0,0) == true 
+				|| pInput->IsKeyDown(SGD::Key::Space))
+				)
 			{
 				is_Right_Coll = true;
 			}
@@ -805,16 +893,11 @@ void Player::BasicCollision(const IEntity* pOther)
 
 			}
 
-			//SetFriction(11.0f);
-
-		//	if (pInput->IsButtonDown(0, 0) == false)
-		//	{
-		//		is_Left_Coll = true;
-		//
-		//	}
+	
 			
-			if (pInput->IsButtonDown(0, 0) == true
-				&& is_Left_Coll == false)
+			if ((pInput->IsButtonDown(0, 0) == true
+				|| pInput->IsKeyDown(SGD::Key::Space))
+				/*&& m_fButtonTimer < 0.4*/ )
 			{
 				is_Left_Coll = true;
 			}
@@ -876,104 +959,6 @@ void Player::BasicCollision(const IEntity* pOther)
 			SetVelocity({ GetVelocity().x, 0 });
 		}
 	}
-
-	//RECT rPlayer;
-	//rPlayer.left = (LONG)GetRect().left;
-	//rPlayer.top = (LONG)GetRect().top;
-	//rPlayer.right = (LONG)GetRect().right;
-	//rPlayer.bottom = (LONG)GetRect().bottom;
-
-	////Create a rectangle for the other object
-	//RECT rObject;
-	//rObject.left = (LONG)pOther->GetRect().left;
-	//rObject.top = (LONG)pOther->GetRect().top;
-	//rObject.right = (LONG)pOther->GetRect().right;
-	//rObject.bottom = (LONG)pOther->GetRect().bottom;
-
-	////Create a rectangle for the intersection
-	//RECT rIntersection = {};
-
-	////	RECT rPlayerWall;
-	////	rPlayerWall.left = (LONG)GetRect().left - 1;
-	////	rPlayerWall.top = (LONG)GetRect().top;
-	////	rPlayerWall.right = (LONG)GetRect().right + 1;
-	////	rPlayerWall.bottom = (LONG)GetRect().bottom;
-	////
-	////	IntersectRect(&rIntersection, &rPlayer, &rPlayerWall);
-
-	//int nIntersectWidth = rIntersection.right - rIntersection.left;
-	//int nIntersectHeight = rIntersection.bottom - rIntersection.top;
-
-	////if (nIntersectHeight > nIntersectWidth)
-	////{
-	////	if (GetIsFalling() == true
-	////		|| GetIsJumping() == true)
-	////		SetIsInputStuck(true);
-	////
-	////}
-
-	//IntersectRect(&rIntersection, &rPlayer, &rObject);
-
-	//nIntersectWidth = rIntersection.right - rIntersection.left;
-	//nIntersectHeight = rIntersection.bottom - rIntersection.top;
-
-	////Colliding with the side of the object
-	//if(nIntersectHeight > nIntersectWidth)
-	//{
-	//	if(rPlayer.right == rIntersection.right)
-	//	{
-
-	//		SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
-	//		SetVelocity({ 0, GetVelocity().y });
-	//		//SetDashTimer(0);
-
-	//		is_Right_Coll = true;
-	//	}
-	//	if(rPlayer.left == rIntersection.left)
-	//	{
-	//		SetPosition({ (float)rObject.right, GetPosition().y });
-	//		SetVelocity({ 0, GetVelocity().y });
-	//		//SetDashTimer(0);
-
-	//		is_Left_Coll = true;
-
-	//	}
-	//}
-
-	//if(nIntersectWidth > nIntersectHeight)
-	//{
-	//	if(rPlayer.bottom == rIntersection.bottom)
-	//	{
-
-	//		if(IsBouncing() == true)
-	//		{
-	//			SetVelocity({ GetVelocity().x, GetVelocity().y * -1 });
-	//			//				SetJumpVelCur(GetJumpVelCur() * -1);
-	//			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height  /*- nIntersectHeight*/ });
-
-	//		}
-
-	//		else
-	//		{
-	//			SetVelocity({ GetVelocity().x, 0 });
-	//			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 /*- nIntersectHeight*/ });
-
-	//		}
-
-	//		SetJumpVelCur(0);
-	//		SetIsJumping(false);
-	//		SetIsFalling(false);
-	//		SetIsInputStuck(false);
-
-	//		is_Left_Coll = false;
-	//		is_Right_Coll = false;
-	//	}
-	//	if(rPlayer.top == rIntersection.top)
-	//	{
-	//		SetPosition({ GetPosition().x, (float)rObject.bottom });
-	//		SetVelocity({ GetVelocity().x, 0 });
-	//	}
-	//}
 
 }
 

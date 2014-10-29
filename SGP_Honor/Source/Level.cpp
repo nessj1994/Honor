@@ -191,8 +191,8 @@ void Level::RenderImageLayer(bool background)
 							// Draw the tile
 							Camera::GetInstance()->DrawTextureSection(
 								layer->GetTileSet(),
-								{ xx * 32.0f - Camera::GetInstance()->GetCameraPos().x * layer->GetScrollSpeed() /** Camera::GetInstance()->GetZoomScale()*/,
-								yy * 32.0f - Camera::GetInstance()->GetCameraPos().y * layer->GetScrollSpeed()  /* * Camera::GetInstance()->GetZoomScale() */},
+								{ (xx * 32.0f) - Camera::GetInstance()->GetCameraPos().x * layer->GetScrollSpeed() ,
+								(yy * 32.0f) - Camera::GetInstance()->GetCameraPos().y * layer->GetScrollSpeed() },
 								section,
 								0.0f,
 								{ 0.0f, 0.0f },
@@ -620,7 +620,7 @@ void Level::CheckCollision(IEntity * _entity)
 					LevelCollider * collider = new LevelCollider();
 					collider->SetPosition({ xx * 32.0f, yy * 32.0f });
 					collider->SetSize({ 32, 32 });
-					//if (collider->GetRect().IsIntersecting(_entity->GetRect()))
+					if (collider->GetRect().IsIntersecting(_entity->GetRect()))
 					{
 						collider->SetCollide(id);
 						_entity->HandleCollision(collider);

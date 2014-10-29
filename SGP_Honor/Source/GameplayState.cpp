@@ -183,8 +183,8 @@ void GameplayState::Enter(void) //Load Resources
 
 	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
-	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
-	m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
+//	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
+//	m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
 
 	// Temporary
 	//CreateBullBoss(500, 400);
@@ -705,7 +705,7 @@ Hawk* GameplayState::CreateHawk(Entity* pOwner) const
 	else
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
-	proj->SetSize({ 10, 10 });
+	proj->SetSize({ 32, 32 });
 	proj->SetDirection({ pOwner->GetDirection() });
 	proj->SetOwner(pOwner);
 	//pOwner->SetHawkPtr(proj);
