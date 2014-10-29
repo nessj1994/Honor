@@ -179,15 +179,15 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadLevel("Level1_5");
+	LoadLevel("Level1_1");
 
-	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
+	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
 	m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
 
 	// Temporary
-	CreateBullBoss(500, 400);
+	//CreateBullBoss(500, 400);
 }
 
 
@@ -671,7 +671,6 @@ Entity* GameplayState::CreateGravProjectile(Entity* pOwner) const
 	else
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width, pOwner->GetPosition().y - pOwner->GetSize().height / 2));
 
-	proj->SetSize({ 40, 40 });
 	proj->SetDirection({ pOwner->GetDirection() });
 	proj->SetOwner(pOwner);
 
