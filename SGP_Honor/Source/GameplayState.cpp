@@ -131,7 +131,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pPouncer = new Pouncer();
 	m_pJellyfish = new Jellyfish();
 	m_pJellyfish2 = new Jellyfish();
-	m_pJellyfish2->SetPosition({100, 600});
+	m_pJellyfish2->SetPosition({900, 700});
 
 
 
@@ -180,12 +180,11 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("HubLevel");
 
 	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
-	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
-	//m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
-	//m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
+	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
+	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
+	m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
 
 	// Temporary
 	//CreateBullBoss(500, 400);
@@ -245,11 +244,9 @@ void GameplayState::Exit(void)
 	
 	delete m_pPouncer;
 
-	if (m_pJellyfish != nullptr)
-		m_pJellyfish->Release();
+	delete m_pJellyfish;
 
-	if (m_pJellyfish2 != nullptr)
-		m_pJellyfish2->Release();
+	delete m_pJellyfish2;
 	//Create local references to the SGD Wrappers
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -263,6 +260,7 @@ void GameplayState::Exit(void)
 	//Unload Assets
 	//Level
 	delete m_pLevel;
+	m_pLevel = nullptr;
 
 
 	AnimationEngine::GetInstance()->Terminate();

@@ -31,7 +31,7 @@ void Teleporter::Render()
 
 	Camera::GetInstance()->Draw(rMyRect, { 255, 0, 0, 255 });
 	
-	Camera::GetInstance()->DrawTexture({ m_ptPosition.x - 30, m_ptPosition.y - 15 }, 0.0f, m_hImage, false, 0.8f, {});
+	Camera::GetInstance()->DrawTexture({ m_ptPosition.x - 30, m_ptPosition.y - 15 }, 0.0f, m_hImage, false, 0.8f, {}, {});
 
 }
 

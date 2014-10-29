@@ -84,7 +84,7 @@ void FallingBlock::Render(void)
 	//Render us with the camera
 	//Camera::GetInstance()->Draw(rMyRect,
 	//	SGD::Color::Color(255, 0, 255, 0));
-	Camera::GetInstance()->DrawTexture(m_ptPosition, 0.0f, m_hImage, false, 1.0f, {});
+	Camera::GetInstance()->DrawTexture(m_ptPosition, 0.0f, m_hImage, false, 1.0f, {}, {});
 
 
 }
