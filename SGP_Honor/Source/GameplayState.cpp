@@ -181,7 +181,7 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadLevel("Level1_1");
 
-	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
+	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
 	m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);

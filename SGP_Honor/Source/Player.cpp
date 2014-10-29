@@ -1348,9 +1348,9 @@ void Player::JellyfishCollision(const IEntity* pOther)
 			//SetVelocity({ GetVelocity().x, /*GetVelocity().y*/1500 * (-1.0f - (0.1f * jfish->GetBounceCount())) });
 			SetVelocity({ GetVelocity().x, GetVelocity().y * (-1.0f - (0.1f * jfish->GetBounceCount())) });
 			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height /*- nIntersectHeight*/ });
-			SetIsFalling(false);
-			SetIsInputStuck(false);
-			SetIsJumping(true);
+			//SetIsFalling(false);
+			//SetIsInputStuck(false);
+			//SetIsJumping(true);
 		}
 		if (rPlayer.top == rIntersection.top)
 		{
