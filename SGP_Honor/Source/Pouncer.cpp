@@ -6,6 +6,7 @@
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include <cmath>
 #include <Windows.h>
+#include "../SGD Wrappers/SGD_GraphicsManager.h"
 
 #define MaxJumpTime 0.6f
 
@@ -13,7 +14,8 @@ Pouncer::Pouncer() : Listener(this)
 {
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
 	m_ptPosition = { 800, 600 };
-	m_szSize = { 32, 32 };
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/hermitcrabPlaceholder.png");
+	m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage);
 	SetGravity(-500.0f);
 }
 
@@ -21,6 +23,7 @@ Pouncer::Pouncer() : Listener(this)
 Pouncer::~Pouncer()
 {
 	SetTarget(nullptr);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 void Pouncer::Update(float elapsedTime)
@@ -30,14 +33,14 @@ void Pouncer::Update(float elapsedTime)
 		SGD::Vector distance = target->GetPosition() - m_ptPosition;
 		if (distance.ComputeLength() < 250)
 		{
-			if (target->GetPosition().x < m_ptPosition.x && fabsf(distance.y) < 10 && inAir == false)
+			if (target->GetPosition().x < m_ptPosition.x && fabsf(distance.y) < 40 && inAir == false)
 			{
 				m_bFacingRight = false;
 				SetVelocity({ -200, -300 });
 				isPouncing = true;
 				inAir = true;
 			}
-			else if (target->GetPosition().x > m_ptPosition.x && fabsf(distance.y) < 10 && inAir == false)
+			else if (target->GetPosition().x > m_ptPosition.x && fabsf(distance.y) < 40 && inAir == false)
 			{
 				m_bFacingRight = true;
 				SetVelocity({ 200, -300 });
@@ -64,18 +67,19 @@ void Pouncer::Update(float elapsedTime)
 
 void Pouncer::Render(void)
 {
-	//Get the camera position for our offset
-	SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
+	////Get the camera position for our offset
+	//SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
 
-	//create a reference to our rectangle
-	SGD::Rectangle rMyRect = GetRect();
+	////create a reference to our rectangle
+	//SGD::Rectangle rMyRect = GetRect();
 
-	//Offset our rectangle by the camera position for rendering
-	rMyRect.Offset({ -camPos.x, -camPos.y });
+	////Offset our rectangle by the camera position for rendering
+	//rMyRect.Offset({ -camPos.x, -camPos.y });
 
-	//Render us with the camera
-	Camera::GetInstance()->Draw(rMyRect,
-		SGD::Color::Color(255, 255, 0, 0));
+	////Render us with the camera
+	//Camera::GetInstance()->Draw(rMyRect,
+	//	SGD::Color::Color(255, 255, 0, 0));
+	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1 , SGD::Color(255, 255, 255, 255));
 }
 
 SGD::Rectangle Pouncer::GetRect(void) const
