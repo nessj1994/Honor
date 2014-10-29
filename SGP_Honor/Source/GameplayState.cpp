@@ -180,7 +180,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("Level1_5");
+	LoadLevel("HubLevel");
 
 	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
@@ -295,6 +295,13 @@ bool GameplayState::Input(void) //Hanlde user Input
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
+	//Change between windowed and full screen modes
+	if(pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyReleased(SGD::Key::Enter))
+	{
+		SGD::GraphicsManager::GetInstance()->Resize({ Game::GetInstance()->GetScreenWidth(),
+			Game::GetInstance()->GetScreenHeight() }, !(Game::GetInstance()->GetWindowed()));
+		Game::GetInstance()->SetWindowed(!(Game::GetInstance()->GetWindowed()));
+	}
 
 	//DOOR TEST This will be removed later
 	//if(pInput->IsKeyPressed(SGD::Key::X))
@@ -709,7 +716,7 @@ Hawk* GameplayState::CreateHawk(Entity* pOwner) const
 	else
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
-	proj->SetSize({ 32, 32 });
+	proj->SetSize({ 20, 20 });
 	proj->SetDirection({ pOwner->GetDirection() });
 	proj->SetOwner(pOwner);
 	//pOwner->SetHawkPtr(proj);
