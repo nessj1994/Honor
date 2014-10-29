@@ -48,7 +48,8 @@ Player::~Player()
 {
 	delete m_pDash;
 	delete m_pBounce;
-	//delete m_emHonor;
+	delete m_emHonor;
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHonorParticleHUD);
 }
 
 /////////////////////////////////////////////////
@@ -57,7 +58,7 @@ void Player::Update(float elapsedTime)
 {
 	//Emitter Updates
 	m_pBounce->GetEMBubbles()->Update(elapsedTime);
-	m_pDash->GetEMDash()->Update(elapsedTime);
+	m_pDash->GetEMDash()->Update(elapsedTime);	
 	m_emHonor->Update(elapsedTime);
 	//
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
@@ -154,13 +155,17 @@ void Player::Update(float elapsedTime)
 
 		if (pInput->IsKeyDown(SGD::Key::W) == true)
 		{
-
+			GetBounce()->GetEMBubbles()->Finish(false);
 			SetIsBouncing(true);
 		}
 		else
 		{
-			//Reseting particles for the bounce since its false
-			GetBounce()->GetEMBubbles()->KillParticles(m_ptPosition);
+			GetBounce()->GetEMBubbles()->Finish();
+			if (GetBounce()->GetEMBubbles()->Done())
+			{
+				//Reseting particles for the bounce since its false
+				GetBounce()->GetEMBubbles()->KillParticles(m_ptPosition);
+			}			
 		}
 
 
@@ -290,6 +295,7 @@ void Player::Update(float elapsedTime)
 		if (pInput->IsKeyDown(SGD::Key::Tab) == true
 			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
 		{
+			GetDash()->GetEMDash()->Finish(false);
 			CastDash();
 			m_ts.SetPlaying(true);
 			m_ts.ResetCurrFrame();
@@ -297,8 +303,13 @@ void Player::Update(float elapsedTime)
 		}
 		else
 		{
-			//Reset Dash Particles to the players position
-			GetDash()->GetEMDash()->KillParticles(m_ptPosition);
+			GetDash()->GetEMDash()->Finish();
+			if (GetDash()->GetEMDash()->Done())
+			{
+				//Reset Dash Particles to the players position
+				GetDash()->GetEMDash()->KillParticles(m_ptPosition);
+			}
+			
 		}
 		if(this->IsDashing() == false && m_ts.GetCurrAnimation() == "dashing")
 		{
@@ -568,11 +579,11 @@ void Player::Update(float elapsedTime)
 void Player::Render(void)
 {
 	//Emitter Renders
-	if (IsBouncing())
+	if (IsBouncing() || !GetBounce()->GetEMBubbles()->Done())
 	{
 		GetBounce()->GetEMBubbles()->Render(m_ptPosition);
 	}	
-	if (IsDashing())
+	if (IsDashing() || !GetDash()->GetEMDash()->Done())
 	{
 		GetDash()->GetEMDash()->Render(m_ptPosition);
 	}

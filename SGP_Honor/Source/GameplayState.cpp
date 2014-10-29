@@ -175,7 +175,7 @@ void GameplayState::Enter(void) //Load Resources
 
 
 	//For Particle Testing*/
-	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/C++Test.xml", "Test", { 96, 672 });
+	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/Bla.xml", "Test", { 131, 673 });
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
@@ -408,7 +408,7 @@ void GameplayState::Render(void)
 
 
 
-	//m_pEmitter2->Render();
+	m_pEmitter2->Render();
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 

@@ -140,6 +140,14 @@ void Emitter::StartParticles(bool restart)
 		Temp.SetGravity(m_fGravity);
 		Temp.SetColorChange(m_fColorChange);
 		Temp.Reset();
+	/*	if (rand() % 4 > 2)
+		{
+			Temp.Starting(false);
+		}
+		else
+		{
+			Temp.Starting(true);
+		}*/
 		m_vecParticles.push_back(Temp);
 	}
 }
@@ -161,15 +169,20 @@ void Emitter::Update(float elapsedTime)
 			m_EndPoint.y = y;
 		}
 	}
-
+	m_bDone = true;
 		for (int i = 0; i < m_vecParticles.size(); i++)
 		{
-			if (m_vecParticles[i].IsDead())
+			if (m_vecParticles[i].IsDead() && !m_bFinish)
 			{
 				Recylce(&m_vecParticles[i]);
 			}
+			if (!m_vecParticles[i].IsDead())
+			{
+				m_bDone = false;
+			}
 			m_vecParticles[i].Update(elapsedTime);
 		}
+
 
 }
 
@@ -266,6 +279,15 @@ void Emitter::KillParticles(SGD::Point _Pos)
 	for (size_t i = 0; i < m_vecParticles.size(); i++)
 	{
 		m_vecParticles[i].SetPosition({thing(MT),thing2(MT)});
+		m_vecParticles[i].Starting(false);
+		//if (rand() % 10 > 5)
+		//{
+		//	m_vecParticles[i].Starting(false);
+		//}
+		//else
+		//{
+		//	m_vecParticles[i].Starting(true);
+		//}
 		if (m_iEmitterShape)
 		{
 			if (m_bPinEdges)

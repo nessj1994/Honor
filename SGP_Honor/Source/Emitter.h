@@ -25,7 +25,6 @@ public:
 	void Recylce(Particle* particle);
 	void StartParticles(bool restart = false);
 	void KillParticles(SGD::Point _Pos);
-
 	/////////////////////////////////////////////
 	////////////////Accessors///////////////////
 	SGD::HTexture GetImage(void) const { return m_hImage; }
@@ -46,29 +45,29 @@ public:
 	float GetMaxScaleRate(void) const { return m_fMaxScaleRate; }
 	unsigned int GetMaxParticles(void) const { return m_unMaxParticles; }
 	bool GetLooping(void) const { return m_bLooping; }
-
+	bool Done() { return m_bDone; }
 
 
 
 	/////////////////////////////////////////////
 	/////////////////Mutators///////////////////
-	void SetImage(SGD::HTexture image)  {  m_hImage = image; }
-	void SetMinVelocity(SGD::Vector minVelocity)  {  m_vtMinVelocity = minVelocity; }
-	void SetMaxVelocity(SGD::Vector maxVelocity)  {  m_vtMaxVelocity = maxVelocity; }
-	void SetMinAcceleration(SGD::Vector minAcceleration)  {  m_vtMinAcceleration = minAcceleration; }
-	void SetMaxAcceleration(SGD::Vector maxAcceleration)  {  m_vtMaxAcceleration = maxAcceleration; }
-	void SetMinGravity(SGD::Vector minGravity)  {  m_vtMinGravity = minGravity; }
-	void SetMaxGravity(SGD::Vector maxGravity)  {  m_vtMaxGravity = maxGravity; }
-	void SetStartColor(SGD::Color color)  {  m_cStartColor = color; }
-	void SetEndColor(SGD::Color color)  {  m_cEndColor = color; }
-	void SetPosition(SGD::Point position)  {  m_ptPosition = position; }
-	void SetSize(SGD::Size size)  {  m_szSize = size; }
+	void SetImage(SGD::HTexture image)  { m_hImage = image; }
+	void SetMinVelocity(SGD::Vector minVelocity)  { m_vtMinVelocity = minVelocity; }
+	void SetMaxVelocity(SGD::Vector maxVelocity)  { m_vtMaxVelocity = maxVelocity; }
+	void SetMinAcceleration(SGD::Vector minAcceleration)  { m_vtMinAcceleration = minAcceleration; }
+	void SetMaxAcceleration(SGD::Vector maxAcceleration)  { m_vtMaxAcceleration = maxAcceleration; }
+	void SetMinGravity(SGD::Vector minGravity)  { m_vtMinGravity = minGravity; }
+	void SetMaxGravity(SGD::Vector maxGravity)  { m_vtMaxGravity = maxGravity; }
+	void SetStartColor(SGD::Color color)  { m_cStartColor = color; }
+	void SetEndColor(SGD::Color color)  { m_cEndColor = color; }
+	void SetPosition(SGD::Point position)  { m_ptPosition = position; }
+	void SetSize(SGD::Size size)  { m_szSize = size; }
 	void SetMaxLifeSpan(float LifeSpan)  { m_fMaxLifeSpan = LifeSpan; }
-	void SetMinLifeSpan(float Lifespan)  {  m_fMinLifeSpan = Lifespan; }
-	void SetScale(SGD::Size Scale)  {  m_szScale = Scale; }
-	void SetMinScaleRate(float minScaleRate)  {  m_fMinScaleRate = minScaleRate; }
-	void SetMaxScaleRate(float maxScaleRate)  {  m_fMaxScaleRate = maxScaleRate; }
-	void SetMaxParticles(unsigned int maxParticles)  {  m_unMaxParticles = maxParticles; }
+	void SetMinLifeSpan(float Lifespan)  { m_fMinLifeSpan = Lifespan; }
+	void SetScale(SGD::Size Scale)  { m_szScale = Scale; }
+	void SetMinScaleRate(float minScaleRate)  { m_fMinScaleRate = minScaleRate; }
+	void SetMaxScaleRate(float maxScaleRate)  { m_fMaxScaleRate = maxScaleRate; }
+	void SetMaxParticles(unsigned int maxParticles)  { m_unMaxParticles = maxParticles; }
 	void SetLooping(bool looping)  { m_bLooping = looping; }
 	void SetMaxSize(SGD::Size _Size) { m_szMaxParticleSize = _Size; }
 	void SetMinSize(SGD::Size _Size) { m_szMinParticleSize = _Size; }
@@ -81,8 +80,9 @@ public:
 	void SetSpinSpeed(int _SpinSpeed){ m_iSpinSpeed = _SpinSpeed; }
 	void SetRadius(int _Radius){ m_iRadius = _Radius; }
 	void PinEdges(bool _PinEdges){ m_bPinEdges = _PinEdges; }
+	void Finish(bool _Finish = true) { m_bFinish = _Finish; }
 	
-	
+
 private:
 	std::random_device device;
 	SGD::HTexture m_hImage = SGD::INVALID_HANDLE;
@@ -115,12 +115,14 @@ private:
 	float m_fMaxScaleRate = 0.0f;
 	unsigned int m_unMaxParticles = 10;
 	bool m_bLooping = false;
+	bool m_bFinish = false;
+	bool m_bDone = false;
 	//Timers
 	float m_fSpinTimer = 0.0f;
 
 	std::vector<Particle> m_vecParticles;
 	//CHecks
 	bool m_bStarted = false;
-
+	
 };
 

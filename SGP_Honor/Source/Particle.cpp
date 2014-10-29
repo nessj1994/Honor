@@ -1,14 +1,20 @@
 #include "Particle.h"
 #include "Camera.h"
 
+
+
 Particle::Particle(SGD::Point Pos, float LifeSpan)
 {
 	m_ptPosition = Pos;
 	m_szSize = { .2f, .2f };
 	m_blDead = false;
 	m_fLifeSpan = LifeSpan;
-	m_fCurLifeSpan = 0;
+	std::mt19937 MT(device());
+	std::uniform_real_distribution<float>thing(0,LifeSpan);
+	m_fCurLifeSpan = thing(MT);
 	m_fCurRotation = 0;
+	m_bStart = true;
+
 }
 
 Particle::Particle(const Particle& _Particle)
@@ -64,6 +70,8 @@ void Particle::Update(float elapsedTime)
 	if (m_fCurLifeSpan >= m_fLifeSpan)
 	{
 		m_blDead = true;
+		m_bStart = true;
+
 	}
 	else
 	{
@@ -165,7 +173,7 @@ void Particle::Update(float elapsedTime)
 
 void Particle::Render(void)
 {
-	if (m_blDead)
+	if (m_blDead || !m_bStart)
 	{
 		return;
 	}
