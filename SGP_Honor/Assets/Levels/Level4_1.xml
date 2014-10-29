@@ -3050,7 +3050,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="4">
+	<Entities numEntities="5">
 		<Entity type="0" x="32" y="480" numArgs="1" name="Honor_1">
 			<Argument type="1" name="Amount" value="1" />
 		</Entity>
@@ -3064,5 +3064,6 @@
 			<Argument type="0" name="IsHorizontal" value="0" />
 			<Argument type="1" name="ReturnDistance" value="64" />
 		</Entity>
+		<Entity type="10" x="384" y="256" numArgs="0" name="Pendulum_1" />
 	</Entities>
 </Level>

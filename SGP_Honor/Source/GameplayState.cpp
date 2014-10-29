@@ -179,8 +179,8 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadLevel("Level4_1");
-	//LoadLevel("Level1_5");
+	//LoadLevel("Level4_1");
+	LoadLevel("Level1_5");
 
 	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
