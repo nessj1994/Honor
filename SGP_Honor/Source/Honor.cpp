@@ -20,7 +20,6 @@ Honor::~Honor()
 {
 	delete m_eEffect;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
-	delete m_eEffect;
 }
 
 /////////////////////////////////////////////////

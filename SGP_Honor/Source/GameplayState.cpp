@@ -202,6 +202,10 @@ void GameplayState::Exit(void)
 	//Save the game
 	SaveGame();
 
+	// Save collected honor
+	m_pLevel->Exit();
+	SaveHonorVector();
+
 
 	if (m_pEntities != nullptr)
 	{
@@ -258,11 +262,8 @@ void GameplayState::Exit(void)
 
 	//Unload Assets
 	//Level
-	m_pLevel->Exit();
 	delete m_pLevel;
 
-	// Save collected honor
-	SaveHonorVector();
 
 	AnimationEngine::GetInstance()->Terminate();
 	AnimationEngine::GetInstance()->DeleteInstance();
