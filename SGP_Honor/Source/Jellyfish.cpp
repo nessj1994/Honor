@@ -12,7 +12,7 @@ Jellyfish::Jellyfish() : Listener(this)
 	Listener::RegisterForEvent("RESET_JELLYFISH_BOUNCE");
 	m_ptPosition = { 700, 700 };
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/Jellyfish.png");
-	m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage);
+	m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage) * Camera::GetInstance()->GetZoomScale();
 }
 
 
