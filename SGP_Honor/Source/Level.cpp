@@ -236,7 +236,8 @@ void Level::Startup()
 // - Called when a level is over
 void Level::Exit()
 {
-
+	// Update map of honor in gameplay state
+	GameplayState::GetInstance()->SetHonorVector(m_vCollectedHonor);
 }
 
 //////////////////////////////
@@ -388,6 +389,8 @@ bool Level::LoadLevel(const char * _path)
 	// Only proceed if there are any entities
 	if (numEntities > 0)
 	{
+		// Keep track of honor
+		unsigned int honorIndex = 0;
 		// Loop through each entity
 		TiXmlElement * pEntity = pEntities->FirstChildElement();
 		for (int i = 0; i < numEntities; ++i)
@@ -412,8 +415,20 @@ bool Level::LoadLevel(const char * _path)
 					TiXmlElement * pArg = pEntity->FirstChildElement();
 					int amount;
 					pArg->Attribute("value", &amount);
-					GameplayState::GetInstance()->CreateHonor(x, y, amount);
-					// TODO: parse args
+					GameplayState::GetInstance()->CreateHonor(x, y, amount, honorIndex);
+					int vectorSize = GameplayState::GetInstance()->GetHonorVectorSize();
+					// If there is a value in collected honor for this
+					if (honorIndex < vectorSize)
+					{
+						// push back the value
+						m_vCollectedHonor.push_back(GameplayState::GetInstance()->GetHonorValue(honorIndex));
+					}
+					else
+					{
+						// it could not have been collected
+						m_vCollectedHonor.push_back(false);
+					}
+					++honorIndex;
 					break;
 				}
 				case 1: // Activator
@@ -670,4 +685,12 @@ void Level::CheckEvent(IEntity * _entity)
 			}
 		}
 	}
+}
+
+//////////////////////////////
+// UpdateHonorVector
+// - Updates if the honor at the given index has been collected
+void Level::UpdateHonorVector(int _index, bool _value)
+{
+	m_vCollectedHonor[_index] = _value;
 }

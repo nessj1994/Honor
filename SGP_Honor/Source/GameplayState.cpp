@@ -131,7 +131,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pPouncer = new Pouncer();
 	m_pJellyfish = new Jellyfish();
 	m_pJellyfish2 = new Jellyfish();
-	m_pJellyfish2->SetPosition({100, 600});
+	m_pJellyfish2->SetPosition({900, 700});
 
 
 
@@ -179,9 +179,10 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadLevel("Level1_1");
+	LoadHonorVector();
+	LoadLevel("Level1_5");
 
-	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
+	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 //	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
 //	m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
@@ -200,6 +201,10 @@ void GameplayState::Exit(void)
 
 	//Save the game
 	SaveGame();
+
+	// Save collected honor
+	m_pLevel->Exit();
+	SaveHonorVector();
 
 
 	if (m_pEntities != nullptr)
@@ -235,17 +240,14 @@ void GameplayState::Exit(void)
 	//if (m_pPendulum != nullptr)
 	//	m_pPendulum->Release();
 
-	if (m_pSquid != nullptr)
-		m_pSquid->Release();
+	delete m_pSquid;
 
-	if (m_pPouncer != nullptr)
-		m_pPouncer->Release();
+	
+	delete m_pPouncer;
 
-	if (m_pJellyfish != nullptr)
-		m_pJellyfish->Release();
+	delete m_pJellyfish;
 
-	if (m_pJellyfish2 != nullptr)
-		m_pJellyfish2->Release();
+	delete m_pJellyfish2;
 	//Create local references to the SGD Wrappers
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -259,6 +261,8 @@ void GameplayState::Exit(void)
 	//Unload Assets
 	//Level
 	delete m_pLevel;
+	m_pLevel = nullptr;
+
 
 	AnimationEngine::GetInstance()->Terminate();
 	AnimationEngine::GetInstance()->DeleteInstance();
@@ -816,12 +820,19 @@ void GameplayState::CreateTempFrozenTiles(void)
 /////////////////////////
 // CreateHonor
 // -Creates an honor collectible at the given coordinates
-void GameplayState::CreateHonor(int _x, int _y, int _amount)
+void GameplayState::CreateHonor(int _x, int _y, int _amount, unsigned int _index)
 {
 	Honor * mHonor = new Honor();
 	mHonor->SetPosition({ (float)_x, (float)_y });
 	mHonor->SetHonorAmount(_amount);
 	mHonor->SetEmitter();
+	mHonor->SetVectorID(_index);
+	// Check if this has been collected
+	mHonor->SetIsCollected(false);
+	if (_index < GetHonorVectorSize())
+	{
+		mHonor->SetIsCollected(m_mCollectedHonor[m_strCurrLevel][_index]);
+	}
 	m_pEntities->AddEntity(mHonor, Entity::ENT_HONOR);
 	mHonor->Release();
 }
@@ -891,6 +902,7 @@ void GameplayState::CreateDoor(int _x, int _y, bool _isHorizontal, int _ID)
 	{
 		pDoor->SetSize({ 32.0f, 128.0f });
 	}
+	pDoor->SetHorizontal(_isHorizontal);
 	pDoor->SetKeyID(_ID);
 	m_pEntities->AddEntity(pDoor, Entity::ENT_DOOR);
 	pDoor->Release();
@@ -1149,6 +1161,7 @@ void GameplayState::LoadLevelMap()
 		std::string key = pLevel->Attribute("key");
 		std::string path = pLevel->Attribute("path");
 		m_mLevels[key] = path;
+		m_mCollectedHonor[key];
 
 		// Move to the next node
 		pLevel = pLevel->NextSiblingElement();
@@ -1161,6 +1174,9 @@ void GameplayState::LoadLevelMap()
 // - Loads the level at the path for the given key
 void GameplayState::LoadLevel(std::string _level)
 {
+	// Save the string
+	m_strCurrLevel = _level;
+
 	// Clear the old entities
 	m_pEntities->RemoveAll();
 
@@ -1175,6 +1191,7 @@ void GameplayState::LoadLevel(std::string _level)
 		m_pLevel = nullptr;
 	}
 
+
 	// Create a new level and load the correct file
 	m_pLevel = new Level();
 	m_pLevel->LoadLevel(m_mLevels[_level].c_str());
@@ -1185,4 +1202,135 @@ void GameplayState::LoadLevel(std::string _level)
 	m_pPlayer->SetVelocity({ 0.0f, 0.0f });
 
 	// TODO anything else to reset the player
+}
+
+/////////////////////////////////////////////
+// SetHonorVector
+// -Sets the honor vector in the honor map to the given value
+void GameplayState::SetHonorVector(std::vector<bool> _value)
+{
+	m_mCollectedHonor[m_strCurrLevel] = _value;
+}
+
+/////////////////////////////////////////////
+// SaveHonorVector
+// -Saves the data in the honor vector to a file
+void GameplayState::SaveHonorVector()
+{
+	// Setting up the xml file
+	TiXmlDocument doc;
+	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
+	doc.LinkEndChild(decl);
+
+	// Create the root node
+	TiXmlElement* Root = new TiXmlElement("Levels");
+	int totalHonor = m_pPlayer->GetHonorCollected();
+	Root->SetAttribute("totalHonor", totalHonor);
+	doc.LinkEndChild(Root);
+
+	// Loop through each level
+	typedef std::map<std::string, std::vector<bool>>::iterator it_type;
+	for (it_type iter = m_mCollectedHonor.begin(); iter != m_mCollectedHonor.end(); iter++)
+	{
+		// Grab the key and value
+		std::string key = iter->first;
+		std::vector<bool> value = iter->second;
+
+		// Create a node for the current level
+		TiXmlElement* Level = new TiXmlElement("Level");
+		Level->SetAttribute("name", key.c_str());
+		Root->LinkEndChild(Level);
+
+		// Loop through each value in the data
+		for (unsigned int i = 0; i < value.size(); ++i)
+		{
+			TiXmlElement* Honor = new TiXmlElement("Honor");
+			if (value[i])
+			{
+				Honor->SetAttribute("collected", "1");
+			}
+			else
+			{
+				Honor->SetAttribute("collected", "0");
+			}
+			Level->LinkEndChild(Honor);
+		}
+	}
+
+	// Close the file and finish
+	doc.SaveFile("Assets/Levels/CollectedHonor.xml");
+}
+
+/////////////////////////////////////////////
+// LoadHonorVector
+// -Loads the data in the honor vector file
+void GameplayState::LoadHonorVector()
+{
+	//Create the tinyxml document 
+	TiXmlDocument doc;
+
+	// Load the file
+	if (doc.LoadFile("Assets/Levels/CollectedHonor.xml") == false)
+	{
+		return;
+	}
+
+	// Grab reference to the root
+	TiXmlElement* pRoot = doc.RootElement();
+	if (pRoot == nullptr)
+	{
+		return;
+	}
+
+	// Read in total honor collected
+	int totalHonor;
+	pRoot->Attribute("totalHonor", &totalHonor);
+	m_pPlayer->SetHonorCollected(totalHonor);
+
+	// Loop through each level
+	TiXmlElement * pLevel = pRoot->FirstChildElement();
+	while (pLevel)
+	{
+		// Name of this level, used for the key
+		std::string name = pLevel->Attribute("name");
+
+		// Loop through the vector of collected honor
+		TiXmlElement * pVector = pLevel->FirstChildElement();
+		while (pVector)
+		{
+			// Read in value
+			int collected;
+			pVector->Attribute("collected", &collected);
+			if (collected == 1)
+			{
+				m_mCollectedHonor[name].push_back(true);
+			}
+			else
+			{
+				m_mCollectedHonor[name].push_back(false);
+			}
+
+			// Go to the next element
+			pVector = pVector->NextSiblingElement();
+		}
+
+		// Go to the next element
+		pLevel = pLevel->NextSiblingElement();
+	}
+}
+
+bool GameplayState::GetHonorValue(int _index)
+{
+	if (_index < m_mCollectedHonor[m_strCurrLevel].size())
+	{
+		return m_mCollectedHonor[m_strCurrLevel][_index];
+	}
+}
+
+/////////////////////////////////////////////
+// LoadHonorVector
+// -Loads the data in the honor vector file
+unsigned int GameplayState::GetHonorVectorSize()
+{
+	return m_mCollectedHonor[m_strCurrLevel].size();
 }

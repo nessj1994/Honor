@@ -207,7 +207,7 @@ Emitter* ParticleEngine::LoadEmitter(std::string filePath, std::string Name, SGD
 	}
 	else
 	{
-		assert(doc.LoadFile() != 0 && "Particle Engine XML File was not loaded!<-------------------------------------");
+		assert(doc.LoadFile() != 0 && "Particle Engine XML File was not loaded!(Possible Incorrect Path)<-------------------------------------");
 		return NULL;
 	}
 	
