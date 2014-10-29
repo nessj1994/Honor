@@ -2,17 +2,18 @@
 #include "Camera.h"
 #include "GameplayState.h"
 #include "ChangeLevelMessage.h"
+#include "../SGD Wrappers/SGD_InputManager.h"
 
 /////////////////////////////////////////////////
 // Ctor/dtor
 Teleporter::Teleporter()
 {
-
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/Graphics/Teleporter.png");
 }
 
 Teleporter::~Teleporter()
 {
-
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 /////////////////////////////////////////////////
@@ -29,6 +30,9 @@ void Teleporter::Render()
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
 	Camera::GetInstance()->Draw(rMyRect, { 255, 0, 0, 255 });
+	
+	Camera::GetInstance()->DrawTexture({ m_ptPosition.x - 30, m_ptPosition.y - 15 }, 0.0f, m_hImage, false, 0.8f, {});
+
 }
 
 /////////////////////////////////////////////////
@@ -38,8 +42,11 @@ void Teleporter::HandleCollision(const IEntity* pOther)
 {
 	if (pOther->GetType() == ENT_PLAYER)
 	{
-		ChangeLevelMessage* pMsg = new ChangeLevelMessage{ this };
-		pMsg->QueueMessage();
-		pMsg = nullptr;
+		if (SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::W))
+		{
+			ChangeLevelMessage* pMsg = new ChangeLevelMessage{ this };
+			pMsg->QueueMessage();
+			pMsg = nullptr;
+		}
 	}
 }

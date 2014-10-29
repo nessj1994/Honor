@@ -38,6 +38,5 @@ private:
 	unsigned int m_unDistance = 0; //Pixels moved from the start postion on either side
 
 
-
 };
 

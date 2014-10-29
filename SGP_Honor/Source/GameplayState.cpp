@@ -109,7 +109,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	//Load Audio
 	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/HonorBGM.xwm");
-	//pAudio->PlayAudio(m_hBGM);
+	pAudio->PlayAudio(m_hBGM, true);
 
 	//These are only for testing and will be removed later
 	//m_pDoor = new Door();
@@ -130,6 +130,8 @@ void GameplayState::Enter(void) //Load Resources
 	m_pSquid = new Squid();
 	m_pPouncer = new Pouncer();
 	m_pJellyfish = new Jellyfish();
+	m_pJellyfish2 = new Jellyfish();
+	m_pJellyfish2->SetPosition({100, 600});
 
 
 
@@ -177,11 +179,12 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadLevel("Level1_5");
+	LoadLevel("HubLevel");
 
 	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
-	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
-	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
+	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
+	//m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
+	//m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
 
 	// Temporary
 	//CreateBullBoss(500, 400);
@@ -219,7 +222,7 @@ void GameplayState::Exit(void)
 	{
 		m_pPlayer->Release();
 	}
-
+	
 	//if (m_pStatue != nullptr)
 	//	m_pStatue->Release();
 
@@ -232,14 +235,16 @@ void GameplayState::Exit(void)
 	//if (m_pPendulum != nullptr)
 	//	m_pPendulum->Release();
 
-	if (m_pSquid != nullptr)
-		m_pSquid->Release();
+	delete m_pSquid;
 
-	if (m_pPouncer != nullptr)
-		m_pPouncer->Release();
+	
+	delete m_pPouncer;
 
 	if (m_pJellyfish != nullptr)
 		m_pJellyfish->Release();
+
+	if (m_pJellyfish2 != nullptr)
+		m_pJellyfish2->Release();
 	//Create local references to the SGD Wrappers
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -307,7 +312,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 		LoadLevel("Level1_1");
 	}
 
-	if (pInput->IsKeyPressed(SGD::Key::P)
+	if (pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
@@ -335,6 +340,7 @@ void GameplayState::Update(float elapsedTime)
 
 	m_pEntities->UpdateAll(elapsedTime);
 	Camera::GetInstance()->Update(elapsedTime);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BLOCK);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PERM_FREEZE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TEMP_FREEZE);
@@ -349,7 +355,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MOVING_PLATFORM);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TELEPORTER);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ENEMY);
-	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_JELLYFISH);
+	m_pEntities->CheckCollisions(Entity::ENT_JELLYFISH, Entity::ENT_PLAYER);
 
 
 
@@ -665,7 +671,6 @@ Entity* GameplayState::CreateGravProjectile(Entity* pOwner) const
 	else
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width, pOwner->GetPosition().y - pOwner->GetSize().height / 2));
 
-	proj->SetSize({ 40, 40 });
 	proj->SetDirection({ pOwner->GetDirection() });
 	proj->SetOwner(pOwner);
 
@@ -719,7 +724,7 @@ Player* GameplayState::CreatePlayer(void)
 	Player* pPlayer = new Player;
 
 	pPlayer->SetPosition(SGD::Point(100, 100));
-	pPlayer->SetSize(SGD::Size(32, 32));
+	pPlayer->SetSize(SGD::Size(32, 64));
 
 	return pPlayer;
 
@@ -815,6 +820,7 @@ void GameplayState::CreateHonor(int _x, int _y, int _amount)
 	Honor * mHonor = new Honor();
 	mHonor->SetPosition({ (float)_x, (float)_y });
 	mHonor->SetHonorAmount(_amount);
+	mHonor->SetEmitter();
 	m_pEntities->AddEntity(mHonor, Entity::ENT_HONOR);
 	mHonor->Release();
 }
