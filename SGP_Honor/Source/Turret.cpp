@@ -1,6 +1,7 @@
 #include "Turret.h"
 #include "CreateProjectileMessage.h"
 #include "../SGD Wrappers/SGD_MessageManager.h"
+#include "AnimationEngine.h"
 #include "Camera.h"
 Turret::Turret()
 {
@@ -8,6 +9,9 @@ Turret::Turret()
 	m_szSize = { 32, 32 };
 	m_fFireTimer = 0.0f;
 	m_vtDirection = { 1, 0 };
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/Graphics/Turret.png");
+	AnimationEngine::GetInstance()->LoadAnimation("Assets/TurretAnimations.xml");
+	m_ts.SetCurrAnimation("turretidle");
 }
 
 
@@ -26,16 +30,21 @@ void Turret::Update(float elapsedTime)
 	if(m_fFireTimer <= 0.0f)
 	{
 		m_fFireTimer = 0.0f;
+		m_ts.SetCurrAnimation("turretfire");
+		m_ts.SetPlaying(true);
 	}
 
 	if(m_fFireTimer == 0.0f)
 	{
-		m_fFireTimer = 1.0f;
+
+		m_fFireTimer = 1.65f;
 		CreateProjectileMessage* pMsg = new CreateProjectileMessage(this);
 		pMsg->QueueMessage();
 		pMsg = nullptr;
-	}
 
+	
+	}
+	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 }
 void Turret::Render(void)
 {
@@ -49,8 +58,7 @@ void Turret::Render(void)
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
 	//Render us with the camera
-	Camera::GetInstance()->Draw(rMyRect,
-		SGD::Color::Color(255, 255, 255, 0));
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0.0f, m_ts, false);
 }
 
 int Turret::GetType(void) const

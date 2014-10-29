@@ -109,7 +109,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	//Load Audio
 	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/HonorBGM.xwm");
-	//pAudio->PlayAudio(m_hBGM);
+	pAudio->PlayAudio(m_hBGM, true);
 
 	//These are only for testing and will be removed later
 	//m_pDoor = new Door();
@@ -175,7 +175,7 @@ void GameplayState::Enter(void) //Load Resources
 
 
 	//For Particle Testing*/
-	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/C++Test.xml", "Test", { 96, 672 });
+	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/C++Test.xml", "Test", { 96, 672 });
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
@@ -222,7 +222,7 @@ void GameplayState::Exit(void)
 	{
 		m_pPlayer->Release();
 	}
-
+	
 	//if (m_pStatue != nullptr)
 	//	m_pStatue->Release();
 
@@ -252,7 +252,7 @@ void GameplayState::Exit(void)
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 	ParticleEngine::GetInstance()->Terminate();
 	ParticleEngine::GetInstance()->DeleteInstance();
-
+	delete m_pEmitter2;
 
 
 
@@ -313,7 +313,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 		LoadLevel("Level1_1");
 	}
 
-	if (pInput->IsKeyPressed(SGD::Key::P)
+	if (pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
@@ -341,6 +341,7 @@ void GameplayState::Update(float elapsedTime)
 
 	m_pEntities->UpdateAll(elapsedTime);
 	Camera::GetInstance()->Update(elapsedTime);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BLOCK);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PERM_FREEZE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TEMP_FREEZE);
@@ -408,7 +409,7 @@ void GameplayState::Render(void)
 
 
 
-	m_pEmitter2->Render();
+	//m_pEmitter2->Render();
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 
@@ -724,7 +725,7 @@ Player* GameplayState::CreatePlayer(void)
 	Player* pPlayer = new Player;
 
 	pPlayer->SetPosition(SGD::Point(100, 100));
-	pPlayer->SetSize(SGD::Size(32, 32));
+	pPlayer->SetSize(SGD::Size(32, 64));
 
 	return pPlayer;
 
@@ -820,6 +821,7 @@ void GameplayState::CreateHonor(int _x, int _y, int _amount)
 	Honor * mHonor = new Honor();
 	mHonor->SetPosition({ (float)_x, (float)_y });
 	mHonor->SetHonorAmount(_amount);
+	mHonor->SetEmitter();
 	m_pEntities->AddEntity(mHonor, Entity::ENT_HONOR);
 	mHonor->Release();
 }

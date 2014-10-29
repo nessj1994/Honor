@@ -8,13 +8,58 @@
 
 Emitter::Emitter()
 {
-	m_ptPosition = { 0, 0 };
+	m_ptPosition = { 96, 672 };
 	m_szSize = { 100, 100 };
 	m_bLooping = true;
 	m_unMaxParticles = 10;
+	m_bStarted = false;
 
 }
 
+Emitter::Emitter(const Emitter& _Emitter)
+{
+	m_hImage = _Emitter.m_hImage;
+	m_vtMinVelocity = _Emitter.m_vtMinVelocity;
+	m_vtMaxVelocity = _Emitter.m_vtMaxVelocity;
+	m_fGravity = _Emitter.m_fGravity;
+	m_cStartColor = _Emitter.m_cStartColor;
+	m_cEndColor = _Emitter.m_cEndColor;
+	m_ptPosition = _Emitter.m_ptPosition;
+	m_EndPoint = _Emitter.m_EndPoint;
+	m_szSize = _Emitter.m_szSize;
+	m_szMaxParticleSize = _Emitter.m_szMaxParticleSize;
+	m_szMinParticleSize = _Emitter.m_szMinParticleSize;
+	m_iEmitterShape = _Emitter.m_iEmitterShape;
+	m_iSpinSpeed = _Emitter.m_iSpinSpeed;
+	m_iRadius = _Emitter.m_iRadius;
+	m_bPinEdges = _Emitter.m_bPinEdges;
+	m_fColorChange = _Emitter.m_fColorChange;
+	m_fRotation = _Emitter.m_fRotation;
+	m_fMaxLifeSpan = _Emitter.m_fMaxLifeSpan;
+	m_fMinLifeSpan = _Emitter.m_fMinLifeSpan;
+	m_fGravity = _Emitter.m_fGravity;
+	m_szScale = _Emitter.m_szScale;
+	m_fAlphaStart = _Emitter.m_fAlphaStart;
+	m_fAlphaFade = _Emitter.m_fAlphaFade;
+	m_fMinScaleRate = _Emitter.m_fMinScaleRate;
+	m_fMaxScaleRate = _Emitter.m_fMaxScaleRate;
+	m_unMaxParticles = _Emitter.m_unMaxParticles;
+	m_bLooping = _Emitter.m_bLooping;
+	//Timers
+	m_fSpinTimer = _Emitter.m_fSpinTimer;
+
+	m_Particles = _Emitter.m_Particles;
+	m_bStarted = _Emitter.m_bStarted;
+}
+
+Emitter& Emitter::operator= (const Emitter& _other)
+{
+	if (this != &_other)
+	{
+		Emitter(_other);
+	}
+	return *this;
+}
 
 Emitter::~Emitter()
 {
@@ -22,6 +67,14 @@ Emitter::~Emitter()
 
 void Emitter::StartParticles()
 {
+	if (m_bStarted)
+	{
+		return;
+	}
+	else
+	{
+		m_bStarted = true;
+	}
 	if (m_iEmitterShape)
 	{
 		m_EndPoint.y = m_ptPosition.y;
@@ -132,8 +185,9 @@ void Emitter::Render(SGD::Point _Pos)
 	}
 	else
 	{
+		
 		SGD::Rectangle Rect{ { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, m_szSize };
-		SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
+		//SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
 	}
 
 
