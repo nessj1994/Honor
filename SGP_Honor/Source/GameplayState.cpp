@@ -180,7 +180,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("Level1_5");
+	LoadLevel("HubLevel");
 
 	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
@@ -903,6 +903,7 @@ void GameplayState::CreateDoor(int _x, int _y, bool _isHorizontal, int _ID)
 	{
 		pDoor->SetSize({ 32.0f, 128.0f });
 	}
+	pDoor->SetHorizontal(_isHorizontal);
 	pDoor->SetKeyID(_ID);
 	m_pEntities->AddEntity(pDoor, Entity::ENT_DOOR);
 	pDoor->Release();

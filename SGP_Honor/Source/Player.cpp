@@ -48,6 +48,7 @@ Player::~Player()
 {
 	delete m_pDash;
 	delete m_pBounce;
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHonorParticleHUD);
 	//delete m_emHonor;
 }
 
