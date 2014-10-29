@@ -74,8 +74,8 @@ void Camera::DrawTextureSection(SGD::HTexture handle, SGD::Point position, SGD::
 
 void Camera::Update(float _elapsedTime)
 {
-	m_ptCameraPosition.x = (m_pPlayer->GetPosition().x - Game::GetInstance()->GetScreenWidth()  / 3)  /** m_fScale*/; // Divide by Scale
-	m_ptCameraPosition.y = (m_pPlayer->GetPosition().y - Game::GetInstance()->GetScreenHeight() / 2)  /** m_fScale*/;// Divide by Scale
+	m_ptCameraPosition.x = (m_pPlayer->GetPosition().x  - Game::GetInstance()->GetScreenWidth() / 3); // Divide by Scale
+	m_ptCameraPosition.y = (m_pPlayer->GetPosition().y  - Game::GetInstance()->GetScreenHeight() / 2);// Divide by Scale
 
 }
 
