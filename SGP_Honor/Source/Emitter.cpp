@@ -138,7 +138,7 @@ void Emitter::StartParticles(bool restart)
 		Temp.SetVelocity({ VX, VY });
 		Temp.SetImage(m_hImage);
 		Temp.SetGravity(m_fGravity);
-		Temp.SetColorChange(m_fColorChange);
+		Temp.SetColorChange((int)m_fColorChange);
 		Temp.Reset();
 		m_Particles.push_back(Temp);
 	}
@@ -157,8 +157,8 @@ void Emitter::Update(float elapsedTime)
 			double A[2] = { m_EndPoint.x, m_EndPoint.y };
 			double x = (A[0] - m_ptPosition.x) * cos(((double)m_iSpinSpeed * (3.14 / 180))) - (A[1] - m_ptPosition.y) * sin(((double)m_iSpinSpeed * (3.14 / 180))) + m_ptPosition.x;
 			double y = (A[1] - m_ptPosition.y) * cos(((double)m_iSpinSpeed * (3.14 / 180))) + (A[0] - m_ptPosition.x) * sin(((double)m_iSpinSpeed * (3.14 / 180))) + m_ptPosition.y;
-			m_EndPoint.x = x;
-			m_EndPoint.y = y;
+			m_EndPoint.x = (float)x;
+			m_EndPoint.y = (float)y;
 		}
 	}
 
@@ -190,7 +190,7 @@ void Emitter::Render(SGD::Point _Pos)
 	{
 		
 		SGD::Rectangle Rect{ { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, m_szSize };
-		SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
+		//SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
 	}
 
 
@@ -226,7 +226,7 @@ void Emitter::Recylce(Particle* particle)
 			}
 
 		}
-		particle->SetColorChange(m_fColorChange);
+		particle->SetColorChange((int)m_fColorChange);
 		particle->Reset();
 	}
 	

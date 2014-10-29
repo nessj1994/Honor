@@ -27,9 +27,9 @@ void Honor::Update(float elapsedTime)
 }
 void Honor::Render(void)
 {
-	m_eEffect->Render(m_ptPosition);
+	/*m_eEffect->Render(m_ptPosition);
 	if (isCollected == false)
-		Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false);
+		Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false);*/
 	//SGD::GraphicsManager::GetInstance()->DrawTexture(m_hImage, SGD::Point(200, 400));
 }
 
