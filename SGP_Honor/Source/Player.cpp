@@ -417,7 +417,9 @@ void Player::Update(float elapsedTime)
 
 	if (m_unCurrentState == LANDING_STATE
 		&& m_fLandTimer <= 0
-		&&  pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
+		&& pInput->IsKeyDown(SGD::Key::Space) == false
+		//pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false
+		)
 	{
 		m_unCurrentState = RESTING_STATE;
 	}
