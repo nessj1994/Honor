@@ -4,6 +4,9 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
+
+#define rotationSpeed 60.0f
+
 BuzzSaw::BuzzSaw()
 {
 	m_ptStartPosition = { 700, 150 };
@@ -48,7 +51,9 @@ void BuzzSaw::Update(float elapsedTime)
 			m_bMovingRight = true;
 		}
 	}
-
+	rotation += rotationSpeed * elapsedTime;
+	if (rotation >= 30.0f)
+		rotation = 0.0f;
 
 	m_ptPosition += m_vtVelocity* elapsedTime;
 }
@@ -64,8 +69,7 @@ void BuzzSaw::Render(void)
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
 	//Render us with the camera
-	Camera::GetInstance()->DrawTexture(m_ptPosition,
-		SGD::Color::Color(255, 255, 255, 0), m_hImage, false, 1.0f, {});
+	Camera::GetInstance()->DrawTexture(m_ptPosition, rotation, m_hImage, false, 1.0f, SGD::Color::Color(255, 255, 255, 0), m_szSize / 2.0f);
 }
 
 int BuzzSaw::GetType(void) const

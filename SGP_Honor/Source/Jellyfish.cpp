@@ -48,7 +48,7 @@ void Jellyfish::Render(void)
 	////Render us with the camera
 	//Camera::GetInstance()->Draw(rMyRect,
 	//	SGD::Color::Color(255, 255, 0, 0));
-	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1, SGD::Color(255, 255, 255, 255));
+	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1, SGD::Color(255, 255, 255, 255), {});
 }
 
 SGD::Rectangle Jellyfish::GetRect(void) const

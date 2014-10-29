@@ -44,14 +44,14 @@ void Camera::DrawString(std::string str, SGD::Point position)
 		SGD::Color(255, 0, 0, 0));
 }
 
-void Camera::DrawTexture(SGD::Point position, float rotation, SGD::HTexture m_hImage, bool flipped, float scale = 1, SGD::Color color = {})
+void Camera::DrawTexture(SGD::Point position, float rotation, SGD::HTexture m_hImage, bool flipped, float scale = 1, SGD::Color color = {}, SGD::Vector rotationOffset = {})
 {
 	float scaleX = scale;
 	if (flipped == true)
 		scaleX = -scale;
 
 	SGD::GraphicsManager::GetInstance()->DrawTexture(m_hImage,
-	{ position.x - m_ptCameraPosition.x, position.y - m_ptCameraPosition.y }, rotation, {}, {}, { scaleX, scale });
+	{ position.x - m_ptCameraPosition.x, position.y - m_ptCameraPosition.y }, rotation, rotationOffset, {}, { scaleX, scale });
 }
 
 void Camera::DrawTextureSection(SGD::HTexture handle, SGD::Point position, SGD::Rectangle section, float rotation, SGD::Vector rotationOffset, SGD::Color color, SGD::Size scale)
