@@ -4,6 +4,7 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 
+#define BTime 0.2f
 
 Jellyfish::Jellyfish() : Listener(this)
 {
@@ -19,7 +20,15 @@ Jellyfish::~Jellyfish()
 
 void Jellyfish::Update(float elapsedTime)
 {
-
+	if (bouncecounting == true)
+	{
+		bouncetimer += elapsedTime;
+		if (bouncetimer >= BTime)
+		{
+			bouncetimer = 0;
+			bouncecounting = false;
+		}
+	}
 }
 
 void Jellyfish::Render(void)
@@ -45,10 +54,11 @@ SGD::Rectangle Jellyfish::GetRect(void) const
 
 void Jellyfish::HandleCollision(const IEntity* pOther)
 {
-	if (pOther->GetType() == Entity::ENT_PLAYER && GetRect().IsIntersecting(pOther->GetRect()) == true)
+	if (pOther->GetType() == Entity::ENT_PLAYER && bouncecounting == false)
 	{
 		if (numOfBounces < 5)
 			numOfBounces++;
+		bouncecounting = true;
 		SGD::Event Event = { "RESET_JELLYFISH_BOUNCE", nullptr, this };
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}

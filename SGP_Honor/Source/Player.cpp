@@ -403,7 +403,7 @@ void Player::Update(float elapsedTime)
 
 			if (GetVelocity().y < 0)
 			{
-				SetVelocity({ GetVelocity().x, 0 });
+				//SetVelocity({ GetVelocity().x, 0 });
 			}
 
 		}
@@ -685,6 +685,9 @@ void Player::BasicCollision(const IEntity* pOther)
 
 			is_Left_Coll = false;
 			is_Right_Coll = false;
+
+			SGD::Event Event = { "RESET_JELLYFISH_BOUNCE", nullptr, this };
+			SGD::EventManager::GetInstance()->SendEventNow(&Event);
 		}
 		if (rPlayer.top == rIntersection.top)
 		{
@@ -1155,8 +1158,12 @@ void Player::JellyfishCollision(const IEntity* pOther)
 		if (rPlayer.bottom == rIntersection.bottom)
 		{
 			const Jellyfish* jfish = dynamic_cast<const Jellyfish*>(pOther);
+			//SetVelocity({ GetVelocity().x, /*GetVelocity().y*/1500 * (-1.0f - (0.1f * jfish->GetBounceCount())) });
 			SetVelocity({ GetVelocity().x, GetVelocity().y * (-1.0f - (0.1f * jfish->GetBounceCount())) });
 			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height /*- nIntersectHeight*/ });
+			SetIsFalling(false);
+			SetIsInputStuck(false);
+			SetIsJumping(true);
 		}
 		if (rPlayer.top == rIntersection.top)
 		{

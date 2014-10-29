@@ -130,6 +130,8 @@ void GameplayState::Enter(void) //Load Resources
 	m_pSquid = new Squid();
 	m_pPouncer = new Pouncer();
 	m_pJellyfish = new Jellyfish();
+	m_pJellyfish2 = new Jellyfish();
+	m_pJellyfish2->SetPosition({100, 600});
 
 
 
@@ -179,9 +181,10 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadLevel("Level1_5");
 
-	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
+	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
+	m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
 
 	// Temporary
 	CreateBullBoss(500, 400);
@@ -240,6 +243,9 @@ void GameplayState::Exit(void)
 
 	if (m_pJellyfish != nullptr)
 		m_pJellyfish->Release();
+
+	if (m_pJellyfish2 != nullptr)
+		m_pJellyfish2->Release();
 	//Create local references to the SGD Wrappers
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -349,7 +355,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MOVING_PLATFORM);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TELEPORTER);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ENEMY);
-	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_JELLYFISH);
+	m_pEntities->CheckCollisions(Entity::ENT_JELLYFISH, Entity::ENT_PLAYER);
 
 
 
