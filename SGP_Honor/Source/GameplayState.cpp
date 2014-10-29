@@ -179,10 +179,10 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadLevel("Level1_1");
+	LoadLevel("HubLevel");
 
-	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
-	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
+	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
+	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 	//m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
 	//m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
 
@@ -235,11 +235,10 @@ void GameplayState::Exit(void)
 	//if (m_pPendulum != nullptr)
 	//	m_pPendulum->Release();
 
-	if (m_pSquid != nullptr)
-		m_pSquid->Release();
+	delete m_pSquid;
 
-	if (m_pPouncer != nullptr)
-		m_pPouncer->Release();
+	
+	delete m_pPouncer;
 
 	if (m_pJellyfish != nullptr)
 		m_pJellyfish->Release();

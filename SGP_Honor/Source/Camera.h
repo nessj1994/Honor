@@ -69,7 +69,7 @@ private:
 	SGD::Point m_ptCameraPosition = { 0, 0 };
 
 	//SGD::Size m_szZoomScale = { 0.5f, 0.5f };
-	float m_fScale = 0.5f;
+	float m_fScale = 1.0f;
 	
 };
 

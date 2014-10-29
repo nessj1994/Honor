@@ -173,6 +173,7 @@ void Player::Update(float elapsedTime)
 			{
 				stickFrame = 1;
 				m_ts.ResetCurrFrame();
+				
 				m_ts.SetPlaying(true);
 			}
 			//reset currframe to 0 & set the animation playing to false
@@ -182,7 +183,7 @@ void Player::Update(float elapsedTime)
 			}
 			if(pInput->IsKeyReleased(SGD::Key::E) == true || pInput->IsKeyReleased(SGD::Key::Q) == true)
 			{
-				if(!is_Jumping)
+				if(m_unCurrentState != JUMPING_STATE && m_unCurrentState != FALLING_STATE)
 				{
 					m_ts.SetPlaying(false);
 					m_ts.ResetCurrFrame();
@@ -190,11 +191,11 @@ void Player::Update(float elapsedTime)
 					m_ts.SetPlaying(true);
 				}
 			}
-			else if(leftClamped == true)
+			else if(leftClamped == true && m_unCurrentState == RESTING_STATE)
 			{
 				m_ts.SetPlaying(false);
-				//m_ts.ResetCurrFrame();
-				//m_ts.SetCurrAnimation("Idle");
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Idle");
 				m_ts.SetPlaying(true);
 
 			}
@@ -236,7 +237,7 @@ void Player::Update(float elapsedTime)
 					
 					SetDirection({ 1, 0 });
 				}
-				if(!is_Jumping)
+				if(m_unCurrentState == RESTING_STATE)
 				{
 					m_ts.SetCurrAnimation("Walking");
 				}
@@ -275,7 +276,7 @@ void Player::Update(float elapsedTime)
 						}
 					SetDirection({ -1, 0 });
 				}
-				if(!is_Jumping)
+				if(m_unCurrentState == RESTING_STATE)
 				{
 					m_ts.SetCurrAnimation("Walking");
 				}
@@ -476,7 +477,6 @@ void Player::Update(float elapsedTime)
 		{
 			SetGravity(-3000);
 
-			m_ts.SetPlaying(false);
 			SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
 		}
 
@@ -506,6 +506,7 @@ void Player::Update(float elapsedTime)
 		&& m_fLandTimer <= 0
 		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
 	{
+		m_ts.SetCurrAnimation("Idle");
 		m_unCurrentState = RESTING_STATE;
 	}
 
