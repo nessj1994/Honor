@@ -126,6 +126,7 @@ private:
 	float m_fJumpVelCur = 0;
 	float m_fJumpTimer = 0.4f;
 	float m_fLandTimer = 0.0f;
+	float m_fButtonTimer = 0.0f;
 
 	float m_fShotTimer = 0.20f;
 	float m_fInputTimer = 0.0f;
@@ -140,7 +141,7 @@ private:
 
 	unsigned int m_unHonorCollected = 0;
 
-	Hawk* m_pHawk;
+	//Hawk* m_pHawk;
 	Dash* m_pDash;
 	Ice* m_pIce;
 	Bounce* m_pBounce;
