@@ -18,6 +18,8 @@ public:
 	Player();
 	virtual ~Player();
 
+	enum BlockStates { RESTING_STATE, JUMPING_STATE, FALLING_STATE, LANDING_STATE, STICK_STATE };
+
 
 	/////////////////////////////////////////////////
 	/////////////////// Interface //////////////////
@@ -44,6 +46,7 @@ public:
 	void RightRampCollision(const IEntity* pOther);
 	void GeyserCollision(const IEntity* pOther);
 	void LaserCollision(const IEntity* pOther);
+	unsigned int GetCurrentState(void) const { return m_unCurrentState; }
 	void JellyfishCollision(const IEntity* pOther);
 
 
@@ -58,8 +61,8 @@ public:
 	bool HasIce(void) const { return m_bHasIce; }
 	bool HasBounce(void) const { return m_bHasBounce; }
 	bool HasArmor(void) const { return m_bHasArmor; }
-	bool GetIsJumping(void)const { return is_Jumping; }
-	bool GetIsFalling(void)const { return is_Falling; }
+//	bool GetIsJumping(void)const { return is_Jumping; }
+//	bool GetIsFalling(void)const { return is_Falling; }
 	bool GetIsInputStuck(void)const { return is_Stuck; }
 
 
@@ -87,8 +90,8 @@ public:
 	void SetDash(Dash& dash) {};
 	void SetIce(Ice& ice) {};
 	void SetBounce(Bounce& bounce) {};
-	void SetIsJumping(bool _jump) { is_Jumping = _jump; }
-	void SetIsFalling(bool _fall) { is_Falling = _fall; }
+	//void SetIsJumping(bool _jump) { is_Jumping = _jump; }
+	//void SetIsFalling(bool _fall) { is_Falling = _fall; }
 	void SetIsInputStuck(bool _stuck) { is_Stuck = _stuck; }
 	void SetHonorCollected(unsigned int honor) { m_unHonorCollected = honor; }
 
@@ -117,13 +120,17 @@ private:
 	bool is_Ramp = false;
 
 	float m_fDashTime = 0.0f;
+	float m_fIceTimer = 0.0f;
 	//float m_fJumpVelCap = 250;
 	float m_fJumpVelCur = 0;
-	float m_fJumpTimer = 0.9f;
+	float m_fJumpTimer = 0.4f;
+	float m_fLandTimer = 0.0f;
+
 	float m_fShotTimer = 0.20f;
 	float m_fInputTimer = 0.0f;
 	float m_fHawkTimer = 1.0f;
 
+	unsigned int m_unCurrentState = 0;
 
 
 	//float m_fStickTimer = 0.0f; // For WallJumping (Input won't register while stick timer is Active) (0.25)

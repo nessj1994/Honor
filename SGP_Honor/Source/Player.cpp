@@ -47,13 +47,19 @@ void Player::Update(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
+	//Timers
+	m_fIceTimer += elapsedTime;
 
 
 	m_fJumpTimer -= elapsedTime;
 
-	if(m_fJumpTimer < 0.0f)
+	m_fLandTimer -= elapsedTime;
+
+	if (m_fJumpTimer < 0.0f)
 		m_fJumpTimer = 0;
 
+	if (m_fLandTimer < 0.0f)
+		m_fLandTimer = 0;
 
 	m_fHawkTimer += elapsedTime;
 
@@ -65,7 +71,7 @@ void Player::Update(float elapsedTime)
 	static int stickFrame = 1;
 	bool controller = pInput->IsControllerConnected(0);
 
-	if(leftStickXOff > -JOYSTICK_DEADZONE && leftStickXOff < JOYSTICK_DEADZONE)
+	if (leftStickXOff > -JOYSTICK_DEADZONE && leftStickXOff < JOYSTICK_DEADZONE)
 	{
 		leftStickXOff = 0;
 		leftClamped = true;
@@ -75,10 +81,10 @@ void Player::Update(float elapsedTime)
 	SetIsBouncing(false);
 
 	//////// NEED TO UPDATE WITH CONTROLLER ( JORDAN )
-	if(GetIsInputStuck() == false)
+	if (GetIsInputStuck() == false)
 		m_fInputTimer = 0;
 
-	if(GetIsInputStuck() == true
+	if (GetIsInputStuck() == true
 		&& GetVelocity().y < 0)
 	{
 		SetVelocity({ /*GetVelocity().x*/ 0, 0 });
@@ -88,24 +94,26 @@ void Player::Update(float elapsedTime)
 	/////////////////////////////////////////////////
 	/////////////////Controls////////////////////////
 
-	if(IsDashing() == false)///////////////Dash check begins
+	if (IsDashing() == false)///////////////Dash check begins
 	{
 
-		if(GetIsFalling() == false
-			&& GetIsJumping() == false)
+		//	if(GetIsFalling() == false
+		//		&& GetIsJumping() == false)
+		if (m_unCurrentState == RESTING_STATE
+			|| m_unCurrentState == LANDING_STATE)
 		{
 			/////////////////////////////////////////////////
 			/////////////////Friction////////////////////////
 
 			//Left Friction
-			if(GetVelocity().x < 0
+			if (GetVelocity().x < 0
 				&& (pInput->IsKeyDown(SGD::Key::Q) == false
 				&& leftClamped == true))
 			{
 
 				SetVelocity(SGD::Vector(GetVelocity().x + GetFriction(), GetVelocity().y));
 
-				if(GetVelocity().x > 0
+				if (GetVelocity().x > 0
 					&& GetVelocity().x < 10)
 				{
 					SetVelocity(SGD::Vector(0, GetVelocity().y));
@@ -113,15 +121,15 @@ void Player::Update(float elapsedTime)
 
 			}
 			//Right Friction
-			if(GetVelocity().x > 0
+			if (GetVelocity().x > 0
 				&& (pInput->IsKeyDown(SGD::Key::E) == false
 				&& leftClamped == true))
 			{
 
 				SetVelocity(SGD::Vector(GetVelocity().x - GetFriction(), GetVelocity().y));
 
-				if(GetVelocity().x < 0
-					&& GetVelocity().x > -10)
+				if (GetVelocity().x < 0
+					&& GetVelocity().x > -100)
 				{
 					SetVelocity(SGD::Vector(0, GetVelocity().y));
 				}
@@ -129,7 +137,7 @@ void Player::Update(float elapsedTime)
 		}
 
 
-		if(pInput->IsKeyDown(SGD::Key::W) == true)
+		if (pInput->IsKeyDown(SGD::Key::W) == true)
 		{
 			SetIsBouncing(true);
 		}
@@ -144,6 +152,7 @@ void Player::Update(float elapsedTime)
 			{
 				stickFrame = 1;
 				m_ts.ResetCurrFrame();
+				
 				m_ts.SetPlaying(true);
 			}
 			//reset currframe to 0 & set the animation playing to false
@@ -153,7 +162,7 @@ void Player::Update(float elapsedTime)
 			}
 			if(pInput->IsKeyReleased(SGD::Key::E) == true || pInput->IsKeyReleased(SGD::Key::Q) == true)
 			{
-				if(!is_Jumping)
+				if(m_unCurrentState != JUMPING_STATE && m_unCurrentState != FALLING_STATE)
 				{
 					m_ts.SetPlaying(false);
 					m_ts.ResetCurrFrame();
@@ -161,11 +170,11 @@ void Player::Update(float elapsedTime)
 					m_ts.SetPlaying(true);
 				}
 			}
-			else if(leftClamped == true)
+			else if(leftClamped == true && m_unCurrentState == RESTING_STATE)
 			{
 				m_ts.SetPlaying(false);
-				//m_ts.ResetCurrFrame();
-				//m_ts.SetCurrAnimation("Idle");
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Idle");
 				m_ts.SetPlaying(true);
 
 			}
@@ -183,16 +192,31 @@ void Player::Update(float elapsedTime)
 				if(m_fInputTimer > 0.20f
 					|| GetIsInputStuck() == false)
 				{
-					if(GetVelocity().x < 0)
-					{
-						SetVelocity(SGD::Vector(GetVelocity().x + (5 * GetSpeed() * elapsedTime), GetVelocity().y));
+					
 
-					}
-					else
-						SetVelocity(SGD::Vector(GetVelocity().x + GetSpeed() * elapsedTime, GetVelocity().y));
+						if (GetVelocity().x < 0)
+						{
+							if (m_unCurrentState == RESTING_STATE
+								|| m_unCurrentState == LANDING_STATE)
+							{
+								SetVelocity(SGD::Vector(GetVelocity().x + (5 * GetSpeed() * elapsedTime), GetVelocity().y));
+							}
+							else
+							{
+								SetVelocity(SGD::Vector(GetVelocity().x + (2 *GetSpeed() * elapsedTime), GetVelocity().y));
+
+							}
+						}
+						else
+						{
+							SetVelocity(SGD::Vector(GetVelocity().x + GetSpeed() * elapsedTime, GetVelocity().y));
+							//SetVelocity(SGD::Vector(1050, GetVelocity().y));
+
+						}
+					
 					SetDirection({ 1, 0 });
 				}
-				if(!is_Jumping)
+				if(m_unCurrentState == RESTING_STATE)
 				{
 					m_ts.SetCurrAnimation("Walking");
 				}
@@ -209,17 +233,29 @@ void Player::Update(float elapsedTime)
 				if(m_fInputTimer > 0.20f
 					|| GetIsInputStuck() == false)
 				{
-					if(GetVelocity().x > 0)
-					{
-						SetVelocity(SGD::Vector(GetVelocity().x - (5 * GetSpeed() * elapsedTime), GetVelocity().y));
-					}
-					else
-					{
-						SetVelocity(SGD::Vector(GetVelocity().x - GetSpeed() * elapsedTime, GetVelocity().y));
-					}
+					
+
+						if (GetVelocity().x > 0)
+						{
+							if (m_unCurrentState == RESTING_STATE
+								|| m_unCurrentState == LANDING_STATE)
+							{
+								SetVelocity(SGD::Vector(GetVelocity().x - (5 * GetSpeed() * elapsedTime), GetVelocity().y));
+							}
+							else
+							{
+								SetVelocity(SGD::Vector(GetVelocity().x - (2 * GetSpeed() * elapsedTime)	, GetVelocity().y));
+
+							}
+						}
+						else
+						{
+							SetVelocity(SGD::Vector(GetVelocity().x - GetSpeed() * elapsedTime, GetVelocity().y));
+							//SetVelocity(SGD::Vector(-1050, GetVelocity().y));
+						}
 					SetDirection({ -1, 0 });
 				}
-				if(!is_Jumping)
+				if(m_unCurrentState == RESTING_STATE)
 				{
 					m_ts.SetCurrAnimation("Walking");
 				}
@@ -230,7 +266,7 @@ void Player::Update(float elapsedTime)
 		m_fShotTimer += elapsedTime;
 
 
-		if(pInput->IsKeyDown(SGD::Key::Tab) == true
+		if (pInput->IsKeyDown(SGD::Key::Tab) == true
 			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
 		{
 			CastDash();
@@ -250,39 +286,40 @@ void Player::Update(float elapsedTime)
 		/////////////////////////////////////////////////
 		////////////////////Jump/////////////////////////
 
-		if(pInput->IsButtonDown(0, 0))
+		if (pInput->IsButtonDown(0, 0))
 		{
 			SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
 		}
 
+		if (pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)
+		{
+			int tempx = 0;
+		}
 
-		if(pInput->IsKeyDown(SGD::Key::Space) == true
-			|| pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)
+		
+
+		if (pInput->IsKeyDown(SGD::Key::Space) == true
+			|| pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)	
 
 		{
-			if(GetIsJumping() == false)
+			//if(GetIsJumping() == false)
+			if (m_unCurrentState == RESTING_STATE)
 			{
 				m_ts.ResetCurrFrame();
 				m_ts.SetPlaying(false);
 				m_ts.SetCurrAnimation("Jump");
-				m_fJumpTimer = 0.4f;
-
-				//	SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
-				//SetVelocity({ GetVelocity().x, -450});
-				//SetIsJumping(true);
-				SetVelocity({ GetVelocity().x, -900 });
+				m_fJumpTimer = 0.3f;
+				m_unCurrentState = JUMPING_STATE;
 
 
 			}
 
-			if(GetIsFalling() == false)
+			if (m_unCurrentState == JUMPING_STATE)
 			{
-				//SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
-				//SetVelocity({ GetVelocity().x, GetJumpVelCur() });
 
-				if(m_fJumpTimer < 0.1f)
+				if (m_fJumpTimer < 0.2f)
 				{
-					SetVelocity({ GetVelocity().x, GetVelocity().y + (9000 * elapsedTime) });
+					SetVelocity({ GetVelocity().x, GetVelocity().y + (2200 * elapsedTime) });
 					if(GetVelocity().y > 0)
 					{
 						SetVelocity({ GetVelocity().x, 0 });
@@ -290,28 +327,26 @@ void Player::Update(float elapsedTime)
 					}
 
 				}
+				else
+					SetVelocity({ GetVelocity().x, -600 });
 
-
-				SetIsJumping(true);
 			}
 
-			if(m_fInputTimer <= 0.20f)
+			if (m_fInputTimer <= 0.20f)
 			{
-				if(GetIsInputStuck() == true)
+				if (GetIsInputStuck() == true)
 				{
 
-					if(/*pInput->IsKeyDown(SGD::Key::Q) == true
-						&&*/ is_Right_Coll == true)
+					if (is_Right_Coll == true)
 					{
 						SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
-						SetVelocity({ -600, GetJumpVelCur() });
+						SetVelocity({ -900, -900 });
 					}
 
-					if(/*pInput->IsKeyDown(SGD::Key::E) == true
-						&&*/ is_Left_Coll == true)
+					if (is_Left_Coll == true)
 					{
 						SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
-						SetVelocity({ 600, GetJumpVelCur() });
+						SetVelocity({ 900, -900 /*GetJumpVelCur() */ });
 					}
 				}
 			}
@@ -320,7 +355,7 @@ void Player::Update(float elapsedTime)
 		/////////////////////////////////////////////////
 		///////////////////Shoot/////////////////////////
 
-		if(pInput->IsKeyDown(SGD::Key::R) == true
+		if (pInput->IsKeyDown(SGD::Key::R) == true
 			&& m_fShotTimer > 0.25f)
 		{
 			m_fShotTimer = 0.0f;
@@ -330,11 +365,10 @@ void Player::Update(float elapsedTime)
 		}
 
 
-		if(pInput->IsKeyDown(SGD::Key::D) == true
-			/*&& m_fShotTimer > 0.25f*/)
+		if (pInput->IsKeyDown(SGD::Key::D) == true)
 		{
 
-			if(m_bHawkCast == false
+			if (m_bHawkCast == false
 				&& m_fHawkTimer > 1.0f)
 			{
 
@@ -345,23 +379,23 @@ void Player::Update(float elapsedTime)
 			}
 			else
 			{
-				if(GetHawkPtr() != nullptr)
+				if (GetHawkPtr() != nullptr)
 				{
 
-					if(pInput->IsKeyDown(SGD::Key::LeftArrow) == true)
+					if (pInput->IsKeyDown(SGD::Key::LeftArrow) == true)
 					{
 						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - GetHawkPtr()->GetSpeed() * elapsedTime, GetVelocity().y));
 					}
-					if(pInput->IsKeyDown(SGD::Key::RightArrow) == true)
+					if (pInput->IsKeyDown(SGD::Key::RightArrow) == true)
 					{
 						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + GetHawkPtr()->GetSpeed() * elapsedTime, GetHawkPtr()->GetVelocity().y));
 					}
 
-					if(pInput->IsKeyDown(SGD::Key::UpArrow) == true)
+					if (pInput->IsKeyDown(SGD::Key::UpArrow) == true)
 					{
 						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y - GetHawkPtr()->GetSpeed() * elapsedTime));
 					}
-					if(pInput->IsKeyDown(SGD::Key::DownArrow) == true)
+					if (pInput->IsKeyDown(SGD::Key::DownArrow) == true)
 					{
 						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + GetHawkPtr()->GetSpeed() * elapsedTime));
 					}
@@ -372,13 +406,12 @@ void Player::Update(float elapsedTime)
 			}
 
 		}
-		if(pInput->IsKeyDown(SGD::Key::D) == false
-			/*&& m_fShotTimer > 0.25f*/)
+		if (pInput->IsKeyDown(SGD::Key::D) == false)
 		{
 			m_bHawkCast = false;
 
 			//if HawkPtr != null set to NULL
-			if(GetHawkPtr() != nullptr)
+			if (GetHawkPtr() != nullptr)
 			{
 				m_fHawkTimer = 0.0f;
 
@@ -395,15 +428,17 @@ void Player::Update(float elapsedTime)
 		/////////////////////////////////////////////////
 		///////////////////Spray/////////////////////////
 
-		if(pInput->IsKeyDown(SGD::Key::F) == true
+		if (pInput->IsKeyDown(SGD::Key::F) == true
 			/*&& m_fShotTimer > 0.25f*/)
 		{
 			//m_fShotTimer = 0.0f;
-
-
-			CreateSprayMessage* pMsg = new CreateSprayMessage(this);
-			pMsg->QueueMessage();
-			pMsg = nullptr;
+			if (m_fIceTimer > .05f)
+			{
+				m_fIceTimer = 0;
+				CreateSprayMessage* pMsg = new CreateSprayMessage(this);
+				pMsg->QueueMessage();
+				pMsg = nullptr;
+			}
 		}
 
 
@@ -412,25 +447,27 @@ void Player::Update(float elapsedTime)
 		/////////////////////////////////////////////////
 		//////////////Constant Updates///////////////////
 
-		if(GetIsFalling() == true)
+		if (m_unCurrentState != JUMPING_STATE)
 		{
 			SetGravity(-3000);
 
-			m_ts.SetPlaying(false);
 			SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
 		}
 
-		if((m_fJumpTimer == 0.0f
+		if ((m_unCurrentState == JUMPING_STATE
+			&& m_fJumpTimer == 0.0f
 			|| pInput->IsKeyDown(SGD::Key::Space) == false
 			&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
 			&& GetVelocity().y <= 0
+			&& m_unCurrentState == JUMPING_STATE
 			/*&& GetIsInputStuck() == true*/)
 		{
-			SetIsFalling(true);
+			//SetIsFalling(true);
+			m_unCurrentState = FALLING_STATE;
 
-			if(GetVelocity().y < 0)
+			if (GetVelocity().y < 0)
 			{
-				SetVelocity({ GetVelocity().x, 0 });
+				//SetVelocity({ GetVelocity().x, 0 });
 
 			}
 
@@ -439,10 +476,51 @@ void Player::Update(float elapsedTime)
 
 	}
 
+	if (m_unCurrentState == LANDING_STATE
+		&& m_fLandTimer <= 0
+		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
+	{
+		m_ts.SetCurrAnimation("Idle");
+		m_unCurrentState = RESTING_STATE;
+	}
 
-	if(GetVelocity().y > 1050)
+
+	if (GetVelocity().y > 1050)
 	{
 		SetVelocity(SGD::Vector(GetVelocity().x, 1050));
+	}
+
+	if (m_unCurrentState == RESTING_STATE
+		|| m_unCurrentState == LANDING_STATE)
+	{
+
+
+		if (GetVelocity().x > 850)
+		{
+			if (IsDashing() == false)
+				SetVelocity(SGD::Vector(850, GetVelocity().y));
+		}
+
+		if (GetVelocity().x < -850)
+		{
+			if (IsDashing() == false)
+				SetVelocity(SGD::Vector(-850, GetVelocity().y));
+		}
+	}
+	else
+	{
+		if (GetVelocity().x > 1150)
+		{
+			if (IsDashing() == false)
+				SetVelocity(SGD::Vector(1150, GetVelocity().y));
+		}
+
+		if (GetVelocity().x < -1150)
+		{
+			if (IsDashing() == false)
+				SetVelocity(SGD::Vector(-1150, GetVelocity().y));
+		}
+
 	}
 
 	SetIsInputStuck(false);
@@ -467,10 +545,17 @@ void Player::Render(void)
 
 	////Camera::GetInstance()->Draw(SGD::Rectangle(10, 300, 20, 320), SGD::Color::Color(255, 0, 0, 255));
 
+
+	// * Camera::GetInstance()->GetZoomScale().width
+	// * Camera::GetInstance()->GetZoomScale().height
+
 	Camera::GetInstance()->Draw(SGD::Rectangle(
-		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
-		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
+		(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
+		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y),
+		(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width),
+		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
 		SGD::Color::Color(255, 255, 0, 0));
+
 
 	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight());
 
@@ -497,7 +582,7 @@ void Player::HandleCollision(const IEntity* pOther)
 {
 
 	Unit::HandleCollision(pOther);
-	if(pOther->GetType() == ENT_DOOR)
+	if (pOther->GetType() == ENT_DOOR)
 	{
 		BasicCollision(pOther);
 	}
@@ -526,11 +611,11 @@ void Player::HandleCollision(const IEntity* pOther)
 		m_bHasArmor = true;
 	}
 
-	if(pOther->GetType() == Entity::ENT_SOLID_WALL)
+	if (pOther->GetType() == Entity::ENT_SOLID_WALL)
 	{
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(1.0f);
+		SetFriction(7.0f);
 	}
 
 	if(pOther->GetType() == Entity::ENT_MOVING_PLATFORM)
@@ -561,39 +646,39 @@ void Player::HandleCollision(const IEntity* pOther)
 		SetFriction(1.0f);
 	}
 
-	if(pOther->GetType() == Entity::ENT_DEATH)
+	if (pOther->GetType() == Entity::ENT_DEATH)
 	{
 		//Kill the player
 		m_ptPosition = m_ptStartPosition;
 	}
 
-	if(pOther->GetType() == Entity::ENT_RIGHT_RAMP)
+	if (pOther->GetType() == Entity::ENT_RIGHT_RAMP)
 	{
 		RightRampCollision(pOther);
 		SetFriction(1.0f);
 		is_Ramp = true;
 	}
 
-	if(pOther->GetType() == Entity::ENT_LEFT_RAMP)
+	if (pOther->GetType() == Entity::ENT_LEFT_RAMP)
 	{
 		LeftRampCollision(pOther);
 		SetFriction(1.0f);
 		is_Ramp = true;
 	}
 
-	if(pOther->GetType() == Entity::ENT_ICE)
+	if (pOther->GetType() == Entity::ENT_ICE)
 	{
 		SetFriction(0.1f);
 	}
 
-	if(pOther->GetType() == Entity::ENT_ICE_LEFT_RAMP)
+	if (pOther->GetType() == Entity::ENT_ICE_LEFT_RAMP)
 	{
 		LeftRampCollision(pOther);
 		is_Ramp = true;
 		SetFriction(0.1f);
 	}
 
-	if(pOther->GetType() == Entity::ENT_RIGHT_RAMP)
+	if (pOther->GetType() == Entity::ENT_RIGHT_RAMP)
 	{
 		RightRampCollision(pOther);
 		SetFriction(1.0f);
@@ -668,8 +753,8 @@ void Player::BasicCollision(const IEntity* pOther)
 
 	if(nIntersectHeight > nIntersectWidth)
 	{
-		if(GetIsFalling() == true
-			|| GetIsJumping() == true)
+		if (m_unCurrentState == JUMPING_STATE
+			|| m_unCurrentState == FALLING_STATE)
 			SetIsInputStuck(true);
 
 	}
@@ -686,19 +771,52 @@ void Player::BasicCollision(const IEntity* pOther)
 		{
 
 			SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
-			SetVelocity({ 0, GetVelocity().y });
+			if (m_unCurrentState == RESTING_STATE)
+			{
+				SetVelocity({ 0, GetVelocity().y });
+
+			}
 			SetDashTimer(0);
 
-			is_Right_Coll = true;
+
+			//SetFriction(11.0f);
+
+			//if (pInput->IsButtonDown(0, 0) == false)
+			//{
+			//	is_Right_Coll = true;
+			//}
+			
+			if (pInput->IsButtonDown(0,0) == true 
+				&& is_Right_Coll == false)
+			{
+				is_Right_Coll = true;
+			}
 		}
 		if(rPlayer.left == rIntersection.left)
 		{
 			SetPosition({ (float)rObject.right, GetPosition().y });
-			SetVelocity({ 0, GetVelocity().y });
+			//SetVelocity({ 0, GetVelocity().y });
 			SetDashTimer(0);
 
+			if (m_unCurrentState == RESTING_STATE)
+			{
+				SetVelocity({ 0, GetVelocity().y });
 
-			is_Left_Coll = true;
+			}
+
+			//SetFriction(11.0f);
+
+		//	if (pInput->IsButtonDown(0, 0) == false)
+		//	{
+		//		is_Left_Coll = true;
+		//
+		//	}
+			
+			if (pInput->IsButtonDown(0, 0) == true
+				&& is_Left_Coll == false)
+			{
+				is_Left_Coll = true;
+			}
 
 		}
 	}
@@ -717,6 +835,17 @@ void Player::BasicCollision(const IEntity* pOther)
 			{
 				SetVelocity({ GetVelocity().x, 0 });
 				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 /*- nIntersectHeight*/ });
+				if (m_unCurrentState == FALLING_STATE)
+				{
+					// Landing is constantly setting it to 0.4f
+					// 
+
+					m_fLandTimer = 0.001f;
+					m_unCurrentState = LANDING_STATE;
+				}
+				//if (m_fLandTimer <= 0)
+				//	m_unCurrentState = RESTING_STATE;
+
 			}
 
 			if(is_Jumping)
@@ -729,12 +858,16 @@ void Player::BasicCollision(const IEntity* pOther)
 
 			SetJumpVelCur(0);
 
-			SetIsJumping(false);
-			SetIsFalling(false);
+
+			//SetIsJumping(false);
+			//SetIsFalling(false);
 			SetIsInputStuck(false);
 
 			is_Left_Coll = false;
 			is_Right_Coll = false;
+
+			SGD::Event Event = { "RESET_JELLYFISH_BOUNCE", nullptr, this };
+			SGD::EventManager::GetInstance()->SendEventNow(&Event);
 		}
 		if(rPlayer.top == rIntersection.top)
 		{
@@ -891,7 +1024,7 @@ void Player::LeftRampCollision(const IEntity* pOther)
 
 
 
-	if(/*nIntersectWidth*/ rIntersectWidth > 17)
+	if (/*nIntersectWidth*/ rIntersectWidth > 17)
 	{
 		//SetPosition({ GetPosition().x, (float)rObject.bottom - tempInt - GetSize().height });
 		m_ptPosition.y -= rIntersectHeight;
@@ -963,7 +1096,7 @@ void Player::RightRampCollision(const IEntity* pOther)
 	float rIntersectHeight = rIntersecting.ComputeHeight();
 
 
-	if(/*nIntersectWidth*/ rIntersectWidth > 17)
+	if (/*nIntersectWidth*/ rIntersectWidth > 17)
 	{
 		//SetPosition({ GetPosition().x, (float)rObject.bottom - tempInt - GetSize().height });
 		m_ptPosition.y -= rIntersectHeight;
@@ -1084,8 +1217,12 @@ void Player::GeyserCollision(const IEntity* pOther)
 			}
 
 			SetJumpVelCur(0);
-			SetIsJumping(false);
-			SetIsFalling(false);
+
+			m_unCurrentState = RESTING_STATE;
+
+
+			//SetIsJumping(false);
+			//SetIsFalling(false);
 			SetIsInputStuck(false);
 
 			is_Left_Coll = false;
@@ -1213,8 +1350,12 @@ void Player::JellyfishCollision(const IEntity* pOther)
 		if (rPlayer.bottom == rIntersection.bottom)
 		{
 			const Jellyfish* jfish = dynamic_cast<const Jellyfish*>(pOther);
+			//SetVelocity({ GetVelocity().x, /*GetVelocity().y*/1500 * (-1.0f - (0.1f * jfish->GetBounceCount())) });
 			SetVelocity({ GetVelocity().x, GetVelocity().y * (-1.0f - (0.1f * jfish->GetBounceCount())) });
 			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height /*- nIntersectHeight*/ });
+			//SetIsFalling(false);
+			//SetIsInputStuck(false);
+			//SetIsJumping(true);
 		}
 		if (rPlayer.top == rIntersection.top)
 		{

@@ -22,7 +22,7 @@ public:
 	void Update(float elapsedTime);
 	void Render(SGD::Point _Pos = {});
 	void Recylce(Particle* particle);
-	void StartParticles();
+	void StartParticles(bool restart = false);
 
 	/////////////////////////////////////////////
 	////////////////Accessors///////////////////
@@ -79,6 +79,7 @@ public:
 	void SetSpinSpeed(int _SpinSpeed){ m_iSpinSpeed = _SpinSpeed; }
 	void SetRadius(int _Radius){ m_iRadius = _Radius; }
 	void PinEdges(bool _PinEdges){ m_bPinEdges = _PinEdges; }
+	
 private:
 	std::random_device device;
 	SGD::HTexture m_hImage = SGD::INVALID_HANDLE;

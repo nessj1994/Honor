@@ -65,9 +65,9 @@ Emitter::~Emitter()
 {
 }
 
-void Emitter::StartParticles()
+void Emitter::StartParticles(bool restart)
 {
-	if (m_bStarted)
+	if (m_bStarted && !restart)
 	{
 		return;
 	}
@@ -120,7 +120,9 @@ void Emitter::StartParticles()
 			{
 				int MAX = (int)(__max(m_ptPosition.y, m_EndPoint.y));
 				int MIN = (int)(__min(m_ptPosition.y, m_EndPoint.y));
-				Temp.SetPosition({ (float)(rand() % (((int)__max(m_ptPosition.x, m_EndPoint.x) - ((int)__min(m_ptPosition.x, m_EndPoint.x) + 1)) + (int)__min(m_ptPosition.x, m_EndPoint.x))),
+				int XMAX = (int)(__max(m_ptPosition.x, m_EndPoint.x));
+				int XMIN = (int)(__min(m_ptPosition.x, m_EndPoint.x));
+				Temp.SetPosition({ (float)(rand() % (XMAX - (XMIN + 1)) + XMIN),
 					(float)(rand() % (MAX - (MIN + 1)) + MIN) });
 			}
 
@@ -174,11 +176,12 @@ void Emitter::Update(float elapsedTime)
 
 void Emitter::Render(SGD::Point _Pos)
 {
-	if (_Pos != SGD::Point(0,0))
+
+	if (m_ptPosition != _Pos && _Pos != SGD::Point(0, 0))
 	{
 		m_ptPosition = _Pos;
+		StartParticles(true);
 	}
-	
 	if (m_iEmitterShape)
 	{
 		SGD::GraphicsManager::GetInstance()->DrawLine({ m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, { m_EndPoint.x - Camera::GetInstance()->GetCameraPos().x, m_EndPoint.y - Camera::GetInstance()->GetCameraPos().y });	
@@ -219,7 +222,7 @@ void Emitter::Recylce(Particle* particle)
 				int MAX = (int)(__max(m_ptPosition.y, m_EndPoint.y));
 				int MIN = (int)(__min(m_ptPosition.y, m_EndPoint.y))-1;
 				particle->SetPosition({ (float)(rand() % (((int)__max(m_ptPosition.x, m_EndPoint.x) - ((int)__min(m_ptPosition.x, m_EndPoint.x) +1)) + (int)__min(m_ptPosition.x, m_EndPoint.x))),
-					(float)(rand() % (MAX - (MIN + 1)) + MIN) });
+					(float)(rand() % ((MAX - (MIN + 1))+1) + MIN) });
 			}
 
 		}

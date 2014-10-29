@@ -19,5 +19,7 @@ public:
 
 private:
 	int numOfBounces = 0;
+	float bouncetimer = 0.0f;
+	bool bouncecounting = false;
 };
 

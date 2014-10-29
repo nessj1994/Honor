@@ -83,7 +83,7 @@ protected:
 	SGD::Vector			m_vtDirection			= { 0, 0 };     //1,0 right 0,1 down
 	SGD::Size			m_szSize				= SGD::Size{ 0, 0 }; //2D size
 	SGD::Size			m_szScale				= SGD::Size{ 1, 1 };//2D Scale
-	float				m_fSpeed				= 750.0f;// 250.0f;
+	float				m_fSpeed				= 2550.0f;// 250.0f;
 	float				m_fFriction = 10.0f;
 
 
