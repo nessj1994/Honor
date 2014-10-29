@@ -1,15 +1,18 @@
 #include "GravProjectile.h"
 #include "Camera.h"
-
+#include "../SGD Wrappers/SGD_GraphicsManager.h"
 
 GravProjectile::GravProjectile()
 {
 	SetSpeed(5000);
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/SquidProjectile.png");
+	m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage);
 }
 
 
 GravProjectile::~GravProjectile()
 {
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 void GravProjectile::Update(float elapsedTime)
@@ -41,10 +44,11 @@ void GravProjectile::Update(float elapsedTime)
 
 void GravProjectile::Render(void)
 {
-	Camera::GetInstance()->Draw(SGD::Rectangle(
+	/*Camera::GetInstance()->Draw(SGD::Rectangle(
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
-		SGD::Color::Color(255, 0, 255, 0));
+		SGD::Color::Color(255, 0, 255, 0));*/
+	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1, SGD::Color(255, 255, 255, 255));
 }
 
 SGD::Rectangle GravProjectile::GetRect(void) const

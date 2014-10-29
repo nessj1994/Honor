@@ -29,7 +29,7 @@ void Armor::Update(float elapsedTime)
 void Armor::Render(void)
 {
 	if (isCollected == false)
-		Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false);
+		Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1.0f, {});
 }
 
 SGD::Rectangle Armor::GetRect(void) const

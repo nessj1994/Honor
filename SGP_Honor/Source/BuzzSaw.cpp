@@ -65,7 +65,7 @@ void BuzzSaw::Render(void)
 
 	//Render us with the camera
 	Camera::GetInstance()->DrawTexture(m_ptPosition,
-		SGD::Color::Color(255, 255, 255, 0), m_hImage, false);
+		SGD::Color::Color(255, 255, 255, 0), m_hImage, false, 1.0f, {});
 }
 
 int BuzzSaw::GetType(void) const

@@ -25,23 +25,23 @@ void Ice::Update(float elapsedTime)
 	m_pEmitter->Update(elapsedTime);
 	//m_pEmitter->Recylce()
 
-	if (GetDirection().x == 1)
-	{
-		SetVelocity({ GetVelocity().x + GetSpeed() * elapsedTime, GetVelocity().y });
-		if (GetVelocity().x > 850)
-		{
-			SetVelocity({ 850, GetVelocity().y + 100 });
-		}
-	}
+	//if (GetDirection().x == 1)
+	//{
+	//	SetVelocity({ GetVelocity().x + GetSpeed() * elapsedTime, GetVelocity().y });
+	//	if (GetVelocity().x > 850)
+	//	{
+	//		SetVelocity({ 850, GetVelocity().y + 100 });
+	//	}
+	//}
 
-	else
-	{
-		SetVelocity({ GetVelocity().x - GetSpeed() * elapsedTime, GetVelocity().y });
-		if (GetVelocity().x < -850)
-		{
-			SetVelocity({ -850, GetVelocity().y + 100 });
-		}
-	}
+	//else
+	//{
+	//	SetVelocity({ GetVelocity().x - GetSpeed() * elapsedTime, GetVelocity().y });
+	//	if (GetVelocity().x < -850)
+	//	{
+	//		SetVelocity({ -850, GetVelocity().y + 100 });
+	//	}
+	//}
 
 
 

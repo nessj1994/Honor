@@ -186,6 +186,7 @@ private:
 	Squid* m_pSquid = nullptr;
 	Pouncer* m_pPouncer = nullptr;
 	Jellyfish* m_pJellyfish = nullptr;
+	Jellyfish* m_pJellyfish2 = nullptr;
 
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
 

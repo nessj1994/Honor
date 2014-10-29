@@ -9,7 +9,7 @@
 Honor::Honor()
 {
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/HonorPiece.png");
-	//m_ptPosition = SGD::Point(200, 300);
+	m_ptPosition = SGD::Point(200, 300);
 	SetSize(SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage));
 	SGD::Point midPoint = SGD::Point(m_ptPosition.x + m_szSize.width / 4, m_ptPosition.y + m_szSize.height / 4);
 	m_eEffect = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/GreenHonor.xml", "GreenHonor", midPoint);
@@ -18,6 +18,7 @@ Honor::Honor()
 
 Honor::~Honor()
 {
+	delete m_eEffect;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 	delete m_eEffect;
 }
@@ -32,7 +33,7 @@ void Honor::Render(void)
 {
 	if (m_bIsCollected == false)
 	{
-		Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false);
+		Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1.0f, {});
 		//SGD::GraphicsManager::GetInstance()->DrawTexture(m_hImage, SGD::Point(200, 400));
 		SGD::Point midPoint = SGD::Point(m_ptPosition.x + m_szSize.width / 4, m_ptPosition.y + m_szSize.height / 4);
 		m_eEffect->Render(midPoint);

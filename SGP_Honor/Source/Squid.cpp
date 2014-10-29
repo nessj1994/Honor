@@ -16,7 +16,6 @@ Squid::Squid() : Listener(this)
 	m_ptPosition = { 800, 200 };
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/Squid.xml");
 	m_ts.SetCurrAnimation("Squid Idle");
-	m_szSize = SGD::Size(GetRect().right - GetRect().left, GetRect().bottom - GetRect().top);
 }
 
 

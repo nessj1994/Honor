@@ -8,12 +8,12 @@
 // Ctor/dtor
 Teleporter::Teleporter()
 {
-
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/Graphics/Teleporter.png");
 }
 
 Teleporter::~Teleporter()
 {
-
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 /////////////////////////////////////////////////
@@ -30,6 +30,9 @@ void Teleporter::Render()
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
 	Camera::GetInstance()->Draw(rMyRect, { 255, 0, 0, 255 });
+	
+	Camera::GetInstance()->DrawTexture({ m_ptPosition.x - 30, m_ptPosition.y - 15 }, 0.0f, m_hImage, false, 0.8f, {});
+
 }
 
 /////////////////////////////////////////////////

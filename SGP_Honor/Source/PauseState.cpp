@@ -186,9 +186,13 @@ bool PauseState::Input(void)
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 1 /*Button B on xbox controller*/))
 	{
-		GameplayState::GetInstance()->ResetAudio();
 
-		Game::GetInstance()->RemoveState();
+		m_nCursor = 4;
+		
+
+	//	GameplayState::GetInstance()->ResetAudio();
+	//
+	//	Game::GetInstance()->RemoveState();
 	}
 
 	return true;

@@ -130,6 +130,8 @@ void GameplayState::Enter(void) //Load Resources
 	m_pSquid = new Squid();
 	m_pPouncer = new Pouncer();
 	m_pJellyfish = new Jellyfish();
+	m_pJellyfish2 = new Jellyfish();
+	m_pJellyfish2->SetPosition({100, 600});
 
 
 
@@ -181,8 +183,9 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevel("Level1_5");
 
 	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
-	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
-	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
+	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
+	//m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
+	//m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
 
 	// Temporary
 	//CreateBullBoss(500, 400);
@@ -233,14 +236,16 @@ void GameplayState::Exit(void)
 	//if (m_pPendulum != nullptr)
 	//	m_pPendulum->Release();
 
-	if (m_pSquid != nullptr)
-		m_pSquid->Release();
+	delete m_pSquid;
 
-	if (m_pPouncer != nullptr)
-		m_pPouncer->Release();
+	
+	delete m_pPouncer;
 
 	if (m_pJellyfish != nullptr)
 		m_pJellyfish->Release();
+
+	if (m_pJellyfish2 != nullptr)
+		m_pJellyfish2->Release();
 	//Create local references to the SGD Wrappers
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -312,7 +317,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 		LoadLevel("Level1_1");
 	}
 
-	if (pInput->IsKeyPressed(SGD::Key::P)
+	if (pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
@@ -355,7 +360,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MOVING_PLATFORM);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TELEPORTER);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ENEMY);
-	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_JELLYFISH);
+	m_pEntities->CheckCollisions(Entity::ENT_JELLYFISH, Entity::ENT_PLAYER);
 
 
 
@@ -671,7 +676,6 @@ Entity* GameplayState::CreateGravProjectile(Entity* pOwner) const
 	else
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width, pOwner->GetPosition().y - pOwner->GetSize().height / 2));
 
-	proj->SetSize({ 40, 40 });
 	proj->SetDirection({ pOwner->GetDirection() });
 	proj->SetOwner(pOwner);
 
