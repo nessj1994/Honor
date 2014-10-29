@@ -22,7 +22,7 @@ public:
 	SGD::Point GetPosition(void) const { return m_ptPosition; }
 	SGD::Vector GetVelocity(void) const { return m_vtVelocity; }
 	SGD::Vector GetAcceleration(void) const { return m_vtAcceleration; }
-	SGD::Vector GetGravity(void) const { return m_vtGravity; }
+	float GetGravity(void) const { return m_vtGravity; }
 	SGD::Color GetStartColor(void) const { return m_cStartColor; }
 	SGD::Color GetEndColor(void) const { return m_cEndColor; }
 	SGD::Size GetSize(void) const { return m_szSize; }
@@ -42,7 +42,7 @@ public:
 	void SetPosition(SGD::Point position) { m_ptPosition = position; }
 	void SetVelocity(SGD::Vector velocity) { m_vtVelocity = velocity; }
 	void SetAcceleration(SGD::Vector acceleration) { m_vtAcceleration = acceleration; }
-	void SetGravity(SGD::Vector gravity) { m_vtGravity = gravity; }
+	void SetGravity(float gravity) { m_vtGravity = gravity; }
 	void SetStartColor(SGD::Color color) { m_cStartColor = color; }
 	void SetEndColor(SGD::Color color) { m_cEndColor = color; }
 	void SetSize(SGD::Size size) { m_szSize = size; }
@@ -66,7 +66,7 @@ private:
 	SGD::Point m_ptPosition = { 0, 0 };
 	SGD::Vector m_vtVelocity = { 0, 0 };
 	SGD::Vector m_vtAcceleration = { 0, 0 };
-	SGD::Vector m_vtGravity = { 0, 0 };
+	float m_vtGravity;
 	SGD::Color m_cStartColor;
 	SGD::Color m_cEndColor;
 	SGD::Color m_cCurrentColor;

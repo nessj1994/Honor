@@ -23,6 +23,7 @@ public:
 	virtual SGD::Rectangle GetRect(void)				const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
 
+	virtual void BasicCollision(const IEntity* pOther);
 
 	//////////////////////////////////////////////
 	/////////////////Accessors///////////////////
@@ -59,7 +60,6 @@ private:
 	
 	std::map<Animation, std::string> m_mAnimations;
 	std::string m_stCurrentAnimation;
-	bool m_bFacingRight = true;
 	
 	bool m_bDashing = false;
 	bool m_bIcing = false;
@@ -75,5 +75,6 @@ private:
 
 protected:
 	AnimTimeStamp m_ts;
+	bool m_bFacingRight = true;
 };
 

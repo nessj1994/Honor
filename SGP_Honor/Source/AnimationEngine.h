@@ -25,7 +25,6 @@ public:
 	SGD::Rectangle GetRect(const AnimTimeStamp& ts, bool facingRight, float scale, SGD::Point position);
 	SGD::Rectangle GetAttackRect(const AnimTimeStamp& ts, bool facingRight, float scale, SGD::Point position);
 
-
 	/////////////////////////////////////////////////////////////////////////
 	///////////////////////////////Interface////////////////////////////////
 	void LoadAnimation(std::string filePath);

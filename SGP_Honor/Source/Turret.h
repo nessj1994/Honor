@@ -1,7 +1,7 @@
 #pragma once
-#include "Entity.h"
+#include "Unit.h"
 class Turret :
-	public Entity
+	public Unit
 {
 public:
 	Turret();
@@ -25,7 +25,7 @@ public:
 
 private:
 
-	float m_fFireTimer = 1.0f;
+	float m_fFireTimer = 1.65f;
 	int m_nDirection = 0;
 };
 

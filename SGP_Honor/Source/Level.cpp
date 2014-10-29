@@ -125,8 +125,10 @@ void Level::Render()
 				//pGraphics->DrawRectangle(rect, color, { 0, 0, 0 }, 2);
 
 				Camera::GetInstance()->Draw(SGD::Rectangle(
-					xx * 32.0f - Camera::GetInstance()->GetCameraPos().x, yy * 32.0f - Camera::GetInstance()->GetCameraPos().y,
-					xx * 32.0f - Camera::GetInstance()->GetCameraPos().x + 32.0f, yy * 32.0f - Camera::GetInstance()->GetCameraPos().y + 32.0f),
+					xx * 32.0f - Camera::GetInstance()->GetCameraPos().x				/** Camera::GetInstance()->GetZoomScale()*/,
+					yy * 32.0f - Camera::GetInstance()->GetCameraPos().y				/** Camera::GetInstance()->GetZoomScale()*/,
+					xx * 32.0f - Camera::GetInstance()->GetCameraPos().x + 32.0f		/** Camera::GetInstance()->GetZoomScale()*/,
+					yy * 32.0f - Camera::GetInstance()->GetCameraPos().y + 32.0f		/** Camera::GetInstance()->GetZoomScale()*/),
 					color);
 			}
 		}
@@ -156,8 +158,8 @@ void Level::RenderImageLayer(bool background)
 			// Variables to help with culling
 			int startX = (int)(Camera::GetInstance()->GetCameraPos().x / 32 * layer->GetScrollSpeed()) - 1;
 			int startY = (int)(Camera::GetInstance()->GetCameraPos().y / 32 * layer->GetScrollSpeed()) - 1;
-			int mapWidth = (int)(Game::GetInstance()->GetScreenWidth() / 32) / Camera::GetInstance()->GetZoomScale().width;
-			int mapHeight = (int)(Game::GetInstance()->GetScreenHeight() / 32) / Camera::GetInstance()->GetZoomScale().width;
+			int mapWidth = (int)(Game::GetInstance()->GetScreenWidth() / 32)	/   Camera::GetInstance()->GetZoomScale();
+			int mapHeight = (int)(Game::GetInstance()->GetScreenHeight() / 32) / Camera::GetInstance()->GetZoomScale();
 
 			// TODO fix culling
 
@@ -189,8 +191,8 @@ void Level::RenderImageLayer(bool background)
 							// Draw the tile
 							Camera::GetInstance()->DrawTextureSection(
 								layer->GetTileSet(),
-								{ xx * 32.0f - Camera::GetInstance()->GetCameraPos().x * layer->GetScrollSpeed(),
-								yy * 32.0f - Camera::GetInstance()->GetCameraPos().y * layer->GetScrollSpeed() },
+								{ xx * 32.0f - Camera::GetInstance()->GetCameraPos().x * layer->GetScrollSpeed() /** Camera::GetInstance()->GetZoomScale()*/,
+								yy * 32.0f - Camera::GetInstance()->GetCameraPos().y * layer->GetScrollSpeed()  /* * Camera::GetInstance()->GetZoomScale() */},
 								section,
 								0.0f,
 								{ 0.0f, 0.0f },

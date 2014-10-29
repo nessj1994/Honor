@@ -3,17 +3,20 @@
 #include <cmath>
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include "../SGD Wrappers/SGD_GraphicsManager.h"
 BuzzSaw::BuzzSaw()
 {
 	m_ptStartPosition = { 700, 150 };
 	m_ptPosition = m_ptStartPosition;
 	m_szSize = { 32, 32 };
 	m_bMovingRight = false;
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/Graphics/Buzzsaw.png");
 }
 
 
 BuzzSaw::~BuzzSaw()
 {
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage); 
 }
 
 
@@ -61,8 +64,8 @@ void BuzzSaw::Render(void)
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
 	//Render us with the camera
-	Camera::GetInstance()->Draw(rMyRect,
-		SGD::Color::Color(255, 255, 255, 0));
+	Camera::GetInstance()->DrawTexture(m_ptPosition,
+		SGD::Color::Color(255, 255, 255, 0), m_hImage, false, 1.0f, {});
 }
 
 int BuzzSaw::GetType(void) const
