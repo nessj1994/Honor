@@ -114,7 +114,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	//Load Audio
 	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/HonorBGM.xwm");
-	pAudio->PlayAudio(m_hBGM, true);
+	//pAudio->PlayAudio(m_hBGM, true);
 
 	//These are only for testing and will be removed later
 	//m_pDoor = new Door();
@@ -132,11 +132,11 @@ void GameplayState::Enter(void) //Load Resources
 	//m_pStatue = new HintStatue();
 	//m_pStatue->SetMessageString("This is a test string");
 
-	/*m_pSquid = new Squid();
-	m_pPouncer = new Pouncer();
-	m_pJellyfish = new Jellyfish();
-	m_pJellyfish2 = new Jellyfish();
-	m_pJellyfish2->SetPosition({900, 700});*/
+	//m_pSquid = new Squid();
+	//m_pPouncer = new Pouncer();
+	//m_pJellyfish = new Jellyfish();
+	//m_pJellyfish2 = new Jellyfish();
+	//m_pJellyfish2->SetPosition({900, 700});
 
 	//Create player with factory method
 	m_pPlayer = CreatePlayer();
@@ -189,7 +189,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Temporary
 	//CreateBullBoss(500, 400);
-	CreateCrabBoss();
+	//CreateCrabBoss();
 }
 
 
@@ -241,14 +241,14 @@ void GameplayState::Exit(void)
 	//if (m_pPendulum != nullptr)
 	//	m_pPendulum->Release();
 
-	/*delete m_pSquid;
+	//delete m_pSquid;
 
-	
-	delete m_pPouncer;
+	//
+	//delete m_pPouncer;
 
-	delete m_pJellyfish;
+	//delete m_pJellyfish;
 
-	delete m_pJellyfish2;*/
+	//delete m_pJellyfish2;
 	//Create local references to the SGD Wrappers
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -348,7 +348,7 @@ void GameplayState::Update(float elapsedTime)
 
 	//	m_pCamera->Update(elapsedTime);
 
-	m_pEmitter2->Update(elapsedTime);
+	//m_pEmitter2->Update(elapsedTime);
 	float x = elapsedTime;
 
 	m_pEntities->UpdateAll(elapsedTime);
@@ -368,7 +368,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MOVING_PLATFORM);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TELEPORTER);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ENEMY);
-	m_pEntities->CheckCollisions(Entity::ENT_JELLYFISH, Entity::ENT_PLAYER);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_JELLYFISH);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_BULL);
 
 
 
@@ -421,9 +422,17 @@ void GameplayState::Render(void)
 
 
 
-	m_pEmitter2->Render();
+	//m_pEmitter2->Render();
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
+
+	if (m_pPlayer->GetDead())
+	{
+		// Draw a fading rectangle
+		unsigned char alpha = (char)(((0.5f - m_pPlayer->GetDeathTimer()) / 0.5f) * 255.0f);
+		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
+		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+	}
 
 
 }
@@ -1168,21 +1177,102 @@ void GameplayState::CreateTeleporter(int _x, int _y, std::string _level)
 }
 
 /////////////////////////
-// CreateBullBoss
-// -Creates a bull boss at the given coordinates
-void GameplayState::CreateBullBoss(int _x, int _y)
+// CreateEnemy
+// -Creates an enemy at the given coordinates
+void GameplayState::CreateEnemy(int _x, int _y, int _type)
 {
-	Bull * mBull = new Bull();
-	mBull->SetPosition({ (float)_x, (float)_y });
-	m_pEntities->AddEntity(mBull, Entity::ENT_BOSS_BULL);
-	mBull->Release();
+	switch (_type)
+	{
+		case 0: // bull
+		{
+			break;
+		}
+		case 1: // skeleton
+		{
+			break;
+		}
+		case 2: // mutant man
+		{
+			break;
+		}
+		case 3: // mutant bird
+		{
+			break;
+		}
+		case 4: // ice golem
+		{
+			break;
+		}
+		case 5: // ice bat
+		{
+			break;
+		}
+		case 6: // ice turtle
+		{
+			break;
+		}
+		case 7: // hermit crab
+		{
+			Pouncer * pPouncer = new Pouncer();
+			pPouncer->SetPosition({ (float)_x, (float)_y });
+			m_pEntities->AddEntity(pPouncer, Entity::ENT_POUNCER);
+			pPouncer->Release();
+			break;
+		}
+		case 8: // squid
+		{
+			Squid * pSquid = new Squid();
+			pSquid->SetPosition({ (float)_x, (float)_y });
+			m_pEntities->AddEntity(pSquid, Entity::ENT_SQUID);
+			pSquid->Release();
+			break;
+		}
+		case 9: // jellyfish
+		{
+			Jellyfish * pJelly = new Jellyfish();
+			pJelly->SetPosition({ (float)_x, (float)_y });
+			m_pEntities->AddEntity(pJelly, Entity::ENT_JELLYFISH);
+			pJelly->Release();
+			break;
+		}
+	}
 }
 
-void GameplayState::CreateCrabBoss()
+/////////////////////////
+// CreateBoss
+// -Creates a boss at the given coordinates
+void GameplayState::CreateBoss(int _x, int _y, int _type)
 {
-	Crab * mCrab = new Crab();
-	m_pEntities->AddEntity(mCrab, Entity::ENT_BOSS_CRAB);
-	mCrab->Release();
+	switch (_type)
+	{
+		case 0: // bull
+		{
+			Bull * pBull = new Bull();
+			pBull->SetPosition({ (float)_x, (float)_y });
+			m_pEntities->AddEntity(pBull, Entity::ENT_BOSS_BULL);
+			pBull->Release();
+			break;
+		}
+		case 1: // caveman
+		{
+			break;
+		}
+		case 2: // yeti
+		{
+			break;
+		}
+		case 3: // crab
+		{
+			Crab * mCrab = new Crab();
+			m_pEntities->AddEntity(mCrab, Entity::ENT_BOSS_CRAB);
+			mCrab->Release();
+			break;
+		}
+		case 4: // wizard
+		{
+			break;
+		}
+	}
 }
 
 #pragma endregion

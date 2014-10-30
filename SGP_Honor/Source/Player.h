@@ -35,6 +35,21 @@ public:
 	////////////// Listener Interface //////////////
 	void HandleEvent(const SGD::Event* pEvent);
 
+	////////////////////////////////////////////////
+	/////////////////////Update methods/////////////
+	void UpdateDeath(float elapsedTime);
+	void UpdateArmor(float elapsedTime);
+	void UpdateEmitters(float elapsedTime);
+	void UpdateTimers(float elapsedTime);
+	void UpdateFriction(float elapsedTime, bool leftClamped);
+	void UpdateBounce(float elapsedTime);
+	void UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped, float leftStickXOff);
+	void UpdateDash(float elapsedTime);
+	void UpdateJump(float elapsedTime);
+	void UpdateHawk(float elapsedTime);
+	void UpdateSpray(float elapsedTime);
+	void UpdateConstants(float elapsedTime);
+	void UpdateVelocity(float elapsedTime);
 
 	////////////////////////////////////////////////
 	/////////////////////Methods///////////////////
@@ -49,6 +64,7 @@ public:
 	void LaserCollision(const IEntity* pOther);
 	unsigned int GetCurrentState(void) const { return m_unCurrentState; }
 	void JellyfishCollision(const IEntity* pOther);
+	void KillPlayer();
 
 
 
@@ -65,13 +81,14 @@ public:
 //	bool GetIsJumping(void)const { return is_Jumping; }
 //	bool GetIsFalling(void)const { return is_Falling; }
 	bool GetIsInputStuck(void)const { return is_Stuck; }
-
+	bool GetDead(void) const { return m_bDead; }
 
 
 	//Floats
 	float GetDashTime(void) const { return m_fDashTime; }
 	//float GetJumpCapTime(void) const { return m_fJumpVelCap; }
 	float GetJumpVelCur(void) const { return m_fJumpVelCur; }
+	float GetDeathTimer(void) const { return m_fDeathTimer; }
 
 	//Abilities
 	Dash* GetDash(void) const { return m_pDash; }
@@ -100,6 +117,8 @@ public:
 	void SetJumpVelCur(float _velCur) { m_fJumpVelCur = _velCur; }
 	void IncreaseHonorCollected(unsigned int amount) { m_unHonorCollected += amount; }
 
+	//Hawk Explosion function
+	void HawkExplode(SGD::Point _pos);
 private:
 
 
@@ -110,6 +129,7 @@ private:
 	bool m_bHasArmor = false;
 	bool m_bHawkCast = false;
 
+
 	bool is_Jumping = false;
 	bool is_Falling = true;
 	bool has_landed = true;
@@ -119,6 +139,7 @@ private:
 	bool is_Right_Coll = false;
 	bool is_Platform = false;
 	bool is_Ramp = false;
+	bool m_bDead = false;
 
 	float m_fDashTime = 0.0f;
 	float m_fIceTimer = 0.0f;
@@ -127,18 +148,14 @@ private:
 	float m_fJumpTimer = 0.4f;
 	float m_fLandTimer = 0.0f;
 	float m_fButtonTimer = 0.0f;
+	float m_fDeathTimer = 0.0f;
+	float m_fArmorTimer = 0.0f;
 
 	float m_fShotTimer = 0.20f;
 	float m_fInputTimer = 0.0f;
 	float m_fHawkTimer = 1.0f;
 
 	unsigned int m_unCurrentState = 0;
-
-
-	//float m_fStickTimer = 0.0f; // For WallJumping (Input won't register while stick timer is Active) (0.25)
-
-	//Hawk* m_pHawk;
-
 	unsigned int m_unHonorCollected = 0;
 
 	//Hawk* m_pHawk;
@@ -146,12 +163,22 @@ private:
 	Ice* m_pIce;
 	Bounce* m_pBounce;
 
+
 	SGD::HTexture m_hImage = SGD::INVALID_HANDLE;
 	//Honor Particle Image for the HUD
 	SGD::HTexture m_hHonorParticleHUD = SGD::INVALID_HANDLE;
+
 	//Emitters
 	//Honor emitter for HUD
 	Emitter* m_emHonor;
+
+	//SGD::Rectangle = {}
+	//Hawk Explosion 
+	Emitter* m_emFeatherExplosion;
+	bool m_bHawkExplode = false;
+	//Hawk Return
+	Emitter* m_emHawkReturn;
+	bool m_bReturningHawk = false;
 };
 
 

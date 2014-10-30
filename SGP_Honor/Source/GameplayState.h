@@ -103,9 +103,8 @@ public:
 	void CreateFreezableRightRamp(int _x, int _y);
 	void CreateHintStatue(int _x, int _y, std::string _message);
 	void CreateTeleporter(int _x, int _y, std::string _level);
-
-	void CreateBullBoss(int _x, int _y);
-	void CreateCrabBoss();
+	void CreateEnemy(int _x, int _y, int _type);
+	void CreateBoss(int _x, int _y, int _type);
 
 	void LoadLevel(std::string _level);
 	void SetHonorVector(std::vector<bool> _value);
