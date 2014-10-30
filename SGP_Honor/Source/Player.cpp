@@ -654,6 +654,13 @@ void Player::Update(float elapsedTime)
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 
 	SetGravity(-3000);
+
+
+	if (m_fButtonTimer == 0)
+	{
+		SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
+	}
+
 }
 
 void Player::Render(void)
@@ -904,14 +911,27 @@ void Player::BasicCollision(const IEntity* pOther)
 		if(rPlayer.right == rIntersection.right)
 		{
 
-			SetPosition({ (float)rObject.left - GetSize().width +1, GetPosition().y });
-			SetVelocity({ 0, GetVelocity().y });
-			SetDashTimer(0);
+			if (m_unCurrentState == RESTING_STATE
+				|| m_unCurrentState == LANDING_STATE)
+			{
+				SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
+				SetVelocity({ 0, GetVelocity().y });
+				SetDashTimer(0);
+			}
+			else
+			{
+				SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
+				SetVelocity({ 0, GetVelocity().y });
+				SetDashTimer(0);
+			}
 
 
 
-			if ( (pInput->IsButtonDown(0,0) == true 
-				|| pInput->IsKeyDown(SGD::Key::Space))
+			if  ((pInput->IsButtonDown(0,0) == true 
+				|| pInput->IsKeyDown(SGD::Key::Space) == true)
+				&& (m_unCurrentState != RESTING_STATE
+				|| m_unCurrentState != LANDING_STATE)
+				//&& m_fButtonTimer > 0
 				)
 			{
 				is_Right_Coll = true;
@@ -919,15 +939,30 @@ void Player::BasicCollision(const IEntity* pOther)
 		}
 		if(rPlayer.left == rIntersection.left)
 		{
-			SetPosition({ (float)rObject.right - 1, GetPosition().y });
-			SetDashTimer(0);
-			SetVelocity({ 0, GetVelocity().y });
+
+			if (m_unCurrentState == RESTING_STATE
+				|| m_unCurrentState == LANDING_STATE)
+			{
+				SetPosition({ (float)rObject.right, GetPosition().y });
+				SetDashTimer(0);
+				SetVelocity({ 0, GetVelocity().y });
+			}
+			else
+			{
+				SetPosition({ (float)rObject.right-1, GetPosition().y });
+				SetDashTimer(0);
+				SetVelocity({ 0, GetVelocity().y });
+			}
+			
 
 			
 
 			if ((pInput->IsButtonDown(0, 0) == true
 				|| pInput->IsKeyDown(SGD::Key::Space))
-				/*&& m_fButtonTimer < 0.4*/ )
+				&& (m_unCurrentState != RESTING_STATE
+				|| m_unCurrentState != LANDING_STATE)
+				//&& m_fButtonTimer > 0
+				)
 			{
 				is_Left_Coll = true;
 			}
