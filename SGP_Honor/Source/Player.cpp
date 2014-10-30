@@ -18,7 +18,7 @@
 #include "Font.h"
 #include "BitmapFont.h"
 #include "Game.h"
-
+#include "Bull.h"
 
 #include <Windows.h>
 #include "Dash.h"
@@ -390,6 +390,20 @@ void Player::HandleCollision(const IEntity* pOther)
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}
 
+	if (pOther->GetType() == Entity::ENT_BOSS_BULL)
+	{
+		// TODO use states
+		// Throw the player back
+		Bull * bull = (Bull*)(pOther);
+		float throwSpeed = 2000;
+		if (bull->IsFacingRight())
+		{
+			throwSpeed = -2000;
+		}
+		SetGravity(0);
+		SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
+		SetVelocity({ throwSpeed, -1000 });
+	}
 }
 
 void Player::BasicCollision(const IEntity* pOther)
