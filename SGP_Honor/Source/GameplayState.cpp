@@ -1088,14 +1088,99 @@ void GameplayState::CreateTeleporter(int _x, int _y, std::string _level)
 }
 
 /////////////////////////
-// CreateBullBoss
-// -Creates a bull boss at the given coordinates
-void GameplayState::CreateBullBoss(int _x, int _y)
+// CreateEnemy
+// -Creates an enemy at the given coordinates
+void GameplayState::CreateEnemy(int _x, int _y, int _type)
 {
-	Bull * mBull = new Bull();
-	mBull->SetPosition({ (float)_x, (float)_y });
-	m_pEntities->AddEntity(mBull, Entity::ENT_BOSS_BULL);
-	mBull->Release();
+	switch (_type)
+	{
+		case 0: // bull
+		{
+			break;
+		}
+		case 1: // skeleton
+		{
+			break;
+		}
+		case 2: // mutant man
+		{
+			break;
+		}
+		case 3: // mutant bird
+		{
+			break;
+		}
+		case 4: // ice golem
+		{
+			break;
+		}
+		case 5: // ice bat
+		{
+			break;
+		}
+		case 6: // ice turtle
+		{
+			break;
+		}
+		case 7: // hermit crab
+		{
+			Pouncer * pPouncer = new Pouncer();
+			pPouncer->SetPosition({ (float)_x, (float)_y });
+			m_pEntities->AddEntity(pPouncer, Entity::ENT_POUNCER);
+			pPouncer->Release();
+			break;
+		}
+		case 8: // squid
+		{
+			Squid * pSquid = new Squid();
+			pSquid->SetPosition({ (float)_x, (float)_y });
+			m_pEntities->AddEntity(pSquid, Entity::ENT_SQUID);
+			pSquid->Release();
+			break;
+		}
+		case 9: // jellyfish
+		{
+			Jellyfish * pJelly = new Jellyfish();
+			pJelly->SetPosition({ (float)_x, (float)_y });
+			m_pEntities->AddEntity(pJelly, Entity::ENT_JELLYFISH);
+			pJelly->Release();
+			break;
+		}
+	}
+}
+
+/////////////////////////
+// CreateBoss
+// -Creates a boss at the given coordinates
+void GameplayState::CreateBoss(int _x, int _y, int _type)
+{
+	switch (_type)
+	{
+		case 0: // bull
+		{
+			Bull * pBull = new Bull();
+			pBull->SetPosition({ (float)_x, (float)_y });
+			m_pEntities->AddEntity(pBull, Entity::ENT_BOSS_BULL);
+			pBull->Release();
+			break;
+		}
+		case 1: // caveman
+		{
+			break;
+		}
+		case 2: // yeti
+		{
+			break;
+		}
+		case 3: // crab
+		{
+			break;
+		}
+		case 4: // wizard
+		{
+			break;
+		}
+	}
 }
 
 #pragma endregion
