@@ -16,6 +16,7 @@
 #include <Windows.h>		// Win32 Application
 #include <vld.h>			// Visual Leak Detector!!!
 #include "Game.h"			// Our Game class
+#include "../resource.h"
 
 //*********************************************************************//
 // Preprocessor Constants
@@ -149,8 +150,8 @@ HWND MakeWindow(HINSTANCE hInstance)
 	winClassEx.cbClsExtra = 0;
 	winClassEx.cbWndExtra = 0;
 	winClassEx.hInstance = hInstance;
-	winClassEx.hIcon = LoadIconW(NULL, (LPWSTR)IDI_APPLICATION);
-	winClassEx.hIconSm = LoadIconW(NULL, (LPWSTR)IDI_APPLICATION);
+	winClassEx.hIcon = LoadIconW(hInstance, MAKEINTRESOURCE(IDI_HonorIcon));
+	winClassEx.hIconSm = LoadIconW(hInstance, MAKEINTRESOURCE(IDI_HonorIcon));
 	winClassEx.hCursor = LoadCursorW(NULL, (LPWSTR)IDC_ARROW);
 	winClassEx.hbrBackground = (HBRUSH)(1 + COLOR_WINDOW);
 	winClassEx.lpszMenuName = NULL;

@@ -138,8 +138,11 @@ void Emitter::StartParticles(bool restart)
 		Temp.SetVelocity({ VX, VY });
 		Temp.SetImage(m_hImage);
 		Temp.SetGravity(m_fGravity);
-		Temp.SetColorChange((int)m_fColorChange);
 		Temp.Reset();
+		if (!m_bLooping)
+		{
+			Temp.SetDead(true);
+		}
 		m_vecParticles.push_back(Temp);
 	}
 }
@@ -161,15 +164,24 @@ void Emitter::Update(float elapsedTime)
 			m_EndPoint.y = (float)y;
 		}
 	}
-
+	if (!m_bLooping)
+	{
+		int x = 0;
+	}
+	m_bDone = true;
 		for (int i = 0; i < m_vecParticles.size(); i++)
 		{
-			if (m_vecParticles[i].IsDead())
+			if (m_vecParticles[i].IsDead() && !m_bFinish)
 			{
 				Recylce(&m_vecParticles[i]);
 			}
+			if (!m_vecParticles[i].IsDead())
+			{
+				m_bDone = false;
+			}
 			m_vecParticles[i].Update(elapsedTime);
 		}
+
 
 }
 
@@ -225,11 +237,21 @@ void Emitter::RenderINworld(SGD::Point _Pos)
 	}
 }
 
+void Emitter::Burst(SGD::Point _pos)
+{
+	m_ptPosition = _pos;
+	for (size_t i = 0; i < m_vecParticles.size(); i++)
+	{
+		m_vecParticles[i].SetDead(false);
+		Recylce(&m_vecParticles[i]);
+		m_vecParticles[i].Reset();
+	}
+}
+
 
 void Emitter::Recylce(Particle* particle)
 {
-	if (m_bLooping)
-	{
+
 		//Random Generator
 		std::mt19937 MT(device());
 		std::uniform_real_distribution<float>X(m_ptPosition.x, m_ptPosition.x + m_szSize.width);
@@ -252,8 +274,12 @@ void Emitter::Recylce(Particle* particle)
 
 		}
 		particle->SetColorChange((int)m_fColorChange);
-		particle->Reset();
-	}
+
+		if (m_bLooping)
+		{
+			particle->Reset();
+		}
+	
 	
 }
 
@@ -266,6 +292,15 @@ void Emitter::KillParticles(SGD::Point _Pos)
 	for (size_t i = 0; i < m_vecParticles.size(); i++)
 	{
 		m_vecParticles[i].SetPosition({thing(MT),thing2(MT)});
+		m_vecParticles[i].Starting(false);
+		//if (rand() % 10 > 5)
+		//{
+		//	m_vecParticles[i].Starting(false);
+		//}
+		//else
+		//{
+		//	m_vecParticles[i].Starting(true);
+		//}
 		if (m_iEmitterShape)
 		{
 			if (m_bPinEdges)

@@ -592,7 +592,6 @@
     <ResourceCompile Include="SGP_Honor.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon1.ico" />
-    <Image Include="icon2.ico" />
+    <Image Include="HonorIcon.ico" />
   </ItemGroup>
 </Project>
