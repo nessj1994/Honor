@@ -25,6 +25,7 @@ public:
 	void Recylce(Particle* particle);
 	void StartParticles(bool restart = false);
 	void KillParticles(SGD::Point _Pos);
+	void Burst(SGD::Point _pos);
 	/////////////////////////////////////////////
 	////////////////Accessors///////////////////
 	SGD::HTexture GetImage(void) const { return m_hImage; }

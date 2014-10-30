@@ -183,7 +183,7 @@ void GameplayState::Enter(void) //Load Resources
 	LoadHonorVector();
 	LoadLevel("HubLevel");
 
-	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
+	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 //	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
 //	m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
@@ -348,7 +348,7 @@ void GameplayState::Update(float elapsedTime)
 
 	//	m_pCamera->Update(elapsedTime);
 
-	m_pEmitter2->Update(elapsedTime);
+	//m_pEmitter2->Update(elapsedTime);
 	float x = elapsedTime;
 
 	m_pEntities->UpdateAll(elapsedTime);
@@ -421,7 +421,7 @@ void GameplayState::Render(void)
 
 
 
-	m_pEmitter2->Render();
+	//m_pEmitter2->Render();
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 

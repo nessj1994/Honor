@@ -1,7 +1,10 @@
 #include "Hawk.h"
 #include "Game.h"
 #include "Camera.h"
+#include "Player.h"
 #include "DestroyEntityMessage.h"
+#include "ParticleEngine.h"
+#include "Emitter.h"
 
 Hawk::Hawk()
 {
@@ -27,6 +30,7 @@ Hawk::~Hawk()
 
 void Hawk::Update(float elapsedTime)
 {
+	
 	if (GetDirection().x == 1)
 	{
 		//SetVelocity({ GetVelocity().x /*+ GetSpeed() * elapsedTime*/, GetVelocity().y });
@@ -70,7 +74,11 @@ void Hawk::Update(float elapsedTime)
 		//DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
 		//pMsg->QueueMessage();
 		//pMsg = nullptr;
-
+		if (GetOwner()->GetType() == ENT_PLAYER)
+		{
+			Player* temp = dynamic_cast<Player*>(GetOwner());
+			temp->HawkExplode(m_ptPosition);
+		}
 		SetPosition({ -100, -100 });
 
 		SetVelocity({ 0, 0 });
@@ -95,6 +103,11 @@ void Hawk::HandleCollision(const IEntity* pOther)
 		//m_Eevent.SendEventNow((void*)pOther);
 
 
+		if (GetOwner()->GetType() == ENT_PLAYER)
+		{
+			Player* temp = dynamic_cast<Player*>(GetOwner());
+			temp->HawkExplode(m_ptPosition);
+		}
 		SetPosition({ -100, -100 });
 
 		SetVelocity({ 0, 0 });
@@ -113,6 +126,11 @@ void Hawk::HandleCollision(const IEntity* pOther)
 		//m_Eevent.SendEventNow((void*)pOther);
 
 
+		if (GetOwner()->GetType() == ENT_PLAYER)
+		{
+			Player* temp = dynamic_cast<Player*>(GetOwner());
+			temp->HawkExplode(m_ptPosition);
+		}
 		SetPosition({ -100, -100 });
 
 		SetVelocity({ 0, 0 });
@@ -133,6 +151,11 @@ void Hawk::HandleCollision(const IEntity* pOther)
 		//m_Eevent.SendEventNow((void*)pOther);
 
 
+		if (GetOwner()->GetType() == ENT_PLAYER)
+		{
+			Player* temp = dynamic_cast<Player*>(GetOwner());
+			temp->HawkExplode(m_ptPosition);
+		}
 		SetPosition({ -100, -100 });
 
 		SetVelocity({ 0, 0 });
@@ -149,7 +172,11 @@ void Hawk::HandleCollision(const IEntity* pOther)
 		//EVENT SYSTEM
 		//SGD::Event m_Eevent = { "PLAYER_HIT", GetOwner(), this };
 		//m_Eevent.SendEventNow((void*)pOther);
-
+		if (GetOwner()->GetType() == ENT_PLAYER)
+		{
+			Player* temp = dynamic_cast<Player*>(GetOwner());
+			temp->HawkExplode(m_ptPosition);
+		}
 
 		SetPosition({ -100, -100 });
 

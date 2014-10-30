@@ -36,8 +36,13 @@ Player::Player() : Listener(this)
 	SetDirection({ 1, 0 });
 	m_pDash = new Dash();
 	m_pBounce = new Bounce();
+	//HUD
 	m_hHonorParticleHUD = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/HonorPiece.png");
+	//Emitters
 	m_emHonor = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/SilverHonor.xml", "SilverHonor", { (32 ), (32 ) });
+	m_emFeatherExplosion = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FeatherExplosion.xml", "FeatherExplosion", m_ptPosition);
+	m_emHawkReturn = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/HawkReturn.xml", "HawkReturn", { -100, -100 });
+	//
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/PlayerAnimations.xml");
 	m_ts.SetCurrAnimation("Idle");
 	
@@ -56,6 +61,12 @@ Player::~Player()
 /////////////////Interface///////////////////////
 void Player::Update(float elapsedTime)
 {
+	//Emitter Updates
+	m_emHonor->Update(elapsedTime);
+	m_emFeatherExplosion->Update(elapsedTime);
+	m_emHawkReturn->Update(elapsedTime);
+	//
+
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	if (m_bDead)
 	{
@@ -149,6 +160,7 @@ void Player::Update(float elapsedTime)
 
 		UpdateVelocity(elapsedTime);
 
+
 		SetIsInputStuck(false);
 
 		is_Left_Coll = false;
@@ -158,6 +170,7 @@ void Player::Update(float elapsedTime)
 		SGD::Event* pATEvent = new SGD::Event("ASSESS_PLAYER_RANGE", nullptr, this);
 		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 		pATEvent = nullptr;
+
 
 		Unit::Update(elapsedTime);
 		AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
@@ -176,6 +189,21 @@ void Player::Render(void)
 	if (IsDashing() || !GetDash()->GetEMDash()->Done())
 	{
 		GetDash()->GetEMDash()->Render(m_ptPosition);
+	}
+	if (m_bHawkExplode || !m_emFeatherExplosion->Done())
+	{
+		m_emFeatherExplosion->Render();
+	}
+	if (m_bReturningHawk || !m_emHawkReturn->Done())
+	{
+		m_emHawkReturn->Render();
+	}
+	//
+
+
+	if (m_emFeatherExplosion->Done() == true)
+	{
+		int x = 0;
 	}
 	//
 	//SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -1361,11 +1389,15 @@ void Player::UpdateHawk(float elapsedTime)
 		if (m_bHawkCast == false
 			&& m_fHawkTimer > 1.0f)
 		{
-
-			m_bHawkCast = true;
-			CreateHawkMessage* pMsg = new CreateHawkMessage(this);
-			pMsg->QueueMessage();
-			pMsg = nullptr;
+			//Dont spawn another hawk until particles are done
+			if (!m_bReturningHawk)
+			{
+				m_bHawkCast = true;
+				m_bHawkExplode = false;
+				CreateHawkMessage* pMsg = new CreateHawkMessage(this);
+				pMsg->QueueMessage();
+				pMsg = nullptr;
+			}
 		}
 		else
 		{
@@ -1477,15 +1509,66 @@ void Player::UpdateHawk(float elapsedTime)
 		{
 			m_fHawkTimer = 0.0f;
 
+			if (m_emFeatherExplosion->Done())
+			{
+				//Emitter Stuff
+				m_bHawkExplode = true;
+				m_emFeatherExplosion->Burst(GetHawkPtr()->GetPosition());
+				m_emHawkReturn->Burst(GetHawkPtr()->GetPosition());
+				m_bReturningHawk = true;
+			}
+			else
+			{
+				m_bHawkExplode = false;
+			}
 
-			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ GetHawkPtr() };
-			pMsg->QueueMessage();
-			pMsg = nullptr;
+			
+				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ GetHawkPtr() };
+				pMsg->QueueMessage();
+				pMsg = nullptr;
 
-			SetHawkPtr(nullptr);
+				SetHawkPtr(nullptr);
+			
 		}
 
 	}
+
+
+	//Emitter Hawk Returning changing the position with velocity
+	if (m_bReturningHawk)
+	{
+		SGD::Vector distance = m_ptPosition - m_emHawkReturn->GetPosition();
+		if (distance.ComputeLength() > 10)
+		{
+			SGD::Vector VEL = { 0, 0 };
+			if (m_ptPosition.x < m_emHawkReturn->GetPosition().x)
+			{
+				VEL.x = -300;
+			}
+			if (m_ptPosition.y < m_emHawkReturn->GetPosition().y)
+			{
+				VEL.y = -300;
+			}
+			if (m_ptPosition.x > m_emHawkReturn->GetPosition().x)
+			{
+				VEL.x = 300;
+			}
+			if (m_ptPosition.y > m_emHawkReturn->GetPosition().y)
+			{
+				VEL.y = 300;
+			}
+			SGD::Point TempPos = m_emHawkReturn->GetPosition();
+			TempPos += VEL * elapsedTime;
+			m_emHawkReturn->SetPosition(TempPos);
+			m_emHawkReturn->Finish(false);
+		}
+		else
+		{
+			m_emHawkReturn->Finish();
+			m_bReturningHawk = false;
+		}
+	}
+	
 }
 
 void Player::UpdateSpray(float elapsedTime)
@@ -1593,6 +1676,20 @@ void Player::UpdateVelocity(float elapsedTime)
 	}
 
 }
+
+void Player::HawkExplode(SGD::Point _pos)
+{
+	if (!m_bHawkExplode)
+	{
+		m_bHawkExplode = true;
+		m_emFeatherExplosion->Finish();
+		m_emFeatherExplosion->Burst(_pos);
+		m_bReturningHawk = true;
+		m_emHawkReturn->Burst(_pos);
+	}	
+}
+
+#pragma endregion
 
 void Player::UpdatePlayerSwing(float elapsedTime)
 {
