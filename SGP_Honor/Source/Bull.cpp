@@ -11,6 +11,7 @@ Bull::Bull()
 	SetSize({ 160.0f, 96.0f });
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/Bull_Animation.xml");
 	m_ts.SetCurrAnimation("Bull_Charging");
+	m_ts.SetPlaying(true);
 }
 
 ///////////////////////////////////////////////////
@@ -35,5 +36,8 @@ void Bull::Update(float elapsedTime)
 void Bull::Render(void)
 {
 	Boss::Render();
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, m_bFacingRight);
+	SGD::Point newPosition = m_ptPosition;
+	newPosition.y += 38;
+	newPosition.x += 50;
+	Camera::GetInstance()->DrawAnimation(newPosition, 0, m_ts, m_bFacingRight);
 }
