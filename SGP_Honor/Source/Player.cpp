@@ -56,170 +56,188 @@ Player::~Player()
 /////////////////Interface///////////////////////
 void Player::Update(float elapsedTime)
 {
-	//Emitter Updates
-	m_pBounce->GetEMBubbles()->Update(elapsedTime);
-	m_pDash->GetEMDash()->Update(elapsedTime);	
-	m_emHonor->Update(elapsedTime);
-	//
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-
-	//Timers
-	m_fIceTimer += elapsedTime;
-
-	m_fJumpTimer -= elapsedTime;
-
-	m_fLandTimer -= elapsedTime;
-
-	if (m_fJumpTimer < 0.0f)
-		m_fJumpTimer = 0;
-
-	if (m_fLandTimer < 0.0f)
-		m_fLandTimer = 0;
-
-	m_fHawkTimer += elapsedTime;
-
-
-	float leftStickXOff = pInput->GetLeftJoystick(0).x;
-	float leftStickYOff = pInput->GetLeftJoystick(0).y;
-
-	bool leftClamped = false;
-	static int stickFrame = 1;
-	bool controller = pInput->IsControllerConnected(0);
-
-	if (leftStickXOff > -JOYSTICK_DEADZONE && leftStickXOff < JOYSTICK_DEADZONE)
+	if (m_bDead)
 	{
-		leftStickXOff = 0;
-		leftClamped = true;
-		stickFrame = 5;
+		m_fDeathTimer -= elapsedTime;
+		if (m_fDeathTimer <= 0.0f || pInput->IsAnyKeyPressed())
+		{
+			m_bDead = false;
+			m_fDeathTimer = 0.0f;
+			m_ptPosition = m_ptStartPosition;
+			SetVelocity({ 0.0f, 0.0f });
+		}
 	}
-
-	SetIsBouncing(false);
-
-	//////// NEED TO UPDATE WITH CONTROLLER ( JORDAN )
-	if (GetIsInputStuck() == false)
-		m_fInputTimer = 0;
-
-
-	//Player would get "stuck" on walls and force its velocity to change (not intentional here, added elsewhere to fix other issues) InputTimer solves similar issues with no
-	// Conflicts
-//if (GetIsInputStuck() == true
-//	&& GetVelocity().y < 0)
-//{
-////	SetVelocity({ /*GetVelocity().x*/ 0, 0 });
-//}
-
-
-	/////////////////////////////////////////////////
-	/////////////////Controls////////////////////////
-
-	if (IsDashing() == false)///////////////Dash check begins
+	else
 	{
-
-		//	if(GetIsFalling() == false
-		//		&& GetIsJumping() == false)
-		if (m_unCurrentState == RESTING_STATE
-			|| m_unCurrentState == LANDING_STATE)
+		// Update armor timer
+		if (m_fArmorTimer > 0)
 		{
-			/////////////////////////////////////////////////
-			/////////////////Friction////////////////////////
-
-			//Left Friction
-			if (GetVelocity().x < 0
-				&& (pInput->IsKeyDown(SGD::Key::Q) == false
-				&& leftClamped == true))
-			{
-
-				SetVelocity(SGD::Vector(GetVelocity().x + GetFriction(), GetVelocity().y));
-
-				if (GetVelocity().x > 0
-					&& GetVelocity().x < 10)
-				{
-					SetVelocity(SGD::Vector(0, GetVelocity().y));
-				}
-
-			}
-			//Right Friction
-			if (GetVelocity().x > 0
-				&& (pInput->IsKeyDown(SGD::Key::E) == false
-				&& leftClamped == true))
-			{
-
-				SetVelocity(SGD::Vector(GetVelocity().x - GetFriction(), GetVelocity().y));
-
-				if (GetVelocity().x < 0
-					&& GetVelocity().x > -100)
-				{
-					SetVelocity(SGD::Vector(0, GetVelocity().y));
-				}
-			}
+			m_fArmorTimer -= elapsedTime;
 		}
 
+		//Emitter Updates
+		m_pBounce->GetEMBubbles()->Update(elapsedTime);
+		m_pDash->GetEMDash()->Update(elapsedTime);
+		m_emHonor->Update(elapsedTime);
 
-		if (pInput->IsKeyDown(SGD::Key::W) == true)
+		//Timers
+		m_fIceTimer += elapsedTime;
+
+		m_fJumpTimer -= elapsedTime;
+
+		m_fLandTimer -= elapsedTime;
+
+		if (m_fJumpTimer < 0.0f)
+			m_fJumpTimer = 0;
+
+		if (m_fLandTimer < 0.0f)
+			m_fLandTimer = 0;
+
+		m_fHawkTimer += elapsedTime;
+
+
+		float leftStickXOff = pInput->GetLeftJoystick(0).x;
+		float leftStickYOff = pInput->GetLeftJoystick(0).y;
+
+		bool leftClamped = false;
+		static int stickFrame = 1;
+		bool controller = pInput->IsControllerConnected(0);
+
+		if (leftStickXOff > -JOYSTICK_DEADZONE && leftStickXOff < JOYSTICK_DEADZONE)
 		{
-			GetBounce()->GetEMBubbles()->Finish(false);
-			SetIsBouncing(true);
+			leftStickXOff = 0;
+			leftClamped = true;
+			stickFrame = 5;
 		}
-		else
-		{
-			GetBounce()->GetEMBubbles()->Finish();
-			if (GetBounce()->GetEMBubbles()->Done())
-			{
-				//Reseting particles for the bounce since its false
-				GetBounce()->GetEMBubbles()->KillParticles(m_ptPosition);
-			}			
-		}
+
+		SetIsBouncing(false);
+
+		//////// NEED TO UPDATE WITH CONTROLLER ( JORDAN )
+		if (GetIsInputStuck() == false)
+			m_fInputTimer = 0;
+
+
+		//Player would get "stuck" on walls and force its velocity to change (not intentional here, added elsewhere to fix other issues) InputTimer solves similar issues with no
+		// Conflicts
+		//if (GetIsInputStuck() == true
+		//	&& GetVelocity().y < 0)
+		//{
+		////	SetVelocity({ /*GetVelocity().x*/ 0, 0 });
+		//}
 
 
 		/////////////////////////////////////////////////
-		/////////////////Movement////////////////////////
-		//reset currframe to 0 & set the animation playing to true
-		if(IsDashing() == false)
+		/////////////////Controls////////////////////////
+
+		if (IsDashing() == false)///////////////Dash check begins
 		{
-			if(pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false))
+
+			//	if(GetIsFalling() == false
+			//		&& GetIsJumping() == false)
+			if (m_unCurrentState == RESTING_STATE
+				|| m_unCurrentState == LANDING_STATE)
 			{
-				stickFrame = 1;
-				m_ts.ResetCurrFrame();
-				
-				m_ts.SetPlaying(true);
+				/////////////////////////////////////////////////
+				/////////////////Friction////////////////////////
+
+				//Left Friction
+				if (GetVelocity().x < 0
+					&& (pInput->IsKeyDown(SGD::Key::Q) == false
+					&& leftClamped == true))
+				{
+
+					SetVelocity(SGD::Vector(GetVelocity().x + GetFriction(), GetVelocity().y));
+
+					if (GetVelocity().x > 0
+						&& GetVelocity().x < 10)
+					{
+						SetVelocity(SGD::Vector(0, GetVelocity().y));
+					}
+
+				}
+				//Right Friction
+				if (GetVelocity().x > 0
+					&& (pInput->IsKeyDown(SGD::Key::E) == false
+					&& leftClamped == true))
+				{
+
+					SetVelocity(SGD::Vector(GetVelocity().x - GetFriction(), GetVelocity().y));
+
+					if (GetVelocity().x < 0
+						&& GetVelocity().x > -100)
+					{
+						SetVelocity(SGD::Vector(0, GetVelocity().y));
+					}
+				}
 			}
-			//reset currframe to 0 & set the animation playing to false
-			if((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true) || pInput->IsKeyDown(SGD::Key::Space) == true)
+
+
+			if (pInput->IsKeyDown(SGD::Key::W) == true)
 			{
-				leftClamped = false;
+				GetBounce()->GetEMBubbles()->Finish(false);
+				SetIsBouncing(true);
 			}
-			if(pInput->IsKeyReleased(SGD::Key::E) == true || pInput->IsKeyReleased(SGD::Key::Q) == true)
+			else
 			{
-				if(m_unCurrentState != JUMPING_STATE && m_unCurrentState != FALLING_STATE)
+				GetBounce()->GetEMBubbles()->Finish();
+				if (GetBounce()->GetEMBubbles()->Done())
+				{
+					//Reseting particles for the bounce since its false
+					GetBounce()->GetEMBubbles()->KillParticles(m_ptPosition);
+				}
+			}
+
+
+			/////////////////////////////////////////////////
+			/////////////////Movement////////////////////////
+			//reset currframe to 0 & set the animation playing to true
+			if (IsDashing() == false)
+			{
+				if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false))
+				{
+					stickFrame = 1;
+					m_ts.ResetCurrFrame();
+
+					m_ts.SetPlaying(true);
+				}
+				//reset currframe to 0 & set the animation playing to false
+				if ((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true) || pInput->IsKeyDown(SGD::Key::Space) == true)
+				{
+					leftClamped = false;
+				}
+				if (pInput->IsKeyReleased(SGD::Key::E) == true || pInput->IsKeyReleased(SGD::Key::Q) == true)
+				{
+					if (m_unCurrentState != JUMPING_STATE && m_unCurrentState != FALLING_STATE)
+					{
+						m_ts.SetPlaying(false);
+						m_ts.ResetCurrFrame();
+						m_ts.SetCurrAnimation("Idle");
+						m_ts.SetPlaying(true);
+					}
+				}
+				else if (leftClamped == true && m_unCurrentState == RESTING_STATE)
 				{
 					m_ts.SetPlaying(false);
 					m_ts.ResetCurrFrame();
 					m_ts.SetCurrAnimation("Idle");
 					m_ts.SetPlaying(true);
+
 				}
-			}
-			else if(leftClamped == true && m_unCurrentState == RESTING_STATE)
-			{
-				m_ts.SetPlaying(false);
-				m_ts.ResetCurrFrame();
-				m_ts.SetCurrAnimation("Idle");
-				m_ts.SetPlaying(true);
-
-			}
 
 
-			//Right Movement
-			if(pInput->IsKeyDown(SGD::Key::E) == true
-				|| leftStickXOff > JOYSTICK_DEADZONE)
-			{
-
-				if(GetIsInputStuck() == true)
-					m_fInputTimer += elapsedTime;
-
-
-				if(m_fInputTimer > 0.20f
-					|| GetIsInputStuck() == false)
+				//Right Movement
+				if (pInput->IsKeyDown(SGD::Key::E) == true
+					|| leftStickXOff > JOYSTICK_DEADZONE)
 				{
+
+					if (GetIsInputStuck() == true)
+						m_fInputTimer += elapsedTime;
+
+
+					if (m_fInputTimer > 0.20f
+						|| GetIsInputStuck() == false)
+					{
 						if (GetVelocity().x < 0)
 						{
 							if (m_unCurrentState == RESTING_STATE
@@ -229,7 +247,7 @@ void Player::Update(float elapsedTime)
 							}
 							else
 							{
-								SetVelocity(SGD::Vector(GetVelocity().x + (2 *GetSpeed() * elapsedTime), GetVelocity().y));
+								SetVelocity(SGD::Vector(GetVelocity().x + (2 * GetSpeed() * elapsedTime), GetVelocity().y));
 							}
 						}
 						else
@@ -237,26 +255,26 @@ void Player::Update(float elapsedTime)
 							SetVelocity(SGD::Vector(GetVelocity().x + GetSpeed() * elapsedTime, GetVelocity().y));
 							//SetVelocity(SGD::Vector(1050, GetVelocity().y));
 						}
-					
-					SetDirection({ 1, 0 });
-				}
-				if(m_unCurrentState == RESTING_STATE)
-				{
-					m_ts.SetCurrAnimation("Walking");
-				}
-				SetFacingRight(true);
-			}
 
-			//Left Movement
-			if(pInput->IsKeyDown(SGD::Key::Q) == true
-				|| leftStickXOff < -JOYSTICK_DEADZONE)
-			{
-				if(GetIsInputStuck() == true)
-					m_fInputTimer += elapsedTime;
+						SetDirection({ 1, 0 });
+					}
+					if (m_unCurrentState == RESTING_STATE)
+					{
+						m_ts.SetCurrAnimation("Walking");
+					}
+					SetFacingRight(true);
+				}
 
-				if(m_fInputTimer > 0.20f
-					|| GetIsInputStuck() == false)
+				//Left Movement
+				if (pInput->IsKeyDown(SGD::Key::Q) == true
+					|| leftStickXOff < -JOYSTICK_DEADZONE)
 				{
+					if (GetIsInputStuck() == true)
+						m_fInputTimer += elapsedTime;
+
+					if (m_fInputTimer > 0.20f
+						|| GetIsInputStuck() == false)
+					{
 						if (GetVelocity().x > 0)
 						{
 							if (m_unCurrentState == RESTING_STATE
@@ -266,7 +284,7 @@ void Player::Update(float elapsedTime)
 							}
 							else
 							{
-								SetVelocity(SGD::Vector(GetVelocity().x - (2 * GetSpeed() * elapsedTime)	, GetVelocity().y));
+								SetVelocity(SGD::Vector(GetVelocity().x - (2 * GetSpeed() * elapsedTime), GetVelocity().y));
 							}
 						}
 						else
@@ -274,386 +292,387 @@ void Player::Update(float elapsedTime)
 							SetVelocity(SGD::Vector(GetVelocity().x - GetSpeed() * elapsedTime, GetVelocity().y));
 							//SetVelocity(SGD::Vector(-1050, GetVelocity().y));
 						}
-					SetDirection({ -1, 0 });
+						SetDirection({ -1, 0 });
+					}
+					if (m_unCurrentState == RESTING_STATE)
+					{
+						m_ts.SetCurrAnimation("Walking");
+					}
+					SetFacingRight(false);
 				}
-				if(m_unCurrentState == RESTING_STATE)
-				{
-					m_ts.SetCurrAnimation("Walking");
-				}
-				SetFacingRight(false);
 			}
-		}
 
-		m_fShotTimer += elapsedTime;
+			m_fShotTimer += elapsedTime;
 
 
-		if (pInput->IsKeyDown(SGD::Key::Tab) == true
-			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
-		{
-			GetDash()->GetEMDash()->Finish(false);
-			CastDash();
-			m_ts.SetPlaying(true);
-			m_ts.ResetCurrFrame();
-			m_ts.SetCurrAnimation("dashing");
-		}
-		else
-		{
-			GetDash()->GetEMDash()->Finish();
-			if (GetDash()->GetEMDash()->Done())
+			if (pInput->IsKeyDown(SGD::Key::Tab) == true
+				|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
 			{
-				//Reset Dash Particles to the players position
-				GetDash()->GetEMDash()->KillParticles(m_ptPosition);
-			}
-			
-		}
-		if(this->IsDashing() == false && m_ts.GetCurrAnimation() == "dashing")
-		{
-			m_ts.SetPlaying(true);
-			m_ts.ResetCurrFrame();
-			m_ts.SetCurrAnimation("Idle");
-		}
-
-
-
-		/////////////////////////////////////////////////
-		////////////////////Jump/////////////////////////
-
-		if (pInput->IsButtonDown(0, 0))
-		{
-			SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
-		}
-
-		if (pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)
-		{
-			int tempx = 0;
-		}
-
-		
-
-		if (pInput->IsKeyDown(SGD::Key::Space) == true
-			|| pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)	
-
-		{
-			m_fButtonTimer += elapsedTime;
-			//if(GetIsJumping() == false)
-			if (m_unCurrentState == RESTING_STATE)
-			{
+				GetDash()->GetEMDash()->Finish(false);
+				CastDash();
+				m_ts.SetPlaying(true);
 				m_ts.ResetCurrFrame();
-				m_ts.SetPlaying(false);
-				m_ts.SetCurrAnimation("Jump");
-				m_fJumpTimer = 0.3f;
-				m_unCurrentState = JUMPING_STATE;
-
-
-			}
-
-			if (m_unCurrentState == JUMPING_STATE)
-			{
-
-				if (m_fJumpTimer < 0.2f)
-				{
-					SetVelocity({ GetVelocity().x, GetVelocity().y + (2200 * elapsedTime) });
-					if(GetVelocity().y > 0)
-					{
-						SetVelocity({ GetVelocity().x, 0 });
-
-					}
-
-				}
-				else
-					SetVelocity({ GetVelocity().x, -600 });
-
-			}
-
-			if (m_fInputTimer <= 0.20f)
-			{
-				if (GetIsInputStuck() == true)
-				{
-
-					if (is_Right_Coll == true
-						 && m_fButtonTimer < 0.08)
-					{
-						SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
-						SetVelocity({ -900, -900 });
-					}
-
-					if (is_Left_Coll == true
-						&& m_fButtonTimer < 0.08)
-					{
-						SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
-						SetVelocity({ 900, -900 /*GetJumpVelCur() */ });
-					}
-				}
-			}
-		}
-
-		/////////////////////////////////////////////////
-		///////////////////Shoot/////////////////////////
-		
-		if (pInput->IsKeyDown(SGD::Key::R) == true
-			&& m_fShotTimer > 0.25f)
-		{
-			m_fShotTimer = 0.0f;
-			CreateProjectileMessage* pMsg = new CreateProjectileMessage(this);
-			pMsg->QueueMessage();
-			pMsg = nullptr;
-		}
-
-		float triggerOff = pInput->GetTrigger(0);
-			//= pInput->GetLeftJoystick(0).x;
-
-
-		if (pInput->IsKeyDown(SGD::Key::D) == true
-			|| triggerOff >0 /*JOYSTICK_DEADZONE*/)
-		{
-
-			if (m_bHawkCast == false
-				&& m_fHawkTimer > 1.0f)
-			{
-
-				m_bHawkCast = true;
-				CreateHawkMessage* pMsg = new CreateHawkMessage(this);
-				pMsg->QueueMessage();
-				pMsg = nullptr;
+				m_ts.SetCurrAnimation("dashing");
 			}
 			else
 			{
-				if (GetHawkPtr() != nullptr)
+				GetDash()->GetEMDash()->Finish();
+				if (GetDash()->GetEMDash()->Done())
 				{
-					float rightStickXOff = pInput->GetRightJoystick(0).x;
-					float rightStickYOff = pInput->GetRightJoystick(0).y;
+					//Reset Dash Particles to the players position
+					GetDash()->GetEMDash()->KillParticles(m_ptPosition);
+				}
+
+			}
+			if (this->IsDashing() == false && m_ts.GetCurrAnimation() == "dashing")
+			{
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Idle");
+			}
 
 
-				//if (pInput->IsKeyDown(SGD::Key::LeftArrow) == true
-				//	|| rightStickXOff < 0)
-				//{
-				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff ) * elapsedTime, GetVelocity().y));
-				//}
-				//if (pInput->IsKeyDown(SGD::Key::RightArrow) == true
-				//	|| rightStickXOff > 0)
-				//{
-				//	GetHawkPtr()->SetVelocity(SGD::Vector(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetVelocity().y)));
-				//}
-				//
-				//if (pInput->IsKeyDown(SGD::Key::UpArrow) == true
-				//	|| rightStickYOff < 0)
-				//{
-				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff ) * elapsedTime));
-				//}
-				//if (pInput->IsKeyDown(SGD::Key::DownArrow) == true
-				//	|| rightStickYOff > 0)
-				//{
-				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
-				//}
-				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetVelocity().y));
-				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
 
-					GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
-					// X Friction
+			/////////////////////////////////////////////////
+			////////////////////Jump/////////////////////////
 
-					if (rightStickXOff == 0)
-					{
+			if (pInput->IsButtonDown(0, 0))
+			{
+				SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
+			}
 
-						if (GetHawkPtr()->GetVelocity().x < 0)
-						{
-							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
-
-							if (GetHawkPtr()->GetVelocity().x > 0.01f)
-							{
-								GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
-
-							}
-						}
-						if (GetHawkPtr()->GetVelocity().x > 0)
-						{
-							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
-
-							if (GetHawkPtr()->GetVelocity().x < -0.01f)
-							{
-								GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
-
-							}
-						}
-
-					}
+			if (pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)
+			{
+				int tempx = 0;
+			}
 
 
-					// Y Friction
 
-					if (rightStickYOff == 0)
-					{
-						if (GetHawkPtr()->GetVelocity().y < 0)
-						{
-							//GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + GetHawkPtr()->GetAirFriction()));
+			if (pInput->IsKeyDown(SGD::Key::Space) == true
+				|| pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)
 
-							if (GetHawkPtr()->GetVelocity().y > 0.007f)
-							{
-
-							}
-							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
-
-						}
-						if (GetHawkPtr()->GetVelocity().y > 0)
-						{
-							//GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y - GetHawkPtr()->GetAirFriction()));
-
-							if (GetHawkPtr()->GetVelocity().y < -0.007f)
-							{
-
-
-							}
-
-							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
-
-						}
-
-					}
-
+			{
+				m_fButtonTimer += elapsedTime;
+				//if(GetIsJumping() == false)
+				if (m_unCurrentState == RESTING_STATE)
+				{
+					m_ts.ResetCurrFrame();
+					m_ts.SetPlaying(false);
+					m_ts.SetCurrAnimation("Jump");
+					m_fJumpTimer = 0.3f;
+					m_unCurrentState = JUMPING_STATE;
 
 
 				}
 
+				if (m_unCurrentState == JUMPING_STATE)
+				{
+
+					if (m_fJumpTimer < 0.2f)
+					{
+						SetVelocity({ GetVelocity().x, GetVelocity().y + (2200 * elapsedTime) });
+						if (GetVelocity().y > 0)
+						{
+							SetVelocity({ GetVelocity().x, 0 });
+
+						}
+
+					}
+					else
+						SetVelocity({ GetVelocity().x, -600 });
+
+				}
+
+				if (m_fInputTimer <= 0.20f)
+				{
+					if (GetIsInputStuck() == true)
+					{
+
+						if (is_Right_Coll == true
+							&& m_fButtonTimer < 0.08)
+						{
+							SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
+							SetVelocity({ -900, -900 });
+						}
+
+						if (is_Left_Coll == true
+							&& m_fButtonTimer < 0.08)
+						{
+							SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
+							SetVelocity({ 900, -900 /*GetJumpVelCur() */ });
+						}
+					}
+				}
 			}
 
-		}
-		if ( triggerOff <= 0
-			&& pInput->IsKeyDown(SGD::Key::D) == false)
-		{
-			m_bHawkCast = false;
+			/////////////////////////////////////////////////
+			///////////////////Shoot/////////////////////////
 
-			//if HawkPtr != null set to NULL
-			if (GetHawkPtr() != nullptr)
+			if (pInput->IsKeyDown(SGD::Key::R) == true
+				&& m_fShotTimer > 0.25f)
 			{
-				m_fHawkTimer = 0.0f;
-
-
-				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ GetHawkPtr() };
+				m_fShotTimer = 0.0f;
+				CreateProjectileMessage* pMsg = new CreateProjectileMessage(this);
 				pMsg->QueueMessage();
 				pMsg = nullptr;
-
-				SetHawkPtr(nullptr);
 			}
 
-		}
+			float triggerOff = pInput->GetTrigger(0);
+			//= pInput->GetLeftJoystick(0).x;
 
-		/////////////////////////////////////////////////
-		///////////////////Spray/////////////////////////
 
-		if (pInput->IsKeyDown(SGD::Key::F) == true
-			/*&& m_fShotTimer > 0.25f*/)
-		{
-			//m_fShotTimer = 0.0f;
-			if (m_fIceTimer > .05f)
+			if (pInput->IsKeyDown(SGD::Key::D) == true
+				|| triggerOff > 0 /*JOYSTICK_DEADZONE*/)
 			{
-				m_fIceTimer = 0;
-				CreateSprayMessage* pMsg = new CreateSprayMessage(this);
-				pMsg->QueueMessage();
-				pMsg = nullptr;
+
+				if (m_bHawkCast == false
+					&& m_fHawkTimer > 1.0f)
+				{
+
+					m_bHawkCast = true;
+					CreateHawkMessage* pMsg = new CreateHawkMessage(this);
+					pMsg->QueueMessage();
+					pMsg = nullptr;
+				}
+				else
+				{
+					if (GetHawkPtr() != nullptr)
+					{
+						float rightStickXOff = pInput->GetRightJoystick(0).x;
+						float rightStickYOff = pInput->GetRightJoystick(0).y;
+
+
+						//if (pInput->IsKeyDown(SGD::Key::LeftArrow) == true
+						//	|| rightStickXOff < 0)
+						//{
+						//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff ) * elapsedTime, GetVelocity().y));
+						//}
+						//if (pInput->IsKeyDown(SGD::Key::RightArrow) == true
+						//	|| rightStickXOff > 0)
+						//{
+						//	GetHawkPtr()->SetVelocity(SGD::Vector(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetVelocity().y)));
+						//}
+						//
+						//if (pInput->IsKeyDown(SGD::Key::UpArrow) == true
+						//	|| rightStickYOff < 0)
+						//{
+						//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff ) * elapsedTime));
+						//}
+						//if (pInput->IsKeyDown(SGD::Key::DownArrow) == true
+						//	|| rightStickYOff > 0)
+						//{
+						//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
+						//}
+						//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetVelocity().y));
+						//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
+
+						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
+						// X Friction
+
+						if (rightStickXOff == 0)
+						{
+
+							if (GetHawkPtr()->GetVelocity().x < 0)
+							{
+								GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
+
+								if (GetHawkPtr()->GetVelocity().x > 0.01f)
+								{
+									GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
+
+								}
+							}
+							if (GetHawkPtr()->GetVelocity().x > 0)
+							{
+								GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
+
+								if (GetHawkPtr()->GetVelocity().x < -0.01f)
+								{
+									GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
+
+								}
+							}
+
+						}
+
+
+						// Y Friction
+
+						if (rightStickYOff == 0)
+						{
+							if (GetHawkPtr()->GetVelocity().y < 0)
+							{
+								//GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + GetHawkPtr()->GetAirFriction()));
+
+								if (GetHawkPtr()->GetVelocity().y > 0.007f)
+								{
+
+								}
+								GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
+
+							}
+							if (GetHawkPtr()->GetVelocity().y > 0)
+							{
+								//GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y - GetHawkPtr()->GetAirFriction()));
+
+								if (GetHawkPtr()->GetVelocity().y < -0.007f)
+								{
+
+
+								}
+
+								GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
+
+							}
+
+						}
+
+
+
+					}
+
+				}
+
+			}
+			if (triggerOff <= 0
+				&& pInput->IsKeyDown(SGD::Key::D) == false)
+			{
+				m_bHawkCast = false;
+
+				//if HawkPtr != null set to NULL
+				if (GetHawkPtr() != nullptr)
+				{
+					m_fHawkTimer = 0.0f;
+
+
+					DestroyEntityMessage* pMsg = new DestroyEntityMessage{ GetHawkPtr() };
+					pMsg->QueueMessage();
+					pMsg = nullptr;
+
+					SetHawkPtr(nullptr);
+				}
+
+			}
+
+			/////////////////////////////////////////////////
+			///////////////////Spray/////////////////////////
+
+			if (pInput->IsKeyDown(SGD::Key::F) == true
+				/*&& m_fShotTimer > 0.25f*/)
+			{
+				//m_fShotTimer = 0.0f;
+				if (m_fIceTimer > .05f)
+				{
+					m_fIceTimer = 0;
+					CreateSprayMessage* pMsg = new CreateSprayMessage(this);
+					pMsg->QueueMessage();
+					pMsg = nullptr;
+				}
+			}
+
+
+
+
+			/////////////////////////////////////////////////
+			//////////////Constant Updates///////////////////
+
+			if (m_unCurrentState != JUMPING_STATE)
+			{
+				SetGravity(-3000);
+				SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
+			}
+
+			if ((m_unCurrentState == JUMPING_STATE
+				&& m_fJumpTimer == 0.0f
+				|| pInput->IsKeyDown(SGD::Key::Space) == false
+				&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
+				&& GetVelocity().y <= 0
+				&& m_unCurrentState == JUMPING_STATE
+				/*&& GetIsInputStuck() == true*/)
+			{
+
+				m_unCurrentState = FALLING_STATE;
+
+				if (GetVelocity().y < 0)
+				{
+					//SetVelocity({ GetVelocity().x, 0 });
+
+				}
 			}
 		}
 
 
-
-
-		/////////////////////////////////////////////////
-		//////////////Constant Updates///////////////////
-
-		if (m_unCurrentState != JUMPING_STATE)
+		if (m_unCurrentState == LANDING_STATE
+			&& m_fLandTimer <= 0
+			&& pInput->IsKeyDown(SGD::Key::Space) == false
+			&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false
+			)
 		{
-			SetGravity(-3000);
-			SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
+			m_ts.SetCurrAnimation("Idle");
+			m_unCurrentState = RESTING_STATE;
 		}
 
-		if ((m_unCurrentState == JUMPING_STATE
-			&& m_fJumpTimer == 0.0f
-			|| pInput->IsKeyDown(SGD::Key::Space) == false
+		//Buffer Input for Wall Jump so you can't jump while holding the JUMP button
+		if (pInput->IsKeyDown(SGD::Key::Space) == false
 			&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
-			&& GetVelocity().y <= 0
-			&& m_unCurrentState == JUMPING_STATE
-			/*&& GetIsInputStuck() == true*/)
 		{
-	
-			m_unCurrentState = FALLING_STATE;
+			m_fButtonTimer = 0;
 
-			if (GetVelocity().y < 0)
+		}
+
+		if (GetVelocity().y > 1050)
+		{
+			SetVelocity(SGD::Vector(GetVelocity().x, 1050));
+		}
+
+		if (m_unCurrentState == RESTING_STATE
+			|| m_unCurrentState == LANDING_STATE)
+		{
+
+
+			if (GetVelocity().x > 850)
 			{
-				//SetVelocity({ GetVelocity().x, 0 });
+				if (IsDashing() == false)
+					SetVelocity(SGD::Vector(850, GetVelocity().y));
+			}
 
+			if (GetVelocity().x < -850)
+			{
+				if (IsDashing() == false)
+					SetVelocity(SGD::Vector(-850, GetVelocity().y));
 			}
 		}
-	}
-	
-
-	if (m_unCurrentState == LANDING_STATE
-		&& m_fLandTimer <= 0
-		&& pInput->IsKeyDown(SGD::Key::Space) == false
-		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false
-		)
-	{
-		m_ts.SetCurrAnimation("Idle");
-		m_unCurrentState = RESTING_STATE;
-	}
-
-	//Buffer Input for Wall Jump so you can't jump while holding the JUMP button
-	if (pInput->IsKeyDown(SGD::Key::Space) == false
-		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
-	{
-		m_fButtonTimer = 0;
-
-	}
-
-	if (GetVelocity().y > 1050)
-	{
-		SetVelocity(SGD::Vector(GetVelocity().x, 1050));
-	}
-
-	if (m_unCurrentState == RESTING_STATE
-		|| m_unCurrentState == LANDING_STATE)
-	{
-
-
-		if (GetVelocity().x > 850)
+		else
 		{
-			if (IsDashing() == false)
-				SetVelocity(SGD::Vector(850, GetVelocity().y));
+			if (GetVelocity().x > 1150)
+			{
+				if (IsDashing() == false)
+					SetVelocity(SGD::Vector(1150, GetVelocity().y));
+			}
+
+			if (GetVelocity().x < -1150)
+			{
+				if (IsDashing() == false)
+					SetVelocity(SGD::Vector(-1150, GetVelocity().y));
+			}
+
 		}
 
-		if (GetVelocity().x < -850)
-		{
-			if (IsDashing() == false)
-				SetVelocity(SGD::Vector(-850, GetVelocity().y));
-		}
+		SetIsInputStuck(false);
+
+		is_Left_Coll = false;
+		is_Right_Coll = false;
+
+		//ASSESS RANGE event for those checking to see range of player
+		SGD::Event* pATEvent = new SGD::Event("ASSESS_PLAYER_RANGE", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
+
+		Unit::Update(elapsedTime);
+		AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
+
+		SetGravity(-3000);
 	}
-	else
-	{
-		if (GetVelocity().x > 1150)
-		{
-			if (IsDashing() == false)
-				SetVelocity(SGD::Vector(1150, GetVelocity().y));
-		}
-
-		if (GetVelocity().x < -1150)
-		{
-			if (IsDashing() == false)
-				SetVelocity(SGD::Vector(-1150, GetVelocity().y));
-		}
-
-	}
-
-	SetIsInputStuck(false);
-
-	is_Left_Coll = false;
-	is_Right_Coll = false;
-
-	//ASSESS RANGE event for those checking to see range of player
-	SGD::Event* pATEvent = new SGD::Event("ASSESS_PLAYER_RANGE", nullptr, this);
-	SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-	pATEvent = nullptr;
-
-	Unit::Update(elapsedTime);
-	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
-
-	SetGravity(-3000);
 }
 
 void Player::Render(void)
@@ -702,6 +721,13 @@ void Player::Render(void)
 
 	font.DrawString(output.str().c_str(), 60, 25, 1, SGD::Color{ 255, 255, 0, 0 });
 
+	if (m_bDead)
+	{
+		// Draw a fading rectangle
+		unsigned char alpha = (char)(((2.0f - m_fDeathTimer) / 2.0f) * 255.0f);
+		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
+		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+	}
 }
 
 
@@ -783,7 +809,8 @@ void Player::HandleCollision(const IEntity* pOther)
 	if (pOther->GetType() == Entity::ENT_DEATH)
 	{
 		//Kill the player
-		m_ptPosition = m_ptStartPosition;
+		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}
 
 	if (pOther->GetType() == Entity::ENT_RIGHT_RAMP)
@@ -1413,13 +1440,27 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	//This is usually back to the level start
 	if(pEvent->GetEventID() == "KILL_PLAYER")
 	{
-		if(m_bHasArmor == false)
+		//Kill the player
+		if (!m_bDead && m_fArmorTimer <= 0.0f)
 		{
-			m_ptPosition = m_ptStartPosition;
+			KillPlayer();
 		}
-		else
-		{
-			m_bHasArmor = false;
-		}
+	}
+}
+
+void Player::KillPlayer()
+{
+	if (m_bHasArmor)
+	{
+		// Jump and remove armor
+		m_bHasArmor = false;
+		m_fArmorTimer = 2.0f;
+		m_vtVelocity.y -= 2500;
+	}
+	else
+	{
+		m_fDeathTimer = 2.0f;
+		m_bDead = true;
+		// TODO Add effects
 	}
 }
