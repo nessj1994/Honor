@@ -177,7 +177,7 @@ private:
 	bool m_bHawkExplode = false;
 	//Hawk Return
 	Emitter* m_emHawkReturn;
-	bool Return;
+	bool m_bReturningHawk = false;
 };
 
 
