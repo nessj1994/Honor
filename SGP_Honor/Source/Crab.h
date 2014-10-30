@@ -22,6 +22,7 @@ private:
 	float leftSlamTimer = 0.0f;
 	float rightSlamTimer = 0.0f;
 	float bubbleTimer = 0.0f;
+	float bubbleSpawn = 0.0f;
 	SGD::Point m_ptLeftArm;
 	SGD::Size m_szLeftArm;
 	SGD::Point m_ptRightArm;

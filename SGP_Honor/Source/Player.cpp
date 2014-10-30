@@ -33,6 +33,8 @@
 Player::Player() : Listener(this)
 {
 	Listener::RegisterForEvent("KILL_PLAYER");
+	Listener::RegisterForEvent("BOUNCE_VERTICAL");
+	Listener::RegisterForEvent("BOUNCE_HORIZONTAL");
 	SetDirection({ 1, 0 });
 	m_pDash = new Dash();
 	m_pBounce = new Bounce();
@@ -1454,5 +1456,18 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		{
 			m_bHasArmor = false;
 		}
+	}
+
+	if (pEvent->GetEventID() == "BOUNCE_VERTICAL")
+	{
+		SetVelocity({ GetVelocity().x, -3000});
+		SetPosition({ GetPosition().x, GetPosition().y - 1 });
+	}
+
+	if (pEvent->GetEventID() == "BOUNCE_HORIZONTAL")
+	{
+		SetVelocity({ 10000.0f * (*(float*)pEvent->GetData()), -1000 });
+		SetPosition({ GetPosition().x, GetPosition().y - 10 });
+		
 	}
 }

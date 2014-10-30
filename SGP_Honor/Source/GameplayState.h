@@ -111,7 +111,7 @@ public:
 	void SetHonorVector(std::vector<bool> _value);
 	void SaveHonorVector();
 	void LoadHonorVector();
-	bool GetHonorValue(int _index);
+	bool GetHonorValue(unsigned int _index);
 	unsigned int GetHonorVectorSize();
 
 private:
@@ -132,6 +132,8 @@ private:
 	Player* CreatePlayer(void);
 	Entity* CreateProjectile(Entity* pOwner) const;
 	Entity* CreateGravProjectile(Entity* pOwner) const;
+	Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const;
+	Entity* GameplayState::CreateVertBubble(Entity* pOwner) const;
 	Entity* CreateSpray(Entity* pOwner) const;
 	Hawk* CreateHawk(Entity* pOwner) const;
 
