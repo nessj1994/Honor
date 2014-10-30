@@ -1040,7 +1040,7 @@ void Player::UpdateDeath(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	m_fDeathTimer -= elapsedTime;
-	if (m_fDeathTimer <= 0.0f || pInput->IsKeyPressed(SGD::Key::Space))
+	if (m_fDeathTimer <= 0.0f)
 	{
 		m_bDead = false;
 		m_fDeathTimer = 0.0f;

@@ -87,13 +87,14 @@ public:
 //	bool GetIsJumping(void)const { return is_Jumping; }
 //	bool GetIsFalling(void)const { return is_Falling; }
 	bool GetIsInputStuck(void)const { return is_Stuck; }
-
+	bool GetDead(void) const { return m_bDead; }
 
 
 	//Floats
 	float GetDashTime(void) const { return m_fDashTime; }
 	//float GetJumpCapTime(void) const { return m_fJumpVelCap; }
 	float GetJumpVelCur(void) const { return m_fJumpVelCur; }
+	float GetDeathTimer(void) const { return m_fDeathTimer; }
 
 	//Abilities
 	Dash* GetDash(void) const { return m_pDash; }
