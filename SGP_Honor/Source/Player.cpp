@@ -220,14 +220,6 @@ void Player::Render(void)
 	//Draw the title
 
 	font.DrawString(output.str().c_str(), 60, 25, 1, SGD::Color{ 255, 255, 0, 0 });
-
-	if (m_bDead)
-	{
-		// Draw a fading rectangle
-		unsigned char alpha = (char)(((2.0f - m_fDeathTimer) / 2.0f) * 255.0f);
-		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
-		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
-	}
 }
 
 SGD::Rectangle Player::GetRect(void) const
@@ -943,7 +935,7 @@ void Player::KillPlayer()
 	}
 	else
 	{
-		m_fDeathTimer = 2.0f;
+		m_fDeathTimer = 0.5f;
 		m_bDead = true;
 		// TODO Add effects
 	}
@@ -954,7 +946,7 @@ void Player::UpdateDeath(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	m_fDeathTimer -= elapsedTime;
-	if (m_fDeathTimer <= 0.0f || pInput->IsKeyPressed(SGD::Key::Space))
+	if (m_fDeathTimer <= 0.0f)
 	{
 		m_bDead = false;
 		m_fDeathTimer = 0.0f;

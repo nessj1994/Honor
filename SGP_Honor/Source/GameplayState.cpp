@@ -109,7 +109,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	//Load Audio
 	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/HonorBGM.xwm");
-	pAudio->PlayAudio(m_hBGM, true);
+	//pAudio->PlayAudio(m_hBGM, true);
 
 	//These are only for testing and will be removed later
 	//m_pDoor = new Door();
@@ -127,11 +127,11 @@ void GameplayState::Enter(void) //Load Resources
 	//m_pStatue = new HintStatue();
 	//m_pStatue->SetMessageString("This is a test string");
 
-	m_pSquid = new Squid();
-	m_pPouncer = new Pouncer();
-	m_pJellyfish = new Jellyfish();
-	m_pJellyfish2 = new Jellyfish();
-	m_pJellyfish2->SetPosition({900, 700});
+	//m_pSquid = new Squid();
+	//m_pPouncer = new Pouncer();
+	//m_pJellyfish = new Jellyfish();
+	//m_pJellyfish2 = new Jellyfish();
+	//m_pJellyfish2->SetPosition({900, 700});
 
 
 
@@ -180,10 +180,10 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("HubLevel");
+	LoadLevel("Level1_5");
 
-	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
-	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
+	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
+	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 //	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
 //	m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
 
@@ -240,14 +240,14 @@ void GameplayState::Exit(void)
 	//if (m_pPendulum != nullptr)
 	//	m_pPendulum->Release();
 
-	delete m_pSquid;
+	//delete m_pSquid;
 
-	
-	delete m_pPouncer;
+	//
+	//delete m_pPouncer;
 
-	delete m_pJellyfish;
+	//delete m_pJellyfish;
 
-	delete m_pJellyfish2;
+	//delete m_pJellyfish2;
 	//Create local references to the SGD Wrappers
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -423,6 +423,14 @@ void GameplayState::Render(void)
 	m_pEmitter2->Render();
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
+
+	if (m_pPlayer->GetDead())
+	{
+		// Draw a fading rectangle
+		unsigned char alpha = (char)(((0.5f - m_pPlayer->GetDeathTimer()) / 0.5f) * 255.0f);
+		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
+		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+	}
 
 
 }

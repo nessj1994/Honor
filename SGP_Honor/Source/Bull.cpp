@@ -1,4 +1,6 @@
 #include "Bull.h"
+#include "AnimationEngine.h"
+#include "Camera.h"
 
 
 ///////////////////////////////////////////////////
@@ -6,7 +8,9 @@
 // -Setup the size
 Bull::Bull()
 {
-	SetSize({ 128.0f, 128.0f });
+	SetSize({ 160.0f, 96.0f });
+	AnimationEngine::GetInstance()->LoadAnimation("Assets/Bull_Animation.xml");
+	m_ts.SetCurrAnimation("Bull_Charging");
 }
 
 ///////////////////////////////////////////////////
@@ -22,6 +26,7 @@ Bull::~Bull()
 void Bull::Update(float elapsedTime)
 {
 	Boss::Update(elapsedTime);
+	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 }
 
 ///////////////////////////////////////////////////
@@ -30,4 +35,5 @@ void Bull::Update(float elapsedTime)
 void Bull::Render(void)
 {
 	Boss::Render();
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, m_bFacingRight);
 }

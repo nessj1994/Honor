@@ -586,6 +586,22 @@ bool Level::LoadLevel(const char * _path)
 					std::string level = pArg->Attribute("value");
 					GameplayState::GetInstance()->CreateTeleporter(x, y, level);
 				}
+				case 19: // Enemy
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					int type;
+					pArg->Attribute("value", &type);
+					GameplayState::GetInstance()->CreateEnemy(x, y, type);
+					break;
+				}
+				case 20: // Boss
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					int type;
+					pArg->Attribute("value", &type);
+					GameplayState::GetInstance()->CreateBoss(x, y, type);
+					break;
+				}
 			}
 
 			// Go to next node
