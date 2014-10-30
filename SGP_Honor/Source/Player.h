@@ -49,6 +49,7 @@ public:
 	void LaserCollision(const IEntity* pOther);
 	unsigned int GetCurrentState(void) const { return m_unCurrentState; }
 	void JellyfishCollision(const IEntity* pOther);
+	void KillPlayer();
 
 
 
@@ -120,6 +121,7 @@ private:
 	bool is_Right_Coll = false;
 	bool is_Platform = false;
 	bool is_Ramp = false;
+	bool m_bDead = false;
 
 	float m_fDashTime = 0.0f;
 	float m_fIceTimer = 0.0f;
@@ -128,6 +130,8 @@ private:
 	float m_fJumpTimer = 0.4f;
 	float m_fLandTimer = 0.0f;
 	float m_fButtonTimer = 0.0f;
+	float m_fDeathTimer = 0.0f;
+	float m_fArmorTimer = 0.0f;
 
 	float m_fShotTimer = 0.20f;
 	float m_fInputTimer = 0.0f;

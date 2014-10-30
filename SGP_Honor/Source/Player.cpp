@@ -62,9 +62,31 @@ void Player::Update(float elapsedTime)
 	m_emHonor->Update(elapsedTime);
 	//
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+	if (m_bDead)
+	{
+		m_fDeathTimer -= elapsedTime;
+		if (m_fDeathTimer <= 0.0f || pInput->IsAnyKeyPressed())
+		{
+			m_bDead = false;
+			m_fDeathTimer = 0.0f;
+			m_ptPosition = m_ptStartPosition;
+			SetVelocity({ 0.0f, 0.0f });
+		}
+	}
+	else
+	{
+		// Update armor timer
+		if (m_fArmorTimer > 0)
+		{
+			m_fArmorTimer -= elapsedTime;
+		}
 
 	//Timers
 	m_fIceTimer += elapsedTime;
+		//Emitter Updates
+		m_pBounce->GetEMBubbles()->Update(elapsedTime);
+		m_pDash->GetEMDash()->Update(elapsedTime);
+		m_emHonor->Update(elapsedTime);
 
 	m_fJumpTimer -= elapsedTime;
 
