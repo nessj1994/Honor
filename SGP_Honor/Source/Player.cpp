@@ -1342,7 +1342,7 @@ void Player::UpdateHawk(float elapsedTime)
 			&& m_fHawkTimer > 1.0f)
 		{
 			//Dont spawn another hawk until particles are done
-			if (m_emFeatherExplosion->Done())
+			if (!m_bReturningHawk)
 			{
 				m_bHawkCast = true;
 				m_bHawkExplode = false;
