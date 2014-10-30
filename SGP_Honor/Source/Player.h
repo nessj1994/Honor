@@ -35,6 +35,21 @@ public:
 	////////////// Listener Interface //////////////
 	void HandleEvent(const SGD::Event* pEvent);
 
+	////////////////////////////////////////////////
+	/////////////////////Update methods/////////////
+	void UpdateDeath(float elapsedTime);
+	void UpdateArmor(float elapsedTime);
+	void UpdateEmitters(float elapsedTime);
+	void UpdateTimers(float elapsedTime);
+	void UpdateFriction(float elapsedTime, bool leftClamped);
+	void UpdateBounce(float elapsedTime);
+	void UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped, float leftStickXOff);
+	void UpdateDash(float elapsedTime);
+	void UpdateJump(float elapsedTime);
+	void UpdateHawk(float elapsedTime);
+	void UpdateSpray(float elapsedTime);
+	void UpdateConstants(float elapsedTime);
+	void UpdateVelocity(float elapsedTime);
 
 	////////////////////////////////////////////////
 	/////////////////////Methods///////////////////
