@@ -41,6 +41,7 @@ class Squid;
 class Pouncer;
 class Bull;
 class Jellyfish;
+class Crab;
 
 //////////////////////////////////////////////////
 // GameplayState class
@@ -104,6 +105,7 @@ public:
 	void CreateTeleporter(int _x, int _y, std::string _level);
 
 	void CreateBullBoss(int _x, int _y);
+	void CreateCrabBoss();
 
 	void LoadLevel(std::string _level);
 	void SetHonorVector(std::vector<bool> _value);
@@ -183,10 +185,10 @@ private:
 	//Honor * m_pHonor = nullptr;
 	//Armor * m_pArmor = nullptr;
 
-	Squid* m_pSquid = nullptr;
+	/*Squid* m_pSquid = nullptr;
 	Pouncer* m_pPouncer = nullptr;
 	Jellyfish* m_pJellyfish = nullptr;
-	Jellyfish* m_pJellyfish2 = nullptr;
+	Jellyfish* m_pJellyfish2 = nullptr;*/
 
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
 

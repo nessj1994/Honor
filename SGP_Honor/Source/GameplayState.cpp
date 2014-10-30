@@ -47,6 +47,7 @@
 #include "Jellyfish.h"
 #include "Teleporter.h"
 #include "Bull.h"
+#include "Crab.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -127,13 +128,11 @@ void GameplayState::Enter(void) //Load Resources
 	//m_pStatue = new HintStatue();
 	//m_pStatue->SetMessageString("This is a test string");
 
-	m_pSquid = new Squid();
+	/*m_pSquid = new Squid();
 	m_pPouncer = new Pouncer();
 	m_pJellyfish = new Jellyfish();
 	m_pJellyfish2 = new Jellyfish();
-	m_pJellyfish2->SetPosition({900, 700});
-
-
+	m_pJellyfish2->SetPosition({900, 700});*/
 
 	//Create player with factory method
 	m_pPlayer = CreatePlayer();
@@ -169,10 +168,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pEntities->AddEntity(m_pHonor, Entity::ENT_HONOR);
 	m_pEntities->AddEntity(m_pPendulum, Entity::ENT_PENDULUM);
 	m_pEntities->AddEntity(m_pStatue, Entity::ENT_STATUE);
-	m_pDoor->SetActivator(m_pSwitch);
-
-
-
+	m_pDoor->SetActivator(m_pSwitch);*/
 
 	//For Particle Testing*/
 	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/Bla.xml", "Test", { 131, 673 });
@@ -180,15 +176,16 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("HubLevel");
+	LoadLevel("Level4_1");
 
-	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
-	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
+	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
+	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 //	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
 //	m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
 
 	// Temporary
 	//CreateBullBoss(500, 400);
+	//CreateCrabBoss();
 }
 
 
@@ -240,14 +237,14 @@ void GameplayState::Exit(void)
 	//if (m_pPendulum != nullptr)
 	//	m_pPendulum->Release();
 
-	delete m_pSquid;
+	/*delete m_pSquid;
 
 	
 	delete m_pPouncer;
 
 	delete m_pJellyfish;
 
-	delete m_pJellyfish2;
+	delete m_pJellyfish2;*/
 	//Create local references to the SGD Wrappers
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -1095,6 +1092,13 @@ void GameplayState::CreateBullBoss(int _x, int _y)
 	mBull->SetPosition({ (float)_x, (float)_y });
 	m_pEntities->AddEntity(mBull, Entity::ENT_BOSS_BULL);
 	mBull->Release();
+}
+
+void GameplayState::CreateCrabBoss()
+{
+	Crab * mCrab = new Crab();
+	m_pEntities->AddEntity(mCrab, Entity::ENT_BOSS_CRAB);
+	mCrab->Release();
 }
 
 #pragma endregion
