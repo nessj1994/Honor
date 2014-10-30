@@ -31,6 +31,9 @@ public:
 	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
 
+
+	SGD::Rectangle GetSwingRect(void) const { return swingRect; }
+
 	////////////////////////////////////////////////
 	////////////// Listener Interface //////////////
 	void HandleEvent(const SGD::Event* pEvent);
@@ -50,6 +53,7 @@ public:
 	void UpdateSpray(float elapsedTime);
 	void UpdateConstants(float elapsedTime);
 	void UpdateVelocity(float elapsedTime);
+	void UpdatePlayerSwing(float elapsedTime);
 
 	////////////////////////////////////////////////
 	/////////////////////Methods///////////////////
@@ -62,6 +66,8 @@ public:
 	void RightRampCollision(const IEntity* pOther);
 	void GeyserCollision(const IEntity* pOther);
 	void LaserCollision(const IEntity* pOther);
+	void SwingCollision(const IEntity* pOther);
+
 	unsigned int GetCurrentState(void) const { return m_unCurrentState; }
 	void JellyfishCollision(const IEntity* pOther);
 	void KillPlayer();
@@ -151,6 +157,7 @@ private:
 	float m_fShotTimer = 0.20f;
 	float m_fInputTimer = 0.0f;
 	float m_fHawkTimer = 1.0f;
+	float m_fSwingTimer = 0.0f;
 
 	unsigned int m_unCurrentState = 0;
 	unsigned int m_unHonorCollected = 0;
@@ -169,7 +176,7 @@ private:
 	//Honor emitter for HUD
 	Emitter* m_emHonor;
 
-	//SGD::Rectangle = {}
+	SGD::Rectangle swingRect = {0,0,0,0};
 };
 
 

@@ -108,7 +108,7 @@ void Player::Update(float elapsedTime)
 
 
 			UpdateBounce(elapsedTime);
-
+			UpdatePlayerSwing(elapsedTime);
 
 			/////////////////////////////////////////////////
 			/////////////////Movement////////////////////////
@@ -193,6 +193,8 @@ void Player::Render(void)
 		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
 		SGD::Color::Color(255, 255, 0, 0));
 
+	Camera::GetInstance()->Draw(SGD::Rectangle(swingRect.left, swingRect.top, swingRect.right, swingRect.bottom),
+		SGD::Color::Color(255, 255, 255, 0));
 
 	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight());
 
@@ -524,6 +526,47 @@ void Player::BasicCollision(const IEntity* pOther)
 	}
 
 }
+
+void Player::SwingCollision(const IEntity* pOther)
+{
+
+//	RECT rTempSwing;
+//	rTempSwing.left = swingRect.left;
+//	rTempSwing.top = swingRect.top;
+//	rTempSwing.right = swingRect.right;
+//	rTempSwing.bottom = swingRect.bottom;
+
+
+	//RECT rObject;
+	//rObject.left = (LONG)pOther->GetRect().left;
+	//rObject.top = (LONG)pOther->GetRect().top;
+	//rObject.right = (LONG)pOther->GetRect().right;
+	//rObject.bottom = (LONG)pOther->GetRect().bottom;
+
+	//RECT rIntersection = {};
+
+	//IntersectRect(&rIntersection, &rObject, &rTempSwing);
+
+	//int nIntersectWidth = rIntersection.right - rIntersection.left;
+	//int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+	//if (nIntersectHeight > nIntersectWidth)
+	//{
+	//	//if switch, activate switch
+	//	//if evenmy call event to kill enemy
+	//	SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
+
+	//}
+
+	//if (nIntersectHeight < nIntersectWidth)
+	//{
+	//	//if switch, activate switch
+	//	//if evenmy call event to kill enemy
+	//	SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
+
+	//}
+}
+
 
 void Player::LeftRampCollision(const IEntity* pOther)
 {
@@ -1003,6 +1046,11 @@ void Player::UpdateTimers(float elapsedTime)
 	m_fJumpTimer -= elapsedTime;
 
 	m_fLandTimer -= elapsedTime;
+
+	m_fSwingTimer -= elapsedTime;
+
+	if (m_fSwingTimer < 0.0f)
+		m_fSwingTimer = 0;
 
 	if (m_fJumpTimer < 0.0f)
 		m_fJumpTimer = 0;
@@ -1545,4 +1593,64 @@ void Player::UpdateVelocity(float elapsedTime)
 	}
 
 }
+
+void Player::UpdatePlayerSwing(float elapsedTime)
+{
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+	if (pInput->IsKeyPressed(SGD::Key::G) == true)
+	{
+		if (m_fSwingTimer <= 0.0f)
+		{
+			m_fSwingTimer = 0.2f;
+		}
+	}
+
+	if (m_fSwingTimer > 0.0f)
+	{
+		if (IsFacingRight() == true)
+		{
+
+			//SGD::Rectangle temp = GetRect();
+
+			SGD::Rectangle temp;
+			temp.left = ( (GetRect().right - 16 ) - Camera::GetInstance()->GetCameraPos().x);
+			temp.top = (GetRect().top - Camera::GetInstance()->GetCameraPos().y) + 10;
+			temp.right = (temp.left) +60;
+			temp.bottom = (temp.top) + 50;
+
+			swingRect = temp;
+
+		}
+		else
+		{
+
+			SGD::Rectangle temp;
+			temp.right = (GetRect().left + 16) - Camera::GetInstance()->GetCameraPos().x;
+			temp.left = temp.right - 60;
+
+
+
+			//temp.left = (GetRect().left + 12) - Camera::GetInstance()->GetCameraPos().x;
+			temp.top = (GetRect().top - Camera::GetInstance()->GetCameraPos().y) + 10;
+			//temp.right = temp.left - 60;
+			temp.bottom = temp.top + 50;
+
+			swingRect = temp;
+			
+		}
+	}
+	else
+	{
+		swingRect = { 0, 0, 0, 0 };
+	}
+
+	
+
+
+}
+
+
+
+
 #pragma endregion

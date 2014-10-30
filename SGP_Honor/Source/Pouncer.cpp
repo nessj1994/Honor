@@ -89,6 +89,9 @@ SGD::Rectangle Pouncer::GetRect(void) const
 
 void Pouncer::HandleCollision(const IEntity* pOther)
 {
+
+	Enemy::HandleCollision(pOther);
+
 	if (pOther->GetType() == Entity::ENT_SOLID_WALL)
 		inAir = false;
 

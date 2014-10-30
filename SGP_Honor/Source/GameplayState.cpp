@@ -128,7 +128,7 @@ void GameplayState::Enter(void) //Load Resources
 	//m_pStatue->SetMessageString("This is a test string");
 
 	m_pSquid = new Squid();
-	m_pPouncer = new Pouncer();
+	//m_pPouncer = new Pouncer();
 	m_pJellyfish = new Jellyfish();
 	m_pJellyfish2 = new Jellyfish();
 	m_pJellyfish2->SetPosition({900, 700});
@@ -153,6 +153,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Add Entities to the entity manager
 
 	m_pEntities->AddEntity(m_pPlayer, Entity::ENT_PLAYER);
+	CreateEnemy(100, 100, 7);
 
 	//Remove this test code later
 	/*m_pEntities->AddEntity(m_pFBlock, Entity::ENT_FALLING_BLOCK);
@@ -183,7 +184,7 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevel("HubLevel");
 
 	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
-	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
+	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 //	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
 //	m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
 
@@ -243,7 +244,7 @@ void GameplayState::Exit(void)
 	delete m_pSquid;
 
 	
-	delete m_pPouncer;
+	//delete m_pPouncer;
 
 	delete m_pJellyfish;
 
@@ -1125,7 +1126,8 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Pouncer * pPouncer = new Pouncer();
 			pPouncer->SetPosition({ (float)_x, (float)_y });
-			m_pEntities->AddEntity(pPouncer, Entity::ENT_POUNCER);
+			pPouncer->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pPouncer, Entity::ENT_ENEMY);
 			pPouncer->Release();
 			break;
 		}
@@ -1133,7 +1135,8 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Squid * pSquid = new Squid();
 			pSquid->SetPosition({ (float)_x, (float)_y });
-			m_pEntities->AddEntity(pSquid, Entity::ENT_SQUID);
+			pSquid->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pSquid, Entity::ENT_ENEMY);
 			pSquid->Release();
 			break;
 		}
@@ -1141,7 +1144,8 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Jellyfish * pJelly = new Jellyfish();
 			pJelly->SetPosition({ (float)_x, (float)_y });
-			m_pEntities->AddEntity(pJelly, Entity::ENT_JELLYFISH);
+			pJelly->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pJelly, Entity::ENT_ENEMY);
 			pJelly->Release();
 			break;
 		}
