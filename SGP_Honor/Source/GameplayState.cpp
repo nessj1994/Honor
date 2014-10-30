@@ -153,7 +153,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Add Entities to the entity manager
 
 	m_pEntities->AddEntity(m_pPlayer, Entity::ENT_PLAYER);
-	CreateEnemy(100, 100, 7);
+	//CreateEnemy(100, 100, 7);
 
 	//Remove this test code later
 	/*m_pEntities->AddEntity(m_pFBlock, Entity::ENT_FALLING_BLOCK);
