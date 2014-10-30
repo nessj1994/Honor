@@ -224,7 +224,7 @@ void Player::Render(void)
 	if (m_bDead)
 	{
 		// Draw a fading rectangle
-		unsigned char alpha = (char)(((2.0f - m_fDeathTimer) / 2.0f) * 255.0f);
+		unsigned char alpha = (char)(((0.5f - m_fDeathTimer) / 0.5f) * 255.0f);
 		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
 		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
 	}
@@ -427,14 +427,25 @@ void Player::BasicCollision(const IEntity* pOther)
 		if(rPlayer.right == rIntersection.right)
 		{
 
-			SetPosition({ (float)rObject.left - GetSize().width +1, GetPosition().y });
-			SetVelocity({ 0, GetVelocity().y });
-			SetDashTimer(0);
+			if (m_unCurrentState == RESTING_STATE
+				|| m_unCurrentState == LANDING_STATE)
+			{
+				SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
+				SetVelocity({ 0, GetVelocity().y });
+				SetDashTimer(0);
+			}
+			else
+			{
+				SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
+				SetVelocity({ 0, GetVelocity().y });
+				SetDashTimer(0);
+			}
 
 
-
-			if ( (pInput->IsButtonDown(0,0) == true 
-				|| pInput->IsKeyDown(SGD::Key::Space))
+			if ((pInput->IsButtonDown(0, 0) == true
+				|| pInput->IsKeyDown(SGD::Key::Space) == true)
+				&& (m_unCurrentState != RESTING_STATE
+				|| m_unCurrentState != LANDING_STATE)
 				)
 			{
 				is_Right_Coll = true;
@@ -442,15 +453,28 @@ void Player::BasicCollision(const IEntity* pOther)
 		}
 		if(rPlayer.left == rIntersection.left)
 		{
-			SetPosition({ (float)rObject.right - 1, GetPosition().y });
-			SetDashTimer(0);
-			SetVelocity({ 0, GetVelocity().y });
+			if (m_unCurrentState == RESTING_STATE
+				|| m_unCurrentState == LANDING_STATE)
+			{
+				SetPosition({ (float)rObject.right, GetPosition().y });
+				SetDashTimer(0);
+				SetVelocity({ 0, GetVelocity().y });
+			}
+			else
+			{
+				SetPosition({ (float)rObject.right - 1, GetPosition().y });
+				SetDashTimer(0);
+				SetVelocity({ 0, GetVelocity().y });
+			}
 
 			
 
 			if ((pInput->IsButtonDown(0, 0) == true
 				|| pInput->IsKeyDown(SGD::Key::Space))
-				/*&& m_fButtonTimer < 0.4*/ )
+				&& (m_unCurrentState != RESTING_STATE
+				|| m_unCurrentState != LANDING_STATE)
+				//&& m_fButtonTimer > 0
+				)
 			{
 				is_Left_Coll = true;
 			}
@@ -943,7 +967,7 @@ void Player::KillPlayer()
 	}
 	else
 	{
-		m_fDeathTimer = 2.0f;
+		m_fDeathTimer = 0.5f;
 		m_bDead = true;
 		// TODO Add effects
 	}
