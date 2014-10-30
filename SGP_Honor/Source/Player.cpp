@@ -220,8 +220,6 @@ void Player::Update(float elapsedTime)
 				if(m_fInputTimer > 0.20f
 					|| GetIsInputStuck() == false)
 				{
-					
-
 						if (GetVelocity().x < 0)
 						{
 							if (m_unCurrentState == RESTING_STATE
@@ -232,14 +230,12 @@ void Player::Update(float elapsedTime)
 							else
 							{
 								SetVelocity(SGD::Vector(GetVelocity().x + (2 *GetSpeed() * elapsedTime), GetVelocity().y));
-
 							}
 						}
 						else
 						{
 							SetVelocity(SGD::Vector(GetVelocity().x + GetSpeed() * elapsedTime, GetVelocity().y));
 							//SetVelocity(SGD::Vector(1050, GetVelocity().y));
-
 						}
 					
 					SetDirection({ 1, 0 });
@@ -261,8 +257,6 @@ void Player::Update(float elapsedTime)
 				if(m_fInputTimer > 0.20f
 					|| GetIsInputStuck() == false)
 				{
-					
-
 						if (GetVelocity().x > 0)
 						{
 							if (m_unCurrentState == RESTING_STATE
@@ -273,7 +267,6 @@ void Player::Update(float elapsedTime)
 							else
 							{
 								SetVelocity(SGD::Vector(GetVelocity().x - (2 * GetSpeed() * elapsedTime)	, GetVelocity().y));
-
 							}
 						}
 						else
@@ -911,18 +904,12 @@ void Player::BasicCollision(const IEntity* pOther)
 		if(rPlayer.right == rIntersection.right)
 		{
 
-			SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
+			SetPosition({ (float)rObject.left - GetSize().width +1, GetPosition().y });
 			SetVelocity({ 0, GetVelocity().y });
 			SetDashTimer(0);
 
 
-			//SetFriction(11.0f);
 
-			//if (pInput->IsButtonDown(0, 0) == false)
-			//{
-			//	is_Right_Coll = true;
-			//}
-			
 			if ( (pInput->IsButtonDown(0,0) == true 
 				|| pInput->IsKeyDown(SGD::Key::Space))
 				)
@@ -932,7 +919,7 @@ void Player::BasicCollision(const IEntity* pOther)
 		}
 		if(rPlayer.left == rIntersection.left)
 		{
-			SetPosition({ (float)rObject.right, GetPosition().y });
+			SetPosition({ (float)rObject.right - 1, GetPosition().y });
 			SetDashTimer(0);
 			SetVelocity({ 0, GetVelocity().y });
 
@@ -970,7 +957,7 @@ void Player::BasicCollision(const IEntity* pOther)
 					m_unCurrentState = LANDING_STATE;
 				}
 				//if (m_fLandTimer <= 0)
-				//	m_unCurrentState = RESTING_STATE;
+				//	m_unCurrentState = RESTING_STATE;,
 
 			}
 
@@ -1200,12 +1187,11 @@ void Player::GeyserCollision(const IEntity* pOther)
 		if(rPlayer.left == rIntersection.left)
 		{
 
-			//SetPosition({ (float)rObject.right, GetPosition().y });
-
 			SetVelocity({ 500 * GetDirection().x * -1, GetVelocity().y - 300 });
-
-			//SetVelocity({ 0, GetVelocity().y });
 			SetDashTimer(0);
+
+			is_Left_Coll = true;
+
 
 			if(m_fDashTime == 0)
 			{
@@ -1215,7 +1201,6 @@ void Player::GeyserCollision(const IEntity* pOther)
 
 			}
 
-			is_Left_Coll = true;
 
 		}
 	}

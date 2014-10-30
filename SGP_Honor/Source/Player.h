@@ -150,7 +150,7 @@ private:
 	//Honor emitter for HUD
 	Emitter* m_emHonor;
 
-	SGD::Rectangle = {}
+	//SGD::Rectangle = {}
 };
 
 
