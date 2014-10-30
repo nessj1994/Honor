@@ -2,7 +2,7 @@
 #include "Unit.h"
 #include "Projectile.h"
 
-
+class Emitter;
 
 class Hawk :
 	public Projectile
@@ -23,9 +23,10 @@ public:
 	void SetOwner(Entity* owner) { if (m_pOwner) m_pOwner->Release(); m_pOwner = owner; m_pOwner->AddRef(); }
 
 private:
-
+	
 	Entity* m_pOwner = nullptr;
 	float m_fCooldown = 0.0f;
 	float m_fAirFriction = 1.5f;
+
 };
 

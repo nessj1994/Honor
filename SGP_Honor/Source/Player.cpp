@@ -36,8 +36,13 @@ Player::Player() : Listener(this)
 	SetDirection({ 1, 0 });
 	m_pDash = new Dash();
 	m_pBounce = new Bounce();
+	//HUD
 	m_hHonorParticleHUD = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/HonorPiece.png");
+	//Emitters
 	m_emHonor = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/SilverHonor.xml", "SilverHonor", { (32 ), (32 ) });
+	m_emFeatherExplosion = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FeatherExplosion.xml", "FeatherExplosion", m_ptPosition);
+	m_emHawkReturn = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/HawkReturn.xml", "HawkReturn", { -100, -100 });
+	//
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/PlayerAnimations.xml");
 	m_ts.SetCurrAnimation("Idle");
 	
@@ -60,6 +65,7 @@ void Player::Update(float elapsedTime)
 	m_pBounce->GetEMBubbles()->Update(elapsedTime);
 	m_pDash->GetEMDash()->Update(elapsedTime);	
 	m_emHonor->Update(elapsedTime);
+	m_emFeatherExplosion->Update(elapsedTime);
 	//
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
@@ -421,6 +427,7 @@ void Player::Update(float elapsedTime)
 			{
 
 				m_bHawkCast = true;
+				m_bHawkExplode = false;
 				CreateHawkMessage* pMsg = new CreateHawkMessage(this);
 				pMsg->QueueMessage();
 				pMsg = nullptr;
@@ -534,13 +541,18 @@ void Player::Update(float elapsedTime)
 			if (GetHawkPtr() != nullptr)
 			{
 				m_fHawkTimer = 0.0f;
-
+				m_bHawkExplode = true;
+				m_emFeatherExplosion->Burst(GetHawkPtr()->GetPosition());
 
 				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ GetHawkPtr() };
 				pMsg->QueueMessage();
 				pMsg = nullptr;
 
 				SetHawkPtr(nullptr);
+			}
+			else
+			{
+				m_bHawkExplode = false;
 			}
 
 		}
@@ -675,6 +687,15 @@ void Player::Render(void)
 	if (IsDashing() || !GetDash()->GetEMDash()->Done())
 	{
 		GetDash()->GetEMDash()->Render(m_ptPosition);
+	}
+	if (m_bHawkExplode || !m_emFeatherExplosion->Done())
+	{
+		m_emFeatherExplosion->Render();
+	}
+
+	if (m_emFeatherExplosion->Done() == true)
+	{
+		int x = 0;
 	}
 	//
 	//SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -1454,5 +1475,15 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		{
 			m_bHasArmor = false;
 		}
+	}
+}
+
+void Player::HawkExplode(SGD::Point _pos)
+{
+	if (!m_bHawkExplode)
+	{
+		m_bHawkExplode = true;
+		m_emFeatherExplosion->Finish();
+		m_emFeatherExplosion->Burst(_pos);
 	}
 }

@@ -100,6 +100,8 @@ public:
 	void SetJumpVelCur(float _velCur) { m_fJumpVelCur = _velCur; }
 	void IncreaseHonorCollected(unsigned int amount) { m_unHonorCollected += amount; }
 
+	//Hawk Explosion function
+	void HawkExplode(SGD::Point _pos);
 private:
 
 
@@ -152,6 +154,12 @@ private:
 	//Emitters
 	//Honor emitter for HUD
 	Emitter* m_emHonor;
+	//Hawk Explosion 
+	Emitter* m_emFeatherExplosion;
+	bool m_bHawkExplode = false;
+	//Hawk Return
+	Emitter* m_emHawkReturn;
+	bool Return;
 };
 
 
