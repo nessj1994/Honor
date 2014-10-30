@@ -85,17 +85,8 @@ void Player::Update(float elapsedTime)
 		SetIsBouncing(false);
 
 		//////// NEED TO UPDATE WITH CONTROLLER ( JORDAN )
-		if (GetIsInputStuck() == false)
-			m_fInputTimer = 0;
-
-
-		//Player would get "stuck" on walls and force its velocity to change (not intentional here, added elsewhere to fix other issues) InputTimer solves similar issues with no
-		// Conflicts
-		//if (GetIsInputStuck() == true
-		//	&& GetVelocity().y < 0)
-		//{
-		////	SetVelocity({ /*GetVelocity().x*/ 0, 0 });
-		//}
+		//if (GetIsInputStuck() == false)
+		//	m_fInputTimer = 0;
 
 
 		/////////////////////////////////////////////////
@@ -127,7 +118,7 @@ void Player::Update(float elapsedTime)
 				UpdateMovement(elapsedTime, stickFrame, leftClamped, leftStickXOff);
 			}
 
-			m_fShotTimer += elapsedTime;
+			//m_fShotTimer += elapsedTime;
 
 
 			UpdateDash(elapsedTime);
@@ -1019,7 +1010,14 @@ void Player::UpdateTimers(float elapsedTime)
 	if (m_fLandTimer < 0.0f)
 		m_fLandTimer = 0;
 
+	if (GetIsInputStuck() == false)
+		m_fInputTimer = 0;
+
+
 	m_fHawkTimer += elapsedTime;
+
+	m_fShotTimer += elapsedTime;
+
 }
 
 void Player::UpdateFriction(float elapsedTime, bool leftClamped)
@@ -1239,7 +1237,8 @@ void Player::UpdateJump(float elapsedTime)
 	{
 		m_fButtonTimer += elapsedTime;
 		//if(GetIsJumping() == false)
-		if (m_unCurrentState == RESTING_STATE)
+		if (m_unCurrentState == RESTING_STATE
+			|| m_unCurrentState == LANDING_STATE)
 		{
 			m_ts.ResetCurrFrame();
 			m_ts.SetPlaying(false);
