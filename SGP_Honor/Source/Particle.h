@@ -58,6 +58,7 @@ public:
 	void SetColorChange(int _Change) { m_iColorChange = _Change; }
 	void SetRotation(float _Rotation) { m_fRotation = _Rotation; }
 	void Starting(bool _Start){ m_bStart = _Start; }
+	void SetDead(bool _Dead){ m_blDead = _Dead; }
 	//For the Recycle in the Emitter
 	void Reset();
 private:

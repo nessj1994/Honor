@@ -36,8 +36,13 @@ Player::Player() : Listener(this)
 	SetDirection({ 1, 0 });
 	m_pDash = new Dash();
 	m_pBounce = new Bounce();
+	//HUD
 	m_hHonorParticleHUD = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/HonorPiece.png");
+	//Emitters
 	m_emHonor = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/SilverHonor.xml", "SilverHonor", { (32 ), (32 ) });
+	m_emFeatherExplosion = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FeatherExplosion.xml", "FeatherExplosion", m_ptPosition);
+	m_emHawkReturn = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/HawkReturn.xml", "HawkReturn", { -100, -100 });
+	//
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/PlayerAnimations.xml");
 	m_ts.SetCurrAnimation("Idle");
 	
@@ -56,6 +61,12 @@ Player::~Player()
 /////////////////Interface///////////////////////
 void Player::Update(float elapsedTime)
 {
+	//Emitter Updates
+	m_emHonor->Update(elapsedTime);
+	m_emFeatherExplosion->Update(elapsedTime);
+	m_emHawkReturn->Update(elapsedTime);
+	//
+
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	if (m_bDead)
 	{
@@ -85,17 +96,8 @@ void Player::Update(float elapsedTime)
 		SetIsBouncing(false);
 
 		//////// NEED TO UPDATE WITH CONTROLLER ( JORDAN )
-		if (GetIsInputStuck() == false)
-			m_fInputTimer = 0;
-
-
-		//Player would get "stuck" on walls and force its velocity to change (not intentional here, added elsewhere to fix other issues) InputTimer solves similar issues with no
-		// Conflicts
-		//if (GetIsInputStuck() == true
-		//	&& GetVelocity().y < 0)
-		//{
-		////	SetVelocity({ /*GetVelocity().x*/ 0, 0 });
-		//}
+		//if (GetIsInputStuck() == false)
+		//	m_fInputTimer = 0;
 
 
 		/////////////////////////////////////////////////
@@ -127,7 +129,7 @@ void Player::Update(float elapsedTime)
 				UpdateMovement(elapsedTime, stickFrame, leftClamped, leftStickXOff);
 			}
 
-			m_fShotTimer += elapsedTime;
+			//m_fShotTimer += elapsedTime;
 
 
 			UpdateDash(elapsedTime);
@@ -158,6 +160,7 @@ void Player::Update(float elapsedTime)
 
 		UpdateVelocity(elapsedTime);
 
+
 		SetIsInputStuck(false);
 
 		is_Left_Coll = false;
@@ -167,6 +170,7 @@ void Player::Update(float elapsedTime)
 		SGD::Event* pATEvent = new SGD::Event("ASSESS_PLAYER_RANGE", nullptr, this);
 		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 		pATEvent = nullptr;
+
 
 		Unit::Update(elapsedTime);
 		AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
@@ -185,6 +189,21 @@ void Player::Render(void)
 	if (IsDashing() || !GetDash()->GetEMDash()->Done())
 	{
 		GetDash()->GetEMDash()->Render(m_ptPosition);
+	}
+	if (m_bHawkExplode || !m_emFeatherExplosion->Done())
+	{
+		m_emFeatherExplosion->Render();
+	}
+	if (m_bReturningHawk || !m_emHawkReturn->Done())
+	{
+		m_emHawkReturn->Render();
+	}
+	//
+
+
+	if (m_emFeatherExplosion->Done() == true)
+	{
+		int x = 0;
 	}
 	//
 	//SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -220,6 +239,14 @@ void Player::Render(void)
 	//Draw the title
 
 	font.DrawString(output.str().c_str(), 60, 25, 1, SGD::Color{ 255, 255, 0, 0 });
+
+	if (m_bDead)
+	{
+		// Draw a fading rectangle
+		unsigned char alpha = (char)(((0.5f - m_fDeathTimer) / 0.5f) * 255.0f);
+		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
+		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+	}
 }
 
 SGD::Rectangle Player::GetRect(void) const
@@ -419,14 +446,25 @@ void Player::BasicCollision(const IEntity* pOther)
 		if(rPlayer.right == rIntersection.right)
 		{
 
-			SetPosition({ (float)rObject.left - GetSize().width +1, GetPosition().y });
-			SetVelocity({ 0, GetVelocity().y });
-			SetDashTimer(0);
+			if (m_unCurrentState == RESTING_STATE
+				|| m_unCurrentState == LANDING_STATE)
+			{
+				SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
+				SetVelocity({ 0, GetVelocity().y });
+				SetDashTimer(0);
+			}
+			else
+			{
+				SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
+				SetVelocity({ 0, GetVelocity().y });
+				SetDashTimer(0);
+			}
 
 
-
-			if ( (pInput->IsButtonDown(0,0) == true 
-				|| pInput->IsKeyDown(SGD::Key::Space))
+			if ((pInput->IsButtonDown(0, 0) == true
+				|| pInput->IsKeyDown(SGD::Key::Space) == true)
+				&& (m_unCurrentState != RESTING_STATE
+				|| m_unCurrentState != LANDING_STATE)
 				)
 			{
 				is_Right_Coll = true;
@@ -434,15 +472,28 @@ void Player::BasicCollision(const IEntity* pOther)
 		}
 		if(rPlayer.left == rIntersection.left)
 		{
-			SetPosition({ (float)rObject.right - 1, GetPosition().y });
-			SetDashTimer(0);
-			SetVelocity({ 0, GetVelocity().y });
+			if (m_unCurrentState == RESTING_STATE
+				|| m_unCurrentState == LANDING_STATE)
+			{
+				SetPosition({ (float)rObject.right, GetPosition().y });
+				SetDashTimer(0);
+				SetVelocity({ 0, GetVelocity().y });
+			}
+			else
+			{
+				SetPosition({ (float)rObject.right - 1, GetPosition().y });
+				SetDashTimer(0);
+				SetVelocity({ 0, GetVelocity().y });
+			}
 
 			
 
 			if ((pInput->IsButtonDown(0, 0) == true
 				|| pInput->IsKeyDown(SGD::Key::Space))
-				/*&& m_fButtonTimer < 0.4*/ )
+				&& (m_unCurrentState != RESTING_STATE
+				|| m_unCurrentState != LANDING_STATE)
+				//&& m_fButtonTimer > 0
+				)
 			{
 				is_Left_Coll = true;
 			}
@@ -987,7 +1038,14 @@ void Player::UpdateTimers(float elapsedTime)
 	if (m_fLandTimer < 0.0f)
 		m_fLandTimer = 0;
 
+	if (GetIsInputStuck() == false)
+		m_fInputTimer = 0;
+
+
 	m_fHawkTimer += elapsedTime;
+
+	m_fShotTimer += elapsedTime;
+
 }
 
 void Player::UpdateFriction(float elapsedTime, bool leftClamped)
@@ -1207,7 +1265,8 @@ void Player::UpdateJump(float elapsedTime)
 	{
 		m_fButtonTimer += elapsedTime;
 		//if(GetIsJumping() == false)
-		if (m_unCurrentState == RESTING_STATE)
+		if (m_unCurrentState == RESTING_STATE
+			|| m_unCurrentState == LANDING_STATE)
 		{
 			m_ts.ResetCurrFrame();
 			m_ts.SetPlaying(false);
@@ -1282,11 +1341,15 @@ void Player::UpdateHawk(float elapsedTime)
 		if (m_bHawkCast == false
 			&& m_fHawkTimer > 1.0f)
 		{
-
-			m_bHawkCast = true;
-			CreateHawkMessage* pMsg = new CreateHawkMessage(this);
-			pMsg->QueueMessage();
-			pMsg = nullptr;
+			//Dont spawn another hawk until particles are done
+			if (m_emFeatherExplosion->Done())
+			{
+				m_bHawkCast = true;
+				m_bHawkExplode = false;
+				CreateHawkMessage* pMsg = new CreateHawkMessage(this);
+				pMsg->QueueMessage();
+				pMsg = nullptr;
+			}
 		}
 		else
 		{
@@ -1398,15 +1461,66 @@ void Player::UpdateHawk(float elapsedTime)
 		{
 			m_fHawkTimer = 0.0f;
 
+			if (m_emFeatherExplosion->Done())
+			{
+				//Emitter Stuff
+				m_bHawkExplode = true;
+				m_emFeatherExplosion->Burst(GetHawkPtr()->GetPosition());
+				m_emHawkReturn->Burst(GetHawkPtr()->GetPosition());
+				m_bReturningHawk = true;
+			}
+			else
+			{
+				m_bHawkExplode = false;
+			}
 
-			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ GetHawkPtr() };
-			pMsg->QueueMessage();
-			pMsg = nullptr;
+			
+				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ GetHawkPtr() };
+				pMsg->QueueMessage();
+				pMsg = nullptr;
 
-			SetHawkPtr(nullptr);
+				SetHawkPtr(nullptr);
+			
 		}
 
 	}
+
+
+	//Emitter Hawk Returning changing the position with velocity
+	if (m_bReturningHawk)
+	{
+		SGD::Vector distance = m_ptPosition - m_emHawkReturn->GetPosition();
+		if (distance.ComputeLength() > 10)
+		{
+			SGD::Vector VEL = { 0, 0 };
+			if (m_ptPosition.x < m_emHawkReturn->GetPosition().x)
+			{
+				VEL.x = -300;
+			}
+			if (m_ptPosition.y < m_emHawkReturn->GetPosition().y)
+			{
+				VEL.y = -300;
+			}
+			if (m_ptPosition.x > m_emHawkReturn->GetPosition().x)
+			{
+				VEL.x = 300;
+			}
+			if (m_ptPosition.y > m_emHawkReturn->GetPosition().y)
+			{
+				VEL.y = 300;
+			}
+			SGD::Point TempPos = m_emHawkReturn->GetPosition();
+			TempPos += VEL * elapsedTime;
+			m_emHawkReturn->SetPosition(TempPos);
+			m_emHawkReturn->Finish(false);
+		}
+		else
+		{
+			m_emHawkReturn->Finish();
+			m_bReturningHawk = false;
+		}
+	}
+	
 }
 
 void Player::UpdateSpray(float elapsedTime)
@@ -1514,4 +1628,17 @@ void Player::UpdateVelocity(float elapsedTime)
 	}
 
 }
+
+void Player::HawkExplode(SGD::Point _pos)
+{
+	if (!m_bHawkExplode)
+	{
+		m_bHawkExplode = true;
+		m_emFeatherExplosion->Finish();
+		m_emFeatherExplosion->Burst(_pos);
+		m_bReturningHawk = true;
+		m_emHawkReturn->Burst(_pos);
+	}	
+}
+
 #pragma endregion

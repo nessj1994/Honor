@@ -347,7 +347,7 @@ void GameplayState::Update(float elapsedTime)
 
 	//	m_pCamera->Update(elapsedTime);
 
-	m_pEmitter2->Update(elapsedTime);
+	//m_pEmitter2->Update(elapsedTime);
 	float x = elapsedTime;
 
 	m_pEntities->UpdateAll(elapsedTime);
@@ -420,7 +420,7 @@ void GameplayState::Render(void)
 
 
 
-	m_pEmitter2->Render();
+	//m_pEmitter2->Render();
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 

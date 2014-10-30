@@ -140,14 +140,10 @@ void Emitter::StartParticles(bool restart)
 		Temp.SetGravity(m_fGravity);
 		Temp.SetColorChange(m_fColorChange);
 		Temp.Reset();
-	/*	if (rand() % 4 > 2)
+		if (!m_bLooping)
 		{
-			Temp.Starting(false);
+			Temp.SetDead(true);
 		}
-		else
-		{
-			Temp.Starting(true);
-		}*/
 		m_vecParticles.push_back(Temp);
 	}
 }
@@ -168,6 +164,10 @@ void Emitter::Update(float elapsedTime)
 			m_EndPoint.x = x;
 			m_EndPoint.y = y;
 		}
+	}
+	if (!m_bLooping)
+	{
+		int x = 0;
 	}
 	m_bDone = true;
 		for (int i = 0; i < m_vecParticles.size(); i++)
@@ -203,7 +203,7 @@ void Emitter::Render(SGD::Point _Pos)
 	{
 		
 		SGD::Rectangle Rect{ { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, m_szSize };
-		//SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
+		SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
 	}
 
 
@@ -238,11 +238,21 @@ void Emitter::RenderINworld(SGD::Point _Pos)
 	}
 }
 
+void Emitter::Burst(SGD::Point _pos)
+{
+	m_ptPosition = _pos;
+	for (size_t i = 0; i < m_vecParticles.size(); i++)
+	{
+		m_vecParticles[i].SetDead(false);
+		Recylce(&m_vecParticles[i]);
+		m_vecParticles[i].Reset();
+	}
+}
+
 
 void Emitter::Recylce(Particle* particle)
 {
-	if (m_bLooping)
-	{
+
 		//Random Generator
 		std::mt19937 MT(device());
 		std::uniform_real_distribution<float>X(m_ptPosition.x, m_ptPosition.x + m_szSize.width);
@@ -265,8 +275,12 @@ void Emitter::Recylce(Particle* particle)
 
 		}
 		particle->SetColorChange(m_fColorChange);
-		particle->Reset();
-	}
+
+		if (m_bLooping)
+		{
+			particle->Reset();
+		}
+	
 	
 }
 
