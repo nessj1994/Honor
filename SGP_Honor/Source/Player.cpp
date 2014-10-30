@@ -66,8 +66,6 @@ void Player::Update(float elapsedTime)
 	//Timers
 	m_fIceTimer += elapsedTime;
 
-	//m_fButtonTimer = 0;
-
 	m_fJumpTimer -= elapsedTime;
 
 	m_fLandTimer -= elapsedTime;
@@ -77,9 +75,6 @@ void Player::Update(float elapsedTime)
 
 	if (m_fLandTimer < 0.0f)
 		m_fLandTimer = 0;
-
-	//if (m_fButtonTimer < 0.0f)
-	//	m_fButtonTimer = 0;
 
 	m_fHawkTimer += elapsedTime;
 
@@ -104,11 +99,14 @@ void Player::Update(float elapsedTime)
 	if (GetIsInputStuck() == false)
 		m_fInputTimer = 0;
 
-	if (GetIsInputStuck() == true
-		&& GetVelocity().y < 0)
-	{
-		SetVelocity({ /*GetVelocity().x*/ 0, 0 });
-	}
+
+	//Player would get "stuck" on walls and force its velocity to change (not intentional here, added elsewhere to fix other issues) InputTimer solves similar issues with no
+	// Conflicts
+//if (GetIsInputStuck() == true
+//	&& GetVelocity().y < 0)
+//{
+////	SetVelocity({ /*GetVelocity().x*/ 0, 0 });
+//}
 
 
 	/////////////////////////////////////////////////
@@ -758,7 +756,7 @@ void Player::HandleCollision(const IEntity* pOther)
 	{
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(7.0f);
+		SetFriction(25.0f);
 	}
 
 	if(pOther->GetType() == Entity::ENT_MOVING_PLATFORM)
@@ -914,11 +912,7 @@ void Player::BasicCollision(const IEntity* pOther)
 		{
 
 			SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
-			if (m_unCurrentState == RESTING_STATE)
-			{
-				SetVelocity({ 0, GetVelocity().y });
-
-			}
+			SetVelocity({ 0, GetVelocity().y });
 			SetDashTimer(0);
 
 
@@ -939,16 +933,9 @@ void Player::BasicCollision(const IEntity* pOther)
 		if(rPlayer.left == rIntersection.left)
 		{
 			SetPosition({ (float)rObject.right, GetPosition().y });
-			//SetVelocity({ 0, GetVelocity().y });
 			SetDashTimer(0);
+			SetVelocity({ 0, GetVelocity().y });
 
-			if (m_unCurrentState == RESTING_STATE)
-			{
-				SetVelocity({ 0, GetVelocity().y });
-
-			}
-
-	
 			
 
 			if ((pInput->IsButtonDown(0, 0) == true
@@ -977,8 +964,7 @@ void Player::BasicCollision(const IEntity* pOther)
 				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 /*- nIntersectHeight*/ });
 				if (m_unCurrentState == FALLING_STATE)
 				{
-					// Landing is constantly setting it to 0.4f
-					// 
+					
 
 					m_fLandTimer = 0.001f;
 					m_unCurrentState = LANDING_STATE;
@@ -988,19 +974,15 @@ void Player::BasicCollision(const IEntity* pOther)
 
 			}
 
-			if(is_Jumping)
-			{
-				m_ts.ResetCurrFrame();
-				m_ts.SetCurrAnimation("Idle");
-				m_ts.SetPlaying(true);
-
-			}
+		//	if (m_unCurrentState == JUMPING_STATE)
+		//	{
+		//		m_ts.ResetCurrFrame();
+		//		m_ts.SetCurrAnimation("Idle");
+		//		m_ts.SetPlaying(true);
+		//
+		//	}
 
 			SetJumpVelCur(0);
-
-
-			//SetIsJumping(false);
-			//SetIsFalling(false);
 			SetIsInputStuck(false);
 
 			is_Left_Coll = false;

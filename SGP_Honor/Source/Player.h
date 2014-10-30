@@ -110,6 +110,7 @@ private:
 	bool m_bHasArmor = false;
 	bool m_bHawkCast = false;
 
+
 	bool is_Jumping = false;
 	bool is_Falling = true;
 	bool has_landed = true;
@@ -133,12 +134,6 @@ private:
 	float m_fHawkTimer = 1.0f;
 
 	unsigned int m_unCurrentState = 0;
-
-
-	//float m_fStickTimer = 0.0f; // For WallJumping (Input won't register while stick timer is Active) (0.25)
-
-	//Hawk* m_pHawk;
-
 	unsigned int m_unHonorCollected = 0;
 
 	//Hawk* m_pHawk;
@@ -146,12 +141,16 @@ private:
 	Ice* m_pIce;
 	Bounce* m_pBounce;
 
+
 	SGD::HTexture m_hImage = SGD::INVALID_HANDLE;
 	//Honor Particle Image for the HUD
 	SGD::HTexture m_hHonorParticleHUD = SGD::INVALID_HANDLE;
+
 	//Emitters
 	//Honor emitter for HUD
 	Emitter* m_emHonor;
+
+	SGD::Rectangle = {}
 };
 
 
