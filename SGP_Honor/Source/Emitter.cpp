@@ -203,7 +203,7 @@ void Emitter::Render(SGD::Point _Pos)
 	{
 		
 		SGD::Rectangle Rect{ { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, m_szSize };
-		SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
+		//SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
 	}
 
 
@@ -293,15 +293,6 @@ void Emitter::KillParticles(SGD::Point _Pos)
 	for (size_t i = 0; i < m_vecParticles.size(); i++)
 	{
 		m_vecParticles[i].SetPosition({thing(MT),thing2(MT)});
-		m_vecParticles[i].Starting(false);
-		//if (rand() % 10 > 5)
-		//{
-		//	m_vecParticles[i].Starting(false);
-		//}
-		//else
-		//{
-		//	m_vecParticles[i].Starting(true);
-		//}
 		if (m_iEmitterShape)
 		{
 			if (m_bPinEdges)

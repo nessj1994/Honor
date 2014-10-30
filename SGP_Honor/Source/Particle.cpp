@@ -13,7 +13,6 @@ Particle::Particle(SGD::Point Pos, float LifeSpan)
 	std::uniform_real_distribution<float>thing(0,LifeSpan);
 	m_fCurLifeSpan = thing(MT);
 	m_fCurRotation = 0;
-	m_bStart = false;
 
 }
 
@@ -70,8 +69,6 @@ void Particle::Update(float elapsedTime)
 	if (m_fCurLifeSpan >= m_fLifeSpan)
 	{
 		m_blDead = true;
-		m_bStart = true;
-
 	}
 	else
 	{
