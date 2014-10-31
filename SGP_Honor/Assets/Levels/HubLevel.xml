@@ -6154,7 +6154,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="5">
+	<Entities numEntities="6">
 		<Entity type="18" x="320" y="672" numArgs="1" name="World1Teleporter">
 			<Argument type="3" name="Level" value="World1Level" />
 		</Entity>
@@ -6169,6 +6169,9 @@
 		</Entity>
 		<Entity type="18" x="1760" y="672" numArgs="1" name="Teleporter_5">
 			<Argument type="3" name="Level" value="World5Level" />
+		</Entity>
+		<Entity type="19" x="256" y="672" numArgs="1" name="Enemy_1">
+			<Argument type="1" name="Type" value="2" />
 		</Entity>
 	</Entities>
 </Level>

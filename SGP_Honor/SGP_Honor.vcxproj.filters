@@ -248,7 +248,9 @@
     <ClCompile Include="Source\Jellyfish.cpp">
       <Filter>Entities\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="MutantMan.cpp" />
+    <ClCompile Include="Source\MutantMan.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -522,7 +524,9 @@
     <ClInclude Include="Source\Jellyfish.h">
       <Filter>Entities\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="MutantMan.h" />
+    <ClInclude Include="Source\MutantMan.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />

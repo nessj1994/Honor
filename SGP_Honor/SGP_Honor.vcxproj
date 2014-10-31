@@ -11,7 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MutantMan.cpp" />
     <ClCompile Include="SGD Wrappers\SGD_AudioManager.cpp" />
     <ClCompile Include="SGD Wrappers\SGD_Event.cpp" />
     <ClCompile Include="SGD Wrappers\SGD_EventManager.cpp" />
@@ -73,6 +72,7 @@
     <ClCompile Include="Source\LevelCollider.cpp" />
     <ClCompile Include="Source\MainMenuState.cpp" />
     <ClCompile Include="Source\MovingPlatform.cpp" />
+    <ClCompile Include="Source\MutantMan.cpp" />
     <ClCompile Include="Source\OptionsState.cpp" />
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\ParticleEngine.cpp" />
@@ -97,7 +97,6 @@
     <ClCompile Include="TinyXML\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MutantMan.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h" />
     <ClInclude Include="SGD Wrappers\SGD_Color.h" />
@@ -170,6 +169,7 @@
     <ClInclude Include="Source\MainMenuState.h" />
     <ClInclude Include="Source\MessageID.h" />
     <ClInclude Include="Source\MovingPlatform.h" />
+    <ClInclude Include="Source\MutantMan.h" />
     <ClInclude Include="Source\OptionsState.h" />
     <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\ParticleEngine.h" />

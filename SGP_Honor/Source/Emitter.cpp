@@ -13,8 +13,8 @@ Emitter::Emitter()
 	m_bLooping = true;
 	m_unMaxParticles = 10;
 	m_bStarted = false;
-	Spawned = m_unMaxParticles/2;
-	SpawnTimer = 0;
+	m_iSpawned = m_unMaxParticles/2;
+	m_fSpawnTimer = 0;
 }
 
 Emitter::Emitter(const Emitter& _Emitter)
@@ -83,8 +83,8 @@ void Emitter::StartParticles(bool restart)
 		m_EndPoint.x = m_ptPosition.x + m_iRadius;
 	}
 
-	Spawned = m_unMaxParticles / 2;
-	SpawnTimer = 0;
+	m_iSpawned = m_unMaxParticles / 2;
+	m_fSpawnTimer = 0;
 	m_vecParticles.clear();
 
 	for (size_t i = 0; i < m_unMaxParticles; i++)
@@ -178,15 +178,15 @@ void Emitter::Update(float elapsedTime)
 		{
 
 			//For Intital Burst
-			if (Spawned != m_vecParticles.size())
+			if (m_iSpawned != m_vecParticles.size())
 			{
-				SpawnTimer += elapsedTime;
-				if (Spawned >= i)
+				m_fSpawnTimer += elapsedTime;
+				if (m_iSpawned >= i)
 				{
-					if (SpawnTimer > 2.0f)
+					if (m_fSpawnTimer > 2.0f)
 					{
-						SpawnTimer = 0;
-						Spawned++;
+						m_fSpawnTimer = 0;
+						m_iSpawned++;
 					}
 					m_vecParticles[i].Update(elapsedTime);					
 				}
@@ -223,7 +223,7 @@ void Emitter::Render(SGD::Point _Pos)
 	if (m_ptPosition != _Pos && _Pos != SGD::Point(0, 0))
 	{
 		m_ptPosition = _Pos;
-		//StartParticles(true);
+		StartParticles(true);
 	}
 	if (m_iEmitterShape)
 	{
@@ -240,7 +240,7 @@ void Emitter::Render(SGD::Point _Pos)
 	for (size_t i = 0; i < m_vecParticles.size(); i++)
 	{
 		//For Intital Burst
-		if (Spawned >= i)
+		if (m_iSpawned >= i)
 		{
 			m_vecParticles[i].Render();
 		}
@@ -259,7 +259,7 @@ void Emitter::RenderINworld(SGD::Point _Pos)
 	for (size_t i = 0; i < m_vecParticles.size(); i++)
 	{
 		//For Intital Burst
-		if (Spawned >= i)
+		if (m_iSpawned >= i)
 		{
 			m_vecParticles[i].RenderINworld();
 		}
@@ -269,8 +269,8 @@ void Emitter::RenderINworld(SGD::Point _Pos)
 void Emitter::Burst(SGD::Point _pos)
 {
 	m_ptPosition = _pos;
-	Spawned = m_unMaxParticles / 2;
-	SpawnTimer = 0;
+	m_iSpawned = m_unMaxParticles / 2;
+	m_fSpawnTimer = 0;
 	for (size_t i = 0; i < m_vecParticles.size(); i++)
 	{
 		m_vecParticles[i].SetDead(false);
@@ -317,8 +317,8 @@ void Emitter::Recylce(Particle* particle)
 void Emitter::KillParticles(SGD::Point _Pos)
 {
 	m_ptPosition = _Pos;
-	Spawned = m_unMaxParticles/2;
-	SpawnTimer = 0;
+	m_iSpawned = m_unMaxParticles/2;
+	m_fSpawnTimer = 0;
 	std::mt19937 MT(device());
 	std::uniform_real_distribution<float>thing(m_ptPosition.x, m_ptPosition.x + m_szSize.width);
 	std::uniform_real_distribution<float>thing2(m_ptPosition.y, m_ptPosition.y + m_szSize.height);
