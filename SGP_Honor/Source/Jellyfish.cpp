@@ -10,15 +10,21 @@
 Jellyfish::Jellyfish() : Listener(this)
 {
 	Listener::RegisterForEvent("RESET_JELLYFISH_BOUNCE");
-	m_ptPosition = { 700, 700 };
+	//m_ptPosition = { 700, 700 };
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/Jellyfish.png");
 	m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage) * Camera::GetInstance()->GetZoomScale();
+	m_vtVelocity = SGD::Vector(20, 0);
 }
 
 
 Jellyfish::~Jellyfish()
 {
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+}
+
+void Jellyfish::SetPatrol()
+{
+	patrolTotal = SGD::Vector({ m_ptPosition.x + patrolDistance.x, m_ptPosition.y + patrolDistance.y });
 }
 
 void Jellyfish::Update(float elapsedTime)
@@ -32,6 +38,14 @@ void Jellyfish::Update(float elapsedTime)
 			bouncecounting = false;
 		}
 	}
+	SGD::Vector distance = SGD::Vector({ patrolTotal.x - m_ptPosition.x, patrolTotal.y - m_ptPosition.y });
+	if (distance.ComputeLength() < 20)
+	{
+		patrolDistance = -patrolDistance;
+		m_vtVelocity = -m_vtVelocity;
+		SetPatrol();
+	}
+	Entity::Update(elapsedTime);
 }
 
 void Jellyfish::Render(void)
@@ -65,6 +79,12 @@ void Jellyfish::HandleCollision(const IEntity* pOther)
 		bouncecounting = true;
 		SGD::Event Event = { "RESET_JELLYFISH_BOUNCE", nullptr, this };
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
+	}
+	if (pOther->GetType() == Entity::ENT_SOLID_WALL)
+	{
+		patrolDistance = -patrolDistance;
+		m_vtVelocity = -m_vtVelocity;
+		SetPatrol();
 	}
 }
 

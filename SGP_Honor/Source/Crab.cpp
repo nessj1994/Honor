@@ -5,22 +5,24 @@
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "CreateHorizontalBubble.h"
 #include "CreateVerticalBubble.h"
+#include "AnimationEngine.h"
 
 #define SlamCooldown 1.5f
 #define BubbleCastLength 2.0f
 #define BubbleSpawnRate 0.2f
+#define BubbleCooldown 3.0f
+#define SlamTime 1.3f
 
 Crab::Crab() : Listener(this)
 {
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
 	//SetCurrentState(idle);
-	SetCurrentState(bubbles);
-	m_ptPosition = SGD::Point(350, 120);
-	m_szSize = SGD::Size(1024, 512);
-	m_szLeftArm = SGD::Size(128, 128);
-	m_ptLeftArm = SGD::Point({ m_ptPosition.x, m_ptPosition.y });
-	m_szRightArm = SGD::Size(128, 128);
-	m_ptRightArm = SGD::Point({ m_ptPosition.x + m_szSize.width - m_szRightArm.width, m_ptPosition.y });
+	SetCurrentState(idle);
+
+	AnimationEngine::GetInstance()->LoadAnimation("Assets/testBoss.xml");
+	m_ts.SetCurrAnimation("Boss Idle");
+
+	//m_ptPosition = SGD::Point(350, 120);
 }
 
 
@@ -32,50 +34,129 @@ void Crab::Update(float elapsedTime)
 {
 	if (GetPlayer() != nullptr)
 	{
-		/*if (GetCurrentState() == idle)
+		if (castedLeftSlam == true)
 		{
-			if ((GetPlayer()->GetPosition().x < m_ptPosition.x && leftSlamTimer == 0) ||
-				(GetPlayer()->GetPosition().x > m_ptPosition.x + m_szSize.width && rightSlamTimer == 0) &&
-				GetPlayer()->GetPosition().y < m_ptPosition.y)
-				SetCurrentState(slamming);
-			else if (GetPlayer()->GetPosition().x >= m_ptPosition.x && GetPlayer()->GetPosition().x <= m_ptPosition.x + m_szSize.width &&
-				GetPlayer()->GetPosition().y < m_ptPosition.y)
-				SetCurrentState(swipping);
-		}*/
+			leftSlamTimer += elapsedTime;
+			if (leftSlamTimer >= SlamTime)
+			{
+				leftSlamTimer = 0;
+				LeftSlamOnCD = true;
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Boss Idle");
+				m_ts.SetPlaying(true);
+				SetCurrentState(idle);
+			}
+		}
+		if (castedRightSlam == true)
+		{
+			rightSlamTimer += elapsedTime;
+			if (rightSlamTimer >= SlamTime)
+			{
+				rightSlamTimer = 0;
+				RightSlamOnCD = true;
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Boss Idle");
+				m_ts.SetPlaying(true);
+				SetCurrentState(idle);
+			}
+		}
 
 		switch (GetCurrentState())
 		{
 		case idle:
+		{
+			SGD::Rectangle rect = GetRect();
+			if ((GetPlayer()->GetPosition().x < rect.left ||
+				 GetPlayer()->GetPosition().x > rect.right) &&
+				 GetPlayer()->GetPosition().y > rect.top && castedLeftSlam == false && castedRightSlam == false)
+				 SetCurrentState(slamming);
+			/*else if (GetPlayer()->GetPosition().x >= m_ptPosition.x && GetPlayer()->GetPosition().x <= m_ptPosition.x + m_szSize.width &&
+			GetPlayer()->GetPosition().y < m_ptPosition.y)
+			SetCurrentState(swipping);*/
+			else if (castedBubbles == false)
+				 SetCurrentState(bubbles);
+
+			if (castedBubbles == true)
+			{
+				 bubbleCD += elapsedTime;
+				 if (bubbleCD >= BubbleCooldown)
+				 {
+					 bubbleCD = 0;
+					 castedBubbles = false;
+				 }
+			}
+			if (LeftSlamOnCD == true)
+			{
+				leftSlamCD += elapsedTime;
+				if (leftSlamCD >= SlamCooldown)
+				{
+					leftSlamCD = 0;
+					LeftSlamOnCD = false;
+					castedLeftSlam = false;
+				}
+			}
+			if (RightSlamOnCD == true)
+			{
+				rightSlamCD += elapsedTime;
+				if (rightSlamCD >= SlamCooldown)
+				{
+					rightSlamCD = 0;
+					RightSlamOnCD = false;
+					castedRightSlam = false;
+				}
+			}
 			break;
+		}
 		case slamming:
+		{
+			SGD::Rectangle rect = GetRect();
+			if (GetPlayer()->GetPosition().x < rect.left && castedLeftSlam == false && castedRightSlam == false)
+			{
+				 m_ts.ResetCurrFrame();
+				 m_ts.SetCurrAnimation("Boss Left Slam");
+				 m_ts.SetPlaying(true);
+				 castedLeftSlam = true;
+			}
+			if (GetPlayer()->GetPosition().x > rect.right && castedLeftSlam == false && castedRightSlam == false)
+			{
+				 m_ts.ResetCurrFrame();
+				 m_ts.SetCurrAnimation("Boss Right Slam");
+				 m_ts.SetPlaying(true);
+				 castedRightSlam = true;
+			}
 			break;
+		}
 		case swipping:
 			break;
 		case bubbles:
 		{
-			bubbleTimer += elapsedTime;
-			bubbleSpawn += elapsedTime;
-			if (bubbleTimer <= BubbleCastLength && bubbleSpawn >= BubbleSpawnRate)
+			if (bubbleCD == 0.0f)
 			{
-				if (rand() % 2 == 0)
+				castedBubbles = true;
+				bubbleTimer += elapsedTime;
+				bubbleSpawn += elapsedTime;
+				if (bubbleTimer <= BubbleCastLength && bubbleSpawn >= BubbleSpawnRate)
 				{
-					CreateHorizontalBubble* pMsg = new CreateHorizontalBubble(this);
-					pMsg->QueueMessage();
-					pMsg = nullptr;
+					if (rand() % 2 == 0)
+					{
+						CreateHorizontalBubble* pMsg = new CreateHorizontalBubble(this);
+						pMsg->QueueMessage();
+						pMsg = nullptr;
+					}
+					else
+					{
+						CreateVerticalBubble* pMsg = new CreateVerticalBubble(this);
+						pMsg->QueueMessage();
+						pMsg = nullptr;
+					}
+					bubbleSpawn = 0.0f;
 				}
-				else
-				{
-					CreateVerticalBubble* pMsg = new CreateVerticalBubble(this);
-					pMsg->QueueMessage();
-					pMsg = nullptr;
-				}
-				bubbleSpawn = 0.0f;
-			}
 
-			if (bubbleTimer >= BubbleCastLength)
-			{
-				bubbleTimer = 0;
-				SetCurrentState(idle);
+				if (bubbleTimer >= BubbleCastLength)
+				{
+					bubbleTimer = 0;
+					SetCurrentState(idle);
+				}
 			}
 
 			break;
@@ -86,6 +167,7 @@ void Crab::Update(float elapsedTime)
 			break;
 		}
 	}
+	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 }
 
 void Crab::Render(void)
@@ -103,15 +185,12 @@ void Crab::Render(void)
 	//Camera::GetInstance()->Draw(rMyRect,
 	//	SGD::Color::Color(255, 255, 0, 0));
 
-	//SGD::Rectangle rLeftArm = SGD::Rectangle(m_ptLeftArm, m_szLeftArm);
-	//rLeftArm.Offset({ -camPos.x, -camPos.y });
-	//Camera::GetInstance()->Draw(rLeftArm,
-	//	SGD::Color::Color(255, 0, 0, 255));
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, IsFacingRight());
+}
 
-	//SGD::Rectangle rRightArm = SGD::Rectangle(m_ptRightArm, m_szRightArm);
-	//rRightArm.Offset({ -camPos.x, -camPos.y });
-	//Camera::GetInstance()->Draw(rRightArm,
-	//	SGD::Color::Color(255, 0, 0, 255));
+SGD::Rectangle Crab::GetRect(void) const
+{
+	return AnimationEngine::GetInstance()->GetRect(m_ts, false, 1, m_ptPosition);
 }
 
 void Crab::BasicCollision(const IEntity* pOther)
