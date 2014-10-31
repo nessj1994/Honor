@@ -354,6 +354,8 @@ void GameplayState::Update(float elapsedTime)
 	//m_pEmitter2->Update(elapsedTime);
 	float x = elapsedTime;
 
+
+
 	m_pEntities->UpdateAll(elapsedTime);
 	Camera::GetInstance()->Update(elapsedTime);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
@@ -377,8 +379,11 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
 
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
+	m_pEntities->CheckCollisions(Entity::ENT_PRESSURE_PLATE, Entity::ENT_SWORD);
+
 	m_pEntities->CheckCollisions(Entity::ENT_SWITCH, Entity::ENT_SWORD);
 
+	
 
 
 	m_pEntities->CheckCollisions(Entity::ENT_TEMP_FREEZE, Entity::ENT_SPRAY);
@@ -834,6 +839,9 @@ Player* GameplayState::CreatePlayer(void)
 
 	pPlayer->SetPosition(SGD::Point(100, 100));
 	pPlayer->SetSize(SGD::Size(32, 64));
+
+
+	pSword->SetSize(SGD::Size(800, 80));
 	pPlayer->SetSword(pSword);
 	m_pEntities->AddEntity(pSword, Entity::ENT_SWORD);
 

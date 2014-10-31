@@ -89,7 +89,7 @@ public:
 //	bool GetIsFalling(void)const { return is_Falling; }
 	bool GetIsInputStuck(void)const { return is_Stuck; }
 	bool GetDead(void) const { return m_bDead; }
-
+	bool GetIsSwinging(void) const { return is_Swinging; }
 
 	//Floats
 	float GetDashTime(void) const { return m_fDashTime; }
@@ -151,6 +151,7 @@ private:
 	bool is_Platform = false;
 	bool is_Ramp = false;
 	bool m_bDead = false;
+	bool is_Swinging = false;
 
 	float m_fDashTime = 0.0f;
 	float m_fIceTimer = 0.0f;

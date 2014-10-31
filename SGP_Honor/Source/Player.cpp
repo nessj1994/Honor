@@ -1167,7 +1167,10 @@ void Player::UpdateTimers(float elapsedTime)
 	m_fSwingTimer -= elapsedTime;
 
 	if (m_fSwingTimer < 0.0f)
+	{
 		m_fSwingTimer = 0;
+		is_Swinging = false;
+	}
 
 	if (m_fJumpTimer < 0.0f)
 		m_fJumpTimer = 0;
@@ -1222,7 +1225,11 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 
 void Player::UpdateBounce(float elapsedTime)
 {
+	
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+	//pInput->GetDPad(0);
+
 	if (pInput->IsKeyDown(SGD::Key::W) == true)
 	{
 		GetBounce()->GetEMBubbles()->Finish(false);
@@ -1831,12 +1838,16 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
-	if (pInput->IsKeyPressed(SGD::Key::G) == true)
+	if (pInput->IsKeyPressed(SGD::Key::G) == true
+		|| pInput->IsButtonPressed(0, 1 /*B button on Xbox*/) == true)
 	{
 		if (m_fSwingTimer <= 0.0f)
 		{
 			m_fSwingTimer = 0.2f;
+			is_Swinging = true;
 		}
+
+
 	}
 
 	if (m_fSwingTimer > 0.0f)
