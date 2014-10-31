@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="MutantMan.cpp" />
     <ClCompile Include="SGD Wrappers\SGD_AudioManager.cpp" />
     <ClCompile Include="SGD Wrappers\SGD_Event.cpp" />
     <ClCompile Include="SGD Wrappers\SGD_EventManager.cpp" />
@@ -96,6 +97,7 @@
     <ClCompile Include="TinyXML\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MutantMan.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SGD Wrappers\SGD_AudioManager.h" />
     <ClInclude Include="SGD Wrappers\SGD_Color.h" />

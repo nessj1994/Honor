@@ -1461,7 +1461,7 @@ void Player::UpdateHawk(float elapsedTime)
 		{
 			m_fHawkTimer = 0.0f;
 
-			if (m_emFeatherExplosion->Done())
+			if (!m_bReturningHawk)
 			{
 				//Emitter Stuff
 				m_bHawkExplode = true;
@@ -1638,6 +1638,7 @@ void Player::HawkExplode(SGD::Point _pos)
 		m_emFeatherExplosion->Burst(_pos);
 		m_bReturningHawk = true;
 		m_emHawkReturn->Burst(_pos);
+		m_emHawkReturn->Finish();
 	}	
 }
 
