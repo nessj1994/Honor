@@ -296,7 +296,7 @@ void Player::Update(float elapsedTime)
 		m_fShotTimer += elapsedTime;
 
 
-		if (pInput->IsKeyDown(SGD::Key::Tab) == true
+		if (pInput->IsKeyPressed(SGD::Key::Tab) == true
 			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
 		{
 			GetDash()->GetEMDash()->Finish(false);
@@ -756,6 +756,7 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_SOLID_WALL)
 	{
+		SetSpeed(2550);
 		is_Platform = true;
 		BasicCollision(pOther);
 		SetFriction(7.0f);
@@ -811,6 +812,10 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_ICE)
 	{
+	
+			//m_vtVelocity.x *= 1000;
+		//SetSpeed(5000);
+		BasicCollision(pOther);
 		SetFriction(0.1f);
 	}
 
@@ -988,13 +993,13 @@ void Player::BasicCollision(const IEntity* pOther)
 
 			}
 
-			if(is_Jumping)
-			{
-				m_ts.ResetCurrFrame();
-				m_ts.SetCurrAnimation("Idle");
-				m_ts.SetPlaying(true);
+			//if(m_unCurrentState == JUMPING_STATE)
+			//{
+			//	m_ts.ResetCurrFrame();
+			//	m_ts.SetCurrAnimation("Idle");
+			//	m_ts.SetPlaying(true);
 
-			}
+			//}
 
 			SetJumpVelCur(0);
 
@@ -1069,7 +1074,7 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	if (/*nIntersectWidth*/ rIntersectWidth > 17)
 	{
 		//SetPosition({ GetPosition().x, (float)rObject.bottom - tempInt - GetSize().height });
-		m_ptPosition.y -= rIntersectHeight;
+		//m_ptPosition.y -= rIntersectHeight;
 	}
 	//else
 	//{

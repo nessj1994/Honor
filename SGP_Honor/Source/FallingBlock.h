@@ -52,8 +52,8 @@ private:
 	SGD::Size m_szSize = { 32, 32 };
 	Entity* m_pTarget = nullptr;
 	unsigned int m_unCurrentState = 0;
-	float m_fFallSpeed = 100.0f;
-	float m_fRiseSpeed = 100.0f;
+	float m_fFallSpeed = 3000.0f;
+	float m_fRiseSpeed = 3000.0f;
 
 
 };
