@@ -88,7 +88,7 @@ public:
 //	bool GetIsFalling(void)const { return is_Falling; }
 	bool GetIsInputStuck(void)const { return is_Stuck; }
 	bool GetDead(void) const { return m_bDead; }
-
+	bool GetStunned(void) const { return m_bStunned; }
 
 	//Floats
 	float GetDashTime(void) const { return m_fDashTime; }
@@ -106,6 +106,7 @@ public:
 
 	////////////////////////////////////////////
 	/////////////////Mutators//////////////////
+	void SetStunnded(bool _stun) { m_bStunned = _stun; }
 	void SetHasArmor(bool armor) { m_bHasArmor = armor; }
 	void SetHasDash(bool dash) { m_bHasDash = dash; }
 	void SetHasIce(bool ice) { m_bHasIce = ice; }
@@ -146,6 +147,7 @@ private:
 	bool is_Platform = false;
 	bool is_Ramp = false;
 	bool m_bDead = false;
+	bool m_bStunned = false;
 
 	float m_fDashTime = 0.0f;
 	float m_fIceTimer = 0.0f;
@@ -156,6 +158,7 @@ private:
 	float m_fButtonTimer = 0.0f;
 	float m_fDeathTimer = 0.0f;
 	float m_fArmorTimer = 0.0f;
+	float m_fStunTimer = 0.0f;
 
 	float m_fShotTimer = 0.20f;
 	float m_fInputTimer = 0.0f;

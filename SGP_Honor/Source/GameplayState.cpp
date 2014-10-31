@@ -182,7 +182,7 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadHonorVector();
 
-	LoadLevel("HubLevel");
+	LoadLevel("Level1_5");
 
 	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
@@ -420,10 +420,8 @@ void GameplayState::Update(float elapsedTime)
 // - Render all game entities
 void GameplayState::Render(void)
 {
-	m_pLevel->RenderImageLayer(true);
 	m_pLevel->Render();
-
-
+	m_pLevel->RenderImageLayer(true);
 
 	//m_pEmitter2->Render();
 	m_pEntities->RenderAll();
@@ -1256,6 +1254,8 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 		{
 			Bull * pBull = new Bull();
 			pBull->SetPosition({ (float)_x, (float)_y });
+			pBull->SetStartPosition({ (float)_x, (float)_y });
+			pBull->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pBull, Entity::ENT_BOSS_BULL);
 			pBull->Release();
 			break;
@@ -1517,6 +1517,7 @@ bool GameplayState::GetHonorValue(unsigned int _index)
 	{
 		return m_mCollectedHonor[m_strCurrLevel][_index];
 	}
+	return false;
 }
 
 /////////////////////////////////////////////

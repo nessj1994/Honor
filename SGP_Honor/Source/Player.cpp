@@ -126,7 +126,7 @@ void Player::Update(float elapsedTime)
 			/////////////////////////////////////////////////
 			/////////////////Movement////////////////////////
 			//reset currframe to 0 & set the animation playing to true
-			if (IsDashing() == false)
+			if (IsDashing() == false && !GetStunned())
 			{
 				UpdateMovement(elapsedTime, stickFrame, leftClamped, leftStickXOff);
 			}
@@ -226,7 +226,7 @@ void Player::Render(void)
 	Camera::GetInstance()->Draw(SGD::Rectangle(swingRect.left, swingRect.top, swingRect.right, swingRect.bottom),
 		SGD::Color::Color(255, 255, 255, 0));
 
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight());
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight(), 1.0f);
 
 	// Draw gui for amount of honor
 	SGD::OStringStream output;
@@ -399,14 +399,19 @@ void Player::HandleCollision(const IEntity* pOther)
 		// TODO use states
 		// Throw the player back
 		Bull * bull = (Bull*)(pOther);
-		float throwSpeed = 2000;
-		if (bull->IsFacingRight())
+		if (bull->GetRunning())
 		{
-			throwSpeed = -2000;
+			float throwSpeed = -3000;
+			if (bull->IsFacingRight())
+			{
+				throwSpeed = 3000;
+			}
+			SetGravity(0);
+			SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
+			SetVelocity({ throwSpeed, -1000 });
+			SetStunnded(true);
+			m_fStunTimer = 0.35f;
 		}
-		SetGravity(0);
-		SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
-		SetVelocity({ throwSpeed, -1000 });
 	}
 }
 
@@ -1081,6 +1086,11 @@ void Player::KillPlayer()
 		m_bDead = true;
 		m_unJumpCount = 0;
 
+		// Reset room
+		SGD::Event* pATEvent = new SGD::Event("ResetRoom", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
+
 		// TODO Add effects
 
 	}
@@ -1127,6 +1137,14 @@ void Player::UpdateTimers(float elapsedTime)
 	m_fLandTimer -= elapsedTime;
 
 	m_fSwingTimer -= elapsedTime;
+
+	if (m_fStunTimer > 0)
+		m_fStunTimer -= elapsedTime;
+	else
+	{
+		m_fStunTimer = 0.0f;
+		m_bStunned = false;
+	}
 
 	if (m_fSwingTimer < 0.0f)
 		m_fSwingTimer = 0;

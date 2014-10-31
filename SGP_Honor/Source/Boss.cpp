@@ -24,10 +24,11 @@ void Boss::Update(float elapsedTime)
 		SetGravity(-3000);
 		SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
 	}
-	SetIsFalling(true);
 
 	// Update movement
 	Unit::Update(elapsedTime);
+
+	SetIsFalling(true);
 }
 
 ///////////////////////////////////////////////////
@@ -101,6 +102,7 @@ void Boss::BasicCollision(const IEntity* pOther)
 	//Colliding with the side of the object
 	if (nIntersectHeight > nIntersectWidth)
 	{
+		SetHitWall(true);
 		if (rBoss.right == rIntersection.right)
 		{
 

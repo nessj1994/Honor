@@ -24,8 +24,9 @@ public:
 	Entity* GetPlayer(void) const { return m_pPlayer; }
 	unsigned int GetHitPoints(void) const { return m_unHitPoints; }
 	unsigned int GetCurrentState(void) const { return m_unCurrentState; }
-	SGD::Point GetStartPosition(void) const { return m_ptPosition; }
+	SGD::Point GetStartPosition(void) const { return m_ptStartPosition; }
 	bool GetIsFalling(void)const { return is_Falling; }
+	bool GetHitWall(void) const { return m_bHitWall; }
 
 	 /////////////////////////////////////////////
 	/////////////////Mutators////////////////////
@@ -34,6 +35,7 @@ public:
 	void SetCurrentState(unsigned int state) { m_unCurrentState = state; }
 	void SetIsFalling(bool _fall) { is_Falling = _fall; }
 	void SetStartPosition(SGD::Point startPos) { m_ptStartPosition = startPos; }
+	void SetHitWall(bool _wall) { m_bHitWall = _wall; }
 
 private:
 
@@ -42,6 +44,7 @@ private:
 	unsigned int m_unCurrentState;
 	SGD::Point m_ptStartPosition;
 
+	bool m_bHitWall;
 	bool is_Falling = true;
 
 
