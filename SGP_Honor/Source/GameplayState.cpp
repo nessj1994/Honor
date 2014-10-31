@@ -10,6 +10,8 @@
 #include "DestroyEntityMessage.h"
 #include "CreateProjectileMessage.h"
 #include "CreateGravProjectileMessage.h"
+#include "CreateHorizontalBubble.h"
+#include "CreateVerticalBubble.h"
 #include "CreateSprayMessage.h"
 #include "CreateHawkMessage.h"
 #include "ChangeLevelMessage.h"
@@ -18,6 +20,8 @@
 #include "Entity.h"
 #include "Projectile.h"
 #include "GravProjectile.h"
+#include "HorizontalBubble.h"
+#include "VerticalBubble.h"
 #include "Player.h"
 #include "EntityManager.h"
 #include "Camera.h"
@@ -47,6 +51,7 @@
 #include "Jellyfish.h"
 #include "Teleporter.h"
 #include "Bull.h"
+#include "Crab.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -109,7 +114,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	//Load Audio
 	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/HonorBGM.xwm");
-	pAudio->PlayAudio(m_hBGM, true);
+	//pAudio->PlayAudio(m_hBGM, true);
 
 	//These are only for testing and will be removed later
 	//m_pDoor = new Door();
@@ -127,13 +132,11 @@ void GameplayState::Enter(void) //Load Resources
 	//m_pStatue = new HintStatue();
 	//m_pStatue->SetMessageString("This is a test string");
 
-	m_pSquid = new Squid();
-	m_pPouncer = new Pouncer();
-	m_pJellyfish = new Jellyfish();
-	m_pJellyfish2 = new Jellyfish();
-	m_pJellyfish2->SetPosition({900, 700});
-
-
+	//m_pSquid = new Squid();
+	//m_pPouncer = new Pouncer();
+	//m_pJellyfish = new Jellyfish();
+	//m_pJellyfish2 = new Jellyfish();
+	//m_pJellyfish2->SetPosition({900, 700});
 
 	//Create player with factory method
 	m_pPlayer = CreatePlayer();
@@ -169,10 +172,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pEntities->AddEntity(m_pHonor, Entity::ENT_HONOR);
 	m_pEntities->AddEntity(m_pPendulum, Entity::ENT_PENDULUM);
 	m_pEntities->AddEntity(m_pStatue, Entity::ENT_STATUE);
-	m_pDoor->SetActivator(m_pSwitch);
-
-
-
+	m_pDoor->SetActivator(m_pSwitch);*/
 
 	//For Particle Testing*/
 	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/Bla.xml", "Test", { 131, 673 });
@@ -180,15 +180,16 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("HubLevel");
+	LoadLevel("Level4_5");
 
-	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
-	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
+	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
+	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
 //	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
 //	m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
 
 	// Temporary
 	//CreateBullBoss(500, 400);
+	//CreateCrabBoss();
 }
 
 
@@ -240,14 +241,14 @@ void GameplayState::Exit(void)
 	//if (m_pPendulum != nullptr)
 	//	m_pPendulum->Release();
 
-	delete m_pSquid;
+	//delete m_pSquid;
 
-	
-	delete m_pPouncer;
+	//
+	//delete m_pPouncer;
 
-	delete m_pJellyfish;
+	//delete m_pJellyfish;
 
-	delete m_pJellyfish2;
+	//delete m_pJellyfish2;
 	//Create local references to the SGD Wrappers
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
@@ -347,7 +348,7 @@ void GameplayState::Update(float elapsedTime)
 
 	//	m_pCamera->Update(elapsedTime);
 
-	m_pEmitter2->Update(elapsedTime);
+	//m_pEmitter2->Update(elapsedTime);
 	float x = elapsedTime;
 
 	m_pEntities->UpdateAll(elapsedTime);
@@ -367,7 +368,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MOVING_PLATFORM);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TELEPORTER);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ENEMY);
-	m_pEntities->CheckCollisions(Entity::ENT_JELLYFISH, Entity::ENT_PLAYER);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_JELLYFISH);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_BULL);
 
 
 
@@ -420,9 +422,17 @@ void GameplayState::Render(void)
 
 
 
-	m_pEmitter2->Render();
+	//m_pEmitter2->Render();
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
+
+	if (m_pPlayer->GetDead())
+	{
+		// Draw a fading rectangle
+		unsigned char alpha = (char)(((0.5f - m_pPlayer->GetDeathTimer()) / 0.5f) * 255.0f);
+		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
+		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+	}
 
 
 }
@@ -523,6 +533,66 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 
 
 			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+			{
+				 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+			}
+
+			pProj->Release();
+			pProj = nullptr;
+
+
+			break;
+		}
+		case MessageID::MSG_CREATE_HORIZ_BUBBLE:
+		{
+			//Downcast to the real message type
+			const CreateHorizontalBubble* pCreateMsg = dynamic_cast<const CreateHorizontalBubble*>(pMsg);
+
+			//Make sure the message isn't a nullptr
+			assert(pCreateMsg != nullptr
+				 && "GameplayState::MessageProc - MSG_CREATE_HORIZ_BUBBLE is not actually a CreateHorizontalBubbleMessage");
+
+			//Create a local reference to the gameplaystate singleton
+			GameplayState* pSelf = GameplayState::GetInstance();
+
+
+			//Play the projectile's audio sound
+
+			//Call CreateProjectile factory method sending in the messages projectile
+			Entity* pProj = pSelf->CreateHorizBubble(pCreateMsg->GetOwner());
+
+
+			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_CRAB)
+			{
+				 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+			}
+
+			pProj->Release();
+			pProj = nullptr;
+
+
+			break;
+		}
+		case MessageID::MSG_CREATE_VERT_BUBBLE:
+		{
+			//Downcast to the real message type
+			const CreateVerticalBubble* pCreateMsg = dynamic_cast<const CreateVerticalBubble*>(pMsg);
+
+			//Make sure the message isn't a nullptr
+			assert(pCreateMsg != nullptr
+				 && "GameplayState::MessageProc - MSG_CREATE_VERT_BUBBLE is not actually a CreateVerticalBubble");
+
+			//Create a local reference to the gameplaystate singleton
+			GameplayState* pSelf = GameplayState::GetInstance();
+
+
+			//Play the projectile's audio sound
+
+			//Call CreateProjectile factory method sending in the messages projectile
+			Entity* pProj = pSelf->CreateVertBubble(pCreateMsg->GetOwner());
+
+
+			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_CRAB)
 			{
 				 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
 			}
@@ -662,7 +732,7 @@ Entity* GameplayState::CreateProjectile(Entity* pOwner) const
 {
 	Projectile* proj = new Projectile();
 	if (pOwner->GetDirection().x == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + +pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	else
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
@@ -686,6 +756,26 @@ Entity* GameplayState::CreateGravProjectile(Entity* pOwner) const
 	proj->SetDirection({ pOwner->GetDirection() });
 	proj->SetOwner(pOwner);
 
+	return proj;
+}
+
+Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
+{
+	HorizontalBubble* proj = new HorizontalBubble();
+	proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width / 2, 
+		pOwner->GetPosition().y + pOwner->GetSize().height - 80));
+	proj->SetOwner(pOwner);
+	proj->SetSize({ 40, 40 });
+	return proj;
+}
+
+Entity* GameplayState::CreateVertBubble(Entity* pOwner) const
+{
+	VerticalBubble* proj = new VerticalBubble();
+	proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width / 2,
+		pOwner->GetPosition().y + pOwner->GetSize().height - 80));
+	proj->SetOwner(pOwner);
+	proj->SetSize({ 40, 40 });
 	return proj;
 }
 
@@ -1087,14 +1177,102 @@ void GameplayState::CreateTeleporter(int _x, int _y, std::string _level)
 }
 
 /////////////////////////
-// CreateBullBoss
-// -Creates a bull boss at the given coordinates
-void GameplayState::CreateBullBoss(int _x, int _y)
+// CreateEnemy
+// -Creates an enemy at the given coordinates
+void GameplayState::CreateEnemy(int _x, int _y, int _type)
 {
-	Bull * mBull = new Bull();
-	mBull->SetPosition({ (float)_x, (float)_y });
-	m_pEntities->AddEntity(mBull, Entity::ENT_BOSS_BULL);
-	mBull->Release();
+	switch (_type)
+	{
+		case 0: // bull
+		{
+			break;
+		}
+		case 1: // skeleton
+		{
+			break;
+		}
+		case 2: // mutant man
+		{
+			break;
+		}
+		case 3: // mutant bird
+		{
+			break;
+		}
+		case 4: // ice golem
+		{
+			break;
+		}
+		case 5: // ice bat
+		{
+			break;
+		}
+		case 6: // ice turtle
+		{
+			break;
+		}
+		case 7: // hermit crab
+		{
+			Pouncer * pPouncer = new Pouncer();
+			pPouncer->SetPosition({ (float)_x, (float)_y });
+			m_pEntities->AddEntity(pPouncer, Entity::ENT_POUNCER);
+			pPouncer->Release();
+			break;
+		}
+		case 8: // squid
+		{
+			Squid * pSquid = new Squid();
+			pSquid->SetPosition({ (float)_x, (float)_y });
+			m_pEntities->AddEntity(pSquid, Entity::ENT_SQUID);
+			pSquid->Release();
+			break;
+		}
+		case 9: // jellyfish
+		{
+			Jellyfish * pJelly = new Jellyfish();
+			pJelly->SetPosition({ (float)_x, (float)_y });
+			m_pEntities->AddEntity(pJelly, Entity::ENT_JELLYFISH);
+			pJelly->Release();
+			break;
+		}
+	}
+}
+
+/////////////////////////
+// CreateBoss
+// -Creates a boss at the given coordinates
+void GameplayState::CreateBoss(int _x, int _y, int _type)
+{
+	switch (_type)
+	{
+		case 0: // bull
+		{
+			Bull * pBull = new Bull();
+			pBull->SetPosition({ (float)_x, (float)_y });
+			m_pEntities->AddEntity(pBull, Entity::ENT_BOSS_BULL);
+			pBull->Release();
+			break;
+		}
+		case 1: // caveman
+		{
+			break;
+		}
+		case 2: // yeti
+		{
+			break;
+		}
+		case 3: // crab
+		{
+			Crab * mCrab = new Crab();
+			m_pEntities->AddEntity(mCrab, Entity::ENT_BOSS_CRAB);
+			mCrab->Release();
+			break;
+		}
+		case 4: // wizard
+		{
+			break;
+		}
+	}
 }
 
 #pragma endregion
@@ -1327,7 +1505,7 @@ void GameplayState::LoadHonorVector()
 	}
 }
 
-bool GameplayState::GetHonorValue(int _index)
+bool GameplayState::GetHonorValue(unsigned int _index)
 {
 	if (_index < m_mCollectedHonor[m_strCurrLevel].size())
 	{

@@ -39,8 +39,10 @@
     <ClCompile Include="Source\Crab.cpp" />
     <ClCompile Include="Source\CreateGravProjectileMessage.cpp" />
     <ClCompile Include="Source\CreateHawkMessage.cpp" />
+    <ClCompile Include="Source\CreateHorizontalBubble.cpp" />
     <ClCompile Include="Source\CreateProjectileMessage.cpp" />
     <ClCompile Include="Source\CreateSprayMessage.cpp" />
+    <ClCompile Include="Source\CreateVerticalBubble.cpp" />
     <ClCompile Include="Source\CreditsState.cpp" />
     <ClCompile Include="Source\Dash.cpp" />
     <ClCompile Include="Source\DestroyEntityMessage.cpp" />
@@ -61,6 +63,7 @@
     <ClCompile Include="Source\Hawk.cpp" />
     <ClCompile Include="Source\HintStatue.cpp" />
     <ClCompile Include="Source\Honor.cpp" />
+    <ClCompile Include="Source\HorizontalBubble.cpp" />
     <ClCompile Include="Source\Ice.cpp" />
     <ClCompile Include="Source\InstructionsState.cpp" />
     <ClCompile Include="Source\Jellyfish.cpp" />
@@ -86,6 +89,7 @@
     <ClCompile Include="Source\Teleporter.cpp" />
     <ClCompile Include="Source\Turret.cpp" />
     <ClCompile Include="Source\Unit.cpp" />
+    <ClCompile Include="Source\VerticalBubble.cpp" />
     <ClCompile Include="Source\WinMain.cpp" />
     <ClCompile Include="Source\Wizard.cpp" />
     <ClCompile Include="Source\World.cpp" />
@@ -132,8 +136,10 @@
     <ClInclude Include="Source\Crab.h" />
     <ClInclude Include="Source\CreateGravProjectileMessage.h" />
     <ClInclude Include="Source\CreateHawkMessage.h" />
+    <ClInclude Include="Source\CreateHorizontalBubble.h" />
     <ClInclude Include="Source\CreateProjectileMessage.h" />
     <ClInclude Include="Source\CreateSprayMessage.h" />
+    <ClInclude Include="Source\CreateVerticalBubble.h" />
     <ClInclude Include="Source\CreditsState.h" />
     <ClInclude Include="Source\Dash.h" />
     <ClInclude Include="Source\DestroyEntityMessage.h" />
@@ -154,6 +160,7 @@
     <ClInclude Include="Source\Hawk.h" />
     <ClInclude Include="Source\HintStatue.h" />
     <ClInclude Include="Source\Honor.h" />
+    <ClInclude Include="Source\HorizontalBubble.h" />
     <ClInclude Include="Source\Ice.h" />
     <ClInclude Include="Source\IEntity.h" />
     <ClInclude Include="Source\IGameState.h" />
@@ -182,6 +189,7 @@
     <ClInclude Include="Source\Teleporter.h" />
     <ClInclude Include="Source\Turret.h" />
     <ClInclude Include="Source\Unit.h" />
+    <ClInclude Include="Source\VerticalBubble.h" />
     <ClInclude Include="Source\Wizard.h" />
     <ClInclude Include="Source\World.h" />
     <ClInclude Include="Source\Yeti.h" />
