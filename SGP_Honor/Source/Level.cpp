@@ -158,8 +158,8 @@ void Level::RenderImageLayer(bool background)
 			// Variables to help with culling
 			int startX = (int)(Camera::GetInstance()->GetCameraPos().x / 32 * layer->GetScrollSpeed()) - 1;
 			int startY = (int)(Camera::GetInstance()->GetCameraPos().y / 32 * layer->GetScrollSpeed()) - 1;
-			int mapWidth = (int)(Game::GetInstance()->GetScreenWidth() / 32)	;
-			int mapHeight = (int)(Game::GetInstance()->GetScreenHeight() / 32) ;
+			int mapWidth = (int)((Game::GetInstance()->GetScreenWidth() / 32.0f)	/ Camera::GetInstance()->GetZoomScale());
+			int mapHeight = (int)((Game::GetInstance()->GetScreenHeight() / 32.0f) / Camera::GetInstance()->GetZoomScale());
 
 			// TODO fix culling
 
@@ -416,7 +416,7 @@ bool Level::LoadLevel(const char * _path)
 					int amount;
 					pArg->Attribute("value", &amount);
 					GameplayState::GetInstance()->CreateHonor(x, y, amount, honorIndex);
-					int vectorSize = GameplayState::GetInstance()->GetHonorVectorSize();
+					unsigned int vectorSize = GameplayState::GetInstance()->GetHonorVectorSize();
 					// If there is a value in collected honor for this
 					if (honorIndex < vectorSize)
 					{
@@ -694,7 +694,7 @@ void Level::CheckEvent(IEntity * _entity)
 				if (levelEvent != "") // only throw non blank events
 				{
 					// Throw event
-					SGD::Event* pATEvent = new SGD::Event(levelEvent.c_str(), nullptr, this);
+					SGD::Event* pATEvent = new SGD::Event(levelEvent.c_str(), nullptr, _entity);
 					SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 					pATEvent = nullptr;
 				}

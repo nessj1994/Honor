@@ -58,7 +58,7 @@ void Turret::Render(void)
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
 	//Render us with the camera
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0.0f, m_ts, false);
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0.0f, m_ts, false, 1.0f);
 }
 
 int Turret::GetType(void) const

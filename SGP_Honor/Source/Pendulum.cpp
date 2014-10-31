@@ -31,7 +31,7 @@ void Pendulum::Update(float elapsedTime)
 }
 void Pendulum::Render(void)
 {
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, true);
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, true, 1.0f);
 }
 
 SGD::Rectangle Pendulum::GetRect(void) const
