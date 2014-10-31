@@ -52,6 +52,7 @@
 #include "Teleporter.h"
 #include "Bull.h"
 #include "Crab.h"
+#include "SwordSwing.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -324,7 +325,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level1_1");
+		LoadLevel("Level3_1");
 	}
 
 	if (pInput->IsKeyPressed(SGD::Key::Escape)
@@ -372,7 +373,11 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ENEMY);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_JELLYFISH);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_BULL);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STATUE);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
 
+	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
+	m_pEntities->CheckCollisions(Entity::ENT_SWITCH, Entity::ENT_SWORD);
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_BULL, Entity::ENT_DOOR);
 
 
@@ -388,8 +393,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_STALACTITE);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_GEYSER);
-	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STATUE);
-	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
+	
 
 	//if (m_pArmor != nullptr)
 	//	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ARMOR);
@@ -825,9 +829,13 @@ Hawk* GameplayState::CreateHawk(Entity* pOwner) const
 Player* GameplayState::CreatePlayer(void)
 {
 	Player* pPlayer = new Player;
+	SwordSwing* pSword = new SwordSwing;
 
 	pPlayer->SetPosition(SGD::Point(100, 100));
 	pPlayer->SetSize(SGD::Size(32, 64));
+	pPlayer->SetSword(pSword);
+	m_pEntities->AddEntity(pSword, Entity::ENT_SWORD);
+
 
 	return pPlayer;
 
@@ -1287,6 +1295,7 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 void GameplayState::SaveGame()
 {
 
+ 
 	//Create the doc
 	TiXmlDocument doc;
 

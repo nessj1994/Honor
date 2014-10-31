@@ -20,7 +20,7 @@ void Unit::Update(float elapsedTime)
 	if (m_fDashTimer <= 0)
 	{
 		m_bDashing = false;
-		m_fDashTimer = 0.3f;
+		m_fDashTimer = 0.15f;
 		if (IsFacingRight() == true)
 			SetVelocity({/* GetVelocity().x - 30*/0, GetVelocity().y });
 		else

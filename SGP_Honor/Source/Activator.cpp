@@ -2,6 +2,9 @@
 #include "Camera.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include <Windows.h>
+#include "Player.h"
+
 
 Activator::Activator(bool isPressure)
 {
@@ -106,6 +109,58 @@ void Activator::HandleCollision(const IEntity* pOther)
 		if (m_bPressurePlate == false && m_fSwitchTimer == 0.0f)
 		{
 
+			//Open Door
+			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+
+			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+			m_fSwitchTimer = 3.0f;
+		}
+
+	}
+
+
+	if (m_pPlayer != nullptr)
+	{
+		
+		RECT rSwingRect;
+		rSwingRect.left =	m_pPlayer->GetSwingRect().left;
+		rSwingRect.top =	m_pPlayer->GetSwingRect().top;
+		rSwingRect.right =	m_pPlayer->GetSwingRect().right;
+		rSwingRect.bottom = m_pPlayer->GetSwingRect().bottom;
+
+		RECT rObject;
+		rObject.left = GetRect().left - Camera::GetInstance()->GetCameraPos().x;
+		rObject.top = GetRect().top - Camera::GetInstance()->GetCameraPos().y;
+		rObject.right = GetRect().right - Camera::GetInstance()->GetCameraPos().x;
+		rObject.bottom = GetRect().bottom - Camera::GetInstance()->GetCameraPos().y;
+
+		RECT rIntersection = {};
+
+		IntersectRect(&rIntersection, &rObject, &rSwingRect);
+
+		int nIntersectWidth = rIntersection.right - rIntersection.left;
+		int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+
+		if (nIntersectHeight > nIntersectWidth)
+		{
+			//Open Door
+			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+
+			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+			m_fSwitchTimer = 3.0f;
+		}
+
+		if (nIntersectHeight < nIntersectWidth)
+		{
 			//Open Door
 			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);

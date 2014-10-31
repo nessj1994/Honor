@@ -252,6 +252,9 @@
     <ClCompile Include="Source\VerticalBubble.cpp" />
     <ClCompile Include="Source\CreateVerticalBubble.cpp" />
     <ClCompile Include="Source\CreateHorizontalBubble.cpp" />
+    <ClCompile Include="Source\SwordSwing.cpp">
+      <Filter>Entities\Spells</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -529,6 +532,9 @@
     <ClInclude Include="Source\VerticalBubble.h" />
     <ClInclude Include="Source\CreateVerticalBubble.h" />
     <ClInclude Include="Source\CreateHorizontalBubble.h" />
+    <ClInclude Include="Source\SwordSwing.h">
+      <Filter>Entities\Spells</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />
