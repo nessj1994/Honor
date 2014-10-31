@@ -1231,12 +1231,18 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 				}
 				else
 				{
-					SetVelocity(SGD::Vector(GetVelocity().x + (2 * GetSpeed() * elapsedTime), GetVelocity().y));
+					SetVelocity(SGD::Vector(GetVelocity().x + (3 * GetSpeed() * elapsedTime), GetVelocity().y));
 				}
 			}
 			else
 			{
-				SetVelocity(SGD::Vector(GetVelocity().x + ( 5* GetSpeed()) * elapsedTime, GetVelocity().y));
+				if (GetIsInputStuck() == true)
+				{
+					SetVelocity(SGD::Vector(GetVelocity().x + (3 * GetSpeed()) * elapsedTime, GetVelocity().y));
+
+				}
+				else
+					SetVelocity(SGD::Vector(GetVelocity().x + (1 * GetSpeed()) * elapsedTime, GetVelocity().y));
 				//SetVelocity(SGD::Vector(1050, GetVelocity().y));
 			}
 
@@ -1267,12 +1273,18 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 				}
 				else
 				{
-					SetVelocity(SGD::Vector(GetVelocity().x - (2 * GetSpeed() * elapsedTime), GetVelocity().y));
+					SetVelocity(SGD::Vector(GetVelocity().x - (3 * GetSpeed() * elapsedTime), GetVelocity().y));
 				}
 			}
 			else
 			{
-				SetVelocity(SGD::Vector(GetVelocity().x - ( 5*GetSpeed()) * elapsedTime, GetVelocity().y));
+				if (GetIsInputStuck() == true)
+				{
+					SetVelocity(SGD::Vector(GetVelocity().x - (3 * GetSpeed()) * elapsedTime, GetVelocity().y));
+
+				}
+				else
+					SetVelocity(SGD::Vector(GetVelocity().x - (1 * GetSpeed()) * elapsedTime, GetVelocity().y));
 				//SetVelocity(SGD::Vector(-1050, GetVelocity().y));
 			}
 			SetDirection({ -1, 0 });

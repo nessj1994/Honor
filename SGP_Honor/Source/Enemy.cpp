@@ -3,6 +3,7 @@
 #include "Player.h"
 #include <Windows.h>
 #include "Camera.h"
+#include "DestroyEntityMessage.h"
 
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 
@@ -82,7 +83,11 @@ void Enemy::HandleCollision(const IEntity* pOther)
 	{
 		//if switch, activate switch
 		//if evenmy call event to kill enemy
-		SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
+		//SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
+
+		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+		pMsg->QueueMessage();
+		pMsg = nullptr;
 
 	}
 
