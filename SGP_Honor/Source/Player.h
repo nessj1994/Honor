@@ -142,6 +142,8 @@ private:
 	bool is_Jumping = false;
 	bool is_Falling = true;
 	bool has_landed = true;
+	bool m_bSliding = false;
+
 
 	bool is_Stuck = false;
 	bool is_Left_Coll = false;

@@ -273,11 +273,15 @@ void Player::HandleCollision(const IEntity* pOther)
 	Unit::HandleCollision(pOther);
 	if (pOther->GetType() == ENT_DOOR)
 	{
+		m_bSliding = false;
+
 		BasicCollision(pOther);
 	}
 
 	if (pOther->GetType() == ENT_JELLYFISH)
 	{
+		m_bSliding = false;
+
 		JellyfishCollision(pOther);
 	}
 
@@ -302,6 +306,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_SOLID_WALL)
 	{
+		m_bSliding = false;
+
 		is_Platform = true;
 		BasicCollision(pOther);
 		SetFriction(25.0f);
@@ -309,6 +315,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if(pOther->GetType() == Entity::ENT_MOVING_PLATFORM)
 	{
+		m_bSliding = false;
+
 		is_Platform = true;
 		BasicCollision(pOther);
 		SetFriction(1.0f);
@@ -316,6 +324,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if(pOther->GetType() == Entity::ENT_BLOCK)
 	{
+		m_bSliding = false;
+
 		is_Platform = true;
 		BasicCollision(pOther);
 		SetFriction(1.0f);
@@ -330,6 +340,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if(pOther->GetType() == Entity::ENT_NOT_FROZEN)
 	{
+		m_bSliding = false;
+
 		is_Platform = true;
 		BasicCollision(pOther);
 		SetFriction(1.0f);
@@ -337,6 +349,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_DEATH)
 	{
+		m_bSliding = false;
+
 		//Kill the player
 		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
@@ -344,6 +358,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_RIGHT_RAMP)
 	{
+		m_bSliding = false;
+
 		RightRampCollision(pOther);
 		SetFriction(1.0f);
 		is_Ramp = true;
@@ -351,6 +367,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_LEFT_RAMP)
 	{
+		m_bSliding = false;
+
 		LeftRampCollision(pOther);
 		SetFriction(1.0f);
 		is_Ramp = true;
@@ -358,7 +376,10 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_ICE)
 	{
+		m_bSliding = true;
+		BasicCollision(pOther);
 		SetFriction(0.1f);
+		SetVelocity(GetVelocity() * 2);
 	}
 
 	if (pOther->GetType() == Entity::ENT_ICE_LEFT_RAMP)
@@ -370,6 +391,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_RIGHT_RAMP)
 	{
+		m_bSliding = false;
+
 		RightRampCollision(pOther);
 		SetFriction(1.0f);
 		is_Ramp = true;
@@ -377,6 +400,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if(pOther->GetType() == Entity::ENT_GEYSER)
 	{
+		m_bSliding = false;
+
 		is_Platform = true;
 		GeyserCollision(pOther);
 		//BasicCollision(pOther);
@@ -398,6 +423,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if(pOther->GetType() == Entity::ENT_LAVA)
 	{
+		m_bSliding = false;
+
 		//if so move back up but kill the player
 		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
@@ -417,6 +444,8 @@ void Player::HandleCollision(const IEntity* pOther)
 		SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
 		SetVelocity({ throwSpeed, -1000 });
 	}
+
+
 }
 
 void Player::BasicCollision(const IEntity* pOther)
@@ -1720,30 +1749,64 @@ void Player::UpdateVelocity(float elapsedTime)
 	{
 
 
-		if (GetVelocity().x > 850)
+		if (GetVelocity().x > 850 && m_bSliding == false)
 		{
 			if (IsDashing() == false)
 				SetVelocity(SGD::Vector(850, GetVelocity().y));
 		}
+		if(GetVelocity().x > 1150 && m_bSliding == true)
+		{
+			if(IsDashing() == false)
+				SetVelocity(SGD::Vector(1150, GetVelocity().y));
+		}
 
-		if (GetVelocity().x < -850)
+		if (GetVelocity().x < -850 && m_bSliding == false)
 		{
 			if (IsDashing() == false)
 				SetVelocity(SGD::Vector(-850, GetVelocity().y));
 		}
+		if(GetVelocity().x < -1150 && m_bSliding == true)
+		{
+			if(IsDashing() == false)
+
+				SetVelocity(SGD::Vector(-1150, GetVelocity().y));
+		}
+
+		if(IsDashing() == true)
+		{
+			if(GetVelocity().x > 2000)
+			{
+				SetVelocity({ 2000, GetVelocity().y });
+			}
+			if(GetVelocity().x < -2000)
+			{
+				SetVelocity({ -2000, GetVelocity().y });
+			}
+		}
 	}
 	else
 	{
-		if (GetVelocity().x > 1150)
+		if (GetVelocity().x > 1150 && m_bSliding == false)
 		{
 			if (IsDashing() == false)
 				SetVelocity(SGD::Vector(1150, GetVelocity().y));
 		}
+		if(GetVelocity().x > 1800 && m_bSliding == true)
+		{
+			if(IsDashing() == false)
+				SetVelocity(SGD::Vector(1800, GetVelocity().y));
+		}
 
-		if (GetVelocity().x < -1150)
+		if(GetVelocity().x < -1150 && m_bSliding == false)
 		{
 			if (IsDashing() == false)
 				SetVelocity(SGD::Vector(-1150, GetVelocity().y));
+		}
+		if(GetVelocity().x < -1800 && m_bSliding == true)
+		{
+			if(IsDashing() == false)
+
+				SetVelocity(SGD::Vector(-1800, GetVelocity().y));
 		}
 
 	}
