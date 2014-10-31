@@ -27,6 +27,8 @@ void Boss::Update(float elapsedTime)
 
 	// Update movement
 	Unit::Update(elapsedTime);
+
+	SetIsFalling(true);
 }
 
 ///////////////////////////////////////////////////
@@ -105,6 +107,7 @@ void Boss::BasicCollision(const IEntity* pOther)
 	//Colliding with the side of the object
 	if (nIntersectHeight > nIntersectWidth)
 	{
+		SetHitWall(true);
 		if (rBoss.right == rIntersection.right)
 		{
 
@@ -166,6 +169,11 @@ void Boss::HandleCollision(const IEntity* pOther)
 {
 	// Solid wall
 	if (pOther->GetType() == ENT_SOLID_WALL)
+	{
+		BasicCollision(pOther);
+	}
+	// Doors
+	if (pOther->GetType() == ENT_DOOR)
 	{
 		BasicCollision(pOther);
 	}

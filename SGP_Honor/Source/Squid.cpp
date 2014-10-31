@@ -76,7 +76,7 @@ void Squid::Render(void)
 	//Camera::GetInstance()->Draw(rMyRect,
 	//	SGD::Color::Color(255, 255, 0, 0));
 
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, m_bFacingRight);
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, m_bFacingRight, 1.0f);
 }
 
 SGD::Rectangle Squid::GetRect(void) const

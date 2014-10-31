@@ -80,6 +80,7 @@ public:
 	void SetEmitterShape(int _EmitterShape) { m_iEmitterShape = _EmitterShape; }
 	void SetSpinSpeed(int _SpinSpeed){ m_iSpinSpeed = _SpinSpeed; }
 	void SetRadius(int _Radius){ m_iRadius = _Radius; }
+	void SetSpawned(int _Spawmed){ m_iSpawned = _Spawmed; }
 	void PinEdges(bool _PinEdges){ m_bPinEdges = _PinEdges; }
 	void Finish(bool _Finish = true) { m_bFinish = _Finish; }
 	
@@ -125,7 +126,7 @@ private:
 	//CHecks
 	bool m_bStarted = false;
 	//Initial Burst
-	int Spawned;
-	float SpawnTimer;
+	int m_iSpawned;
+	float m_fSpawnTimer;
 };
 

@@ -19,6 +19,7 @@
 #include "BitmapFont.h"
 #include "Game.h"
 #include "Bull.h"
+#include "SwordSwing.h"
 
 #include <Windows.h>
 #include "Dash.h"
@@ -48,6 +49,10 @@ Player::Player() : Listener(this)
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/PlayerAnimations.xml");
 	m_ts.SetCurrAnimation("Idle");
 	
+	//Load Sounds
+	m_hIceEffect = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/IceSpray.wav");
+	m_hBounceEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/BounceEffect.wav");
+
 }
 
 
@@ -57,6 +62,8 @@ Player::~Player()
 	delete m_pBounce;
 	delete m_emHonor;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHonorParticleHUD);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hIceEffect);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBounceEffect);
 }
 
 /////////////////////////////////////////////////
@@ -69,6 +76,10 @@ void Player::Update(float elapsedTime)
 	m_emHawkReturn->Update(elapsedTime);
 	//
 
+	//if (m_pSword != nullptr)
+	//{
+	//	m_pSword->Update(elapsedTime);
+	//}
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	if (m_bDead)
 	{
@@ -126,7 +137,7 @@ void Player::Update(float elapsedTime)
 			/////////////////////////////////////////////////
 			/////////////////Movement////////////////////////
 			//reset currframe to 0 & set the animation playing to true
-			if (IsDashing() == false)
+			if (IsDashing() == false && !GetStunned())
 			{
 				UpdateMovement(elapsedTime, stickFrame, leftClamped, leftStickXOff);
 			}
@@ -223,10 +234,15 @@ void Player::Render(void)
 		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
 		SGD::Color::Color(255, 255, 0, 0));
 
-	Camera::GetInstance()->Draw(SGD::Rectangle(swingRect.left, swingRect.top, swingRect.right, swingRect.bottom),
+
+	Camera::GetInstance()->Draw(SGD::Rectangle(m_pSword->GetRect().left, m_pSword->GetRect().top, m_pSword->GetRect().right, m_pSword->GetRect().bottom),
 		SGD::Color::Color(255, 255, 255, 0));
 
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight());
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight(), 1.0f);
+	//Camera::GetInstance()->Draw(SGD::Rectangle(swingRect.left, swingRect.top, swingRect.right, swingRect.bottom),
+	//	SGD::Color::Color(255, 255, 255, 0));
+
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight(), 1.0f);
 
 	// Draw gui for amount of honor
 	SGD::OStringStream output;
@@ -260,15 +276,24 @@ SGD::Rectangle Player::GetRect(void) const
 
 void Player::HandleCollision(const IEntity* pOther)
 {
+	if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::W))
+	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hBounceEffect);
+
+	}
 
 	Unit::HandleCollision(pOther);
 	if (pOther->GetType() == ENT_DOOR)
 	{
+		m_bSliding = false;
+
 		BasicCollision(pOther);
 	}
 
 	if (pOther->GetType() == ENT_JELLYFISH)
 	{
+		m_bSliding = false;
+
 		JellyfishCollision(pOther);
 	}
 
@@ -293,6 +318,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_SOLID_WALL)
 	{
+		m_bSliding = false;
+
 		is_Platform = true;
 		BasicCollision(pOther);
 		SetFriction(25.0f);
@@ -300,6 +327,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if(pOther->GetType() == Entity::ENT_MOVING_PLATFORM)
 	{
+		m_bSliding = false;
+
 		is_Platform = true;
 		BasicCollision(pOther);
 		SetFriction(1.0f);
@@ -307,6 +336,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if(pOther->GetType() == Entity::ENT_BLOCK)
 	{
+		m_bSliding = false;
+
 		is_Platform = true;
 		BasicCollision(pOther);
 		SetFriction(1.0f);
@@ -321,6 +352,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if(pOther->GetType() == Entity::ENT_NOT_FROZEN)
 	{
+		m_bSliding = false;
+
 		is_Platform = true;
 		BasicCollision(pOther);
 		SetFriction(1.0f);
@@ -328,6 +361,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_DEATH)
 	{
+		m_bSliding = false;
+
 		//Kill the player
 		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
@@ -335,6 +370,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_RIGHT_RAMP)
 	{
+		m_bSliding = false;
+
 		RightRampCollision(pOther);
 		SetFriction(1.0f);
 		is_Ramp = true;
@@ -342,6 +379,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_LEFT_RAMP)
 	{
+		m_bSliding = false;
+
 		LeftRampCollision(pOther);
 		SetFriction(1.0f);
 		is_Ramp = true;
@@ -349,7 +388,10 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_ICE)
 	{
+		m_bSliding = true;
+		BasicCollision(pOther);
 		SetFriction(0.1f);
+		SetVelocity(GetVelocity() * 2);
 	}
 
 	if (pOther->GetType() == Entity::ENT_ICE_LEFT_RAMP)
@@ -361,6 +403,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_RIGHT_RAMP)
 	{
+		m_bSliding = false;
+
 		RightRampCollision(pOther);
 		SetFriction(1.0f);
 		is_Ramp = true;
@@ -368,6 +412,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if(pOther->GetType() == Entity::ENT_GEYSER)
 	{
+		m_bSliding = false;
+
 		is_Platform = true;
 		GeyserCollision(pOther);
 		//BasicCollision(pOther);
@@ -389,6 +435,8 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if(pOther->GetType() == Entity::ENT_LAVA)
 	{
+		m_bSliding = false;
+
 		//if so move back up but kill the player
 		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
@@ -399,15 +447,22 @@ void Player::HandleCollision(const IEntity* pOther)
 		// TODO use states
 		// Throw the player back
 		Bull * bull = (Bull*)(pOther);
-		float throwSpeed = 2000;
-		if (bull->IsFacingRight())
+		if (bull->GetRunning())
 		{
-			throwSpeed = -2000;
+			float throwSpeed = -3000;
+			if (bull->IsFacingRight())
+			{
+				throwSpeed = 3000;
+			}
+			SetGravity(0);
+			SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
+			SetVelocity({ throwSpeed, -1000 });
+			SetStunnded(true);
+			m_fStunTimer = 0.35f;
 		}
-		SetGravity(0);
-		SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
-		SetVelocity({ throwSpeed, -1000 });
 	}
+
+
 }
 
 void Player::BasicCollision(const IEntity* pOther)
@@ -1081,6 +1136,11 @@ void Player::KillPlayer()
 		m_bDead = true;
 		m_unJumpCount = 0;
 
+		// Reset room
+		SGD::Event* pATEvent = new SGD::Event("ResetRoom", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
+
 		// TODO Add effects
 
 	}
@@ -1127,6 +1187,14 @@ void Player::UpdateTimers(float elapsedTime)
 	m_fLandTimer -= elapsedTime;
 
 	m_fSwingTimer -= elapsedTime;
+
+	if (m_fStunTimer > 0)
+		m_fStunTimer -= elapsedTime;
+	else
+	{
+		m_fStunTimer = 0.0f;
+		m_bStunned = false;
+	}
 
 	if (m_fSwingTimer < 0.0f)
 		m_fSwingTimer = 0;
@@ -1185,14 +1253,21 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 void Player::UpdateBounce(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+	
+	
 	if (pInput->IsKeyDown(SGD::Key::W) == true)
 	{
+		//if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBounceEffect)))
+		//{
+		//}
 		GetBounce()->GetEMBubbles()->Finish(false);
+		GetBounce()->GetEMBubbles()->Burst(m_ptPosition);
 		SetIsBouncing(true);
 	}
 	else
 	{
 		GetBounce()->GetEMBubbles()->Finish();
+		GetBounce()->GetEMBubbles()->Burst(m_ptPosition);
 		if (GetBounce()->GetEMBubbles()->Done())
 		{
 			//Reseting particles for the bounce since its false
@@ -1215,6 +1290,8 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 
 		m_ts.SetPlaying(true);
 	}
+
+	
 	//reset currframe to 0 & set the animation playing to false
 	if ((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true) || pInput->IsKeyDown(SGD::Key::Space) == true)
 	{
@@ -1573,7 +1650,7 @@ void Player::UpdateHawk(float elapsedTime)
 		{
 			m_fHawkTimer = 0.0f;
 
-			if (m_emFeatherExplosion->Done())
+			if (!m_bReturningHawk)
 			{
 				//Emitter Stuff
 				m_bHawkExplode = true;
@@ -1641,9 +1718,14 @@ void Player::UpdateSpray(float elapsedTime)
 	if (pInput->IsKeyDown(SGD::Key::F) == true
 		/*&& m_fShotTimer > 0.25f*/)
 	{
+		if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hIceEffect)))
+		{
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hIceEffect);
+		}
 		//m_fShotTimer = 0.0f;
 		if (m_fIceTimer > .05f)
 		{
+
 			m_fIceTimer = 0;
 			CreateSprayMessage* pMsg = new CreateSprayMessage(this);
 			pMsg->QueueMessage();
@@ -1711,30 +1793,64 @@ void Player::UpdateVelocity(float elapsedTime)
 	{
 
 
-		if (GetVelocity().x > 850)
+		if (GetVelocity().x > 850 && m_bSliding == false)
 		{
 			if (IsDashing() == false)
 				SetVelocity(SGD::Vector(850, GetVelocity().y));
 		}
+		if(GetVelocity().x > 1150 && m_bSliding == true)
+		{
+			if(IsDashing() == false)
+				SetVelocity(SGD::Vector(1150, GetVelocity().y));
+		}
 
-		if (GetVelocity().x < -850)
+		if (GetVelocity().x < -850 && m_bSliding == false)
 		{
 			if (IsDashing() == false)
 				SetVelocity(SGD::Vector(-850, GetVelocity().y));
 		}
+		if(GetVelocity().x < -1150 && m_bSliding == true)
+		{
+			if(IsDashing() == false)
+
+				SetVelocity(SGD::Vector(-1150, GetVelocity().y));
+		}
+
+		if(IsDashing() == true)
+		{
+			if(GetVelocity().x > 2000)
+			{
+				SetVelocity({ 2000, GetVelocity().y });
+			}
+			if(GetVelocity().x < -2000)
+			{
+				SetVelocity({ -2000, GetVelocity().y });
+			}
+		}
 	}
 	else
 	{
-		if (GetVelocity().x > 1150)
+		if (GetVelocity().x > 1150 && m_bSliding == false)
 		{
 			if (IsDashing() == false)
 				SetVelocity(SGD::Vector(1150, GetVelocity().y));
 		}
+		if(GetVelocity().x > 1800 && m_bSliding == true)
+		{
+			if(IsDashing() == false)
+				SetVelocity(SGD::Vector(1800, GetVelocity().y));
+		}
 
-		if (GetVelocity().x < -1150)
+		if(GetVelocity().x < -1150 && m_bSliding == false)
 		{
 			if (IsDashing() == false)
 				SetVelocity(SGD::Vector(-1150, GetVelocity().y));
+		}
+		if(GetVelocity().x < -1800 && m_bSliding == true)
+		{
+			if(IsDashing() == false)
+
+				SetVelocity(SGD::Vector(-1800, GetVelocity().y));
 		}
 
 	}
@@ -1750,6 +1866,7 @@ void Player::HawkExplode(SGD::Point _pos)
 		m_emFeatherExplosion->Burst(_pos);
 		m_bReturningHawk = true;
 		m_emHawkReturn->Burst(_pos);
+		m_emHawkReturn->Finish();
 	}	
 }
 
@@ -1780,7 +1897,8 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 			temp.right = (temp.left) +80;
 			temp.bottom = (temp.top) + 80;
 
-			swingRect = temp;
+			//swingRect = temp;
+			m_pSword->SetRect(temp);
 
 		}
 		else
@@ -1788,26 +1906,30 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 
 			SGD::Rectangle temp;
 			temp.right = (GetRect().left + 16) - Camera::GetInstance()->GetCameraPos().x;
-			temp.left = temp.right - 60;
+			temp.left = temp.right - 80;
 
 
 
 			//temp.left = (GetRect().left + 12) - Camera::GetInstance()->GetCameraPos().x;
-			temp.top = (GetRect().top - Camera::GetInstance()->GetCameraPos().y) + 10;
+			temp.top = (GetRect().top - Camera::GetInstance()->GetCameraPos().y) - 10;
 			//temp.right = temp.left - 60;
-			temp.bottom = temp.top + 50;
+			temp.bottom = temp.top + 80;
 
-			swingRect = temp;
+			//swingRect = temp;
+			m_pSword->SetRect(temp);
+
 			
 		}
 	}
 	else
 	{
 		swingRect = { 0, 0, 0, 0 };
+		m_pSword->SetRect(swingRect);
+		
 	}
 
 	
-
+	m_pSword->Update(elapsedTime);
 
 }
 

@@ -26,7 +26,7 @@ void Dash:: CastDash(Unit* pOther)
 		pOther->SetIsDashing(true);
 		
 		if (pOther->IsFacingRight() == true)
-			pOther->SetVelocity({ 2000, 0 });
+			pOther->SetVelocity({ 2000, 0});
 		else
 			pOther->SetVelocity({ - 2000, 0 });
 

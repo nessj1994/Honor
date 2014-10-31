@@ -11,6 +11,7 @@ class Ice;
 class Bounce;
 class Dash;
 class Emitter;
+class SwordSwing;
 
 class Player :
 	public Unit, SGD::Listener
@@ -88,7 +89,7 @@ public:
 //	bool GetIsFalling(void)const { return is_Falling; }
 	bool GetIsInputStuck(void)const { return is_Stuck; }
 	bool GetDead(void) const { return m_bDead; }
-
+	bool GetStunned(void) const { return m_bStunned; }
 
 	//Floats
 	float GetDashTime(void) const { return m_fDashTime; }
@@ -100,12 +101,14 @@ public:
 	Dash* GetDash(void) const { return m_pDash; }
 	Ice* GetIce(void) const { return m_pIce; }
 	Bounce* GetBounce(void) const { return m_pBounce; }
+	SwordSwing* GetSword(void) const { return m_pSword; }
 
 	//Unsigned ints
 	unsigned int GetHonorCollected(void) const { return m_unHonorCollected; }
 
 	////////////////////////////////////////////
 	/////////////////Mutators//////////////////
+	void SetStunnded(bool _stun) { m_bStunned = _stun; }
 	void SetHasArmor(bool armor) { m_bHasArmor = armor; }
 	void SetHasDash(bool dash) { m_bHasDash = dash; }
 	void SetHasIce(bool ice) { m_bHasIce = ice; }
@@ -118,6 +121,7 @@ public:
 	//void SetIsFalling(bool _fall) { is_Falling = _fall; }
 	void SetIsInputStuck(bool _stuck) { is_Stuck = _stuck; }
 	void SetHonorCollected(unsigned int honor) { m_unHonorCollected = honor; }
+	void SetSword(SwordSwing* ptr) { m_pSword = ptr; }
 
 	//void SetJumpCapTime(float _capTime) { m_fJumpVelCap = _capTime; }
 	void SetJumpVelCur(float _velCur) { m_fJumpVelCur = _velCur; }
@@ -139,6 +143,8 @@ private:
 	bool is_Jumping = false;
 	bool is_Falling = true;
 	bool has_landed = true;
+	bool m_bSliding = false;
+
 
 	bool is_Stuck = false;
 	bool is_Left_Coll = false;
@@ -146,6 +152,7 @@ private:
 	bool is_Platform = false;
 	bool is_Ramp = false;
 	bool m_bDead = false;
+	bool m_bStunned = false;
 
 	float m_fDashTime = 0.0f;
 	float m_fIceTimer = 0.0f;
@@ -156,6 +163,7 @@ private:
 	float m_fButtonTimer = 0.0f;
 	float m_fDeathTimer = 0.0f;
 	float m_fArmorTimer = 0.0f;
+	float m_fStunTimer = 0.0f;
 
 	float m_fShotTimer = 0.20f;
 	float m_fInputTimer = 0.0f;
@@ -171,7 +179,7 @@ private:
 	Dash* m_pDash;
 	Ice* m_pIce;
 	Bounce* m_pBounce;
-
+	SwordSwing* m_pSword;
 
 	SGD::HTexture m_hImage = SGD::INVALID_HANDLE;
 	//Honor Particle Image for the HUD
@@ -180,7 +188,6 @@ private:
 	//Emitters
 	//Honor emitter for HUD
 	Emitter* m_emHonor;
-
 	SGD::Rectangle swingRect = {0,0,0,0};
 	//Hawk Explosion 
 	Emitter* m_emFeatherExplosion;
@@ -188,6 +195,11 @@ private:
 	//Hawk Return
 	Emitter* m_emHawkReturn;
 	bool m_bReturningHawk = false;
+
+	//Sound Effects
+	SGD::HAudio m_hIceEffect = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hBounceEffect = SGD::INVALID_HANDLE;
+
 };
 
 

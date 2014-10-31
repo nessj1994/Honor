@@ -185,7 +185,7 @@ void Crab::Render(void)
 	//Camera::GetInstance()->Draw(rMyRect,
 	//	SGD::Color::Color(255, 255, 0, 0));
 
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, IsFacingRight());
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, IsFacingRight(),1.0f);
 }
 
 SGD::Rectangle Crab::GetRect(void) const

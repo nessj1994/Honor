@@ -2,6 +2,8 @@
 //#include "Entity.h"
 #include "Projectile.h"
 #include <vector>
+#include "../SGD Wrappers/SGD_Handle.h"
+
 
 class Unit;
 //class Projectile;
@@ -38,6 +40,7 @@ public:
 
 
 private:
+
 
 	Entity* m_pOwner = nullptr;
 	Emitter* m_pEmitter = nullptr;
