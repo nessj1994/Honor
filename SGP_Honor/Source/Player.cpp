@@ -347,6 +347,7 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_ICE)
 	{
+		BasicCollision(pOther);
 		SetFriction(0.1f);
 		SetVelocity(GetVelocity() * 2);
 	}
@@ -407,6 +408,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
 		SetVelocity({ throwSpeed, -1000 });
 	}
+
 }
 
 void Player::BasicCollision(const IEntity* pOther)
