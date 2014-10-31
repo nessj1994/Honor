@@ -156,6 +156,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Add Entities to the entity manager
 
 	m_pEntities->AddEntity(m_pPlayer, Entity::ENT_PLAYER);
+	//CreateEnemy(100, 100, 7);
 
 	//Remove this test code later
 	/*m_pEntities->AddEntity(m_pFBlock, Entity::ENT_FALLING_BLOCK);
@@ -180,7 +181,8 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("Level4_5");
+
+	LoadLevel("HubLevel");
 
 	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
@@ -943,6 +945,7 @@ void GameplayState::CreateActivator(int _x, int _y, bool _isPressure, bool _curr
 	Activator * pActivator = new Activator(_isPressure);
 	pActivator->SetPosition({ (float)_x, (float)_y });
 	pActivator->SetOn(_currState);
+	pActivator->SetPlayer(m_pPlayer);
 	pActivator->SetKeyID(_ID);
 	m_pEntities->AddEntity(pActivator, Entity::ENT_SWITCH);
 	pActivator->Release();
@@ -1215,7 +1218,8 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Pouncer * pPouncer = new Pouncer();
 			pPouncer->SetPosition({ (float)_x, (float)_y });
-			m_pEntities->AddEntity(pPouncer, Entity::ENT_POUNCER);
+			pPouncer->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pPouncer, Entity::ENT_ENEMY);
 			pPouncer->Release();
 			break;
 		}
@@ -1223,7 +1227,8 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Squid * pSquid = new Squid();
 			pSquid->SetPosition({ (float)_x, (float)_y });
-			m_pEntities->AddEntity(pSquid, Entity::ENT_SQUID);
+			pSquid->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pSquid, Entity::ENT_ENEMY);
 			pSquid->Release();
 			break;
 		}
@@ -1231,7 +1236,8 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Jellyfish * pJelly = new Jellyfish();
 			pJelly->SetPosition({ (float)_x, (float)_y });
-			m_pEntities->AddEntity(pJelly, Entity::ENT_JELLYFISH);
+			pJelly->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pJelly, Entity::ENT_ENEMY);
 			pJelly->Release();
 			break;
 		}
