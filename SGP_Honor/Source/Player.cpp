@@ -1175,6 +1175,9 @@ void Player::UpdateBounce(float elapsedTime)
 
 void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped, float leftStickXOff)
 {
+	if (GetIsInputStuck() == true)
+		m_fInputTimer += elapsedTime;
+
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false))
 	{
@@ -1213,8 +1216,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		|| leftStickXOff > JOYSTICK_DEADZONE)
 	{
 
-		if (GetIsInputStuck() == true)
-			m_fInputTimer += elapsedTime;
+		
 
 
 		if (m_fInputTimer > 0.20f
@@ -1234,7 +1236,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 			}
 			else
 			{
-				SetVelocity(SGD::Vector(GetVelocity().x + GetSpeed() * elapsedTime, GetVelocity().y));
+				SetVelocity(SGD::Vector(GetVelocity().x + ( 5* GetSpeed()) * elapsedTime, GetVelocity().y));
 				//SetVelocity(SGD::Vector(1050, GetVelocity().y));
 			}
 
@@ -1251,8 +1253,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 	if (pInput->IsKeyDown(SGD::Key::Q) == true
 		|| leftStickXOff < -JOYSTICK_DEADZONE)
 	{
-		if (GetIsInputStuck() == true)
-			m_fInputTimer += elapsedTime;
+		
 
 		if (m_fInputTimer > 0.20f
 			|| GetIsInputStuck() == false)
@@ -1271,7 +1272,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 			}
 			else
 			{
-				SetVelocity(SGD::Vector(GetVelocity().x - GetSpeed() * elapsedTime, GetVelocity().y));
+				SetVelocity(SGD::Vector(GetVelocity().x - ( 5*GetSpeed()) * elapsedTime, GetVelocity().y));
 				//SetVelocity(SGD::Vector(-1050, GetVelocity().y));
 			}
 			SetDirection({ -1, 0 });

@@ -158,8 +158,8 @@ void Level::RenderImageLayer(bool background)
 			// Variables to help with culling
 			int startX = (int)(Camera::GetInstance()->GetCameraPos().x / 32 * layer->GetScrollSpeed()) - 1;
 			int startY = (int)(Camera::GetInstance()->GetCameraPos().y / 32 * layer->GetScrollSpeed()) - 1;
-			int mapWidth = (int)(Game::GetInstance()->GetScreenWidth() / 32)	/   Camera::GetInstance()->GetZoomScale();
-			int mapHeight = (int)(Game::GetInstance()->GetScreenHeight() / 32) / Camera::GetInstance()->GetZoomScale();
+			int mapWidth = (int)(Game::GetInstance()->GetScreenWidth() / 32)	;
+			int mapHeight = (int)(Game::GetInstance()->GetScreenHeight() / 32) ;
 
 			// TODO fix culling
 
@@ -191,8 +191,8 @@ void Level::RenderImageLayer(bool background)
 							// Draw the tile
 							Camera::GetInstance()->DrawTextureSection(
 								layer->GetTileSet(),
-								{	(xx * 32.0f) * Camera::GetInstance()->GetZoomScale() - Camera::GetInstance()->GetCameraPos().x * layer->GetScrollSpeed(),
-									(yy * 32.0f) * Camera::GetInstance()->GetZoomScale() - Camera::GetInstance()->GetCameraPos().y * layer->GetScrollSpeed() },
+								{	(xx * 32.0f)   - Camera::GetInstance()->GetCameraPos().x * layer->GetScrollSpeed(),
+									(yy * 32.0f)  - Camera::GetInstance()->GetCameraPos().y * layer->GetScrollSpeed() },
 								section,
 								0.0f,
 								{ 0.0f, 0.0f },

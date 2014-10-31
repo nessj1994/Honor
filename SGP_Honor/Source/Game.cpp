@@ -69,7 +69,7 @@ bool Game::Initialize(float width, float height)
 	}
 
 
-	m_fScreenWidth = width;
+	m_fScreenWidth = width ;
 	m_fScreenHeight = height;
 
 	//Initialize the font
