@@ -51,6 +51,7 @@
 #include "Jellyfish.h"
 #include "Teleporter.h"
 #include "Bull.h"
+#include "MutantMan.h"
 #include "Crab.h"
 #include "SwordSwing.h"
 
@@ -175,9 +176,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pEntities->AddEntity(m_pPendulum, Entity::ENT_PENDULUM);
 	m_pEntities->AddEntity(m_pStatue, Entity::ENT_STATUE);
 	m_pDoor->SetActivator(m_pSwitch);*/
-
-	//For Particle Testing*/
-	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/Bla.xml", "Test", { 131, 673 });
+	
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
@@ -258,7 +257,6 @@ void GameplayState::Exit(void)
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 	ParticleEngine::GetInstance()->Terminate();
 	ParticleEngine::GetInstance()->DeleteInstance();
-	delete m_pEmitter2;
 
 
 
@@ -266,7 +264,7 @@ void GameplayState::Exit(void)
 	//Level
 	delete m_pLevel;
 	m_pLevel = nullptr;
-
+	
 
 	AnimationEngine::GetInstance()->Terminate();
 	AnimationEngine::GetInstance()->DeleteInstance();
@@ -408,6 +406,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_STALACTITE);
 	m_pEntities->CheckWorldCollision(Entity::ENT_LASER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_BULL);
+	m_pEntities->CheckWorldCollision(Entity::ENT_MUTANT_MAN);
+
 	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
 
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
@@ -427,7 +427,8 @@ void GameplayState::Render(void)
 	m_pLevel->Render();
 	m_pLevel->RenderImageLayer(true);
 
-	//m_pEmitter2->Render();
+
+	//Camera::GetInstance()->DrawTexture({ 270, 400 }, {}, SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/images.jpg"), false);
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 
@@ -438,7 +439,6 @@ void GameplayState::Render(void)
 		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
 		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
 	}
-
 
 }
 
@@ -789,7 +789,7 @@ Entity* GameplayState::CreateSpray(Entity* pOwner) const
 {
 	Ice* proj = new Ice;
 	if (pOwner->GetDirection().x == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + 20, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	else
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
@@ -1203,10 +1203,16 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		}
 		case 2: // mutant man
 		{
+			MutantMan * pMutant = new MutantMan();
+			pMutant->SetPosition({ (float)_x, (float)_y });
+			pMutant->Begin({ (float)_x, (float)_y });
+			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_MAN);
+			pMutant->Release();
 			break;
 		}
 		case 3: // mutant bird
 		{
+			
 			break;
 		}
 		case 4: // ice golem

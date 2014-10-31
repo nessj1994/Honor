@@ -1,4 +1,6 @@
 #include "Enemy.h"
+#include <cmath>
+#include <Windows.h>
 
 #include "Player.h"
 #include <Windows.h>
@@ -49,7 +51,9 @@ SGD::Rectangle Enemy::GetRect(void) const
 
 void Enemy::HandleCollision(const IEntity* pOther)
 {
-	Unit::HandleCollision(pOther);
+	
+	//Creat a Mutant Man Rect;
+	RECT Enemy;
 	
 	//GetPlayer()->GetSword()->GetRect()
 
@@ -105,5 +109,5 @@ void Enemy::HandleCollision(const IEntity* pOther)
 		pMsg = nullptr;
 	}
 	
-
+	Unit::HandleCollision(pOther);
 }

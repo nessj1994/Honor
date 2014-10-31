@@ -8,8 +8,7 @@
 
 Ice::Ice()
 {
-	m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("Assets/SprayParticle.xml", "Spray", {96,672});
-
+	m_pEmitter = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/SprayParticle.xml", "Spray", m_ptPosition);
 }
 
 
@@ -49,23 +48,23 @@ void Ice::Update(float elapsedTime)
 
 
 	Entity::Update(elapsedTime);
+	//Delete Ice particle when it goes of screen
+	//SGD::Rectangle rSelf = this->GetRect();
+	//SGD::Rectangle rScreen =
+	//{
+	//	0, 0,
+	//	Game::GetInstance()->GetScreenWidth() + Camera::GetInstance()->GetCameraPos().x,
+	//	Game::GetInstance()->GetScreenHeight() + Camera::GetInstance()->GetCameraPos().y
+	//};
 
-	SGD::Rectangle rSelf = this->GetRect();
-	SGD::Rectangle rScreen =
-	{
-		0, 0,
-		Game::GetInstance()->GetScreenWidth() + Camera::GetInstance()->GetCameraPos().x,
-		Game::GetInstance()->GetScreenHeight() + Camera::GetInstance()->GetCameraPos().y
-	};
 
+	//if (rSelf.IsIntersecting(rScreen) == false)
+	//{
+	//	DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+	//	pMsg->QueueMessage();
+	//	pMsg = nullptr;
 
-	if (rSelf.IsIntersecting(rScreen) == false)
-	{
-		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-		pMsg->QueueMessage();
-		pMsg = nullptr;
-
-	}
+	//}
 
 }
 

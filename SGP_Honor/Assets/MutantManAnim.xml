@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations Character="Mutant Man">
+  <Animation name="Mutant_Walking" spritesheet="MutantMaple.png" looping="1">
+    <Frame RenderRectLeft="1" RenderRectTop="1" RenderRectRight="57" RenderRectBottom="64" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="27" anchorpointY="61" />
+    <Frame RenderRectLeft="56" RenderRectTop="1" RenderRectRight="115" RenderRectBottom="66" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="30" anchorpointY="61" />
+    <Frame RenderRectLeft="115" RenderRectTop="0" RenderRectRight="173" RenderRectBottom="64" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="26" anchorpointY="60" />
+    <Frame RenderRectLeft="172" RenderRectTop="0" RenderRectRight="232" RenderRectBottom="65" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="26" anchorpointY="62" />
+  </Animation>
+  <Animation name="Mutant_Idle" spritesheet="MutantMaple.png" looping="1">
+    <Frame RenderRectLeft="0" RenderRectTop="129" RenderRectRight="57" RenderRectBottom="193" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.3" anchorpointX="24" anchorpointY="48" />
+    <Frame RenderRectLeft="57" RenderRectTop="129" RenderRectRight="115" RenderRectBottom="194" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.3" anchorpointX="26" anchorpointY="51" />
+    <Frame RenderRectLeft="114" RenderRectTop="129" RenderRectRight="176" RenderRectBottom="195" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.3" anchorpointX="27" anchorpointY="50" />
+  </Animation>
+  <Animation name="Mutant_Vomiting" spritesheet="MutantMaple.png" looping="1">
+    <Frame RenderRectLeft="61" RenderRectTop="1988" RenderRectRight="125" RenderRectBottom="2051" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.3" anchorpointX="27" anchorpointY="47" />
+  </Animation>
+  <Animation name="Mutant_Attacking" spritesheet="MutantMaple.png" looping="1">
+    <Frame RenderRectLeft="0" RenderRectTop="1124" RenderRectRight="67" RenderRectBottom="1187" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="37" anchorpointY="47" />
+    <Frame RenderRectLeft="67" RenderRectTop="1126" RenderRectRight="158" RenderRectBottom="1189" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="45" anchorpointY="49" />
+  </Animation>
+  <Animation name="Mutant_Death" spritesheet="MutantMaple.png" looping="0">
+    <Frame RenderRectLeft="0" RenderRectTop="1693" RenderRectRight="102" RenderRectBottom="1728" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.1" anchorpointX="49" anchorpointY="25" />
+  </Animation>
+</Animations>

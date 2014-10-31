@@ -1261,11 +1261,13 @@ void Player::UpdateBounce(float elapsedTime)
 		//{
 		//}
 		GetBounce()->GetEMBubbles()->Finish(false);
+		GetBounce()->GetEMBubbles()->Burst(m_ptPosition);
 		SetIsBouncing(true);
 	}
 	else
 	{
 		GetBounce()->GetEMBubbles()->Finish();
+		GetBounce()->GetEMBubbles()->Burst(m_ptPosition);
 		if (GetBounce()->GetEMBubbles()->Done())
 		{
 			//Reseting particles for the bounce since its false
@@ -1648,7 +1650,7 @@ void Player::UpdateHawk(float elapsedTime)
 		{
 			m_fHawkTimer = 0.0f;
 
-			if (m_emFeatherExplosion->Done())
+			if (!m_bReturningHawk)
 			{
 				//Emitter Stuff
 				m_bHawkExplode = true;
@@ -1864,6 +1866,7 @@ void Player::HawkExplode(SGD::Point _pos)
 		m_emFeatherExplosion->Burst(_pos);
 		m_bReturningHawk = true;
 		m_emHawkReturn->Burst(_pos);
+		m_emHawkReturn->Finish();
 	}	
 }
 
