@@ -51,7 +51,7 @@ void AnimationEngine::Update(float elapsedTime, AnimTimeStamp& ts, IEntity* send
 	if (ts.IsPlaying() == false)
 		return;
 
-	ts.SetTimeWaited(ts.GetTimeWaited() + elapsedTime);
+	ts.SetTimeWaited(ts.GetTimeWaited() + elapsedTime * ts.GetSpeed());
 
 	if (m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetEvent() != "none")
 	{
@@ -86,7 +86,7 @@ void AnimationEngine::Render(SGD::Point position, float rotation, AnimTimeStamp&
 
 	SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
 
-	position.Offset({ -camPos.x, -camPos.y });
+	position.Offset({ -camPos.x * scale , -camPos.y * scale });
 	SGD::Rectangle frame = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetSourceRect();
 	SGD::Point anchor = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetAnchor();
 	SGD::GraphicsManager::GetInstance()->DrawTextureSection(m_mAnimationMap[ts.GetCurrAnimation()].GetImage(),

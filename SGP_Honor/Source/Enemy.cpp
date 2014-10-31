@@ -2,6 +2,15 @@
 #include <cmath>
 #include <Windows.h>
 
+#include "Player.h"
+#include <Windows.h>
+#include "Camera.h"
+#include "DestroyEntityMessage.h"
+#include "SwordSwing.h"
+
+#include "../SGD Wrappers/SGD_GraphicsManager.h"
+
+
 Enemy::Enemy()
 {
 }
@@ -23,7 +32,7 @@ void Enemy::Update(float elapsedTime)
 
 void Enemy::Render(void)
 {
-
+	Camera::GetInstance()->Draw(SGD::Rectangle(GetRect()), SGD::Color::Color(255, 0, 255, 0));
 }
 
 
@@ -45,55 +54,59 @@ void Enemy::HandleCollision(const IEntity* pOther)
 	
 	//Creat a Mutant Man Rect;
 	RECT Enemy;
+	
+	//GetPlayer()->GetSword()->GetRect()
 
-	Enemy.top = m_ptPosition.y;
-	Enemy.left = m_ptPosition.x;
-	Enemy.bottom = m_ptPosition.y + m_szSize.width;
-	Enemy.right = m_ptPosition.x + m_szSize.height;
+	RECT rSwingRect;
+	rSwingRect.left =	GetPlayer()->GetSword()->GetRect().left;
+	rSwingRect.top =	GetPlayer()->GetSword()->GetRect().top;
+	rSwingRect.right =	GetPlayer()->GetSword()->GetRect().right;
+	rSwingRect.bottom = GetPlayer()->GetSword()->GetRect().bottom;
 
-	//Create An Object Rect
-	RECT Object;
+	RECT rObject;
+	rObject.left =		GetRect().left- Camera::GetInstance()->GetCameraPos().x;
+	rObject.top =		GetRect().top - Camera::GetInstance()->GetCameraPos().y;
+	rObject.right = GetRect().right - Camera::GetInstance()->GetCameraPos().x;
+	rObject.bottom = GetRect().bottom - Camera::GetInstance()->GetCameraPos().y;
 
-	Object.top = pOther->GetRect().top;
-	Object.left = pOther->GetRect().left;
-	Object.bottom = pOther->GetRect().bottom;
-	Object.right = pOther->GetRect().right;
-
-	//Create a rectangle for the intersection
 	RECT rIntersection = {};
 
-	IntersectRect(&rIntersection, &Enemy, &Object);
+	IntersectRect(&rIntersection, &rObject, &rSwingRect);
 
 	int nIntersectWidth = rIntersection.right - rIntersection.left;
 	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
-	//Colliding with the side of the object
+
+
 	if (nIntersectHeight > nIntersectWidth)
 	{
-		if (Enemy.right == rIntersection.right)
-		{
-			SetPosition({ (float)Object.left - GetSize().width + 1, GetPosition().y });
-			SetVelocity({ 0, GetVelocity().y });
-		}
-		if (Enemy.left == rIntersection.left)
-		{
-			SetPosition({ (float)Object.right, GetPosition().y });
-			SetVelocity({ 0, GetVelocity().y });
-		}
+		//if switch, activate switch
+		//if evenmy call event to kill enemy
+		//SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
+
+		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+		pMsg->QueueMessage();
+		pMsg = nullptr;
+
 	}
 
-	if (nIntersectWidth > nIntersectHeight)
+	if (nIntersectHeight < nIntersectWidth)
 	{
-		if (Enemy.bottom == rIntersection.bottom)
-		{
-			SetVelocity({ GetVelocity().x, 0 });
-			SetPosition({ GetPosition().x, (float)Object.top - GetSize().height + 1 /*- nIntersectHeight*/ });
-		}
-		if (Enemy.top == rIntersection.top)
-		{
-			SetPosition({ GetPosition().x, (float)Object.bottom });
-			SetVelocity({ GetVelocity().x, 0 });
-		}
+		//if switch, activate switch
+		//if evenmy call event to kill enemy
+		//SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
+
+		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+		pMsg->QueueMessage();
+		pMsg = nullptr;
+
+	}
+
+	if (nIntersectHeight = nIntersectWidth)
+	{
+		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+		pMsg->QueueMessage();
+		pMsg = nullptr;
 	}
 	
 	Unit::HandleCollision(pOther);

@@ -40,8 +40,7 @@ class Squid;
 class Pouncer;
 class Bull;
 class Jellyfish;
-//For Debuging
-class MutantMan;
+class Crab;
 
 //
 //////////////////////////////////////////////////
@@ -111,7 +110,7 @@ public:
 	void SetHonorVector(std::vector<bool> _value);
 	void SaveHonorVector();
 	void LoadHonorVector();
-	bool GetHonorValue(int _index);
+	bool GetHonorValue(unsigned int _index);
 	unsigned int GetHonorVectorSize();
 
 private:
@@ -132,6 +131,8 @@ private:
 	Player* CreatePlayer(void);
 	Entity* CreateProjectile(Entity* pOwner) const;
 	Entity* CreateGravProjectile(Entity* pOwner) const;
+	Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const;
+	Entity* GameplayState::CreateVertBubble(Entity* pOwner) const;
 	Entity* CreateSpray(Entity* pOwner) const;
 	Hawk* CreateHawk(Entity* pOwner) const;
 
@@ -185,10 +186,10 @@ private:
 	//Honor * m_pHonor = nullptr;
 	//Armor * m_pArmor = nullptr;
 
-	Squid* m_pSquid = nullptr;
+	/*Squid* m_pSquid = nullptr;
 	Pouncer* m_pPouncer = nullptr;
 	Jellyfish* m_pJellyfish = nullptr;
-	Jellyfish* m_pJellyfish2 = nullptr;
+	Jellyfish* m_pJellyfish2 = nullptr;*/
 
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
 

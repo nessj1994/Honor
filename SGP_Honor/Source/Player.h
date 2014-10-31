@@ -11,6 +11,7 @@ class Ice;
 class Bounce;
 class Dash;
 class Emitter;
+class SwordSwing;
 
 class Player :
 	public Unit, SGD::Listener
@@ -31,6 +32,9 @@ public:
 	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
 
+
+	SGD::Rectangle GetSwingRect(void) const { return swingRect; }
+
 	////////////////////////////////////////////////
 	////////////// Listener Interface //////////////
 	void HandleEvent(const SGD::Event* pEvent);
@@ -50,6 +54,7 @@ public:
 	void UpdateSpray(float elapsedTime);
 	void UpdateConstants(float elapsedTime);
 	void UpdateVelocity(float elapsedTime);
+	void UpdatePlayerSwing(float elapsedTime);
 
 	////////////////////////////////////////////////
 	/////////////////////Methods///////////////////
@@ -62,6 +67,8 @@ public:
 	void RightRampCollision(const IEntity* pOther);
 	void GeyserCollision(const IEntity* pOther);
 	void LaserCollision(const IEntity* pOther);
+	void SwingCollision(const IEntity* pOther);
+
 	unsigned int GetCurrentState(void) const { return m_unCurrentState; }
 	void JellyfishCollision(const IEntity* pOther);
 	void KillPlayer();
@@ -94,6 +101,7 @@ public:
 	Dash* GetDash(void) const { return m_pDash; }
 	Ice* GetIce(void) const { return m_pIce; }
 	Bounce* GetBounce(void) const { return m_pBounce; }
+	SwordSwing* GetSword(void) const { return m_pSword; }
 
 	//Unsigned ints
 	unsigned int GetHonorCollected(void) const { return m_unHonorCollected; }
@@ -112,6 +120,7 @@ public:
 	//void SetIsFalling(bool _fall) { is_Falling = _fall; }
 	void SetIsInputStuck(bool _stuck) { is_Stuck = _stuck; }
 	void SetHonorCollected(unsigned int honor) { m_unHonorCollected = honor; }
+	void SetSword(SwordSwing* ptr) { m_pSword = ptr; }
 
 	//void SetJumpCapTime(float _capTime) { m_fJumpVelCap = _capTime; }
 	void SetJumpVelCur(float _velCur) { m_fJumpVelCur = _velCur; }
@@ -133,6 +142,8 @@ private:
 	bool is_Jumping = false;
 	bool is_Falling = true;
 	bool has_landed = true;
+	bool m_bSliding = false;
+
 
 	bool is_Stuck = false;
 	bool is_Left_Coll = false;
@@ -154,15 +165,18 @@ private:
 	float m_fShotTimer = 0.20f;
 	float m_fInputTimer = 0.0f;
 	float m_fHawkTimer = 1.0f;
+	float m_fSwingTimer = 0.0f;
 
 	unsigned int m_unCurrentState = 0;
 	unsigned int m_unHonorCollected = 0;
+
+	unsigned int m_unJumpCount = 0;
 
 	//Hawk* m_pHawk;
 	Dash* m_pDash;
 	Ice* m_pIce;
 	Bounce* m_pBounce;
-
+	SwordSwing* m_pSword;
 
 	SGD::HTexture m_hImage = SGD::INVALID_HANDLE;
 	//Honor Particle Image for the HUD
@@ -172,7 +186,7 @@ private:
 	//Honor emitter for HUD
 	Emitter* m_emHonor;
 
-	//SGD::Rectangle = {}
+	SGD::Rectangle swingRect = {0,0,0,0};
 	//Hawk Explosion 
 	Emitter* m_emFeatherExplosion;
 	bool m_bHawkExplode = false;
