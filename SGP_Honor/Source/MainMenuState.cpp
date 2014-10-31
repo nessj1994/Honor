@@ -47,6 +47,7 @@ void MainMenuState::Enter(void) //Load Resources
 	m_nCursor = 0;
 
 	int nMusicVol;
+	int nEffectsVol;
 
 	TiXmlDocument doc;
 
@@ -58,9 +59,18 @@ void MainMenuState::Enter(void) //Load Resources
 
 	pOption->Attribute("music_volume", &nMusicVol);
 
+	pOption = pOption->NextSiblingElement();
+
+	pOption->Attribute("sfx_volume", &nEffectsVol);
+
+
 
 	SGD::AudioManager::GetInstance()->SetMasterVolume(SGD::AudioGroup::Music, nMusicVol);
+	SGD::AudioManager::GetInstance()->SetMasterVolume(SGD::AudioGroup::SoundEffects, nEffectsVol);
+	m_hBackground = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Castle.png");
 	m_hSword = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/SwordButton.png");
+	m_hButton = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Buttons.png");
+
 }
 
 
@@ -71,6 +81,9 @@ void MainMenuState::Enter(void) //Load Resources
 void MainMenuState::Exit(void)
 {
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hButton);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
+
 }
 
 
@@ -91,6 +104,11 @@ bool MainMenuState::Input(void) //Hanlde user Input
 		|| pInput->IsDPadPressed(0, SGD::DPad::Down))
 	{
 		m_nCursor += 1;
+		m_rSword.top += 70;
+		if(m_rSword.top > 530.0f)
+		{
+			m_rSword.top = 530.0f;
+		}
 
 		if(m_nCursor > 4)
 		{
@@ -102,6 +120,12 @@ bool MainMenuState::Input(void) //Hanlde user Input
 		|| pInput->IsDPadPressed(0, SGD::DPad::Up))
 	{
 		m_nCursor -= 1;
+		m_rSword.top -= 70;
+
+		if(m_rSword.top < 250.0f)
+		{
+			m_rSword.top = 250.0f;
+		}
 
 		if(m_nCursor < 0)
 		{
@@ -115,6 +139,7 @@ bool MainMenuState::Input(void) //Hanlde user Input
 	{
 		m_nCursor = 0;
 
+		m_rSword.top = m_rPlay.top + 10;
 		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
 		{
 			Game::GetInstance()->AddState(GameplayState::GetInstance());
@@ -124,6 +149,7 @@ bool MainMenuState::Input(void) //Hanlde user Input
 	if(m_rOptions.IsIntersecting(rMouse))
 	{
 		m_nCursor = 1;
+		m_rSword.top = m_rOptions.top + 10;
 
 		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
 		{
@@ -134,6 +160,7 @@ bool MainMenuState::Input(void) //Hanlde user Input
 	if(m_rInstructions.IsIntersecting(rMouse))
 	{
 		m_nCursor = 2;
+		m_rSword.top = m_rInstructions.top + 10;
 
 		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
 		{
@@ -144,6 +171,7 @@ bool MainMenuState::Input(void) //Hanlde user Input
 	if(m_rCredits.IsIntersecting(rMouse))
 	{
 		m_nCursor = 3;
+		m_rSword.top = m_rCredits.top + 10;
 
 		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
 		{
@@ -154,6 +182,7 @@ bool MainMenuState::Input(void) //Hanlde user Input
 	if(m_rExit.IsIntersecting(rMouse))
 	{
 		m_nCursor = 4;
+		m_rSword.top = m_rExit.top + 10;
 
 		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
 		{
@@ -207,6 +236,7 @@ bool MainMenuState::Input(void) //Hanlde user Input
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 1 /*Button B on xbox controller*/))
 	{
+		m_rSword.top = 530.0f;
 		m_nCursor = 4;
 	}
 
@@ -229,13 +259,18 @@ void MainMenuState::Render(void)
 	//Create a local reference to the input manager for ease of use
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 
+	float fWidth = Game::GetInstance()->GetScreenWidth();
 	//Local refernce to the font
 	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+
+	//Draw the background
+	pGraphics->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 2.0f, 1.5f });
 
 	//Draw the title
 	font.DrawString("HONOR", 320, 100, 3, SGD::Color{ 255, 255, 0, 0 });
 
 
+	pGraphics->DrawTexture(m_hSword, { m_rSword.left, m_rSword.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
 
 	
 
@@ -243,72 +278,98 @@ void MainMenuState::Render(void)
 	if(m_nCursor == 0)
 	{
 		pGraphics->DrawRectangle(m_rPlay, { 255, 255, 255, 255 }, {}, {});
-		pGraphics->DrawTexture(m_hSword, { m_rPlay.left - 50, m_rPlay.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
-		font.DrawString("Play", 450, 250, 1, SGD::Color{ 255, 255, 0, 0 });
+		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rPlay.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 240 }, 0.0f, {}, { 255, 255, 255, 255 });
+
+
+
+		font.DrawString("Play", (fWidth - (4 * 19)) / 2, 250, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rPlay, { 255, 255, 255, 30 }, {}, {});
-		pGraphics->DrawTexture(m_hSword, { m_rPlay.left - 50, m_rPlay.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 240 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Play", 450, 250, 1, SGD::Color{ 255, 0, 0, 255 });
+		//pGraphics->DrawTexture(m_hSword, { m_rPlay.left - 50, m_rPlay.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
+
+		font.DrawString("Play", (fWidth - (4 * 19)) / 2, 250, 1, SGD::Color{ 255, 255, 165, 0 });
 	}
 
 
 	if(m_nCursor == 1)
 	{
 		pGraphics->DrawRectangle(m_rOptions, { 255, 255, 255, 255 }, {}, {});
+		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rOptions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 310 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Options", 450, 300, 1, SGD::Color{ 255, 255, 0, 0 });
+		font.DrawString("Options", (fWidth - (7 * 15)) /2 , 320, 1, SGD::Color{ 255, 255, 165, 0 });
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rOptions, { 255, 255, 255, 30 }, {}, {});
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 310 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Options", 450, 300, 1, SGD::Color{ 255, 0, 0, 255 });
+		font.DrawString("Options", (fWidth - (7 * 15)) / 2, 320, 1, SGD::Color{ 255, 255, 165, 0 });
+
 	}
 
 
 	if(m_nCursor == 2)
 	{
 		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 255 }, {}, {});
+		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Instructions", 450, 350, 1, SGD::Color{ 255, 255, 0, 0 });
+		font.DrawString("Instructions", (fWidth - (12 * 14)) / 2, 390, 1, SGD::Color{ 255, 255,165, 0 });
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 30 }, {}, {});
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Instructions", 450, 350, 1, SGD::Color{ 255, 0, 0, 255 });
+		font.DrawString("Instructions", (fWidth - (12 * 14)) / 2, 390, 1, SGD::Color{ 255, 255, 165, 0 });
+
 	}
 
 
 	if(m_nCursor == 3)
 	{
 		pGraphics->DrawRectangle(m_rCredits, { 255, 255, 255, 255 }, {}, {});
+		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rCredits.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 450 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Credits", 450, 400, 1, SGD::Color{ 255, 255, 0, 0 });
+		font.DrawString("Credits", (fWidth - (7 * 14)) /2, 460, 1, SGD::Color{ 255, 255, 165, 0 });
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rCredits, { 255, 255, 255, 30 }, {}, {});
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 450 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Credits", 450, 400, 1, SGD::Color{ 255, 0, 0, 255 });
+		font.DrawString("Credits", (fWidth - (7 * 14)) / 2, 460, 1, SGD::Color{ 255, 255, 165, 0 });
+
 	}
 
 
 	if(m_nCursor == 4)
 	{
 		pGraphics->DrawRectangle(m_rExit, { 255, 255, 255, 255 }, {}, {});
+		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rExit.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 520 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Exit", 450, 450, 1, SGD::Color{ 255, 255, 0, 0 });
+		font.DrawString("Exit", (fWidth - (4 * 18)) / 2 , 530, 1, SGD::Color{ 255, 255, 165, 0 });
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rExit, { 255, 255, 255, 30 }, {}, {});
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 520 }, 0.0f, {}, { 255, 255, 255, 255 });
+		
+		font.DrawString("Exit", (fWidth - (4 * 18)) / 2, 530, 1, SGD::Color{ 255, 255, 165, 0 });
 
-		font.DrawString("Exit", 450, 450, 1, SGD::Color{ 255, 0, 0, 255 });
+		//font.DrawString("Exit", 450, 450, 1, SGD::Color{ 255, 0, 0, 255 });
 	}
+
+	
 
 }

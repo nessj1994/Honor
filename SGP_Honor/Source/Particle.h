@@ -3,6 +3,7 @@
 #include "../SGD Wrappers/SGD_Color.h"
 #include "../SGD Wrappers/SGD_Geometry.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
+#include <random>
 
 class Particle
 {
@@ -56,6 +57,7 @@ public:
 	void SetImage(SGD::HTexture _Image){ m_hTexture = _Image; }
 	void SetColorChange(int _Change) { m_iColorChange = _Change; }
 	void SetRotation(float _Rotation) { m_fRotation = _Rotation; }
+	void SetDead(bool _Dead){ m_blDead = _Dead; }
 	//For the Recycle in the Emitter
 	void Reset();
 private:
@@ -63,6 +65,7 @@ private:
 
 	/////////////////////////////////////////
 	////////////////Members/////////////////
+	std::random_device device;
 	SGD::HTexture m_hTexture;
 	SGD::Point m_ptPosition = { 0, 0 };
 	SGD::Vector m_vtVelocity = { 0, 0 };

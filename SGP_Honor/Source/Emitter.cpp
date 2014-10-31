@@ -13,7 +13,8 @@ Emitter::Emitter()
 	m_bLooping = true;
 	m_unMaxParticles = 10;
 	m_bStarted = false;
-
+	Spawned = m_unMaxParticles/2;
+	SpawnTimer = 0;
 }
 
 Emitter::Emitter(const Emitter& _Emitter)
@@ -50,6 +51,7 @@ Emitter::Emitter(const Emitter& _Emitter)
 
 	m_vecParticles = _Emitter.m_vecParticles;
 	m_bStarted = _Emitter.m_bStarted;
+
 }
 
 Emitter& Emitter::operator= (const Emitter& _other)
@@ -80,7 +82,11 @@ void Emitter::StartParticles(bool restart)
 		m_EndPoint.y = m_ptPosition.y;
 		m_EndPoint.x = m_ptPosition.x + m_iRadius;
 	}
+
+	Spawned = m_unMaxParticles / 2;
+	SpawnTimer = 0;
 	m_vecParticles.clear();
+
 	for (size_t i = 0; i < m_unMaxParticles; i++)
 	{
 		std::mt19937 MT(device());
@@ -140,7 +146,12 @@ void Emitter::StartParticles(bool restart)
 		Temp.SetGravity(m_fGravity);
 		Temp.SetColorChange(m_fColorChange);
 		Temp.Reset();
+		if (!m_bLooping)
+		{
+			Temp.SetDead(true);
+		}
 		m_vecParticles.push_back(Temp);
+		
 	}
 }
 
@@ -162,14 +173,46 @@ void Emitter::Update(float elapsedTime)
 		}
 	}
 
+	m_bDone = true;
 		for (int i = 0; i < m_vecParticles.size(); i++)
 		{
-			if (m_vecParticles[i].IsDead())
+
+			//For Intital Burst
+			if (Spawned != m_vecParticles.size())
 			{
-				Recylce(&m_vecParticles[i]);
+				SpawnTimer += elapsedTime;
+				if (Spawned >= i)
+				{
+					if (SpawnTimer > 2.0f)
+					{
+						SpawnTimer = 0;
+						Spawned++;
+					}
+					m_vecParticles[i].Update(elapsedTime);					
+				}
+				else
+				{
+					std::mt19937 MT(device());
+					std::uniform_real_distribution<float>thing(m_ptPosition.x, m_ptPosition.x + m_szSize.width);
+					std::uniform_real_distribution<float>thing2(m_ptPosition.y, m_ptPosition.y + m_szSize.height);
+					m_vecParticles[i].SetPosition({ thing(MT), thing2(MT) });					
+				}
 			}
-			m_vecParticles[i].Update(elapsedTime);
+			else
+			{
+				if (m_vecParticles[i].IsDead() && !m_bFinish)
+				{
+					Recylce(&m_vecParticles[i]);
+				}
+				if (!m_vecParticles[i].IsDead())
+				{
+					m_bDone = false;
+				}
+				m_vecParticles[i].Update(elapsedTime);
+			}
+			
 		}
+
 
 }
 
@@ -196,7 +239,12 @@ void Emitter::Render(SGD::Point _Pos)
 
 	for (size_t i = 0; i < m_vecParticles.size(); i++)
 	{
-		m_vecParticles[i].Render();
+		//For Intital Burst
+		if (Spawned >= i)
+		{
+			m_vecParticles[i].Render();
+		}
+
 	}
 }
 
@@ -207,29 +255,34 @@ void Emitter::RenderINworld(SGD::Point _Pos)
 		m_ptPosition = _Pos;
 		//StartParticles(true);
 	}
-	if (m_iEmitterShape)
-	{
-		SGD::GraphicsManager::GetInstance()->DrawLine({ m_ptPosition.x, m_ptPosition.y  }, { m_EndPoint.x , m_EndPoint.y  });
-	}
-	else
-	{
-
-		SGD::Rectangle Rect{ { m_ptPosition.x , m_ptPosition.y  }, m_szSize };
-		//SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
-	}
-
 
 	for (size_t i = 0; i < m_vecParticles.size(); i++)
 	{
-		m_vecParticles[i].RenderINworld();
+		//For Intital Burst
+		if (Spawned >= i)
+		{
+			m_vecParticles[i].RenderINworld();
+		}
+	}
+}
+
+void Emitter::Burst(SGD::Point _pos)
+{
+	m_ptPosition = _pos;
+	Spawned = m_unMaxParticles / 2;
+	SpawnTimer = 0;
+	for (size_t i = 0; i < m_vecParticles.size(); i++)
+	{
+		m_vecParticles[i].SetDead(false);
+		Recylce(&m_vecParticles[i]);
+		m_vecParticles[i].Reset();
 	}
 }
 
 
 void Emitter::Recylce(Particle* particle)
 {
-	if (m_bLooping)
-	{
+
 		//Random Generator
 		std::mt19937 MT(device());
 		std::uniform_real_distribution<float>X(m_ptPosition.x, m_ptPosition.x + m_szSize.width);
@@ -252,14 +305,20 @@ void Emitter::Recylce(Particle* particle)
 
 		}
 		particle->SetColorChange(m_fColorChange);
-		particle->Reset();
-	}
+
+		if (m_bLooping)
+		{
+			particle->Reset();
+		}
+	
 	
 }
 
 void Emitter::KillParticles(SGD::Point _Pos)
 {
 	m_ptPosition = _Pos;
+	Spawned = m_unMaxParticles/2;
+	SpawnTimer = 0;
 	std::mt19937 MT(device());
 	std::uniform_real_distribution<float>thing(m_ptPosition.x, m_ptPosition.x + m_szSize.width);
 	std::uniform_real_distribution<float>thing2(m_ptPosition.y, m_ptPosition.y + m_szSize.height);

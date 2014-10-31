@@ -56,6 +56,15 @@ bool InstructionsState::Input(void) //Hanlde user Input
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
+	//Change between windowed and full screen modes
+	if(pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyReleased(SGD::Key::Enter))
+	{
+		SGD::GraphicsManager::GetInstance()->Resize({ Game::GetInstance()->GetScreenWidth(),
+			Game::GetInstance()->GetScreenHeight() }, !(Game::GetInstance()->GetWindowed()));
+		Game::GetInstance()->SetWindowed(!(Game::GetInstance()->GetWindowed()));
+	}
+
+
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 1 /*Button B on xbox controller*/))
 	{

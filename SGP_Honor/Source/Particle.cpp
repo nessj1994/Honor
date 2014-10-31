@@ -1,6 +1,8 @@
 #include "Particle.h"
 #include "Camera.h"
 
+
+
 Particle::Particle(SGD::Point Pos, float LifeSpan)
 {
 	m_ptPosition = Pos;
@@ -9,6 +11,7 @@ Particle::Particle(SGD::Point Pos, float LifeSpan)
 	m_fLifeSpan = LifeSpan;
 	m_fCurLifeSpan = 0;
 	m_fCurRotation = 0;
+
 }
 
 Particle::Particle(const Particle& _Particle)
@@ -81,7 +84,10 @@ void Particle::Update(float elapsedTime)
 	if (RotationChangeTImer >= 0.01f)
 	{
 		RotationChangeTImer = 0;
-		m_fCurRotation += m_fRotation;
+		if (m_fRotation > 0)
+		{
+			m_fCurRotation += (m_fRotation);
+		}		
 	}
 	//Smooth this out later
 	if (AlphaChangeTimer >= 0.04f)
@@ -165,7 +171,7 @@ void Particle::Update(float elapsedTime)
 
 void Particle::Render(void)
 {
-	if (m_blDead)
+	if (m_blDead )
 	{
 		return;
 	}
@@ -176,7 +182,7 @@ void Particle::Render(void)
 	{
 		Temp.x -= (SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hTexture) / 2).width * m_szScale.width;
 		Temp.y -= (SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hTexture) / 2).height * m_szScale.height;
-		SGD::GraphicsManager::GetInstance()->DrawTexture(m_hTexture, Temp, m_fCurRotation, {Temp.x/2,Temp.y/2}, m_cCurrentColor, m_szScale);
+		SGD::GraphicsManager::GetInstance()->DrawTexture(m_hTexture, Temp, m_fCurRotation, { (SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hTexture) / 2).width, (SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hTexture) / 2).height }, m_cCurrentColor, m_szScale);
 	}
 	else
 	{

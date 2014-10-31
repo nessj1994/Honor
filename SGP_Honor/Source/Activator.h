@@ -2,6 +2,8 @@
 #include "Entity.h"
 #include "../SGD Wrappers/SGD_Geometry.h"
 
+class Player;
+
 class Activator :
 	public Entity
 {
@@ -28,8 +30,11 @@ public:
 	/////////////////// Mutators /////////////////
 	void SetOn(bool isOn) { m_bIsOn = isOn; }
 	void SetKeyID(unsigned int ID) { m_unKeyID = ID; }
+	void SetPlayer(Player* ptr) { m_pPlayer = ptr; }
 
 private:
+
+	Player* m_pPlayer = nullptr;
 
 	bool m_bPressurePlate = false;
 	bool m_bIsOn = false;

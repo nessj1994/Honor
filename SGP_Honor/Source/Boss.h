@@ -37,7 +37,7 @@ public:
 
 private:
 
-	Entity* m_pPlayer;
+	Entity* m_pPlayer = nullptr;
 	unsigned int m_unHitPoints;
 	unsigned int m_unCurrentState;
 	SGD::Point m_ptStartPosition;
