@@ -180,7 +180,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("Level1_5");
+	LoadLevel("Level1_1");
 
 	m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
@@ -709,7 +709,7 @@ Hawk* GameplayState::CreateHawk(Entity* pOwner) const
 	else
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
-	proj->SetSize({ 32, 32 });
+	proj->SetSize({ 20, 20 });
 	proj->SetDirection({ pOwner->GetDirection() });
 	proj->SetOwner(pOwner);
 	//pOwner->SetHawkPtr(proj);

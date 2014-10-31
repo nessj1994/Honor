@@ -483,26 +483,26 @@ void Player::Update(float elapsedTime)
 					{
 						if (GetHawkPtr()->GetVelocity().y < 0)
 						{
-							//GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + GetHawkPtr()->GetAirFriction()));
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + GetHawkPtr()->GetAirFriction()));
 
-							if (GetHawkPtr()->GetVelocity().y > 0.007f)
+							if (GetHawkPtr()->GetVelocity().y > 0.1f)
 							{
+								GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
 
 							}
-							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
 
 						}
 						if (GetHawkPtr()->GetVelocity().y > 0)
 						{
-							//GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y - GetHawkPtr()->GetAirFriction()));
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y - GetHawkPtr()->GetAirFriction()));
 
-							if (GetHawkPtr()->GetVelocity().y < -0.007f)
+							if (GetHawkPtr()->GetVelocity().y < -0.1f)
 							{
 
+								GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
 
 							}
 
-							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
 
 						}
 
