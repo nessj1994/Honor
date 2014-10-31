@@ -19,6 +19,7 @@
 #include "BitmapFont.h"
 #include "Game.h"
 #include "Bull.h"
+#include "SwordSwing.h"
 
 #include <Windows.h>
 #include "Dash.h"
@@ -69,6 +70,10 @@ void Player::Update(float elapsedTime)
 	m_emHawkReturn->Update(elapsedTime);
 	//
 
+	//if (m_pSword != nullptr)
+	//{
+	//	m_pSword->Update(elapsedTime);
+	//}
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	if (m_bDead)
 	{
@@ -223,8 +228,12 @@ void Player::Render(void)
 		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
 		SGD::Color::Color(255, 255, 0, 0));
 
-	Camera::GetInstance()->Draw(SGD::Rectangle(swingRect.left, swingRect.top, swingRect.right, swingRect.bottom),
+
+	Camera::GetInstance()->Draw(SGD::Rectangle(m_pSword->GetRect().left, m_pSword->GetRect().top, m_pSword->GetRect().right, m_pSword->GetRect().bottom),
 		SGD::Color::Color(255, 255, 255, 0));
+
+	//Camera::GetInstance()->Draw(SGD::Rectangle(swingRect.left, swingRect.top, swingRect.right, swingRect.bottom),
+	//	SGD::Color::Color(255, 255, 255, 0));
 
 	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight());
 
@@ -1780,7 +1789,8 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 			temp.right = (temp.left) +80;
 			temp.bottom = (temp.top) + 80;
 
-			swingRect = temp;
+			//swingRect = temp;
+			m_pSword->SetRect(temp);
 
 		}
 		else
@@ -1788,26 +1798,30 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 
 			SGD::Rectangle temp;
 			temp.right = (GetRect().left + 16) - Camera::GetInstance()->GetCameraPos().x;
-			temp.left = temp.right - 60;
+			temp.left = temp.right - 80;
 
 
 
 			//temp.left = (GetRect().left + 12) - Camera::GetInstance()->GetCameraPos().x;
-			temp.top = (GetRect().top - Camera::GetInstance()->GetCameraPos().y) + 10;
+			temp.top = (GetRect().top - Camera::GetInstance()->GetCameraPos().y) - 10;
 			//temp.right = temp.left - 60;
-			temp.bottom = temp.top + 50;
+			temp.bottom = temp.top + 80;
 
-			swingRect = temp;
+			//swingRect = temp;
+			m_pSword->SetRect(temp);
+
 			
 		}
 	}
 	else
 	{
 		swingRect = { 0, 0, 0, 0 };
+		m_pSword->SetRect(swingRect);
+		
 	}
 
 	
-
+	m_pSword->Update(elapsedTime);
 
 }
 

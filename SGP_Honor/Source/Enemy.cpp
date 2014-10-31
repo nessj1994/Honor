@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include "Camera.h"
 #include "DestroyEntityMessage.h"
+#include "SwordSwing.h"
 
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 
@@ -49,12 +50,14 @@ SGD::Rectangle Enemy::GetRect(void) const
 void Enemy::HandleCollision(const IEntity* pOther)
 {
 	Unit::HandleCollision(pOther);
+	
+	//GetPlayer()->GetSword()->GetRect()
 
 	RECT rSwingRect;
-	rSwingRect.left= GetPlayer()->GetSwingRect().left;
-	rSwingRect.top = GetPlayer()->GetSwingRect().top;
-	rSwingRect.right = GetPlayer()->GetSwingRect().right;
-	rSwingRect.bottom = GetPlayer()->GetSwingRect().bottom;
+	rSwingRect.left =	GetPlayer()->GetSword()->GetRect().left;
+	rSwingRect.top =	GetPlayer()->GetSword()->GetRect().top;
+	rSwingRect.right =	GetPlayer()->GetSword()->GetRect().right;
+	rSwingRect.bottom = GetPlayer()->GetSword()->GetRect().bottom;
 
 	RECT rObject;
 	rObject.left =		GetRect().left- Camera::GetInstance()->GetCameraPos().x;
@@ -95,6 +98,12 @@ void Enemy::HandleCollision(const IEntity* pOther)
 
 	}
 
+	if (nIntersectHeight = nIntersectWidth)
+	{
+		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+		pMsg->QueueMessage();
+		pMsg = nullptr;
+	}
 	
 
 }

@@ -11,6 +11,7 @@ class Ice;
 class Bounce;
 class Dash;
 class Emitter;
+class SwordSwing;
 
 class Player :
 	public Unit, SGD::Listener
@@ -100,6 +101,7 @@ public:
 	Dash* GetDash(void) const { return m_pDash; }
 	Ice* GetIce(void) const { return m_pIce; }
 	Bounce* GetBounce(void) const { return m_pBounce; }
+	SwordSwing* GetSword(void) const { return m_pSword; }
 
 	//Unsigned ints
 	unsigned int GetHonorCollected(void) const { return m_unHonorCollected; }
@@ -118,6 +120,7 @@ public:
 	//void SetIsFalling(bool _fall) { is_Falling = _fall; }
 	void SetIsInputStuck(bool _stuck) { is_Stuck = _stuck; }
 	void SetHonorCollected(unsigned int honor) { m_unHonorCollected = honor; }
+	void SetSword(SwordSwing* ptr) { m_pSword = ptr; }
 
 	//void SetJumpCapTime(float _capTime) { m_fJumpVelCap = _capTime; }
 	void SetJumpVelCur(float _velCur) { m_fJumpVelCur = _velCur; }
@@ -171,7 +174,7 @@ private:
 	Dash* m_pDash;
 	Ice* m_pIce;
 	Bounce* m_pBounce;
-
+	SwordSwing* m_pSword;
 
 	SGD::HTexture m_hImage = SGD::INVALID_HANDLE;
 	//Honor Particle Image for the HUD
