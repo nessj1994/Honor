@@ -41,6 +41,7 @@ class Squid;
 class Pouncer;
 class Bull;
 class Jellyfish;
+class Crab;
 
 //////////////////////////////////////////////////
 // GameplayState class
@@ -130,6 +131,8 @@ private:
 	Player* CreatePlayer(void);
 	Entity* CreateProjectile(Entity* pOwner) const;
 	Entity* CreateGravProjectile(Entity* pOwner) const;
+	Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const;
+	Entity* GameplayState::CreateVertBubble(Entity* pOwner) const;
 	Entity* CreateSpray(Entity* pOwner) const;
 	Hawk* CreateHawk(Entity* pOwner) const;
 
@@ -183,10 +186,10 @@ private:
 	//Honor * m_pHonor = nullptr;
 	//Armor * m_pArmor = nullptr;
 
-	Squid* m_pSquid = nullptr;
+	/*Squid* m_pSquid = nullptr;
 	Pouncer* m_pPouncer = nullptr;
 	Jellyfish* m_pJellyfish = nullptr;
-	Jellyfish* m_pJellyfish2 = nullptr;
+	Jellyfish* m_pJellyfish2 = nullptr;*/
 
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
 

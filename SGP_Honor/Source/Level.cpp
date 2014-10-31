@@ -191,8 +191,8 @@ void Level::RenderImageLayer(bool background)
 							// Draw the tile
 							Camera::GetInstance()->DrawTextureSection(
 								layer->GetTileSet(),
-								{ (xx * 32.0f) - Camera::GetInstance()->GetCameraPos().x * layer->GetScrollSpeed() ,
-								(yy * 32.0f) - Camera::GetInstance()->GetCameraPos().y * layer->GetScrollSpeed() },
+								{	(xx * 32.0f)   - Camera::GetInstance()->GetCameraPos().x * layer->GetScrollSpeed(),
+									(yy * 32.0f)  - Camera::GetInstance()->GetCameraPos().y * layer->GetScrollSpeed() },
 								section,
 								0.0f,
 								{ 0.0f, 0.0f },

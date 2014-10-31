@@ -21,13 +21,11 @@ public:
 
 	////////////////////////////////////////////////
 	/////////////////Accessors/////////////////////
-	float GetSpeed(void) const { return m_fSpeed; }
 	bool IsLooping(void) const { return m_bLooping; }
 	SGD::HTexture GetImage() const { return m_hImage; }
 
 	///////////////////////////////////////////////
 	//////////////////Mutators////////////////////
-	void SetSpeed(float speed) { m_fSpeed = speed; }
 	void SetLooping(bool Looping) { m_bLooping = Looping; }
 	void SetImage(SGD::HTexture img) { m_hImage = img; }
 	void AddFrame(SGD::Rectangle source, SGD::Rectangle collision, SGD::Rectangle attack,
@@ -47,7 +45,6 @@ private:
 
 	std::vector<Frame> m_vFrames;
 
-	float m_fSpeed = 0.0f;
 	bool m_bLooping = false;
 };
 
