@@ -1776,9 +1776,9 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 
 			SGD::Rectangle temp;
 			temp.left = ( (GetRect().right - 16 ) - Camera::GetInstance()->GetCameraPos().x);
-			temp.top = (GetRect().top - Camera::GetInstance()->GetCameraPos().y) + 10;
-			temp.right = (temp.left) +60;
-			temp.bottom = (temp.top) + 50;
+			temp.top = (GetRect().top - Camera::GetInstance()->GetCameraPos().y) - 10;
+			temp.right = (temp.left) +80;
+			temp.bottom = (temp.top) + 80;
 
 			swingRect = temp;
 

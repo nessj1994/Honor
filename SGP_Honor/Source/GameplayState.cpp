@@ -945,6 +945,7 @@ void GameplayState::CreateActivator(int _x, int _y, bool _isPressure, bool _curr
 	Activator * pActivator = new Activator(_isPressure);
 	pActivator->SetPosition({ (float)_x, (float)_y });
 	pActivator->SetOn(_currState);
+	pActivator->SetPlayer(m_pPlayer);
 	pActivator->SetKeyID(_ID);
 	m_pEntities->AddEntity(pActivator, Entity::ENT_SWITCH);
 	pActivator->Release();
