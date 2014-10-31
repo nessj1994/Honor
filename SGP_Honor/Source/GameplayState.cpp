@@ -52,6 +52,7 @@
 #include "Teleporter.h"
 #include "Bull.h"
 #include "Crab.h"
+#include "SwordSwing.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -182,7 +183,7 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadHonorVector();
 
-	LoadLevel("HubLevel");
+	LoadLevel("Level1_5");
 
 	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
@@ -372,7 +373,12 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ENEMY);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_JELLYFISH);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_BULL);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STATUE);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
 
+	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
+	m_pEntities->CheckCollisions(Entity::ENT_SWITCH, Entity::ENT_SWORD);
+	m_pEntities->CheckCollisions(Entity::ENT_BOSS_BULL, Entity::ENT_DOOR);
 
 
 
@@ -387,8 +393,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_STALACTITE);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_GEYSER);
-	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STATUE);
-	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
+	
 
 	//if (m_pArmor != nullptr)
 	//	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ARMOR);
@@ -403,10 +408,10 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_STALACTITE);
 	m_pEntities->CheckWorldCollision(Entity::ENT_LASER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_BULL);
-
 	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
 
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
+	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_BULL);
 
 
 	//Process messages and events
@@ -419,10 +424,8 @@ void GameplayState::Update(float elapsedTime)
 // - Render all game entities
 void GameplayState::Render(void)
 {
-	m_pLevel->RenderImageLayer(true);
 	m_pLevel->Render();
-
-
+	m_pLevel->RenderImageLayer(true);
 
 	//m_pEmitter2->Render();
 	m_pEntities->RenderAll();
@@ -826,9 +829,13 @@ Hawk* GameplayState::CreateHawk(Entity* pOwner) const
 Player* GameplayState::CreatePlayer(void)
 {
 	Player* pPlayer = new Player;
+	SwordSwing* pSword = new SwordSwing;
 
 	pPlayer->SetPosition(SGD::Point(100, 100));
 	pPlayer->SetSize(SGD::Size(32, 64));
+	pPlayer->SetSword(pSword);
+	m_pEntities->AddEntity(pSword, Entity::ENT_SWORD);
+
 
 	return pPlayer;
 
@@ -1255,6 +1262,8 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 		{
 			Bull * pBull = new Bull();
 			pBull->SetPosition({ (float)_x, (float)_y });
+			pBull->SetStartPosition({ (float)_x, (float)_y });
+			pBull->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pBull, Entity::ENT_BOSS_BULL);
 			pBull->Release();
 			break;
@@ -1517,6 +1526,7 @@ bool GameplayState::GetHonorValue(unsigned int _index)
 	{
 		return m_mCollectedHonor[m_strCurrLevel][_index];
 	}
+	return false;
 }
 
 /////////////////////////////////////////////
