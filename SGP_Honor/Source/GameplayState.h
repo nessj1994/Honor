@@ -109,7 +109,7 @@ public:
 	void SetHonorVector(std::vector<bool> _value);
 	void SaveHonorVector();
 	void LoadHonorVector();
-	bool GetHonorValue(int _index);
+	bool GetHonorValue(unsigned int _index);
 	unsigned int GetHonorVectorSize();
 
 private:

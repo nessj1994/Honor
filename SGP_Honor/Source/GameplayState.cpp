@@ -370,6 +370,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_JELLYFISH);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_BULL);
 
+	m_pEntities->CheckCollisions(Entity::ENT_BOSS_BULL, Entity::ENT_DOOR);
 
 
 
@@ -400,10 +401,10 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_STALACTITE);
 	m_pEntities->CheckWorldCollision(Entity::ENT_LASER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_BULL);
-
 	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
 
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
+	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_BULL);
 
 
 	//Process messages and events
@@ -1420,7 +1421,7 @@ void GameplayState::LoadHonorVector()
 	}
 }
 
-bool GameplayState::GetHonorValue(int _index)
+bool GameplayState::GetHonorValue(unsigned int _index)
 {
 	if (_index < m_mCollectedHonor[m_strCurrLevel].size())
 	{

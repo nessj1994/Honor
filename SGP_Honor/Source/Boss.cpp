@@ -24,6 +24,7 @@ void Boss::Update(float elapsedTime)
 		SetGravity(-3000);
 		SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
 	}
+	SetIsFalling(true);
 
 	// Update movement
 	Unit::Update(elapsedTime);
@@ -161,6 +162,11 @@ void Boss::HandleCollision(const IEntity* pOther)
 {
 	// Solid wall
 	if (pOther->GetType() == ENT_SOLID_WALL)
+	{
+		BasicCollision(pOther);
+	}
+	// Doors
+	if (pOther->GetType() == ENT_DOOR)
 	{
 		BasicCollision(pOther);
 	}
