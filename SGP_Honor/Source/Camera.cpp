@@ -35,7 +35,8 @@ void Camera::Draw(SGD::Rectangle _rect, SGD::Color _color)
 
 void Camera::DrawAnimation(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped)
 {
-	AnimationEngine::GetInstance()->Render({ position.x, position.y }, rotation, ts, flipped, m_fScale, m_ptCameraPosition);
+	AnimationEngine::GetInstance()->Render({ position.x , position.y  },
+		rotation, ts, flipped, m_fScale, m_ptCameraPosition);
 }
 
 void Camera::DrawString(std::string str, SGD::Point position)
@@ -74,8 +75,8 @@ void Camera::DrawTextureSection(SGD::HTexture handle, SGD::Point position, SGD::
 
 void Camera::Update(float _elapsedTime)
 {
-	m_ptCameraPosition.x = (m_pPlayer->GetPosition().x  - Game::GetInstance()->GetScreenWidth() / 3); // Divide by Scale
-	m_ptCameraPosition.y = (m_pPlayer->GetPosition().y  - Game::GetInstance()->GetScreenHeight() / 2);// Divide by Scale
+	m_ptCameraPosition.x = (m_pPlayer->GetPosition().x  - Game::GetInstance()->GetScreenWidth() / 3) / (1/ m_fScale) ; // Divide by Scale
+	m_ptCameraPosition.y = (m_pPlayer->GetPosition().y - Game::GetInstance()->GetScreenHeight() / 2) / (1 / m_fScale) ;// Divide by Scale
 
 }
 

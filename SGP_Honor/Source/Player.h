@@ -165,6 +165,8 @@ private:
 	unsigned int m_unCurrentState = 0;
 	unsigned int m_unHonorCollected = 0;
 
+	unsigned int m_unJumpCount = 0;
+
 	//Hawk* m_pHawk;
 	Dash* m_pDash;
 	Ice* m_pIce;

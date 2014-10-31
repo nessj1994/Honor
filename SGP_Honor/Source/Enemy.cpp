@@ -2,6 +2,7 @@
 
 #include "Player.h"
 #include <Windows.h>
+#include "Camera.h"
 
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 
@@ -27,7 +28,7 @@ void Enemy::Update(float elapsedTime)
 
 void Enemy::Render(void)
 {
-
+	Camera::GetInstance()->Draw(SGD::Rectangle(GetRect()), SGD::Color::Color(255, 0, 255, 0));
 }
 
 
@@ -55,10 +56,10 @@ void Enemy::HandleCollision(const IEntity* pOther)
 	rSwingRect.bottom = GetPlayer()->GetSwingRect().bottom;
 
 	RECT rObject;
-	rObject.left =		GetRect().left;
-	rObject.top =		GetRect().top;
-	rObject.right =		GetRect().right;
-	rObject.bottom =	GetRect().bottom;
+	rObject.left =		GetRect().left- Camera::GetInstance()->GetCameraPos().x;
+	rObject.top =		GetRect().top - Camera::GetInstance()->GetCameraPos().y;
+	rObject.right = GetRect().right - Camera::GetInstance()->GetCameraPos().x;
+	rObject.bottom = GetRect().bottom - Camera::GetInstance()->GetCameraPos().y;
 
 	RECT rIntersection = {};
 
@@ -66,6 +67,8 @@ void Enemy::HandleCollision(const IEntity* pOther)
 
 	int nIntersectWidth = rIntersection.right - rIntersection.left;
 	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+
 
 	if (nIntersectHeight > nIntersectWidth)
 	{

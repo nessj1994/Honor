@@ -509,7 +509,18 @@ void Player::BasicCollision(const IEntity* pOther)
 		{
 			if(IsBouncing() == true)
 			{
-				SetVelocity({ GetVelocity().x, GetVelocity().y * -1 });
+
+				if (m_unJumpCount < 3)
+					m_unJumpCount++;
+
+				if (m_unJumpCount == 1)
+					SetVelocity({ GetVelocity().x, -900.0f });
+				if (m_unJumpCount == 2)
+					SetVelocity({ GetVelocity().x, -1500.0f });
+				if (m_unJumpCount == 3)
+					SetVelocity({ GetVelocity().x, -1900.0f });
+
+
 				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height  /*- nIntersectHeight*/ });
 			}
 
@@ -520,6 +531,7 @@ void Player::BasicCollision(const IEntity* pOther)
 				if (m_unCurrentState == FALLING_STATE)
 				{
 					
+					m_unJumpCount = 0;
 
 					m_fLandTimer = 0.001f;
 					m_unCurrentState = LANDING_STATE;
@@ -551,6 +563,12 @@ void Player::BasicCollision(const IEntity* pOther)
 			SetPosition({ GetPosition().x, (float)rObject.bottom });
 			SetVelocity({ GetVelocity().x, 0 });
 		}
+	}
+
+	if (IsBouncing() == false
+		&& m_unCurrentState == RESTING_STATE)
+	{
+		m_unJumpCount = 0;
 	}
 
 }
@@ -826,7 +844,7 @@ void Player::GeyserCollision(const IEntity* pOther)
 			else
 			{
 				SetVelocity({ 400 * GetDirection().x * -1, GetVelocity().y });
-
+				m_unJumpCount = 0;
 
 			}
 
@@ -1026,12 +1044,16 @@ void Player::KillPlayer()
 		m_bHasArmor = false;
 		m_fArmorTimer = 2.0f;
 		m_vtVelocity.y -= 2500;
+		m_unJumpCount = 0;
 	}
 	else
 	{
 		m_fDeathTimer = 0.5f;
 		m_bDead = true;
+		m_unJumpCount = 0;
+
 		// TODO Add effects
+
 	}
 }
 
