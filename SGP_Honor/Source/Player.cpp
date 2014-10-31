@@ -18,7 +18,7 @@
 #include "Font.h"
 #include "BitmapFont.h"
 #include "Game.h"
-
+#include "Bull.h"
 
 #include <Windows.h>
 #include "Dash.h"
@@ -33,6 +33,8 @@
 Player::Player() : Listener(this)
 {
 	Listener::RegisterForEvent("KILL_PLAYER");
+	Listener::RegisterForEvent("BOUNCE_VERTICAL");
+	Listener::RegisterForEvent("BOUNCE_HORIZONTAL");
 	SetDirection({ 1, 0 });
 	m_pDash = new Dash();
 	m_pBounce = new Bounce();
@@ -392,6 +394,20 @@ void Player::HandleCollision(const IEntity* pOther)
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}
 
+	if (pOther->GetType() == Entity::ENT_BOSS_BULL)
+	{
+		// TODO use states
+		// Throw the player back
+		Bull * bull = (Bull*)(pOther);
+		float throwSpeed = 2000;
+		if (bull->IsFacingRight())
+		{
+			throwSpeed = -2000;
+		}
+		SetGravity(0);
+		SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
+		SetVelocity({ throwSpeed, -1000 });
+	}
 }
 
 void Player::BasicCollision(const IEntity* pOther)
@@ -1033,6 +1049,19 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		{
 			KillPlayer();
 		}
+	}
+
+	if (pEvent->GetEventID() == "BOUNCE_VERTICAL")
+	{
+		SetVelocity({ GetVelocity().x, -3000 });
+		SetPosition({ GetPosition().x, GetPosition().y - 1 });
+	}
+
+	if (pEvent->GetEventID() == "BOUNCE_HORIZONTAL")
+	{
+		SetVelocity({ 10000.0f * (*(float*)pEvent->GetData()), -1000 });
+		SetPosition({ GetPosition().x, GetPosition().y - 10 });
+
 	}
 }
 

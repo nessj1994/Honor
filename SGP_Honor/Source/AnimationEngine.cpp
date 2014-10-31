@@ -51,7 +51,7 @@ void AnimationEngine::Update(float elapsedTime, AnimTimeStamp& ts, IEntity* send
 	if (ts.IsPlaying() == false)
 		return;
 
-	ts.SetTimeWaited(ts.GetTimeWaited() + elapsedTime);
+	ts.SetTimeWaited(ts.GetTimeWaited() + elapsedTime * ts.GetSpeed());
 
 	if (m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetEvent() != "none")
 	{

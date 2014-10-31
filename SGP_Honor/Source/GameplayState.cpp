@@ -10,6 +10,8 @@
 #include "DestroyEntityMessage.h"
 #include "CreateProjectileMessage.h"
 #include "CreateGravProjectileMessage.h"
+#include "CreateHorizontalBubble.h"
+#include "CreateVerticalBubble.h"
 #include "CreateSprayMessage.h"
 #include "CreateHawkMessage.h"
 #include "ChangeLevelMessage.h"
@@ -18,6 +20,8 @@
 #include "Entity.h"
 #include "Projectile.h"
 #include "GravProjectile.h"
+#include "HorizontalBubble.h"
+#include "VerticalBubble.h"
 #include "Player.h"
 #include "EntityManager.h"
 #include "Camera.h"
@@ -47,6 +51,7 @@
 #include "Jellyfish.h"
 #include "Teleporter.h"
 #include "Bull.h"
+#include "Crab.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -133,8 +138,6 @@ void GameplayState::Enter(void) //Load Resources
 	//m_pJellyfish2 = new Jellyfish();
 	//m_pJellyfish2->SetPosition({900, 700});
 
-
-
 	//Create player with factory method
 	m_pPlayer = CreatePlayer();
 
@@ -170,10 +173,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pEntities->AddEntity(m_pHonor, Entity::ENT_HONOR);
 	m_pEntities->AddEntity(m_pPendulum, Entity::ENT_PENDULUM);
 	m_pEntities->AddEntity(m_pStatue, Entity::ENT_STATUE);
-	m_pDoor->SetActivator(m_pSwitch);
-
-
-
+	m_pDoor->SetActivator(m_pSwitch);*/
 
 	//For Particle Testing*/
 	m_pEmitter2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/Bla.xml", "Test", { 131, 673 });
@@ -181,6 +181,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
+
 	LoadLevel("HubLevel");
 
 	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
@@ -190,6 +191,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Temporary
 	//CreateBullBoss(500, 400);
+	//CreateCrabBoss();
 }
 
 
@@ -368,7 +370,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MOVING_PLATFORM);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_TELEPORTER);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ENEMY);
-	m_pEntities->CheckCollisions(Entity::ENT_JELLYFISH, Entity::ENT_PLAYER);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_JELLYFISH);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_BULL);
 
 
 
@@ -542,6 +545,66 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 
 			break;
 		}
+		case MessageID::MSG_CREATE_HORIZ_BUBBLE:
+		{
+			//Downcast to the real message type
+			const CreateHorizontalBubble* pCreateMsg = dynamic_cast<const CreateHorizontalBubble*>(pMsg);
+
+			//Make sure the message isn't a nullptr
+			assert(pCreateMsg != nullptr
+				 && "GameplayState::MessageProc - MSG_CREATE_HORIZ_BUBBLE is not actually a CreateHorizontalBubbleMessage");
+
+			//Create a local reference to the gameplaystate singleton
+			GameplayState* pSelf = GameplayState::GetInstance();
+
+
+			//Play the projectile's audio sound
+
+			//Call CreateProjectile factory method sending in the messages projectile
+			Entity* pProj = pSelf->CreateHorizBubble(pCreateMsg->GetOwner());
+
+
+			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_CRAB)
+			{
+				 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+			}
+
+			pProj->Release();
+			pProj = nullptr;
+
+
+			break;
+		}
+		case MessageID::MSG_CREATE_VERT_BUBBLE:
+		{
+			//Downcast to the real message type
+			const CreateVerticalBubble* pCreateMsg = dynamic_cast<const CreateVerticalBubble*>(pMsg);
+
+			//Make sure the message isn't a nullptr
+			assert(pCreateMsg != nullptr
+				 && "GameplayState::MessageProc - MSG_CREATE_VERT_BUBBLE is not actually a CreateVerticalBubble");
+
+			//Create a local reference to the gameplaystate singleton
+			GameplayState* pSelf = GameplayState::GetInstance();
+
+
+			//Play the projectile's audio sound
+
+			//Call CreateProjectile factory method sending in the messages projectile
+			Entity* pProj = pSelf->CreateVertBubble(pCreateMsg->GetOwner());
+
+
+			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_CRAB)
+			{
+				 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+			}
+
+			pProj->Release();
+			pProj = nullptr;
+
+
+			break;
+		}
 		case MessageID::MSG_CREATE_SPRAY:
 		{
 
@@ -671,7 +734,7 @@ Entity* GameplayState::CreateProjectile(Entity* pOwner) const
 {
 	Projectile* proj = new Projectile();
 	if (pOwner->GetDirection().x == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + +pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	else
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
@@ -695,6 +758,26 @@ Entity* GameplayState::CreateGravProjectile(Entity* pOwner) const
 	proj->SetDirection({ pOwner->GetDirection() });
 	proj->SetOwner(pOwner);
 
+	return proj;
+}
+
+Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
+{
+	HorizontalBubble* proj = new HorizontalBubble();
+	proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width / 2, 
+		pOwner->GetPosition().y + pOwner->GetSize().height - 80));
+	proj->SetOwner(pOwner);
+	proj->SetSize({ 40, 40 });
+	return proj;
+}
+
+Entity* GameplayState::CreateVertBubble(Entity* pOwner) const
+{
+	VerticalBubble* proj = new VerticalBubble();
+	proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width / 2,
+		pOwner->GetPosition().y + pOwner->GetSize().height - 80));
+	proj->SetOwner(pOwner);
+	proj->SetSize({ 40, 40 });
 	return proj;
 }
 
@@ -1185,6 +1268,9 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 		}
 		case 3: // crab
 		{
+			Crab * mCrab = new Crab();
+			m_pEntities->AddEntity(mCrab, Entity::ENT_BOSS_CRAB);
+			mCrab->Release();
 			break;
 		}
 		case 4: // wizard
@@ -1423,7 +1509,7 @@ void GameplayState::LoadHonorVector()
 	}
 }
 
-bool GameplayState::GetHonorValue(int _index)
+bool GameplayState::GetHonorValue(unsigned int _index)
 {
 	if (_index < m_mCollectedHonor[m_strCurrLevel].size())
 	{

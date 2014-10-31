@@ -124,6 +124,8 @@ private:
 	std::vector<Particle> m_vecParticles;
 	//CHecks
 	bool m_bStarted = false;
-	
+	//Initial Burst
+	int Spawned;
+	float SpawnTimer;
 };
 

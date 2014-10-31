@@ -248,6 +248,10 @@
     <ClCompile Include="Source\Jellyfish.cpp">
       <Filter>Entities\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="Source\HorizontalBubble.cpp" />
+    <ClCompile Include="Source\VerticalBubble.cpp" />
+    <ClCompile Include="Source\CreateVerticalBubble.cpp" />
+    <ClCompile Include="Source\CreateHorizontalBubble.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -521,6 +525,10 @@
     <ClInclude Include="Source\Jellyfish.h">
       <Filter>Entities\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="Source\HorizontalBubble.h" />
+    <ClInclude Include="Source\VerticalBubble.h" />
+    <ClInclude Include="Source\CreateVerticalBubble.h" />
+    <ClInclude Include="Source\CreateHorizontalBubble.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />
