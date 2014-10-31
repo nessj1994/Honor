@@ -1,5 +1,6 @@
 #pragma once
-#include "C:\Users\Conor\Desktop\SGP REPO SPRINT 2\honor2\SGP_Honor\Source\Entity.h"
+#include "Entity.h"
+//#include "C:\Users\Conor\Desktop\SGP REPO SPRINT 2\honor2\SGP_Honor\Source\Entity.h"
 class SwordSwing :
 	public Entity
 {
