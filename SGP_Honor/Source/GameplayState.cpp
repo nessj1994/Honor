@@ -180,7 +180,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("Level4_5");
+	LoadLevel("Level4_1");
 
 	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
@@ -401,8 +401,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_STALACTITE);
 	m_pEntities->CheckWorldCollision(Entity::ENT_LASER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_BULL);
-
-	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
+	m_pEntities->CheckWorldCollision(Entity::ENT_POUNCER);
 
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
 
