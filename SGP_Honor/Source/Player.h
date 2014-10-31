@@ -182,7 +182,6 @@ private:
 	//Emitters
 	//Honor emitter for HUD
 	Emitter* m_emHonor;
-
 	SGD::Rectangle swingRect = {0,0,0,0};
 	//Hawk Explosion 
 	Emitter* m_emFeatherExplosion;
@@ -190,6 +189,11 @@ private:
 	//Hawk Return
 	Emitter* m_emHawkReturn;
 	bool m_bReturningHawk = false;
+
+	//Sound Effects
+	SGD::HAudio m_hIceEffect = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hBounceEffect = SGD::INVALID_HANDLE;
+
 };
 
 

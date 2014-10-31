@@ -28,5 +28,6 @@ private:
 	float m_fCooldown = 0.0f;
 	float m_fAirFriction = 1.5f;
 
+	SGD::HAudio m_hEffect = SGD::INVALID_HANDLE;
 };
 

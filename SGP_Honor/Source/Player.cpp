@@ -48,6 +48,10 @@ Player::Player() : Listener(this)
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/PlayerAnimations.xml");
 	m_ts.SetCurrAnimation("Idle");
 	
+	//Load Sounds
+	m_hIceEffect = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/IceSpray.wav");
+	m_hBounceEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/BounceEffect.wav");
+
 }
 
 
@@ -57,6 +61,8 @@ Player::~Player()
 	delete m_pBounce;
 	delete m_emHonor;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHonorParticleHUD);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hIceEffect);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBounceEffect);
 }
 
 /////////////////////////////////////////////////
@@ -260,6 +266,11 @@ SGD::Rectangle Player::GetRect(void) const
 
 void Player::HandleCollision(const IEntity* pOther)
 {
+	if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::W))
+	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hBounceEffect);
+
+	}
 
 	Unit::HandleCollision(pOther);
 	if (pOther->GetType() == ENT_DOOR)
@@ -1214,8 +1225,13 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 void Player::UpdateBounce(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+	
+	
 	if (pInput->IsKeyDown(SGD::Key::W) == true)
 	{
+		//if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBounceEffect)))
+		//{
+		//}
 		GetBounce()->GetEMBubbles()->Finish(false);
 		SetIsBouncing(true);
 	}
@@ -1244,6 +1260,8 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 
 		m_ts.SetPlaying(true);
 	}
+
+	
 	//reset currframe to 0 & set the animation playing to false
 	if ((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true) || pInput->IsKeyDown(SGD::Key::Space) == true)
 	{
@@ -1670,9 +1688,14 @@ void Player::UpdateSpray(float elapsedTime)
 	if (pInput->IsKeyDown(SGD::Key::F) == true
 		/*&& m_fShotTimer > 0.25f*/)
 	{
+		if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hIceEffect)))
+		{
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hIceEffect);
+		}
 		//m_fShotTimer = 0.0f;
 		if (m_fIceTimer > .05f)
 		{
+
 			m_fIceTimer = 0;
 			CreateSprayMessage* pMsg = new CreateSprayMessage(this);
 			pMsg->QueueMessage();
