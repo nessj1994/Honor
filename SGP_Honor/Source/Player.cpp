@@ -1245,11 +1245,13 @@ void Player::UpdateBounce(float elapsedTime)
 	if (pInput->IsKeyDown(SGD::Key::W) == true)
 	{
 		GetBounce()->GetEMBubbles()->Finish(false);
+		GetBounce()->GetEMBubbles()->Burst(m_ptPosition);
 		SetIsBouncing(true);
 	}
 	else
 	{
 		GetBounce()->GetEMBubbles()->Finish();
+		GetBounce()->GetEMBubbles()->Burst(m_ptPosition);
 		if (GetBounce()->GetEMBubbles()->Done())
 		{
 			//Reseting particles for the bounce since its false
