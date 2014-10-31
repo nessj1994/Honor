@@ -997,7 +997,7 @@ void Player::UpdateDeath(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	m_fDeathTimer -= elapsedTime;
-	if (m_fDeathTimer <= 0.0f || pInput->IsKeyPressed(SGD::Key::Space))
+	if (m_fDeathTimer <= 0.0f)
 	{
 		m_bDead = false;
 		m_fDeathTimer = 0.0f;
@@ -1342,7 +1342,7 @@ void Player::UpdateHawk(float elapsedTime)
 			&& m_fHawkTimer > 1.0f)
 		{
 			//Dont spawn another hawk until particles are done
-			if (m_emFeatherExplosion->Done())
+			if (!m_bReturningHawk)
 			{
 				m_bHawkCast = true;
 				m_bHawkExplode = false;
@@ -1461,7 +1461,7 @@ void Player::UpdateHawk(float elapsedTime)
 		{
 			m_fHawkTimer = 0.0f;
 
-			if (m_emFeatherExplosion->Done())
+			if (!m_bReturningHawk)
 			{
 				//Emitter Stuff
 				m_bHawkExplode = true;
@@ -1638,6 +1638,7 @@ void Player::HawkExplode(SGD::Point _pos)
 		m_emFeatherExplosion->Burst(_pos);
 		m_bReturningHawk = true;
 		m_emHawkReturn->Burst(_pos);
+		m_emHawkReturn->Finish();
 	}	
 }
 

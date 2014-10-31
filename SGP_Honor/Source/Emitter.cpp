@@ -13,7 +13,8 @@ Emitter::Emitter()
 	m_bLooping = true;
 	m_unMaxParticles = 10;
 	m_bStarted = false;
-
+	m_iSpawned = m_unMaxParticles/2;
+	m_fSpawnTimer = 0;
 }
 
 Emitter::Emitter(const Emitter& _Emitter)
@@ -50,6 +51,7 @@ Emitter::Emitter(const Emitter& _Emitter)
 
 	m_vecParticles = _Emitter.m_vecParticles;
 	m_bStarted = _Emitter.m_bStarted;
+
 }
 
 Emitter& Emitter::operator= (const Emitter& _other)
@@ -80,7 +82,11 @@ void Emitter::StartParticles(bool restart)
 		m_EndPoint.y = m_ptPosition.y;
 		m_EndPoint.x = m_ptPosition.x + m_iRadius;
 	}
+
+	m_iSpawned = m_unMaxParticles / 2;
+	m_fSpawnTimer = 0;
 	m_vecParticles.clear();
+
 	for (size_t i = 0; i < m_unMaxParticles; i++)
 	{
 		std::mt19937 MT(device());
@@ -144,6 +150,7 @@ void Emitter::StartParticles(bool restart)
 			Temp.SetDead(true);
 		}
 		m_vecParticles.push_back(Temp);
+		
 	}
 }
 
@@ -164,22 +171,45 @@ void Emitter::Update(float elapsedTime)
 			m_EndPoint.y = (float)y;
 		}
 	}
-	if (!m_bLooping)
-	{
-		int x = 0;
-	}
+
 	m_bDone = true;
 		for (int i = 0; i < m_vecParticles.size(); i++)
 		{
-			if (m_vecParticles[i].IsDead() && !m_bFinish)
+
+			//For Intital Burst
+			if (m_iSpawned != m_vecParticles.size())
 			{
-				Recylce(&m_vecParticles[i]);
+				m_fSpawnTimer += elapsedTime;
+				if (m_iSpawned >= i)
+				{
+					if (m_fSpawnTimer > 2.0f)
+					{
+						m_fSpawnTimer = 0;
+						m_iSpawned++;
+					}
+					m_vecParticles[i].Update(elapsedTime);					
+				}
+				else
+				{
+					std::mt19937 MT(device());
+					std::uniform_real_distribution<float>thing(m_ptPosition.x, m_ptPosition.x + m_szSize.width);
+					std::uniform_real_distribution<float>thing2(m_ptPosition.y, m_ptPosition.y + m_szSize.height);
+					m_vecParticles[i].SetPosition({ thing(MT), thing2(MT) });					
+				}
 			}
-			if (!m_vecParticles[i].IsDead())
+			else
 			{
-				m_bDone = false;
+				if (m_vecParticles[i].IsDead() && !m_bFinish)
+				{
+					Recylce(&m_vecParticles[i]);
+				}
+				if (!m_vecParticles[i].IsDead())
+				{
+					m_bDone = false;
+				}
+				m_vecParticles[i].Update(elapsedTime);
 			}
-			m_vecParticles[i].Update(elapsedTime);
+			
 		}
 
 
@@ -192,7 +222,7 @@ void Emitter::Render(SGD::Point _Pos)
 	if (m_ptPosition != _Pos && _Pos != SGD::Point(0, 0))
 	{
 		m_ptPosition = _Pos;
-		//StartParticles(true);
+		StartParticles(true);
 	}
 	if (m_iEmitterShape)
 	{
@@ -202,13 +232,18 @@ void Emitter::Render(SGD::Point _Pos)
 	{
 		
 		SGD::Rectangle Rect{ { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, m_szSize };
-		SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
+		//SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
 	}
 
 
 	for (size_t i = 0; i < m_vecParticles.size(); i++)
 	{
-		m_vecParticles[i].Render();
+		//For Intital Burst
+		if (m_iSpawned >= i)
+		{
+			m_vecParticles[i].Render();
+		}
+
 	}
 }
 
@@ -219,27 +254,22 @@ void Emitter::RenderINworld(SGD::Point _Pos)
 		m_ptPosition = _Pos;
 		//StartParticles(true);
 	}
-	if (m_iEmitterShape)
-	{
-		SGD::GraphicsManager::GetInstance()->DrawLine({ m_ptPosition.x, m_ptPosition.y  }, { m_EndPoint.x , m_EndPoint.y  });
-	}
-	else
-	{
-
-		SGD::Rectangle Rect{ { m_ptPosition.x , m_ptPosition.y  }, m_szSize };
-		//SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
-	}
-
 
 	for (size_t i = 0; i < m_vecParticles.size(); i++)
 	{
-		m_vecParticles[i].RenderINworld();
+		//For Intital Burst
+		if (m_iSpawned >= i)
+		{
+			m_vecParticles[i].RenderINworld();
+		}
 	}
 }
 
 void Emitter::Burst(SGD::Point _pos)
 {
 	m_ptPosition = _pos;
+	m_iSpawned = m_unMaxParticles / 2;
+	m_fSpawnTimer = 0;
 	for (size_t i = 0; i < m_vecParticles.size(); i++)
 	{
 		m_vecParticles[i].SetDead(false);
@@ -286,21 +316,14 @@ void Emitter::Recylce(Particle* particle)
 void Emitter::KillParticles(SGD::Point _Pos)
 {
 	m_ptPosition = _Pos;
+	m_iSpawned = m_unMaxParticles/2;
+	m_fSpawnTimer = 0;
 	std::mt19937 MT(device());
 	std::uniform_real_distribution<float>thing(m_ptPosition.x, m_ptPosition.x + m_szSize.width);
 	std::uniform_real_distribution<float>thing2(m_ptPosition.y, m_ptPosition.y + m_szSize.height);
 	for (size_t i = 0; i < m_vecParticles.size(); i++)
 	{
 		m_vecParticles[i].SetPosition({thing(MT),thing2(MT)});
-		m_vecParticles[i].Starting(false);
-		//if (rand() % 10 > 5)
-		//{
-		//	m_vecParticles[i].Starting(false);
-		//}
-		//else
-		//{
-		//	m_vecParticles[i].Starting(true);
-		//}
 		if (m_iEmitterShape)
 		{
 			if (m_bPinEdges)
