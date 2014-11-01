@@ -181,7 +181,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("Level4_1");
+	LoadLevel("Level1_5");
 
 	//LoadLevel("HubLevel");
 
