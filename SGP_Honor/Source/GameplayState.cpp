@@ -1215,6 +1215,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 			MutantMan * pMutant = new MutantMan();
 			pMutant->SetPosition({ (float)_x, (float)_y });
 			pMutant->Begin({ (float)_x, (float)_y });
+			pMutant->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_MAN);
 			pMutant->Release();
 			break;
