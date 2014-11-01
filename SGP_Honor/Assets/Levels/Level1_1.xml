@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level name="NewLevel" width="128" height="32" fixed="0" playerX="436" playerY="458">
+<Level name="NewLevel" width="128" height="32" fixed="0" playerX="361" playerY="712">
 	<ImageLayers numLayers="0" />
 	<CollisionLayer>
 		<CollisionTile type="0" />

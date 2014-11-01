@@ -98,6 +98,10 @@ public:
 	float GetJumpVelCur(void) const { return m_fJumpVelCur; }
 	float GetDeathTimer(void) const { return m_fDeathTimer; }
 
+	//Pan Accessors for Camera
+	float GetPanValueX(void)const { return m_fPanX; }
+	float GetPanValueY(void)const { return m_fPanY; }
+
 	//Abilities
 	Dash* GetDash(void) const { return m_pDash; }
 	Ice* GetIce(void) const { return m_pIce; }
@@ -171,6 +175,11 @@ private:
 	float m_fInputTimer = 0.0f;
 	float m_fHawkTimer = 1.0f;
 	float m_fSwingTimer = 0.0f;
+
+	//Screen pan value
+	float m_fPanX = 3;
+	float m_fPanY = 2;
+
 
 	unsigned int m_unCurrentState = 0;
 	unsigned int m_unHonorCollected = 0;

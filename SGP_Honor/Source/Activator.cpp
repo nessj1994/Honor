@@ -95,7 +95,8 @@ void Activator::Update(float elapsedTime)
 			pATEvent = nullptr;
 			m_fSwitchTimer = 3.0f;
 		}
-		if (nIntersectHeight == nIntersectWidth)
+		if (nIntersectHeight == nIntersectWidth
+			&& nIntersectHeight > 0)
 		{
 			//Open Door
 			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);

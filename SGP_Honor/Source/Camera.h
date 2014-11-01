@@ -70,6 +70,15 @@ private:
 
 	//SGD::Size m_szZoomScale = { 0.5f, 0.5f };
 	float m_fScale = 1;
+
+
+	//Pan Values
+	float m_fCurrentPanX = 5.5f;
+	float m_fCurrentPanY = 0.5f;
+
+	float m_fDesiredPanX = 0;
+	float m_fDesiredPanY = 0;
+
 	
 };
 

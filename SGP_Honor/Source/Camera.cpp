@@ -75,8 +75,49 @@ void Camera::DrawTextureSection(SGD::HTexture handle, SGD::Point position, SGD::
 
 void Camera::Update(float _elapsedTime)
 {
-	m_ptCameraPosition.x = (m_pPlayer->GetPosition().x  - Game::GetInstance()->GetScreenWidth() / 3) ; // Divide by Scale
-	m_ptCameraPosition.y = (m_pPlayer->GetPosition().y - Game::GetInstance()->GetScreenHeight() / 2) ;// Divide by Scale
+	m_fDesiredPanX = m_pPlayer->GetPanValueX();
+	m_fDesiredPanY = m_pPlayer->GetPanValueY();
+
+	if (m_fCurrentPanX < m_fDesiredPanX)
+	{
+		m_fCurrentPanX += _elapsedTime *5;
+		if (m_fCurrentPanX > m_fDesiredPanX)
+		{
+			m_fCurrentPanX = m_fDesiredPanX;
+		}
+	}
+
+	if (m_fCurrentPanX > m_fDesiredPanX)
+	{
+		m_fCurrentPanX -= _elapsedTime *5;
+		if (m_fCurrentPanX < m_fDesiredPanX)
+		{
+			m_fCurrentPanX = m_fDesiredPanX;
+		}
+	}
+
+
+	if (m_fCurrentPanY < m_fDesiredPanY)
+	{
+		m_fCurrentPanY += _elapsedTime *4;
+		if (m_fCurrentPanY > m_fDesiredPanY)
+		{
+			m_fCurrentPanY = m_fDesiredPanY;
+		}
+	}
+
+	if (m_fCurrentPanY > m_fDesiredPanY)
+	{
+		m_fCurrentPanY -= _elapsedTime *4;
+		if (m_fCurrentPanY < m_fDesiredPanY)
+		{
+			m_fCurrentPanY = m_fDesiredPanY;
+		}
+	}
+
+	
+	m_ptCameraPosition.x = (m_pPlayer->GetPosition().x  - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX) ; // Divide by Scale
+	m_ptCameraPosition.y = (m_pPlayer->GetPosition().y - Game::GetInstance()->GetScreenHeight() / m_fCurrentPanY) ;// Divide by Scale
 
 }
 
