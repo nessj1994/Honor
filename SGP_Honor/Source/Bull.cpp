@@ -21,11 +21,11 @@ Bull::Bull() : Listener(this)
 	SetSize({ 160.0f, 96.0f });
 	m_bFacingRight = false;
 	m_bsCurrState = BS_WALKING;
-	m_fWalkTimer = 1.0f;
+	m_fWalkTimer = 5.0f;
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/Bull_Animation.xml");
 	m_ts.SetCurrAnimation("Bull_Running");
 	m_ts.SetPlaying(true);
-	SetHitPoints(1);
+	SetHitPoints(3);
 	m_eFire1 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect1.xml", "FireEffect1", m_ptPosition);
 	m_eFire2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect2.xml", "FireEffect2", m_ptPosition);
 	m_hVictory = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/BossDefeat.wav");
@@ -93,6 +93,13 @@ void Bull::Update(float elapsedTime)
 				}
 			}
 
+			// Stomp the player when he gets close
+			if (m_bTouchingPlayer)
+			{
+				m_bsCurrState = BS_STOMPING;
+				m_ts.ResetCurrFrame();
+			}
+
 			break;
 		}
 		case BS_RUNNING:
@@ -130,6 +137,27 @@ void Bull::Update(float elapsedTime)
 
 			break;
 		}
+		case BS_STOMPING:
+		{
+			// Handle animation
+			m_ts.SetCurrAnimation("Bull_Stomp");
+			m_ts.SetSpeed(0.5f);
+
+			SetVelocity({ 0.0f, 0.0f });
+
+			// Face the player
+			float playerX = GetPlayer()->GetPosition().x;
+			m_bFacingRight = playerX > m_ptPosition.x + 64;
+
+			// Go back to walking when the player is away
+			if (!m_bTouchingPlayer)
+			{
+				m_bsCurrState = BS_WALKING;
+				m_ts.ResetCurrFrame();
+			}
+
+			break;
+		}
 		case BS_CHARGING:
 		{
 			// Handle animation
@@ -148,7 +176,7 @@ void Bull::Update(float elapsedTime)
 			}
 
 			// Face the player
-			float playerX = GetPlayer()->GetPosition().x;
+			float playerX = GetPlayer()->GetPosition().x + 64;
 			m_bFacingRight = playerX > m_ptPosition.x;
 
 
@@ -317,6 +345,8 @@ void Bull::Update(float elapsedTime)
 		m_fTurnTimer -= elapsedTime;
 	}
 
+	m_bTouchingPlayer = false;
+
 	// Reset hitting a wall
 	SetHitWall(false);
 
@@ -349,10 +379,29 @@ void Bull::Render(void)
 // -Handle collisions
 void Bull::HandleCollision(const IEntity* pOther)
 {
-	Boss::HandleCollision(pOther);
+	// Solid wall
+	if (pOther->GetType() == ENT_SOLID_WALL)
+	{
+		BasicCollision(pOther);
+	}
+
+	// Doors
+	if (pOther->GetType() == ENT_DOOR)
+	{
+		if (m_bsCurrState != BS_RETURNING)
+		{
+			BasicCollision(pOther);
+		}
+	}
 
 	// Death
-	if (pOther->GetType() == ENT_DEATH)
+	if (pOther->GetType() == ENT_PLAYER)
+	{
+		m_bTouchingPlayer = true;
+	}
+
+	// Death
+	else if (pOther->GetType() == ENT_DEATH)
 	{
 		// Set returning to true and start moving back towards the platform
 		if (m_bsCurrState != BS_RETURNING)
@@ -450,6 +499,7 @@ void Bull::ResetBull()
 	m_bAudioPlayed = false;
 	m_bWillChargeRight = true;
 	m_bWillChargeLeft = true;
+	m_bTouchingPlayer = false;
 	m_bsCurrState = BS_WALKING;
 	m_fAlphaFade = 0;
 	m_bRenderFire = false;
@@ -465,4 +515,12 @@ void Bull::ResetBull()
 	m_fSlowTimer = 0.0f;
 	m_fStunTimer = 0.0f;
 	m_fDeathTimer = 0.0f;
+}
+
+///////////////////////////////////////////////////
+// GetAttacking
+// -Return if the bull is running or stomping at the player
+bool Bull::GetAttacking() const
+{
+	return (m_bsCurrState == BS_RUNNING || (m_bsCurrState == BS_STOMPING && m_ts.GetCurrFrame() == 4));
 }
