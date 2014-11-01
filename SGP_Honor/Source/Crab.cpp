@@ -70,9 +70,9 @@ void Crab::Update(float elapsedTime)
 				 GetPlayer()->GetPosition().x > rect.right) &&
 				 GetPlayer()->GetPosition().y > rect.top && castedLeftSlam == false && castedRightSlam == false)
 				 SetCurrentState(slamming);
-			/*else if (GetPlayer()->GetPosition().x >= m_ptPosition.x && GetPlayer()->GetPosition().x <= m_ptPosition.x + m_szSize.width &&
-			GetPlayer()->GetPosition().y < m_ptPosition.y)
-			SetCurrentState(swipping);*/
+			else if (GetPlayer()->GetPosition().x >= rect.left && GetPlayer()->GetPosition().x <= rect.right &&
+				 GetPlayer()->GetPosition().y < m_ptPosition.y)
+				 SetCurrentState(swipping);
 			else if (castedBubbles == false)
 				 SetCurrentState(bubbles);
 
@@ -200,7 +200,6 @@ void Crab::BasicCollision(const IEntity* pOther)
 
 void Crab::HandleCollision(const IEntity* pOther)
 {
-
 }
 
 void Crab::HandleEvent(const SGD::Event* pEvent)

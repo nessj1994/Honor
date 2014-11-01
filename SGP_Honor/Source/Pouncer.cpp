@@ -32,7 +32,7 @@ void Pouncer::Update(float elapsedTime)
 	if (target != nullptr)
 	{
 		SGD::Vector distance = target->GetPosition() - m_ptPosition;
-		if (distance.ComputeLength() < 250)
+		if (distance.ComputeLength() < 250 && distance.ComputeLength() > 80)
 		{
 			if (target->GetPosition().x < m_ptPosition.x && fabsf(distance.y) < 40 && inAir == false)
 			{
@@ -80,7 +80,7 @@ void Pouncer::Render(void)
 	////Render us with the camera
 	//Camera::GetInstance()->Draw(rMyRect,
 	//	SGD::Color::Color(255, 255, 0, 0));
-	Enemy::Render();
+	//Enemy::Render();
 	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1, SGD::Color(255, 255, 255, 255), {});
 }
 
@@ -95,7 +95,10 @@ void Pouncer::HandleCollision(const IEntity* pOther)
 	Enemy::HandleCollision(pOther);
 
 	if (pOther->GetType() == Entity::ENT_SOLID_WALL)
+	{
 		inAir = false;
+		SetVelocity({ 0, 0 });
+	}
 
 	if (pOther->GetType() == Entity::ENT_PLAYER && GetRect().IsIntersecting(pOther->GetRect()) == true)
 	{

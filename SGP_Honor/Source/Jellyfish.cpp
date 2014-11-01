@@ -4,6 +4,7 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
+#include <Windows.h>
 
 #define BTime 0.2f
 
@@ -82,9 +83,45 @@ void Jellyfish::HandleCollision(const IEntity* pOther)
 	}
 	if (pOther->GetType() == Entity::ENT_SOLID_WALL)
 	{
-		patrolDistance = -patrolDistance;
-		m_vtVelocity = -m_vtVelocity;
-		SetPatrol();
+		RECT rjFish;
+		rjFish.left = (LONG)GetRect().left;
+		rjFish.top = (LONG)GetRect().top;
+		rjFish.right = (LONG)GetRect().right;
+		rjFish.bottom = (LONG)GetRect().bottom;
+
+		//Create a rectangle for the other object
+		RECT rObject;
+		rObject.left = (LONG)pOther->GetRect().left;
+		rObject.top = (LONG)pOther->GetRect().top;
+		rObject.right = (LONG)pOther->GetRect().right;
+		rObject.bottom = (LONG)pOther->GetRect().bottom;
+
+		//Create a rectangle for the intersection
+		RECT rIntersection = {};
+
+		IntersectRect(&rIntersection, &rjFish, &rObject);
+
+		int nIntersectWidth = rIntersection.right - rIntersection.left;
+		int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+		//Colliding with the side of the object
+		if (nIntersectHeight > nIntersectWidth)
+		{
+			if (rjFish.right == rIntersection.right)
+			{
+				SetPosition({ (float)rObject.left - GetSize().width - 1, GetPosition().y });
+				patrolDistance = -patrolDistance;
+				m_vtVelocity = -m_vtVelocity;
+				SetPatrol();
+			}
+			if (rjFish.left == rIntersection.left)
+			{
+				SetPosition({ (float)rObject.right, GetPosition().y });
+				patrolDistance = -patrolDistance;
+				m_vtVelocity = -m_vtVelocity;
+				SetPatrol();
+			}
+		}
 	}
 }
 

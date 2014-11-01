@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "DestroyEntityMessage.h"
 #include "SwordSwing.h"
+#include "Pouncer.h"
 
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 
@@ -54,9 +55,22 @@ void Enemy::Update(float elapsedTime)
 			//if evenmy call event to kill enemy
 			//SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
 
-			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-			pMsg->QueueMessage();
-			pMsg = nullptr;
+			if (this->GetType() == ENT_POUNCER)
+			{
+				Pouncer* pnc = dynamic_cast<Pouncer*>(this);
+				if (pnc->GetInAir() == true)
+				{
+					DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+					pMsg->QueueMessage();
+					pMsg = nullptr;
+				}
+			}
+			else
+			{
+				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+				pMsg->QueueMessage();
+				pMsg = nullptr;
+			}
 
 		}
 
@@ -66,18 +80,44 @@ void Enemy::Update(float elapsedTime)
 			//if evenmy call event to kill enemy
 			//SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
 
-			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-			pMsg->QueueMessage();
-			pMsg = nullptr;
+			if (this->GetType() == ENT_POUNCER)
+			{
+				Pouncer* pnc = dynamic_cast<Pouncer*>(this);
+				if (pnc->GetInAir() == true)
+				{
+					DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+					pMsg->QueueMessage();
+					pMsg = nullptr;
+				}
+			}
+			else
+			{
+				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+				pMsg->QueueMessage();
+				pMsg = nullptr;
+			}
 
 		}
 
 		if (nIntersectHeight == nIntersectWidth
 			&& nIntersectHeight != 0)
 		{
-			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-			pMsg->QueueMessage();
-			pMsg = nullptr;
+			if (this->GetType() == ENT_POUNCER)
+			{
+				Pouncer* pnc = dynamic_cast<Pouncer*>(this);
+				if (pnc->GetInAir() == true)
+				{
+					DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+					pMsg->QueueMessage();
+					pMsg = nullptr;
+				}
+			}
+			else
+			{
+				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+				pMsg->QueueMessage();
+				pMsg = nullptr;
+			}
 		}
 	}
 
@@ -100,7 +140,7 @@ int Enemy::GetType(void) const
 SGD::Rectangle Enemy::GetRect(void) const
 {
 
-	return SGD::Rectangle{ m_ptPosition, m_szSize };
+	return SGD::Rectangle();//{ m_ptPosition, m_szSize };
 }
 
 
