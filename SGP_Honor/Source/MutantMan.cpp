@@ -6,6 +6,8 @@
 #include "AnimationEngine.h"
 #include "Camera.h"
 
+#include <cmath>
+#include <Windows.h>
 
 MutantMan::MutantMan() : Listener(this)
 {
@@ -13,7 +15,7 @@ MutantMan::MutantMan() : Listener(this)
 	m_ptPosition = { 96, 672 };
 	m_pPatrolPoint = m_ptPosition;
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/MutantManAnim.xml");
-	m_ts.SetCurrAnimation("Mutant_Walking");
+	m_ts.SetCurrAnimation("Mutant_Idle");
 	m_ts.SetPlaying(true);
 	m_szSize = {50,70};
 	SetGravity(-1000.0f);
@@ -43,6 +45,12 @@ void MutantMan::Update(float _elapsedTime)
 	distance = m_ptPosition - m_pPatrolPoint;
 	if (distance.ComputeLength() < 255)
 	{
+		if (m_ts.GetCurrAnimation() != "Mutant_Walking")
+		{
+			m_ts.ResetCurrFrame();
+			m_ts.SetCurrAnimation("Mutant_Walking");
+			m_ts.SetPlaying(true);
+		}
 		//Move to patrol point
 		if (m_ptPosition.x < m_pPatrolPoint.x)
 		{
@@ -53,6 +61,14 @@ void MutantMan::Update(float _elapsedTime)
 		{
 			m_bFacingRight = true;
 			m_vtVelocity.x = -300;
+		}
+		if (m_ptPosition.x < m_pPatrolPoint.x)
+		{
+			m_vtVelocity.y = 300;
+		}
+		if (m_ptPosition.y > m_pPatrolPoint.y)
+		{
+			m_vtVelocity.y = -100;
 		}
 		////Patrol if no target
 		//if (m_pPatrolPoint == m_ptPosition && m_bFacingRight)
@@ -70,6 +86,9 @@ void MutantMan::Update(float _elapsedTime)
 	}
 	else
 	{
+		m_ts.ResetCurrFrame();
+		m_ts.SetCurrAnimation("Mutant_Idle");
+		m_ts.SetPlaying(true);
 		m_vtVelocity = { m_vtVelocity.x != 0 ? m_vtVelocity.x -= GetGravity() * _elapsedTime : m_vtVelocity.x = 0, 300 };
 	}
 
@@ -98,6 +117,55 @@ void MutantMan::HandleCollision(const IEntity* pOther)
 		//if so move back up but kill the player
 		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
+	}
+
+	RECT rMutant;
+	rMutant.left = GetRect().left;
+	rMutant.top = GetRect().top;
+	rMutant.right = GetRect().right;
+	rMutant.bottom = GetRect().bottom;
+
+	RECT rObject;
+	rObject.left = pOther->GetRect().left;
+	rObject.top = pOther->GetRect().top;
+	rObject.right = pOther->GetRect().right;
+	rObject.bottom = pOther->GetRect().bottom;
+
+	RECT rIntersection = {};
+
+	IntersectRect(&rIntersection, &rObject, &rMutant);
+
+	int nIntersectWidth = rIntersection.right - rIntersection.left;
+	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+
+
+	if (nIntersectHeight > nIntersectWidth)
+	{
+		if (rMutant.right == rIntersection.right)
+		{
+			SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
+			SetVelocity({ 0, GetVelocity().y });
+		}
+		if (rMutant.left == rIntersection.left)
+		{
+			SetPosition({ (float)rObject.right, GetPosition().y });
+			SetVelocity({ 0, GetVelocity().y });
+		}
+	}
+
+	if (nIntersectWidth > nIntersectHeight)
+	{
+		if (rMutant.bottom == rIntersection.bottom)
+		{
+			SetVelocity({ GetVelocity().x, 0 });
+			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 /*- nIntersectHeight*/ });
+		}
+		if (rMutant.top == rIntersection.top)
+		{
+			SetPosition({ GetPosition().x, (float)rObject.bottom });
+			SetVelocity({ GetVelocity().x, 0 });
+		}
 	}
 
 	
