@@ -49,6 +49,10 @@ Player::Player() : Listener(this)
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/PlayerAnimations.xml");
 	m_ts.SetCurrAnimation("Idle");
 	
+	//Load Sounds
+	m_hIceEffect = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/IceSpray.wav");
+	m_hBounceEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/BounceEffect.wav");
+
 }
 
 
@@ -58,6 +62,8 @@ Player::~Player()
 	delete m_pBounce;
 	delete m_emHonor;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHonorParticleHUD);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hIceEffect);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBounceEffect);
 }
 
 /////////////////////////////////////////////////
@@ -131,7 +137,7 @@ void Player::Update(float elapsedTime)
 			/////////////////////////////////////////////////
 			/////////////////Movement////////////////////////
 			//reset currframe to 0 & set the animation playing to true
-			if (IsDashing() == false)
+			if (IsDashing() == false && !GetStunned())
 			{
 				UpdateMovement(elapsedTime, stickFrame, leftClamped, leftStickXOff);
 			}
@@ -232,10 +238,11 @@ void Player::Render(void)
 	Camera::GetInstance()->Draw(SGD::Rectangle(m_pSword->GetRect().left, m_pSword->GetRect().top, m_pSword->GetRect().right, m_pSword->GetRect().bottom),
 		SGD::Color::Color(255, 255, 255, 0));
 
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight(), 1.0f);
 	//Camera::GetInstance()->Draw(SGD::Rectangle(swingRect.left, swingRect.top, swingRect.right, swingRect.bottom),
 	//	SGD::Color::Color(255, 255, 255, 0));
 
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight());
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight(), 1.0f);
 
 	// Draw gui for amount of honor
 	SGD::OStringStream output;
@@ -269,6 +276,11 @@ SGD::Rectangle Player::GetRect(void) const
 
 void Player::HandleCollision(const IEntity* pOther)
 {
+	if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::W))
+	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hBounceEffect);
+
+	}
 
 	Unit::HandleCollision(pOther);
 	if (pOther->GetType() == ENT_DOOR)
@@ -435,14 +447,19 @@ void Player::HandleCollision(const IEntity* pOther)
 		// TODO use states
 		// Throw the player back
 		Bull * bull = (Bull*)(pOther);
-		float throwSpeed = 2000;
-		if (bull->IsFacingRight())
+		if (bull->GetRunning())
 		{
-			throwSpeed = -2000;
+			float throwSpeed = -3000;
+			if (bull->IsFacingRight())
+			{
+				throwSpeed = 3000;
+			}
+			SetGravity(0);
+			SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
+			SetVelocity({ throwSpeed, -1000 });
+			SetStunnded(true);
+			m_fStunTimer = 0.35f;
 		}
-		SetGravity(0);
-		SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
-		SetVelocity({ throwSpeed, -1000 });
 	}
 
 
@@ -1119,6 +1136,11 @@ void Player::KillPlayer()
 		m_bDead = true;
 		m_unJumpCount = 0;
 
+		// Reset room
+		SGD::Event* pATEvent = new SGD::Event("ResetRoom", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
+
 		// TODO Add effects
 
 	}
@@ -1165,6 +1187,14 @@ void Player::UpdateTimers(float elapsedTime)
 	m_fLandTimer -= elapsedTime;
 
 	m_fSwingTimer -= elapsedTime;
+
+	if (m_fStunTimer > 0)
+		m_fStunTimer -= elapsedTime;
+	else
+	{
+		m_fStunTimer = 0.0f;
+		m_bStunned = false;
+	}
 
 	if (m_fSwingTimer < 0.0f)
 	{
@@ -1232,12 +1262,17 @@ void Player::UpdateBounce(float elapsedTime)
 
 	if (pInput->IsKeyDown(SGD::Key::W) == true)
 	{
+		//if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBounceEffect)))
+		//{
+		//}
 		GetBounce()->GetEMBubbles()->Finish(false);
+		GetBounce()->GetEMBubbles()->Burst(m_ptPosition);
 		SetIsBouncing(true);
 	}
 	else
 	{
 		GetBounce()->GetEMBubbles()->Finish();
+		GetBounce()->GetEMBubbles()->Burst(m_ptPosition);
 		if (GetBounce()->GetEMBubbles()->Done())
 		{
 			//Reseting particles for the bounce since its false
@@ -1260,6 +1295,8 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 
 		m_ts.SetPlaying(true);
 	}
+
+	
 	//reset currframe to 0 & set the animation playing to false
 	if ((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true) || pInput->IsKeyDown(SGD::Key::Space) == true)
 	{
@@ -1618,7 +1655,7 @@ void Player::UpdateHawk(float elapsedTime)
 		{
 			m_fHawkTimer = 0.0f;
 
-			if (m_emFeatherExplosion->Done())
+			if (!m_bReturningHawk)
 			{
 				//Emitter Stuff
 				m_bHawkExplode = true;
@@ -1686,9 +1723,14 @@ void Player::UpdateSpray(float elapsedTime)
 	if (pInput->IsKeyDown(SGD::Key::F) == true
 		/*&& m_fShotTimer > 0.25f*/)
 	{
+		if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hIceEffect)))
+		{
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hIceEffect);
+		}
 		//m_fShotTimer = 0.0f;
 		if (m_fIceTimer > .05f)
 		{
+
 			m_fIceTimer = 0;
 			CreateSprayMessage* pMsg = new CreateSprayMessage(this);
 			pMsg->QueueMessage();
@@ -1829,6 +1871,7 @@ void Player::HawkExplode(SGD::Point _pos)
 		m_emFeatherExplosion->Burst(_pos);
 		m_bReturningHawk = true;
 		m_emHawkReturn->Burst(_pos);
+		m_emHawkReturn->Finish();
 	}	
 }
 

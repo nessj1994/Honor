@@ -16,10 +16,13 @@ public:
 	virtual void HandleCollision(const IEntity* pOther) override;
 	void HandleEvent(const SGD::Event* pEvent);
 	int GetBounceCount() const { return numOfBounces; }
+	void SetPatrol();
 
 private:
 	int numOfBounces = 0;
 	float bouncetimer = 0.0f;
 	bool bouncecounting = false;
+	SGD::Vector patrolDistance = SGD::Vector(100.0f, 0.0f);
+	SGD::Vector patrolTotal;
 };
 

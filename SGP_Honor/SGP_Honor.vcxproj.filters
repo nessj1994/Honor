@@ -248,6 +248,9 @@
     <ClCompile Include="Source\Jellyfish.cpp">
       <Filter>Entities\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MutantMan.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
     <ClCompile Include="Source\HorizontalBubble.cpp" />
     <ClCompile Include="Source\VerticalBubble.cpp" />
     <ClCompile Include="Source\CreateVerticalBubble.cpp" />
@@ -526,6 +529,9 @@
       <Filter>Entities\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Source\Jellyfish.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MutantMan.h">
       <Filter>Entities\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Source\HorizontalBubble.h" />
