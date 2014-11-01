@@ -181,7 +181,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("Level4_1");
+	LoadLevel("Level3_1");
 
 	//LoadLevel("HubLevel");
 
@@ -1215,6 +1215,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 			MutantMan * pMutant = new MutantMan();
 			pMutant->SetPosition({ (float)_x, (float)_y });
 			pMutant->Begin({ (float)_x, (float)_y });
+			pMutant->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_MAN);
 			pMutant->Release();
 			break;
