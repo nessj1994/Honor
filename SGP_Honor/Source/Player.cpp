@@ -46,13 +46,13 @@ Player::Player() : Listener(this)
 	//HUD
 	m_hHonorParticleHUD = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/HonorPiece.png");
 	//Emitters
-	m_emHonor = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/SilverHonor.xml", "SilverHonor", { (32 ), (32 ) });
+	m_emHonor = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/SilverHonor.xml", "SilverHonor", { (32), (32) });
 	m_emFeatherExplosion = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FeatherExplosion.xml", "FeatherExplosion", m_ptPosition);
 	m_emHawkReturn = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/HawkReturn.xml", "HawkReturn", { -100, -100 });
 	//
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/PlayerAnimations.xml");
 	m_ts.SetCurrAnimation("Idle");
-	
+
 	//Load Sounds
 	m_hIceEffect = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/IceSpray.wav");
 	m_hBounceEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/BounceEffect.wav");
@@ -87,7 +87,7 @@ void Player::Update(float elapsedTime)
 	//	m_pSword->Update(elapsedTime);
 	//}
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if (m_bDead)
+	if(m_bDead)
 	{
 		UpdateDeath(elapsedTime);
 	}
@@ -105,7 +105,7 @@ void Player::Update(float elapsedTime)
 		static int stickFrame = 1;
 		bool controller = pInput->IsControllerConnected(0);
 
-		if (leftStickXOff > -JOYSTICK_DEADZONE && leftStickXOff < JOYSTICK_DEADZONE)
+		if(leftStickXOff > -JOYSTICK_DEADZONE && leftStickXOff < JOYSTICK_DEADZONE)
 		{
 			leftStickXOff = 0;
 			leftClamped = true;
@@ -122,12 +122,12 @@ void Player::Update(float elapsedTime)
 		/////////////////////////////////////////////////
 		/////////////////Controls////////////////////////
 
-		if (IsDashing() == false)///////////////Dash check begins
+		if(IsDashing() == false)///////////////Dash check begins
 		{
 
 			//	if(GetIsFalling() == false
 			//		&& GetIsJumping() == false)
-			if (m_unCurrentState == RESTING_STATE
+			if(m_unCurrentState == RESTING_STATE
 				|| m_unCurrentState == LANDING_STATE)
 			{
 				/////////////////////////////////////////////////
@@ -143,7 +143,7 @@ void Player::Update(float elapsedTime)
 			/////////////////////////////////////////////////
 			/////////////////Movement////////////////////////
 			//reset currframe to 0 & set the animation playing to true
-			if (IsDashing() == false && !GetStunned())
+			if(IsDashing() == false && !GetStunned())
 			{
 				UpdateMovement(elapsedTime, stickFrame, leftClamped, leftStickXOff);
 			}
@@ -201,28 +201,28 @@ void Player::Update(float elapsedTime)
 void Player::Render(void)
 {
 	//Emitter Renders
-	if (IsBouncing() || !GetBounce()->GetEMBubbles()->Done())
+	if(IsBouncing() || !GetBounce()->GetEMBubbles()->Done())
 	{
 		GetBounce()->GetEMBubbles()->SetPosition(m_ptPosition);
 		GetBounce()->GetEMBubbles()->Render();
-	}	
-	if (IsDashing() || !GetDash()->GetEMDash()->Done())
+	}
+	if(IsDashing() || !GetDash()->GetEMDash()->Done())
 	{
 		GetDash()->GetEMDash()->SetPosition(m_ptPosition);
 		GetDash()->GetEMDash()->Render();
 	}
-	if (m_bHawkExplode || !m_emFeatherExplosion->Done())
+	if(m_bHawkExplode || !m_emFeatherExplosion->Done())
 	{
 		m_emFeatherExplosion->Render();
 	}
-	if (m_bReturningHawk || !m_emHawkReturn->Done())
+	if(m_bReturningHawk || !m_emHawkReturn->Done())
 	{
 		m_emHawkReturn->Render();
 	}
 	//
 
 
-	if (m_emFeatherExplosion->Done() == true)
+	if(m_emFeatherExplosion->Done() == true)
 	{
 		int x = 0;
 	}
@@ -257,18 +257,18 @@ void Player::Render(void)
 	//Render Honor emitter in world
 	m_emHonor->RenderINworld();
 	//Render Honor image
-	SGD::GraphicsManager::GetInstance()->DrawTexture(m_hHonorParticleHUD,{ 25, 34 });
+	SGD::GraphicsManager::GetInstance()->DrawTexture(m_hHonorParticleHUD, { 25, 34 });
 
 	output << ": " << m_unHonorCollected;
 	//Local refernce to the font
 	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
-	
-	
+
+
 	//Draw the title
 
 	font.DrawString(output.str().c_str(), 60, 25, 1, SGD::Color{ 255, 255, 0, 0 });
 
-	if (m_bDead)
+	if(m_bDead)
 	{
 		// Draw a fading rectangle
 		unsigned char alpha = (char)(((0.5f - m_fDeathTimer) / 0.5f) * 255.0f);
@@ -290,14 +290,14 @@ void Player::HandleCollision(const IEntity* pOther)
 	}
 
 	Unit::HandleCollision(pOther);
-	if (pOther->GetType() == ENT_DOOR)
+	if(pOther->GetType() == ENT_DOOR)
 	{
 		m_bSliding = false;
 
 		BasicCollision(pOther);
 	}
 
-	if (pOther->GetType() == ENT_JELLYFISH)
+	if(pOther->GetType() == ENT_JELLYFISH)
 	{
 		m_bSliding = false;
 
@@ -312,7 +312,7 @@ void Player::HandleCollision(const IEntity* pOther)
 	if(pOther->GetType() == Entity::ENT_HONOR)
 	{
 		const Honor* honor = dynamic_cast<const Honor*>(pOther);
-		if (!honor->GetIsCollected())
+		if(!honor->GetIsCollected())
 		{
 			IncreaseHonorCollected(honor->GetHonorAmount());
 		}
@@ -323,7 +323,8 @@ void Player::HandleCollision(const IEntity* pOther)
 		m_bHasArmor = true;
 	}
 
-	if (pOther->GetType() == Entity::ENT_SOLID_WALL)
+
+	if(pOther->GetType() == Entity::ENT_SOLID_WALL)
 	{
 		m_bSliding = false;
 
@@ -331,6 +332,24 @@ void Player::HandleCollision(const IEntity* pOther)
 		BasicCollision(pOther);
 		SetFriction(25.0f);
 	}
+	if(pOther->GetType() == Entity::ENT_LEFT_RAMP)
+	{
+		m_bSliding = false;
+
+		LeftRampCollision(pOther);
+		SetFriction(25.0f);
+		is_Ramp = true;
+	}
+
+	else if(pOther->GetType() == Entity::ENT_RIGHT_RAMP)
+	{
+		m_bSliding = false;
+
+		RightRampCollision(pOther);
+		SetFriction(25.0f);
+		is_Ramp = true;
+	}
+
 
 	if(pOther->GetType() == Entity::ENT_MOVING_PLATFORM)
 	{
@@ -366,7 +385,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		SetFriction(1.0f);
 	}
 
-	if (pOther->GetType() == Entity::ENT_DEATH)
+	if(pOther->GetType() == Entity::ENT_DEATH)
 	{
 		m_bSliding = false;
 
@@ -375,25 +394,8 @@ void Player::HandleCollision(const IEntity* pOther)
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}
 
-	if (pOther->GetType() == Entity::ENT_RIGHT_RAMP)
-	{
-		m_bSliding = false;
 
-		RightRampCollision(pOther);
-		SetFriction(1.0f);
-		is_Ramp = true;
-	}
-
-	if (pOther->GetType() == Entity::ENT_LEFT_RAMP)
-	{
-		m_bSliding = false;
-
-		LeftRampCollision(pOther);
-		SetFriction(1.0f);
-		is_Ramp = true;
-	}
-
-	if (pOther->GetType() == Entity::ENT_ICE)
+	if(pOther->GetType() == Entity::ENT_ICE)
 	{
 		m_bSliding = true;
 		BasicCollision(pOther);
@@ -401,20 +403,11 @@ void Player::HandleCollision(const IEntity* pOther)
 		SetVelocity(GetVelocity() * 2);
 	}
 
-	if (pOther->GetType() == Entity::ENT_ICE_LEFT_RAMP)
+	if(pOther->GetType() == Entity::ENT_ICE_LEFT_RAMP)
 	{
 		LeftRampCollision(pOther);
 		is_Ramp = true;
 		SetFriction(0.1f);
-	}
-
-	if (pOther->GetType() == Entity::ENT_RIGHT_RAMP)
-	{
-		m_bSliding = false;
-
-		RightRampCollision(pOther);
-		SetFriction(1.0f);
-		is_Ramp = true;
 	}
 
 	if(pOther->GetType() == Entity::ENT_GEYSER)
@@ -449,7 +442,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}
 
-	if (pOther->GetType() == Entity::ENT_BOSS_BULL)
+	if(pOther->GetType() == Entity::ENT_BOSS_BULL)
 	{
 		// TODO use states
 		// Throw the player back
@@ -457,7 +450,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		if (bull->GetAttacking())
 		{
 			float throwSpeed = -3000;
-			if (bull->IsFacingRight())
+			if(bull->IsFacingRight())
 			{
 				throwSpeed = 3000;
 			}
@@ -510,7 +503,7 @@ void Player::BasicCollision(const IEntity* pOther)
 
 	if(nIntersectHeight > nIntersectWidth)
 	{
-		if (m_unCurrentState == JUMPING_STATE
+		if(m_unCurrentState == JUMPING_STATE
 			|| m_unCurrentState == FALLING_STATE)
 			SetIsInputStuck(true);
 
@@ -526,23 +519,23 @@ void Player::BasicCollision(const IEntity* pOther)
 	{
 		if(rPlayer.right == rIntersection.right)
 		{
+			
+				if(m_unCurrentState == RESTING_STATE
+					|| m_unCurrentState == LANDING_STATE)
+				{
+					SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
+					SetVelocity({ 0, GetVelocity().y });
+					SetDashTimer(0);
+				}
+				else
+				{
+					SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
+					SetVelocity({ 0, GetVelocity().y });
+					SetDashTimer(0);
+				}
 
-			if (m_unCurrentState == RESTING_STATE
-				|| m_unCurrentState == LANDING_STATE)
-			{
-				SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
-				SetVelocity({ 0, GetVelocity().y });
-				SetDashTimer(0);
-			}
-			else
-			{
-				SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
-				SetVelocity({ 0, GetVelocity().y });
-				SetDashTimer(0);
-			}
 
-
-			if ((pInput->IsButtonDown(0, 0) == true
+			if((pInput->IsButtonDown(0, 0) == true
 				|| pInput->IsKeyDown(SGD::Key::Space) == true)
 				&& (m_unCurrentState != RESTING_STATE
 				|| m_unCurrentState != LANDING_STATE)
@@ -553,7 +546,7 @@ void Player::BasicCollision(const IEntity* pOther)
 		}
 		if(rPlayer.left == rIntersection.left)
 		{
-			if (m_unCurrentState == RESTING_STATE
+			if(m_unCurrentState == RESTING_STATE
 				|| m_unCurrentState == LANDING_STATE)
 			{
 				SetPosition({ (float)rObject.right, GetPosition().y });
@@ -567,9 +560,9 @@ void Player::BasicCollision(const IEntity* pOther)
 				SetVelocity({ 0, GetVelocity().y });
 			}
 
-			
 
-			if ((pInput->IsButtonDown(0, 0) == true
+
+			if((pInput->IsButtonDown(0, 0) == true
 				|| pInput->IsKeyDown(SGD::Key::Space))
 				&& (m_unCurrentState != RESTING_STATE
 				|| m_unCurrentState != LANDING_STATE)
@@ -589,14 +582,14 @@ void Player::BasicCollision(const IEntity* pOther)
 			if(IsBouncing() == true)
 			{
 
-				if (m_unJumpCount < 3)
+				if(m_unJumpCount < 3)
 					m_unJumpCount++;
 
-				if (m_unJumpCount == 1)
+				if(m_unJumpCount == 1)
 					SetVelocity({ GetVelocity().x, -900.0f });
-				if (m_unJumpCount == 2)
+				if(m_unJumpCount == 2)
 					SetVelocity({ GetVelocity().x, -1500.0f });
-				if (m_unJumpCount == 3)
+				if(m_unJumpCount == 3)
 					SetVelocity({ GetVelocity().x, -1900.0f });
 
 
@@ -607,9 +600,9 @@ void Player::BasicCollision(const IEntity* pOther)
 			{
 				SetVelocity({ GetVelocity().x, 0 });
 				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 /*- nIntersectHeight*/ });
-				if (m_unCurrentState == FALLING_STATE)
+				if(m_unCurrentState == FALLING_STATE)
 				{
-					
+
 					m_unJumpCount = 0;
 
 					m_fLandTimer = 0.001f;
@@ -620,13 +613,13 @@ void Player::BasicCollision(const IEntity* pOther)
 
 			}
 
-		//	if (m_unCurrentState == JUMPING_STATE)
-		//	{
-		//		m_ts.ResetCurrFrame();
-		//		m_ts.SetCurrAnimation("Idle");
-		//		m_ts.SetPlaying(true);
-		//
-		//	}
+			//	if (m_unCurrentState == JUMPING_STATE)
+			//	{
+			//		m_ts.ResetCurrFrame();
+			//		m_ts.SetCurrAnimation("Idle");
+			//		m_ts.SetPlaying(true);
+			//
+			//	}
 
 			SetJumpVelCur(0);
 			SetIsInputStuck(false);
@@ -644,7 +637,7 @@ void Player::BasicCollision(const IEntity* pOther)
 		}
 	}
 
-	if (IsBouncing() == false
+	if(IsBouncing() == false
 		&& m_unCurrentState == RESTING_STATE)
 	{
 		m_unJumpCount = 0;
@@ -655,11 +648,11 @@ void Player::BasicCollision(const IEntity* pOther)
 void Player::SwingCollision(const IEntity* pOther)
 {
 
-//	RECT rTempSwing;
-//	rTempSwing.left = swingRect.left;
-//	rTempSwing.top = swingRect.top;
-//	rTempSwing.right = swingRect.right;
-//	rTempSwing.bottom = swingRect.bottom;
+	//	RECT rTempSwing;
+	//	rTempSwing.left = swingRect.left;
+	//	rTempSwing.top = swingRect.top;
+	//	rTempSwing.right = swingRect.right;
+	//	rTempSwing.bottom = swingRect.bottom;
 
 
 	//RECT rObject;
@@ -700,7 +693,17 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	float tempVal = 32.0f / 32.0f;
 
 
-	SetGravity(0);
+	SetGravity(GetGravity() * 4);
+	SetVelocity({ GetVelocity().x, 0 });
+	if(GetVelocity().x > 300)
+	{
+		m_vtVelocity.x = 300;
+
+	}
+	if(GetVelocity().x < -400)
+	{
+		m_vtVelocity.x = -400;
+	}
 
 	RECT rPlayer;
 	rPlayer.left = (LONG)GetRect().left;
@@ -743,26 +746,49 @@ void Player::LeftRampCollision(const IEntity* pOther)
 
 
 
-	SetPosition({ GetPosition().x, (float)rObject.bottom - tempVal - GetSize().height });
-	m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
 
 
-	if (/*nIntersectWidth*/ nIntersectWidth > 17)
+
+	if(/*nIntersectWidth*/ /*nIntersectWidth > 1  &&*/ nIntersectWidth < 31)
 	{
-		
+		//SetPosition({ GetPosition().x, (float)rObject.bottom - tempVal - GetSize().height });
+		m_ptPosition.y = (float)rObject.bottom - tempVal -  GetSize().height;
+		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
 	}
+	
+	else if(nIntersectWidth == 31)
+	{
+		//m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
+		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+		tempVal = 31 / 32;
+
+		m_ptPosition.y = (float)rObject.bottom - GetSize().height - tempVal;
+		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * 1);
+
+		BasicCollision(pOther);
+		
+	
+	}
+	else if(nIntersectWidth == 32)
+	{
+		BasicCollision(pOther);
+
+		m_ptPosition.x += 1;
+	}
+
+
 	//else
 	//{
-	//	//SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 });
-	//	m_ptPosition.y -= rIntersectHeight;
+	//	SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 });
+	//	m_ptPosition.y -= nIntersectHeight;
 	//}
 
 
 
 	//	}
 
-
-	SetVelocity({ 0, 0 });
+	if(m_ptPosition.x + m_szSize.width > rObject.right)
+	SetVelocity({ m_vtVelocity.x , 1000 });
 
 
 
@@ -815,7 +841,7 @@ void Player::RightRampCollision(const IEntity* pOther)
 	float rIntersectHeight = rIntersecting.ComputeHeight();
 
 
-	if (/*nIntersectWidth*/ rIntersectWidth > 17)
+	if(/*nIntersectWidth*/ rIntersectWidth > 17)
 	{
 		//SetPosition({ GetPosition().x, (float)rObject.bottom - tempInt - GetSize().height });
 		m_ptPosition.y -= rIntersectHeight;
@@ -902,9 +928,9 @@ void Player::GeyserCollision(const IEntity* pOther)
 
 			if(m_fDashTime == 0)
 			{
-			m_ts.SetPlaying(true);
-			m_ts.ResetCurrFrame();
-			m_ts.SetCurrAnimation("Idle");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Idle");
 
 			}
 
@@ -1042,24 +1068,24 @@ void Player::JellyfishCollision(const IEntity* pOther)
 	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
 	//Colliding with the side of the object
-	if (nIntersectHeight > nIntersectWidth)
+	if(nIntersectHeight > nIntersectWidth)
 	{
-		if (rPlayer.right == rIntersection.right)
+		if(rPlayer.right == rIntersection.right)
 		{
 
 			SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
 			SetVelocity({ 0, GetVelocity().y });
 		}
-		if (rPlayer.left == rIntersection.left)
+		if(rPlayer.left == rIntersection.left)
 		{
 			SetPosition({ (float)rObject.right, GetPosition().y });
 			SetVelocity({ 0, GetVelocity().y });
 		}
 	}
 
-	if (nIntersectWidth > nIntersectHeight)
+	if(nIntersectWidth > nIntersectHeight)
 	{
-		if (rPlayer.bottom == rIntersection.bottom)
+		if(rPlayer.bottom == rIntersection.bottom)
 		{
 			const Jellyfish* jfish = dynamic_cast<const Jellyfish*>(pOther);
 			//SetVelocity({ GetVelocity().x, /*GetVelocity().y*/1500 * (-1.0f - (0.1f * jfish->GetBounceCount())) });
@@ -1069,7 +1095,7 @@ void Player::JellyfishCollision(const IEntity* pOther)
 			//SetIsInputStuck(false);
 			//SetIsJumping(true);
 		}
-		if (rPlayer.top == rIntersection.top)
+		if(rPlayer.top == rIntersection.top)
 		{
 			SetPosition({ GetPosition().x, (float)rObject.bottom });
 			SetVelocity({ GetVelocity().x, 0 });
@@ -1113,19 +1139,19 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	if(pEvent->GetEventID() == "KILL_PLAYER")
 	{
 		//Kill the player
-		if (!m_bDead && m_fArmorTimer <= 0.0f)
+		if(!m_bDead && m_fArmorTimer <= 0.0f)
 		{
 			KillPlayer();
 		}
 	}
 
-	if (pEvent->GetEventID() == "BOUNCE_VERTICAL")
+	if(pEvent->GetEventID() == "BOUNCE_VERTICAL")
 	{
 		SetVelocity({ GetVelocity().x, -3000 });
 		SetPosition({ GetPosition().x, GetPosition().y - 1 });
 	}
 
-	if (pEvent->GetEventID() == "BOUNCE_HORIZONTAL")
+	if(pEvent->GetEventID() == "BOUNCE_HORIZONTAL")
 	{
 		SetVelocity({ 10000.0f * (*(float*)pEvent->GetData()), -1000 });
 		SetPosition({ GetPosition().x, GetPosition().y - 10 });
@@ -1140,7 +1166,7 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 
 void Player::KillPlayer()
 {
-	if (m_bHasArmor)
+	if(m_bHasArmor)
 	{
 		// Jump and remove armor
 		m_bHasArmor = false;
@@ -1165,7 +1191,7 @@ void Player::UpdateDeath(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	m_fDeathTimer -= elapsedTime;
-	if (m_fDeathTimer <= 0.0f)
+	if(m_fDeathTimer <= 0.0f)
 	{
 		m_bDead = false;
 		m_fDeathTimer = 0.0f;
@@ -1183,7 +1209,7 @@ void Player::UpdateDeath(float elapsedTime)
 void Player::UpdateArmor(float elapsedTime)
 {
 	// Update armor timer
-	if (m_fArmorTimer > 0)
+	if(m_fArmorTimer > 0)
 	{
 		m_fArmorTimer -= elapsedTime;
 	}
@@ -1208,7 +1234,7 @@ void Player::UpdateTimers(float elapsedTime)
 
 	m_fSwingTimer -= elapsedTime;
 
-	if (m_fStunTimer > 0)
+	if(m_fStunTimer > 0)
 		m_fStunTimer -= elapsedTime;
 	else if (m_bStunned)
 	{
@@ -1220,19 +1246,19 @@ void Player::UpdateTimers(float elapsedTime)
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}
 
-	if (m_fSwingTimer < 0.0f)
+	if(m_fSwingTimer < 0.0f)
 	{
 		m_fSwingTimer = 0;
 		is_Swinging = false;
 	}
 
-	if (m_fJumpTimer < 0.0f)
+	if(m_fJumpTimer < 0.0f)
 		m_fJumpTimer = 0;
 
-	if (m_fLandTimer < 0.0f)
+	if(m_fLandTimer < 0.0f)
 		m_fLandTimer = 0;
 
-	if (GetIsInputStuck() == false)
+	if(GetIsInputStuck() == false)
 		m_fInputTimer = 0;
 
 
@@ -1247,14 +1273,14 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
 	//Left Friction
-	if (GetVelocity().x < 0
+	if(GetVelocity().x < 0
 		&& (pInput->IsKeyDown(SGD::Key::Q) == false
 		&& leftClamped == true))
 	{
 
 		SetVelocity(SGD::Vector(GetVelocity().x + GetFriction(), GetVelocity().y));
 
-		if (GetVelocity().x > 0
+		if(GetVelocity().x > 0
 			&& GetVelocity().x < 10)
 		{
 			SetVelocity(SGD::Vector(0, GetVelocity().y));
@@ -1262,14 +1288,14 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 
 	}
 	//Right Friction
-	if (GetVelocity().x > 0
+	if(GetVelocity().x > 0
 		&& (pInput->IsKeyDown(SGD::Key::E) == false
 		&& leftClamped == true))
 	{
 
 		SetVelocity(SGD::Vector(GetVelocity().x - GetFriction(), GetVelocity().y));
 
-		if (GetVelocity().x < 0
+		if(GetVelocity().x < 0
 			&& GetVelocity().x > -100)
 		{
 			SetVelocity(SGD::Vector(0, GetVelocity().y));
@@ -1279,13 +1305,13 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 
 void Player::UpdateBounce(float elapsedTime)
 {
-	
+
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
 	//pInput->GetDPad(0);
 
-	if (pInput->IsKeyDown(SGD::Key::W) == true
-		|| pInput->IsButtonDown(0, 4 /*Left Bumper*/ ))
+	if(pInput->IsKeyDown(SGD::Key::W) == true
+		|| pInput->IsButtonDown(0, 4 /*Left Bumper*/))
 	{
 		//if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBounceEffect)))
 		//{
@@ -1296,7 +1322,7 @@ void Player::UpdateBounce(float elapsedTime)
 	else
 	{
 		GetBounce()->GetEMBubbles()->Finish();
-		if (GetBounce()->GetEMBubbles()->Done())
+		if(GetBounce()->GetEMBubbles()->Done())
 		{
 			//Reseting particles for the bounce since its false
 			GetBounce()->GetEMBubbles()->KillParticles(m_ptPosition);
@@ -1307,11 +1333,11 @@ void Player::UpdateBounce(float elapsedTime)
 
 void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped, float leftStickXOff)
 {
-	if (GetIsInputStuck() == true)
+	if(GetIsInputStuck() == true)
 		m_fInputTimer += elapsedTime;
 
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false))
+	if(pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false))
 	{
 		stickFrame = 1;
 		m_ts.ResetCurrFrame();
@@ -1319,15 +1345,15 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		m_ts.SetPlaying(true);
 	}
 
-	
+
 	//reset currframe to 0 & set the animation playing to false
-	if ((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true) || pInput->IsKeyDown(SGD::Key::Space) == true)
+	if((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true) || pInput->IsKeyDown(SGD::Key::Space) == true)
 	{
 		leftClamped = false;
 	}
-	if (pInput->IsKeyReleased(SGD::Key::E) == true || pInput->IsKeyReleased(SGD::Key::Q) == true)
+	if(pInput->IsKeyReleased(SGD::Key::E) == true || pInput->IsKeyReleased(SGD::Key::Q) == true)
 	{
-		if (m_unCurrentState != JUMPING_STATE && m_unCurrentState != FALLING_STATE)
+		if(m_unCurrentState != JUMPING_STATE && m_unCurrentState != FALLING_STATE)
 		{
 			m_ts.SetPlaying(false);
 			m_ts.ResetCurrFrame();
@@ -1335,7 +1361,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 			m_ts.SetPlaying(true);
 		}
 	}
-	else if (leftClamped == true && m_unCurrentState == RESTING_STATE)
+	else if(leftClamped == true && m_unCurrentState == RESTING_STATE)
 	{
 		m_ts.SetPlaying(false);
 		m_ts.ResetCurrFrame();
@@ -1346,19 +1372,19 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 
 
 	//Right Movement
-	if (pInput->IsKeyDown(SGD::Key::E) == true
+	if(pInput->IsKeyDown(SGD::Key::E) == true
 		|| leftStickXOff > JOYSTICK_DEADZONE)
 	{
 
-		
 
 
-		if (m_fInputTimer > 0.20f
+
+		if(m_fInputTimer > 0.20f
 			|| GetIsInputStuck() == false)
 		{
-			if (GetVelocity().x < 0)
+			if(GetVelocity().x < 0)
 			{
-				if (m_unCurrentState == RESTING_STATE
+				if(m_unCurrentState == RESTING_STATE
 					|| m_unCurrentState == LANDING_STATE)
 				{
 					SetVelocity(SGD::Vector(GetVelocity().x + (5 * GetSpeed() * elapsedTime), GetVelocity().y));
@@ -1370,7 +1396,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 			}
 			else
 			{
-				if (GetIsInputStuck() == true)
+				if(GetIsInputStuck() == true)
 				{
 					SetVelocity(SGD::Vector(GetVelocity().x + (3 * GetSpeed()) * elapsedTime, GetVelocity().y));
 
@@ -1382,7 +1408,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 
 			SetDirection({ 1, 0 });
 		}
-		if (m_unCurrentState == RESTING_STATE)
+		if(m_unCurrentState == RESTING_STATE)
 		{
 			m_ts.SetCurrAnimation("Walking");
 		}
@@ -1390,17 +1416,17 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 	}
 
 	//Left Movement
-	if (pInput->IsKeyDown(SGD::Key::Q) == true
+	if(pInput->IsKeyDown(SGD::Key::Q) == true
 		|| leftStickXOff < -JOYSTICK_DEADZONE)
 	{
-		
 
-		if (m_fInputTimer > 0.20f
+
+		if(m_fInputTimer > 0.20f
 			|| GetIsInputStuck() == false)
 		{
-			if (GetVelocity().x > 0)
+			if(GetVelocity().x > 0)
 			{
-				if (m_unCurrentState == RESTING_STATE
+				if(m_unCurrentState == RESTING_STATE
 					|| m_unCurrentState == LANDING_STATE)
 				{
 					SetVelocity(SGD::Vector(GetVelocity().x - (5 * GetSpeed() * elapsedTime), GetVelocity().y));
@@ -1412,7 +1438,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 			}
 			else
 			{
-				if (GetIsInputStuck() == true)
+				if(GetIsInputStuck() == true)
 				{
 					SetVelocity(SGD::Vector(GetVelocity().x - (3 * GetSpeed()) * elapsedTime, GetVelocity().y));
 
@@ -1423,7 +1449,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 			}
 			SetDirection({ -1, 0 });
 		}
-		if (m_unCurrentState == RESTING_STATE)
+		if(m_unCurrentState == RESTING_STATE)
 		{
 			m_ts.SetCurrAnimation("Walking");
 		}
@@ -1434,7 +1460,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 void Player::UpdateDash(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if (pInput->IsKeyDown(SGD::Key::Tab) == true
+	if(pInput->IsKeyDown(SGD::Key::Tab) == true
 		|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
 	{
 		GetDash()->GetEMDash()->Finish(false);
@@ -1446,13 +1472,13 @@ void Player::UpdateDash(float elapsedTime)
 	else
 	{
 		GetDash()->GetEMDash()->Finish();
-		if (GetDash()->GetEMDash()->Done())
+		if(GetDash()->GetEMDash()->Done())
 		{
 			//Reset Dash Particles to the players position
 			GetDash()->GetEMDash()->KillParticles(m_ptPosition);
 		}
 	}
-	if (this->IsDashing() == false && m_ts.GetCurrAnimation() == "dashing")
+	if(this->IsDashing() == false && m_ts.GetCurrAnimation() == "dashing")
 	{
 		m_ts.SetPlaying(true);
 		m_ts.ResetCurrFrame();
@@ -1463,25 +1489,25 @@ void Player::UpdateDash(float elapsedTime)
 void Player::UpdateJump(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if (pInput->IsButtonDown(0, 0))
+	if(pInput->IsButtonDown(0, 0))
 	{
 		SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
 	}
 
-	if (pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)
+	if(pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)
 	{
 		int tempx = 0;
 	}
 
 
 
-	if (pInput->IsKeyDown(SGD::Key::Space) == true
+	if(pInput->IsKeyDown(SGD::Key::Space) == true
 		|| pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)
 
 	{
 		m_fButtonTimer += elapsedTime;
 		//if(GetIsJumping() == false)
-		if (m_unCurrentState == RESTING_STATE
+		if(m_unCurrentState == RESTING_STATE
 			|| m_unCurrentState == LANDING_STATE)
 		{
 			m_ts.ResetCurrFrame();
@@ -1493,13 +1519,13 @@ void Player::UpdateJump(float elapsedTime)
 
 		}
 
-		if (m_unCurrentState == JUMPING_STATE)
+		if(m_unCurrentState == JUMPING_STATE)
 		{
 
-			if (m_fJumpTimer < 0.2f)
+			if(m_fJumpTimer < 0.2f)
 			{
 				SetVelocity({ GetVelocity().x, GetVelocity().y + (2200 * elapsedTime) });
-				if (GetVelocity().y > 0)
+				if(GetVelocity().y > 0)
 				{
 					SetVelocity({ GetVelocity().x, 0 });
 
@@ -1511,19 +1537,19 @@ void Player::UpdateJump(float elapsedTime)
 
 		}
 
-		if (m_fInputTimer <= 0.20f)
+		if(m_fInputTimer <= 0.20f)
 		{
-			if (GetIsInputStuck() == true)
+			if(GetIsInputStuck() == true)
 			{
 
-				if (is_Right_Coll == true
+				if(is_Right_Coll == true
 					&& m_fButtonTimer < 0.08)
 				{
 					SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
 					SetVelocity({ -900, -900 });
 				}
 
-				if (is_Left_Coll == true
+				if(is_Left_Coll == true
 					&& m_fButtonTimer < 0.08)
 				{
 					SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
@@ -1537,7 +1563,7 @@ void Player::UpdateJump(float elapsedTime)
 void Player::UpdateHawk(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if (pInput->IsKeyDown(SGD::Key::R) == true
+	if(pInput->IsKeyDown(SGD::Key::R) == true
 		&& m_fShotTimer > 0.25f)
 	{
 		m_fShotTimer = 0.0f;
@@ -1550,15 +1576,15 @@ void Player::UpdateHawk(float elapsedTime)
 	//= pInput->GetLeftJoystick(0).x;
 
 
-	if (pInput->IsKeyDown(SGD::Key::D) == true
+	if(pInput->IsKeyDown(SGD::Key::D) == true
 		|| triggerOff > 0 /*JOYSTICK_DEADZONE*/)
 	{
 
-		if (m_bHawkCast == false
+		if(m_bHawkCast == false
 			&& m_fHawkTimer > 1.0f)
 		{
 			//Dont spawn another hawk until particles are done
-			if (!m_bReturningHawk)
+			if(!m_bReturningHawk)
 			{
 				m_bHawkCast = true;
 				m_bHawkExplode = false;
@@ -1569,7 +1595,7 @@ void Player::UpdateHawk(float elapsedTime)
 		}
 		else
 		{
-			if (GetHawkPtr() != nullptr)
+			if(GetHawkPtr() != nullptr)
 			{
 				float rightStickXOff = pInput->GetRightJoystick(0).x;
 				float rightStickYOff = pInput->GetRightJoystick(0).y;
@@ -1602,24 +1628,24 @@ void Player::UpdateHawk(float elapsedTime)
 				GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
 				// X Friction
 
-				if (rightStickXOff == 0)
+				if(rightStickXOff == 0)
 				{
 
-					if (GetHawkPtr()->GetVelocity().x < 0)
+					if(GetHawkPtr()->GetVelocity().x < 0)
 					{
 						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
 
-						if (GetHawkPtr()->GetVelocity().x > 0.01f)
+						if(GetHawkPtr()->GetVelocity().x > 0.01f)
 						{
 							GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
 
 						}
 					}
-					if (GetHawkPtr()->GetVelocity().x > 0)
+					if(GetHawkPtr()->GetVelocity().x > 0)
 					{
 						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
 
-						if (GetHawkPtr()->GetVelocity().x < -0.01f)
+						if(GetHawkPtr()->GetVelocity().x < -0.01f)
 						{
 							GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
 
@@ -1631,24 +1657,24 @@ void Player::UpdateHawk(float elapsedTime)
 
 				// Y Friction
 
-				if (rightStickYOff == 0)
+				if(rightStickYOff == 0)
 				{
-					if (GetHawkPtr()->GetVelocity().y < 0)
+					if(GetHawkPtr()->GetVelocity().y < 0)
 					{
 						//GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + GetHawkPtr()->GetAirFriction()));
 
-						if (GetHawkPtr()->GetVelocity().y > 0.007f)
+						if(GetHawkPtr()->GetVelocity().y > 0.007f)
 						{
 
 						}
 						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
 
 					}
-					if (GetHawkPtr()->GetVelocity().y > 0)
+					if(GetHawkPtr()->GetVelocity().y > 0)
 					{
 						//GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y - GetHawkPtr()->GetAirFriction()));
 
-						if (GetHawkPtr()->GetVelocity().y < -0.007f)
+						if(GetHawkPtr()->GetVelocity().y < -0.007f)
 						{
 
 
@@ -1667,17 +1693,17 @@ void Player::UpdateHawk(float elapsedTime)
 		}
 
 	}
-	if (triggerOff <= 0
+	if(triggerOff <= 0
 		&& pInput->IsKeyDown(SGD::Key::D) == false)
 	{
 		m_bHawkCast = false;
 
 		//if HawkPtr != null set to NULL
-		if (GetHawkPtr() != nullptr)
+		if(GetHawkPtr() != nullptr)
 		{
 			m_fHawkTimer = 0.0f;
 
-			if (!m_bReturningHawk)
+			if(!m_bReturningHawk)
 			{
 				//Emitter Stuff
 				m_bHawkExplode = true;
@@ -1690,38 +1716,38 @@ void Player::UpdateHawk(float elapsedTime)
 				m_bHawkExplode = false;
 			}
 
-			
-				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ GetHawkPtr() };
-				pMsg->QueueMessage();
-				pMsg = nullptr;
 
-				SetHawkPtr(nullptr);
-			
+			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ GetHawkPtr() };
+			pMsg->QueueMessage();
+			pMsg = nullptr;
+
+			SetHawkPtr(nullptr);
+
 		}
 
 	}
 
 
 	//Emitter Hawk Returning changing the position with velocity
-	if (m_bReturningHawk)
+	if(m_bReturningHawk)
 	{
 		SGD::Vector distance = m_ptPosition - m_emHawkReturn->GetPosition();
-		if (distance.ComputeLength() > 10)
+		if(distance.ComputeLength() > 10)
 		{
 			SGD::Vector VEL = { 0, 0 };
-			if (m_ptPosition.x < m_emHawkReturn->GetPosition().x)
+			if(m_ptPosition.x < m_emHawkReturn->GetPosition().x)
 			{
 				VEL.x = -300;
 			}
-			if (m_ptPosition.y < m_emHawkReturn->GetPosition().y)
+			if(m_ptPosition.y < m_emHawkReturn->GetPosition().y)
 			{
 				VEL.y = -300;
 			}
-			if (m_ptPosition.x > m_emHawkReturn->GetPosition().x)
+			if(m_ptPosition.x > m_emHawkReturn->GetPosition().x)
 			{
 				VEL.x = 300;
 			}
-			if (m_ptPosition.y > m_emHawkReturn->GetPosition().y)
+			if(m_ptPosition.y > m_emHawkReturn->GetPosition().y)
 			{
 				VEL.y = 300;
 			}
@@ -1736,13 +1762,13 @@ void Player::UpdateHawk(float elapsedTime)
 			m_bReturningHawk = false;
 		}
 	}
-	
+
 }
 
 void Player::UpdateSpray(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if (pInput->IsKeyDown(SGD::Key::F) == true
+	if(pInput->IsKeyDown(SGD::Key::F) == true
 		/*&& m_fShotTimer > 0.25f*/)
 	{
 		if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hIceEffect)))
@@ -1750,7 +1776,7 @@ void Player::UpdateSpray(float elapsedTime)
 			SGD::AudioManager::GetInstance()->PlayAudio(m_hIceEffect);
 		}
 		//m_fShotTimer = 0.0f;
-		if (m_fIceTimer > .05f)
+		if(m_fIceTimer > .05f)
 		{
 
 			m_fIceTimer = 0;
@@ -1764,13 +1790,13 @@ void Player::UpdateSpray(float elapsedTime)
 void Player::UpdateConstants(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if (m_unCurrentState != JUMPING_STATE)
+	if(m_unCurrentState != JUMPING_STATE)
 	{
 		SetGravity(-3000);
 		SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
 	}
 
-	if ((m_unCurrentState == JUMPING_STATE
+	if((m_unCurrentState == JUMPING_STATE
 		&& m_fJumpTimer == 0.0f
 		|| pInput->IsKeyDown(SGD::Key::Space) == false
 		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
@@ -1781,7 +1807,7 @@ void Player::UpdateConstants(float elapsedTime)
 
 		m_unCurrentState = FALLING_STATE;
 
-		if (GetVelocity().y < 0)
+		if(GetVelocity().y < 0)
 		{
 			//SetVelocity({ GetVelocity().x, 0 });
 
@@ -1792,7 +1818,7 @@ void Player::UpdateConstants(float elapsedTime)
 void Player::UpdateVelocity(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if (m_unCurrentState == LANDING_STATE
+	if(m_unCurrentState == LANDING_STATE
 		&& m_fLandTimer <= 0
 		&& pInput->IsKeyDown(SGD::Key::Space) == false
 		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false
@@ -1803,26 +1829,26 @@ void Player::UpdateVelocity(float elapsedTime)
 	}
 
 	//Buffer Input for Wall Jump so you can't jump while holding the JUMP button
-	if (pInput->IsKeyDown(SGD::Key::Space) == false
+	if(pInput->IsKeyDown(SGD::Key::Space) == false
 		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
 	{
 		m_fButtonTimer = 0;
 
 	}
 
-	if (GetVelocity().y > 1050)
+	if(GetVelocity().y > 1050)
 	{
 		SetVelocity(SGD::Vector(GetVelocity().x, 1050));
 	}
 
-	if (m_unCurrentState == RESTING_STATE
+	if(m_unCurrentState == RESTING_STATE
 		|| m_unCurrentState == LANDING_STATE)
 	{
 
 
-		if (GetVelocity().x > 850 && m_bSliding == false)
+		if(GetVelocity().x > 850 && m_bSliding == false)
 		{
-			if (IsDashing() == false)
+			if(IsDashing() == false)
 				SetVelocity(SGD::Vector(850, GetVelocity().y));
 		}
 		if(GetVelocity().x > 1150 && m_bSliding == true)
@@ -1831,9 +1857,9 @@ void Player::UpdateVelocity(float elapsedTime)
 				SetVelocity(SGD::Vector(1150, GetVelocity().y));
 		}
 
-		if (GetVelocity().x < -850 && m_bSliding == false)
+		if(GetVelocity().x < -850 && m_bSliding == false)
 		{
-			if (IsDashing() == false)
+			if(IsDashing() == false)
 				SetVelocity(SGD::Vector(-850, GetVelocity().y));
 		}
 		if(GetVelocity().x < -1150 && m_bSliding == true)
@@ -1857,9 +1883,9 @@ void Player::UpdateVelocity(float elapsedTime)
 	}
 	else
 	{
-		if (GetVelocity().x > 1150 && m_bSliding == false)
+		if(GetVelocity().x > 1150 && m_bSliding == false)
 		{
-			if (IsDashing() == false)
+			if(IsDashing() == false)
 				SetVelocity(SGD::Vector(1150, GetVelocity().y));
 		}
 		if(GetVelocity().x > 1800 && m_bSliding == true)
@@ -1870,7 +1896,7 @@ void Player::UpdateVelocity(float elapsedTime)
 
 		if(GetVelocity().x < -1150 && m_bSliding == false)
 		{
-			if (IsDashing() == false)
+			if(IsDashing() == false)
 				SetVelocity(SGD::Vector(-1150, GetVelocity().y));
 		}
 		if(GetVelocity().x < -1800 && m_bSliding == true)
@@ -1886,7 +1912,7 @@ void Player::UpdateVelocity(float elapsedTime)
 
 void Player::HawkExplode(SGD::Point _pos)
 {
-	if (!m_bHawkExplode)
+	if(!m_bHawkExplode)
 	{
 		m_bHawkExplode = true;
 		m_emFeatherExplosion->Finish();
@@ -1894,7 +1920,7 @@ void Player::HawkExplode(SGD::Point _pos)
 		m_bReturningHawk = true;
 		m_emHawkReturn->Burst(_pos);
 		m_emHawkReturn->Finish();
-	}	
+	}
 }
 
 #pragma endregion
@@ -1903,10 +1929,10 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
-	if (pInput->IsKeyPressed(SGD::Key::G) == true
+	if(pInput->IsKeyPressed(SGD::Key::G) == true
 		|| pInput->IsButtonPressed(0, 1 /*B button on Xbox*/) == true)
 	{
-		if (m_fSwingTimer <= 0.0f)
+		if(m_fSwingTimer <= 0.0f)
 		{
 			m_fSwingTimer = 0.2f;
 			is_Swinging = true;
@@ -1915,17 +1941,17 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 
 	}
 
-	if (m_fSwingTimer > 0.0f)
+	if(m_fSwingTimer > 0.0f)
 	{
-		if (IsFacingRight() == true)
+		if(IsFacingRight() == true)
 		{
 
 			//SGD::Rectangle temp = GetRect();
 
 			SGD::Rectangle temp;
-			temp.left = ( (GetRect().right - 16 ) - Camera::GetInstance()->GetCameraPos().x);
+			temp.left = ((GetRect().right - 16) - Camera::GetInstance()->GetCameraPos().x);
 			temp.top = (GetRect().top - Camera::GetInstance()->GetCameraPos().y) - 10;
-			temp.right = (temp.left) +80;
+			temp.right = (temp.left) + 80;
 			temp.bottom = (temp.top) + 80;
 
 			//swingRect = temp;
@@ -1949,17 +1975,17 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 			//swingRect = temp;
 			m_pSword->SetRect(temp);
 
-			
+
 		}
 	}
 	else
 	{
 		swingRect = { 0, 0, 0, 0 };
 		m_pSword->SetRect(swingRect);
-		
+
 	}
 
-	
+
 	m_pSword->Update(elapsedTime);
 
 }
