@@ -4,13 +4,14 @@
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include <Windows.h>
 #include "Player.h"
+#include "SwordSwing.h"
 
 
 Activator::Activator(bool isPressure)
 {
 	m_bPressurePlate = isPressure;
 
-	m_ptPosition = { 68, 300 };
+	//m_ptPosition = { 68, 300 };
 	m_szSize = { 32, 32 };
 
 }
@@ -44,6 +45,75 @@ void Activator::Update(float elapsedTime)
 		pATEvent = nullptr;
 	}
 
+
+	if (m_pPlayer->GetIsSwinging() == true
+		&& GetType() == ENT_SWITCH)
+	{
+		
+		RECT rSwingRect;
+		rSwingRect.left = m_pPlayer->GetSword()->GetRect().left;
+		rSwingRect.top = m_pPlayer->GetSword()->GetRect().top;
+		rSwingRect.right = m_pPlayer->GetSword()->GetRect().right;
+		rSwingRect.bottom = m_pPlayer->GetSword()->GetRect().bottom;
+
+		RECT rObject;
+		rObject.left = GetRect().left - Camera::GetInstance()->GetCameraPos().x;
+		rObject.top = GetRect().top - Camera::GetInstance()->GetCameraPos().y;
+		rObject.right = GetRect().right - Camera::GetInstance()->GetCameraPos().x;
+		rObject.bottom = GetRect().bottom - Camera::GetInstance()->GetCameraPos().y;
+
+		RECT rIntersection = {};
+
+		IntersectRect(&rIntersection, &rObject, &rSwingRect);
+
+		int nIntersectWidth = rIntersection.right - rIntersection.left;
+		int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+
+		if (nIntersectHeight > nIntersectWidth)
+		{
+			//Open Door
+			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+
+			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+			m_fSwitchTimer = 3.0f;
+		}
+
+		if (nIntersectHeight < nIntersectWidth)
+		{
+			//Open Door
+			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+
+			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+			m_fSwitchTimer = 3.0f;
+		}
+		if (nIntersectHeight == nIntersectWidth)
+		{
+			//Open Door
+			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+
+			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+			m_fSwitchTimer = 3.0f;
+		}
+	}
+
+
+
+
+
+
 }
 
 void Activator::Render(void)
@@ -61,6 +131,8 @@ void Activator::Render(void)
 
 int Activator::GetType(void) const
 {
+
+	//return 1;
 
 	if (m_bPressurePlate == false)
 	{
@@ -85,11 +157,11 @@ void Activator::HandleCollision(const IEntity* pOther)
 	{
 		if(m_bPressurePlate == false && m_fSwitchTimer == 0.0f)
 		{
-			//Open Door
-			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
-			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-			pATEvent = nullptr;
-			m_fSwitchTimer = 3.0f;
+		//	//Open Door
+		//	SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
+		//	SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		//	pATEvent = nullptr;
+		//	m_fSwitchTimer = 3.0f;
 
 		}
 		else if(m_bPressurePlate == true)
@@ -121,6 +193,12 @@ void Activator::HandleCollision(const IEntity* pOther)
 		}
 
 	}
+
+	if (pOther->GetType() == ENT_SWORD)
+	{
+		int x = 1;
+	}
+
 
 
 	if (m_pPlayer != nullptr)

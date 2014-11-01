@@ -13,7 +13,7 @@ public:
 	virtual void Update(float elapsedTime)  override;
 	virtual void Render(void) override;
 
-	int GetType(void) const override { return ENT_ENEMY; }
+	int GetType(void) const override { return ENT_POUNCER; }
 	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
 

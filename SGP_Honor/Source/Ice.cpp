@@ -3,7 +3,7 @@
 #include "Camera.h"
 #include "DestroyEntityMessage.h"
 #include "ParticleEngine.h"
-
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "Emitter.h"
 
 Ice::Ice()

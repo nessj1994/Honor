@@ -181,8 +181,9 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
+	LoadLevel("Level4_1");
 
-	LoadLevel("World2Level");
+	//LoadLevel("HubLevel");
 
 	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
@@ -352,6 +353,8 @@ void GameplayState::Update(float elapsedTime)
 	//m_pEmitter2->Update(elapsedTime);
 	float x = elapsedTime;
 
+
+
 	m_pEntities->UpdateAll(elapsedTime);
 	Camera::GetInstance()->Update(elapsedTime);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
@@ -375,9 +378,12 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
 
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
+	m_pEntities->CheckCollisions(Entity::ENT_PRESSURE_PLATE, Entity::ENT_SWORD);
+
 	m_pEntities->CheckCollisions(Entity::ENT_SWITCH, Entity::ENT_SWORD);
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_BULL, Entity::ENT_DOOR);
 
+	
 
 
 	m_pEntities->CheckCollisions(Entity::ENT_TEMP_FREEZE, Entity::ENT_SPRAY);
@@ -410,6 +416,8 @@ void GameplayState::Update(float elapsedTime)
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
 
+	m_pEntities->CheckWorldCollision(Entity::ENT_POUNCER);
+	m_pEntities->CheckWorldCollision(Entity::ENT_JELLYFISH);
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_BULL);
 
@@ -767,8 +775,7 @@ Entity* GameplayState::CreateGravProjectile(Entity* pOwner) const
 Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 {
 	HorizontalBubble* proj = new HorizontalBubble();
-	proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width / 2, 
-		pOwner->GetPosition().y + pOwner->GetSize().height - 80));
+	proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + 80));
 	proj->SetOwner(pOwner);
 	proj->SetSize({ 40, 40 });
 	return proj;
@@ -777,8 +784,7 @@ Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 Entity* GameplayState::CreateVertBubble(Entity* pOwner) const
 {
 	VerticalBubble* proj = new VerticalBubble();
-	proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width / 2,
-		pOwner->GetPosition().y + pOwner->GetSize().height - 80));
+	proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + 80));
 	proj->SetOwner(pOwner);
 	proj->SetSize({ 40, 40 });
 	return proj;
@@ -833,6 +839,9 @@ Player* GameplayState::CreatePlayer(void)
 
 	pPlayer->SetPosition(SGD::Point(100, 100));
 	pPlayer->SetSize(SGD::Size(32, 64));
+
+
+	pSword->SetSize(SGD::Size(800, 80));
 	pPlayer->SetSword(pSword);
 	m_pEntities->AddEntity(pSword, Entity::ENT_SWORD);
 
@@ -1233,7 +1242,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 			Pouncer * pPouncer = new Pouncer();
 			pPouncer->SetPosition({ (float)_x, (float)_y });
 			pPouncer->SetPlayer(m_pPlayer);
-			m_pEntities->AddEntity(pPouncer, Entity::ENT_ENEMY);
+			m_pEntities->AddEntity(pPouncer, Entity::ENT_POUNCER);
 			pPouncer->Release();
 			break;
 		}
@@ -1251,6 +1260,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 			Jellyfish * pJelly = new Jellyfish();
 			pJelly->SetPosition({ (float)_x, (float)_y });
 			pJelly->SetPlayer(m_pPlayer);
+			pJelly->SetPatrol();
 			m_pEntities->AddEntity(pJelly, Entity::ENT_ENEMY);
 			pJelly->Release();
 			break;
@@ -1286,6 +1296,7 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 		case 3: // crab
 		{
 			Crab * mCrab = new Crab();
+			mCrab->SetPosition({ (float)_x, (float)_y });
 			m_pEntities->AddEntity(mCrab, Entity::ENT_BOSS_CRAB);
 			mCrab->Release();
 			break;
