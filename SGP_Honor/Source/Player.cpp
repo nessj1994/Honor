@@ -6,6 +6,7 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "../SGD Wrappers/SGD_String.h"
+#include "GameplayState.h"
 #include "DestroyEntityMessage.h"
 #include "CreateProjectileMessage.h"
 #include "CreateSprayMessage.h"
@@ -268,8 +269,7 @@ void Player::Render(void)
 	{
 		// Draw a fading rectangle
 		unsigned char alpha = (char)(((0.5f - m_fDeathTimer) / 0.5f) * 255.0f);
-		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
-		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+		GameplayState::GetInstance()->SetScreenFadeout(alpha);
 	}
 }
 
@@ -1140,10 +1140,6 @@ void Player::KillPlayer()
 		m_bDead = true;
 		m_unJumpCount = 0;
 
-		// Reset room
-		SGD::Event* pATEvent = new SGD::Event("ResetRoom", nullptr, this);
-		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		pATEvent = nullptr;
 
 		// TODO Add effects
 
@@ -1161,6 +1157,12 @@ void Player::UpdateDeath(float elapsedTime)
 		m_fDeathTimer = 0.0f;
 		m_ptPosition = m_ptStartPosition;
 		SetVelocity({ 0.0f, 0.0f });
+		GameplayState::GetInstance()->SetScreenFadeout(0);
+
+		// Reset room
+		SGD::Event* pATEvent = new SGD::Event("ResetRoom", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
 	}
 }
 

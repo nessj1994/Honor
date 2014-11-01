@@ -50,6 +50,5 @@ private:
 
 	Emitter * m_eFire1;
 	Emitter * m_eFire2;
-	Emitter * m_eFire3;
 };
 

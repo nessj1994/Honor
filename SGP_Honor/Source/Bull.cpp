@@ -4,6 +4,7 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "ParticleEngine.h"
+#include "GameplayState.h"
 
 
 ///////////////////////////////////////////////////
@@ -24,7 +25,6 @@ Bull::Bull() : Listener(this)
 	SetHitPoints(1);
 	m_eFire1 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect1.xml", "FireEffect1", m_ptPosition);
 	m_eFire2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect2.xml", "FireEffect2", m_ptPosition);
-	m_eFire3 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect3.xml", "FireEffect3", m_ptPosition);
 }
 
 ///////////////////////////////////////////////////
@@ -40,6 +40,10 @@ Bull::~Bull()
 void Bull::Update(float elapsedTime)
 {
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
+
+	// Fire effect
+	m_eFire1->Update(elapsedTime);
+	m_eFire2->Update(elapsedTime);
 
 	switch (m_bsCurrState)
 	{
@@ -258,21 +262,24 @@ void Bull::Update(float elapsedTime)
 			}
 			else if (m_fDeathTimer > 5.0f)
 			{
-				// Fire effect
-				m_eFire1->Update(elapsedTime);
-				m_eFire2->Update(elapsedTime);
-				m_eFire3->Update(elapsedTime);
-
 			}
 			else
 			{
+
 				// Alpha fade
+				unsigned char alpha = (char)(((5.0f - m_fDeathTimer) / 5.0f) * 255.0f);
+				GameplayState::GetInstance()->SetScreenFadeout(alpha);
 			}
 
 			// Update timer
 			if (m_fDeathTimer > 0.0f)
 			{
 				m_fDeathTimer -= elapsedTime;
+			}
+			else
+			{
+				GameplayState::GetInstance()->SetScreenFadeout(0);
+				// TODO Delete bull, give player dash, update room
 			}
 			break;
 		}
@@ -305,10 +312,9 @@ void Bull::Render(void)
 	{
 		SGD::Point renderPosition = m_ptPosition;
 		renderPosition.x -= 32;
-		renderPosition.y += 32;
+		renderPosition.y += 64;
 		m_eFire1->Render(renderPosition);
 		m_eFire2->Render(renderPosition);
-		//m_eFire3->Render(renderPosition);
 	}
 }
 

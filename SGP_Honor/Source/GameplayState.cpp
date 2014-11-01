@@ -440,13 +440,10 @@ void GameplayState::Render(void)
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 
-	if (m_pPlayer->GetDead())
-	{
-		// Draw a fading rectangle
-		unsigned char alpha = (char)(((0.5f - m_pPlayer->GetDeathTimer()) / 0.5f) * 255.0f);
-		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
-		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
-	}
+	// Draw a fading rectangle
+	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
+	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { m_cScreenFade, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+
 
 }
 
