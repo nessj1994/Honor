@@ -451,7 +451,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		// TODO use states
 		// Throw the player back
 		Bull * bull = (Bull*)(pOther);
-		if (bull->GetRunning())
+		if (bull->GetAttacking())
 		{
 			float throwSpeed = -3000;
 			if (bull->IsFacingRight())
