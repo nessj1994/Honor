@@ -34,6 +34,7 @@ private:
 	////////////// Member fields //////////////
 	bool m_bCanCharge = false;
 	bool m_bDead = false;
+	bool m_bRenderFire = false;
 
 	float m_fStunSpeed = 0.0f;
 	char m_fAlphaFade = 0;

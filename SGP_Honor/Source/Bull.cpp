@@ -41,9 +41,6 @@ void Bull::Update(float elapsedTime)
 {
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 
-	// Fire effect
-	m_eFire1->Update(elapsedTime);
-	m_eFire2->Update(elapsedTime);
 
 	switch (m_bsCurrState)
 	{
@@ -259,12 +256,24 @@ void Bull::Update(float elapsedTime)
 				m_ts.SetCurrAnimation("Bull_Stunned");
 				m_ts.SetSpeed(1.0f);
 				SetVelocity({ 0.0f, 0.0f });
+
+				// Fire effect
+				m_eFire1->Update(elapsedTime);
+				m_eFire2->Update(elapsedTime);
 			}
 			else if (m_fDeathTimer > 5.0f)
 			{
+				m_bRenderFire = true;
+
+				// Fire effect
+				m_eFire1->Update(elapsedTime);
+				m_eFire2->Update(elapsedTime);
 			}
 			else
 			{
+				// Fire effect
+				m_eFire1->Update(elapsedTime);
+				m_eFire2->Update(elapsedTime);
 
 				// Alpha fade
 				unsigned char alpha = (char)(((5.0f - m_fDeathTimer) / 5.0f) * 255.0f);
@@ -308,7 +317,7 @@ void Bull::Render(void)
 	newPosition.y += 38;
 	newPosition.x += 50;
 	Camera::GetInstance()->DrawAnimation(newPosition, 0, m_ts, !m_bFacingRight, 1.0f);
-	if (m_bDead)
+	if (m_bRenderFire)
 	{
 		SGD::Point renderPosition = m_ptPosition;
 		renderPosition.x -= 32;
