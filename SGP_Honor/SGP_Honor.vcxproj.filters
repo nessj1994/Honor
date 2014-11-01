@@ -251,12 +251,20 @@
     <ClCompile Include="Source\MutantMan.cpp">
       <Filter>Entities\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="Source\HorizontalBubble.cpp" />
-    <ClCompile Include="Source\VerticalBubble.cpp" />
-    <ClCompile Include="Source\CreateVerticalBubble.cpp" />
-    <ClCompile Include="Source\CreateHorizontalBubble.cpp" />
     <ClCompile Include="Source\SwordSwing.cpp">
       <Filter>Entities\Spells</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HorizontalBubble.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VerticalBubble.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CreateHorizontalBubble.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CreateVerticalBubble.cpp">
+      <Filter>Messages</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -534,12 +542,20 @@
     <ClInclude Include="Source\MutantMan.h">
       <Filter>Entities\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Source\HorizontalBubble.h" />
-    <ClInclude Include="Source\VerticalBubble.h" />
-    <ClInclude Include="Source\CreateVerticalBubble.h" />
-    <ClInclude Include="Source\CreateHorizontalBubble.h" />
     <ClInclude Include="Source\SwordSwing.h">
       <Filter>Entities\Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HorizontalBubble.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VerticalBubble.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CreateHorizontalBubble.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CreateVerticalBubble.h">
+      <Filter>Messages</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

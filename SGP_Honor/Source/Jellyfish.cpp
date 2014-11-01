@@ -5,6 +5,7 @@
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include <Windows.h>
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 #define BTime 0.2f
 

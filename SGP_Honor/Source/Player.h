@@ -201,6 +201,7 @@ private:
 	//Sound Effects
 	SGD::HAudio m_hIceEffect = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hBounceEffect = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hJellyfishEffect = SGD::INVALID_HANDLE;
 
 };
 

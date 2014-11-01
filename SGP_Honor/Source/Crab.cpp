@@ -12,6 +12,8 @@
 #define BubbleSpawnRate 0.2f
 #define BubbleCooldown 3.0f
 #define SlamTime 1.3f
+#define SwipeTime 1.3f
+#define SwipeCooldown 1.5f
 
 Crab::Crab() : Listener(this)
 {
@@ -60,6 +62,19 @@ void Crab::Update(float elapsedTime)
 				SetCurrentState(idle);
 			}
 		}
+		if (castedSwipe == true)
+		{
+			swipeTimer += elapsedTime;
+			if (swipeTimer >= SwipeTime)
+			{
+				swipeTimer = 0;
+				SwipeOnCD = true;
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Boss Idle");
+				m_ts.SetPlaying(true);
+				SetCurrentState(idle);
+			}
+		}
 
 		switch (GetCurrentState())
 		{
@@ -71,7 +86,7 @@ void Crab::Update(float elapsedTime)
 				 GetPlayer()->GetPosition().y > rect.top && castedLeftSlam == false && castedRightSlam == false)
 				 SetCurrentState(slamming);
 			else if (GetPlayer()->GetPosition().x >= rect.left && GetPlayer()->GetPosition().x <= rect.right &&
-				 GetPlayer()->GetPosition().y < m_ptPosition.y)
+				 GetPlayer()->GetPosition().y < m_ptPosition.y && castedSwipe == false)
 				 SetCurrentState(swipping);
 			else if (castedBubbles == false)
 				 SetCurrentState(bubbles);
@@ -84,6 +99,16 @@ void Crab::Update(float elapsedTime)
 					 bubbleCD = 0;
 					 castedBubbles = false;
 				 }
+			}
+			if (SwipeOnCD == true)
+			{
+				swipeCD += elapsedTime;
+				if (swipeCD >= SwipeCooldown)
+				{
+					swipeCD = 0;
+					castedSwipe = false;
+					SwipeOnCD = false;
+				}
 			}
 			if (LeftSlamOnCD == true)
 			{
@@ -127,7 +152,16 @@ void Crab::Update(float elapsedTime)
 			break;
 		}
 		case swipping:
+		{
+			if (castedSwipe == false && castedLeftSlam == false && castedRightSlam == false)
+			{
+				 m_ts.ResetCurrFrame();
+				 m_ts.SetCurrAnimation("Boss Swipe");
+				 m_ts.SetPlaying(true);
+				 castedSwipe = true;
+			}
 			break;
+		}
 		case bubbles:
 		{
 			if (bubbleCD == 0.0f)

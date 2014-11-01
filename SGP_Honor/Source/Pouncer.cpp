@@ -97,7 +97,7 @@ void Pouncer::HandleCollision(const IEntity* pOther)
 	if (pOther->GetType() == Entity::ENT_SOLID_WALL)
 	{
 		inAir = false;
-		SetVelocity({ 0, 0 });
+		SetVelocity({ 0, GetVelocity().y });
 	}
 
 	if (pOther->GetType() == Entity::ENT_PLAYER && GetRect().IsIntersecting(pOther->GetRect()) == true)

@@ -52,6 +52,7 @@ Player::Player() : Listener(this)
 	//Load Sounds
 	m_hIceEffect = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/IceSpray.wav");
 	m_hBounceEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/BounceEffect.wav");
+	m_hJellyfishEffect = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/JellyfishBounce.wav");
 
 }
 
@@ -64,6 +65,7 @@ Player::~Player()
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHonorParticleHUD);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hIceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBounceEffect);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hJellyfishEffect);
 }
 
 /////////////////////////////////////////////////
@@ -1052,6 +1054,7 @@ void Player::JellyfishCollision(const IEntity* pOther)
 			//SetVelocity({ GetVelocity().x, /*GetVelocity().y*/1500 * (-1.0f - (0.1f * jfish->GetBounceCount())) });
 			SetVelocity({ GetVelocity().x, GetVelocity().y * (-1.0f - (0.1f * jfish->GetBounceCount())) });
 			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height /*- nIntersectHeight*/ });
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hJellyfishEffect);
 			//SetIsFalling(false);
 			//SetIsInputStuck(false);
 			//SetIsJumping(true);
@@ -1108,7 +1111,7 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 
 	if (pEvent->GetEventID() == "BOUNCE_VERTICAL")
 	{
-		SetVelocity({ GetVelocity().x, -3000 });
+		SetVelocity({ GetVelocity().x, -2000 });
 		SetPosition({ GetPosition().x, GetPosition().y - 1 });
 	}
 

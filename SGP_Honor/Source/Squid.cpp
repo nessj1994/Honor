@@ -26,6 +26,7 @@ Squid::~Squid()
 
 void Squid::Update(float elapsedTime)
 {
+	Enemy::Update(elapsedTime);
 	if (target != nullptr)
 	{
 		if (target->GetPosition().x <= m_ptPosition.x)

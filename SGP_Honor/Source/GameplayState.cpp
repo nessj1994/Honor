@@ -181,7 +181,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("Level4_1");
+	LoadLevel("Level4_5");
 
 	//LoadLevel("HubLevel");
 
@@ -546,7 +546,7 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 			Entity* pProj = pSelf->CreateGravProjectile(pCreateMsg->GetOwner());
 
 
-			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_SQUID)
 			{
 				 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
 			}
