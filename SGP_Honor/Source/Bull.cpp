@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include "ParticleEngine.h"
 
 
 ///////////////////////////////////////////////////
@@ -21,6 +22,9 @@ Bull::Bull() : Listener(this)
 	m_ts.SetCurrAnimation("Bull_Running");
 	m_ts.SetPlaying(true);
 	SetHitPoints(1);
+	m_eFire1 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect1.xml", "FireEffect1", m_ptPosition);
+	m_eFire2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect2.xml", "FireEffect2", m_ptPosition);
+	m_eFire3 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect3.xml", "FireEffect3", m_ptPosition);
 }
 
 ///////////////////////////////////////////////////
@@ -214,7 +218,7 @@ void Bull::Update(float elapsedTime)
 				m_bsCurrState = BS_SLOWING;
 				if (GetHitPoints() <= 0)
 				{
-					m_fDeathTimer = 3.0f;
+					m_fDeathTimer = 13.0f;
 					m_bsCurrState = BS_DEATH;
 					m_ts.ResetCurrFrame();
 				}
@@ -224,7 +228,7 @@ void Bull::Update(float elapsedTime)
 		case BS_DEATH:
 		{
 			// Update animation
-			if (m_fDeathTimer > 1.0f)
+			if (m_fDeathTimer > 10.0f)
 			{
 				// Slowly walk a little
 				m_ts.SetCurrAnimation("Bull_Running");
@@ -239,18 +243,30 @@ void Bull::Update(float elapsedTime)
 					SetVelocity({ -32.0f, 0.0f });
 				}
 			}
-			else
+			else if (m_fDeathTimer > 9.0f)
 			{
+				// Pass out and die
 				if (!m_bDead)
 				{
 					m_ts.ResetCurrFrame();
 					m_bDead = true;
 				}
 
-				// Pass out and die
 				m_ts.SetCurrAnimation("Bull_Stunned");
 				m_ts.SetSpeed(1.0f);
 				SetVelocity({ 0.0f, 0.0f });
+			}
+			else if (m_fDeathTimer > 5.0f)
+			{
+				// Fire effect
+				m_eFire1->Update(elapsedTime);
+				m_eFire2->Update(elapsedTime);
+				m_eFire3->Update(elapsedTime);
+
+			}
+			else
+			{
+				// Alpha fade
 			}
 
 			// Update timer
@@ -285,6 +301,15 @@ void Bull::Render(void)
 	newPosition.y += 38;
 	newPosition.x += 50;
 	Camera::GetInstance()->DrawAnimation(newPosition, 0, m_ts, !m_bFacingRight, 1.0f);
+	if (m_bDead)
+	{
+		SGD::Point renderPosition = m_ptPosition;
+		renderPosition.x -= 32;
+		renderPosition.y += 32;
+		m_eFire1->Render(renderPosition);
+		m_eFire2->Render(renderPosition);
+		//m_eFire3->Render(renderPosition);
+	}
 }
 
 ///////////////////////////////////////////////////
@@ -363,6 +388,7 @@ void Bull::ResetBull()
 	m_bFacingRight = false;
 	m_bCanCharge = false;
 	m_bsCurrState = BS_WALKING;
+	m_fAlphaFade = 0;
 	m_ts.SetCurrAnimation("Bull_Running");
 	m_ts.SetPlaying(true);
 	m_ts.ResetCurrFrame();

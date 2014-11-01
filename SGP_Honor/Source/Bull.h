@@ -3,6 +3,9 @@
 
 #include "../SGD Wrappers/SGD_Listener.h"
 
+// Forward declarations
+class Emitter;
+
 class Bull :
 	public Boss, SGD::Listener
 {
@@ -33,6 +36,7 @@ private:
 	bool m_bDead = false;
 
 	float m_fStunSpeed = 0.0f;
+	char m_fAlphaFade = 0;
 
 	float m_fTurnTimer = 0.0f;
 	float m_fChargeTimer = 0.0f;
@@ -43,6 +47,9 @@ private:
 	float m_fDeathTimer = 0.0f;
 
 	BullState m_bsCurrState;
-	
+
+	Emitter * m_eFire1;
+	Emitter * m_eFire2;
+	Emitter * m_eFire3;
 };
 
