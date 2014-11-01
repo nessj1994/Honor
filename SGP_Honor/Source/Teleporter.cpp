@@ -42,7 +42,11 @@ void Teleporter::HandleCollision(const IEntity* pOther)
 {
 	if (pOther->GetType() == ENT_PLAYER)
 	{
-		if (SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::W))
+		float leftStickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
+
+
+		//if (leftStickYOff < -0.8)
+		if (SGD::InputManager::GetInstance()->IsButtonPressed(0,3) == true)
 		{
 			ChangeLevelMessage* pMsg = new ChangeLevelMessage{ this };
 			pMsg->QueueMessage();

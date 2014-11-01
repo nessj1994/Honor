@@ -21,7 +21,6 @@
 //////////// Foward Class Declarations ////////////
 class EntityManager;
 class Entity;
-class Emitter;
 class Level;
 class Player;
 class FallingBlock;
@@ -43,6 +42,7 @@ class Bull;
 class Jellyfish;
 class Crab;
 
+//
 //////////////////////////////////////////////////
 // GameplayState class
 // -runs game logic
@@ -159,8 +159,8 @@ private:
 
 	EntityManager* m_pEntities						= nullptr;
 	Camera* m_pCamera								= nullptr;
-	Emitter* m_pEmitter								= nullptr;
-	Emitter* m_pEmitter2						    = nullptr;
+	/*Emitter* m_pEmitter								= nullptr;
+	Emitter* m_pEmitter2						    = nullptr;*/
 	Level* m_pLevel									= nullptr;
 	Player* m_pPlayer								= nullptr;
 

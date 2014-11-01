@@ -89,6 +89,7 @@ public:
 //	bool GetIsFalling(void)const { return is_Falling; }
 	bool GetIsInputStuck(void)const { return is_Stuck; }
 	bool GetDead(void) const { return m_bDead; }
+	bool GetIsSwinging(void) const { return is_Swinging; }
 	bool GetStunned(void) const { return m_bStunned; }
 
 	//Floats
@@ -152,6 +153,7 @@ private:
 	bool is_Platform = false;
 	bool is_Ramp = false;
 	bool m_bDead = false;
+	bool is_Swinging = false;
 	bool m_bStunned = false;
 
 	float m_fDashTime = 0.0f;
@@ -188,7 +190,6 @@ private:
 	//Emitters
 	//Honor emitter for HUD
 	Emitter* m_emHonor;
-
 	SGD::Rectangle swingRect = {0,0,0,0};
 	//Hawk Explosion 
 	Emitter* m_emFeatherExplosion;
@@ -196,6 +197,11 @@ private:
 	//Hawk Return
 	Emitter* m_emHawkReturn;
 	bool m_bReturningHawk = false;
+
+	//Sound Effects
+	SGD::HAudio m_hIceEffect = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hBounceEffect = SGD::INVALID_HANDLE;
+
 };
 
 
