@@ -75,6 +75,7 @@
     <ClCompile Include="Source\LevelCollider.cpp" />
     <ClCompile Include="Source\MainMenuState.cpp" />
     <ClCompile Include="Source\MovingPlatform.cpp" />
+    <ClCompile Include="Source\MutantMan.cpp" />
     <ClCompile Include="Source\OptionsState.cpp" />
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\ParticleEngine.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Source\MainMenuState.h" />
     <ClInclude Include="Source\MessageID.h" />
     <ClInclude Include="Source\MovingPlatform.h" />
+    <ClInclude Include="Source\MutantMan.h" />
     <ClInclude Include="Source\OptionsState.h" />
     <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\ParticleEngine.h" />

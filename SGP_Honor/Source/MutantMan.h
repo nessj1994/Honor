@@ -4,26 +4,24 @@
 
 class Player;
 
-class Pouncer : public Enemy, SGD::Listener
+class MutantMan : public Enemy, SGD::Listener
 {
 public:
-	Pouncer();
-	virtual ~Pouncer();
-
+	MutantMan();
+	~MutantMan();
 	virtual void Update(float elapsedTime)  override;
 	virtual void Render(void) override;
 
-	int GetType(void) const override { return ENT_POUNCER; }
+	int GetType(void) const override { return ENT_ENEMY; }
 	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
 
 	void HandleEvent(const SGD::Event* pEvent);
 	void SetTarget(Player* plr);
+	void Begin(SGD::Point _Pos){ m_pPatrolPoint = _Pos; }
 
 private:
-	Player* target = nullptr;
-	bool isPouncing = false;
-	float apex = 0.0f;
-	bool inAir = false;
+	Player* m_pptarget = nullptr;
+	SGD::Point m_pPatrolPoint;
 };
 

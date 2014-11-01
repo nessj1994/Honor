@@ -28,6 +28,7 @@ Pouncer::~Pouncer()
 
 void Pouncer::Update(float elapsedTime)
 {
+	Enemy::Update(elapsedTime);
 	if (target != nullptr)
 	{
 		SGD::Vector distance = target->GetPosition() - m_ptPosition;

@@ -5,6 +5,7 @@
 #include "DestroyEntityMessage.h"
 #include "ParticleEngine.h"
 #include "Emitter.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 Hawk::Hawk()
 {
@@ -17,6 +18,9 @@ Hawk::Hawk()
 		
 	}
 	SetSpeed(500);
+
+	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/HawkEffect.wav");
+	SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
 }
 
 
@@ -25,6 +29,7 @@ Hawk::~Hawk()
 	//DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
 	//pMsg->QueueMessage();
 	//pMsg = nullptr;
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
 }
 
 
