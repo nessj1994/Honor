@@ -57,6 +57,8 @@ Player::~Player()
 	delete m_pDash;
 	delete m_pBounce;
 	delete m_emHonor;
+	delete m_emFeatherExplosion;
+	delete m_emHawkReturn;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHonorParticleHUD);
 }
 
@@ -191,11 +193,13 @@ void Player::Render(void)
 	//Emitter Renders
 	if (IsBouncing() || !GetBounce()->GetEMBubbles()->Done())
 	{
-		GetBounce()->GetEMBubbles()->Render(m_ptPosition);
+		GetBounce()->GetEMBubbles()->SetPosition(m_ptPosition);
+		GetBounce()->GetEMBubbles()->Render();
 	}	
 	if (IsDashing() || !GetDash()->GetEMDash()->Done())
 	{
-		GetDash()->GetEMDash()->Render(m_ptPosition);
+		GetDash()->GetEMDash()->SetPosition(m_ptPosition);
+		GetDash()->GetEMDash()->Render();
 	}
 	if (m_bHawkExplode || !m_emFeatherExplosion->Done())
 	{
@@ -1245,13 +1249,11 @@ void Player::UpdateBounce(float elapsedTime)
 	if (pInput->IsKeyDown(SGD::Key::W) == true)
 	{
 		GetBounce()->GetEMBubbles()->Finish(false);
-		GetBounce()->GetEMBubbles()->Burst(m_ptPosition);
 		SetIsBouncing(true);
 	}
 	else
 	{
 		GetBounce()->GetEMBubbles()->Finish();
-		GetBounce()->GetEMBubbles()->Burst(m_ptPosition);
 		if (GetBounce()->GetEMBubbles()->Done())
 		{
 			//Reseting particles for the bounce since its false
@@ -1405,7 +1407,6 @@ void Player::UpdateDash(float elapsedTime)
 			//Reset Dash Particles to the players position
 			GetDash()->GetEMDash()->KillParticles(m_ptPosition);
 		}
-
 	}
 	if (this->IsDashing() == false && m_ts.GetCurrAnimation() == "dashing")
 	{

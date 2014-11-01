@@ -182,7 +182,7 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadHonorVector();
 
-	LoadLevel("Level1_5");
+	LoadLevel("World2Level");
 
 	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
@@ -1206,6 +1206,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 			MutantMan * pMutant = new MutantMan();
 			pMutant->SetPosition({ (float)_x, (float)_y });
 			pMutant->Begin({ (float)_x, (float)_y });
+			pMutant->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_MAN);
 			pMutant->Release();
 			break;
