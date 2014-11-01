@@ -15,7 +15,6 @@ public:
 	virtual void Update(float elapsedTime)  override;
 	virtual void Render(void) override;
 	virtual int GetType(void) const override { return ENT_BOSS; }
-	virtual SGD::Rectangle GetRect(void)				const override;
 
 	void BasicCollision(const IEntity* pOther) override;
 	void HandleCollision(const IEntity* pOther) override;

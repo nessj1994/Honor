@@ -6,6 +6,7 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "../SGD Wrappers/SGD_String.h"
+#include "GameplayState.h"
 #include "DestroyEntityMessage.h"
 #include "CreateProjectileMessage.h"
 #include "CreateSprayMessage.h"
@@ -268,8 +269,7 @@ void Player::Render(void)
 	{
 		// Draw a fading rectangle
 		unsigned char alpha = (char)(((0.5f - m_fDeathTimer) / 0.5f) * 255.0f);
-		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
-		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+		GameplayState::GetInstance()->SetScreenFadeout(alpha);
 	}
 }
 
@@ -444,7 +444,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		// TODO use states
 		// Throw the player back
 		Bull * bull = (Bull*)(pOther);
-		if(bull->GetRunning())
+		if (bull->GetAttacking())
 		{
 			float throwSpeed = -3000;
 			if(bull->IsFacingRight())
@@ -455,7 +455,8 @@ void Player::HandleCollision(const IEntity* pOther)
 			SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
 			SetVelocity({ throwSpeed, -1000 });
 			SetStunnded(true);
-			m_fStunTimer = 0.35f;
+			m_fStunTimer = 0.5f;
+
 		}
 	}
 
@@ -1171,10 +1172,6 @@ void Player::KillPlayer()
 		m_bDead = true;
 		m_unJumpCount = 0;
 
-		// Reset room
-		SGD::Event* pATEvent = new SGD::Event("ResetRoom", nullptr, this);
-		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		pATEvent = nullptr;
 
 		// TODO Add effects
 
@@ -1192,6 +1189,12 @@ void Player::UpdateDeath(float elapsedTime)
 		m_fDeathTimer = 0.0f;
 		m_ptPosition = m_ptStartPosition;
 		SetVelocity({ 0.0f, 0.0f });
+		GameplayState::GetInstance()->SetScreenFadeout(0);
+
+		// Reset room
+		SGD::Event* pATEvent = new SGD::Event("ResetRoom", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
 	}
 }
 
@@ -1225,10 +1228,14 @@ void Player::UpdateTimers(float elapsedTime)
 
 	if(m_fStunTimer > 0)
 		m_fStunTimer -= elapsedTime;
-	else
+	else if (m_bStunned)
 	{
 		m_fStunTimer = 0.0f;
 		m_bStunned = false;
+
+		//Kill the player
+		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}
 
 	if(m_fSwingTimer < 0.0f)

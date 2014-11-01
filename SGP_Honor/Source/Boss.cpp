@@ -52,11 +52,6 @@ void Boss::Render()
 	//SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
 }
 
-SGD::Rectangle Boss::GetRect(void) const
-{
-	return SGD::Rectangle();
-}
-
 ///////////////////////////////////////////////////
 // BasicCollision
 // -Clip out of the given entity

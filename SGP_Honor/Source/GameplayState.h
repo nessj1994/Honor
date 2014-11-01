@@ -81,6 +81,7 @@ public:
 	////////////////////// Mutators /////////////////////////
 	void SetCamera(Camera* camera) { m_pCamera = camera; }
 	void ResetAudio() { SGD::AudioManager::GetInstance()->PlayAudio(m_hBGM); }
+	void SetScreenFadeout(unsigned char _fade) { m_cScreenFade = _fade; }
 
 	///////////////////////////////////////////////////////////
 	///////////////////// Factory Methods  ////////////////////
@@ -192,6 +193,8 @@ private:
 	Jellyfish* m_pJellyfish2 = nullptr;*/
 
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
+
+	unsigned char m_cScreenFade = 0;
 
 };
 

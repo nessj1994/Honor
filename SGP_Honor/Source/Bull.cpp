@@ -3,6 +3,10 @@
 #include "Camera.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
+#include "ParticleEngine.h"
+#include "GameplayState.h"
+#include "Activator.h"
 
 
 ///////////////////////////////////////////////////
@@ -13,14 +17,18 @@ Bull::Bull() : Listener(this)
 	Listener::RegisterForEvent("BullMarkerLeft");
 	Listener::RegisterForEvent("BullMarkerRight");
 	Listener::RegisterForEvent("ResetRoom");
+	Listener::RegisterForEvent("FLIP_DOOR");
 	SetSize({ 160.0f, 96.0f });
 	m_bFacingRight = false;
 	m_bsCurrState = BS_WALKING;
-	m_fWalkTimer = 1.0f;
+	m_fWalkTimer = 5.0f;
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/Bull_Animation.xml");
 	m_ts.SetCurrAnimation("Bull_Running");
 	m_ts.SetPlaying(true);
-	SetHitPoints(1);
+	SetHitPoints(3);
+	m_eFire1 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect1.xml", "FireEffect1", m_ptPosition);
+	m_eFire2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect2.xml", "FireEffect2", m_ptPosition);
+	m_hVictory = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/BossDefeat.wav");
 }
 
 ///////////////////////////////////////////////////
@@ -28,6 +36,9 @@ Bull::Bull() : Listener(this)
 // -Setup the size
 Bull::~Bull()
 {
+	delete m_eFire1;
+	delete m_eFire2;
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hVictory);
 }
 
 ///////////////////////////////////////////////////
@@ -36,6 +47,7 @@ Bull::~Bull()
 void Bull::Update(float elapsedTime)
 {
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
+
 
 	switch (m_bsCurrState)
 	{
@@ -81,6 +93,13 @@ void Bull::Update(float elapsedTime)
 				}
 			}
 
+			// Stomp the player when he gets close
+			if (m_bTouchingPlayer)
+			{
+				m_bsCurrState = BS_STOMPING;
+				m_ts.ResetCurrFrame();
+			}
+
 			break;
 		}
 		case BS_RUNNING:
@@ -92,11 +111,11 @@ void Bull::Update(float elapsedTime)
 			// Move in the direction he is facing
 			if (m_bFacingRight)
 			{
-				SetVelocity({8 * 128.0f, 0.0f });
+				SetVelocity({ 4 * 128.0f, 0.0f });
 			}
 			else
 			{
-				SetVelocity({8 * -128.0f, 0.0f });
+				SetVelocity({ 4 * -128.0f, 0.0f });
 			}
 
 			// Change states if a wall is hit
@@ -118,6 +137,27 @@ void Bull::Update(float elapsedTime)
 
 			break;
 		}
+		case BS_STOMPING:
+		{
+			// Handle animation
+			m_ts.SetCurrAnimation("Bull_Stomp");
+			m_ts.SetSpeed(0.5f);
+
+			SetVelocity({ 0.0f, 0.0f });
+
+			// Face the player
+			float playerX = GetPlayer()->GetPosition().x;
+			m_bFacingRight = playerX > m_ptPosition.x + 64;
+
+			// Go back to walking when the player is away
+			if (!m_bTouchingPlayer)
+			{
+				m_bsCurrState = BS_WALKING;
+				m_ts.ResetCurrFrame();
+			}
+
+			break;
+		}
 		case BS_CHARGING:
 		{
 			// Handle animation
@@ -134,6 +174,10 @@ void Bull::Update(float elapsedTime)
 				m_bsCurrState = BS_RUNNING;
 				m_ts.ResetCurrFrame();
 			}
+
+			// Face the player
+			float playerX = GetPlayer()->GetPosition().x + 64;
+			m_bFacingRight = playerX > m_ptPosition.x;
 
 
 			break;
@@ -214,7 +258,7 @@ void Bull::Update(float elapsedTime)
 				m_bsCurrState = BS_SLOWING;
 				if (GetHitPoints() <= 0)
 				{
-					m_fDeathTimer = 3.0f;
+					m_fDeathTimer = 10.0f;
 					m_bsCurrState = BS_DEATH;
 					m_ts.ResetCurrFrame();
 				}
@@ -223,8 +267,13 @@ void Bull::Update(float elapsedTime)
 		}
 		case BS_DEATH:
 		{
+			if (!m_bAudioPlayed)
+			{
+				m_bAudioPlayed = true;
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hVictory);
+			}
 			// Update animation
-			if (m_fDeathTimer > 1.0f)
+			if (m_fDeathTimer > 8.0f)
 			{
 				// Slowly walk a little
 				m_ts.SetCurrAnimation("Bull_Running");
@@ -239,24 +288,52 @@ void Bull::Update(float elapsedTime)
 					SetVelocity({ -32.0f, 0.0f });
 				}
 			}
-			else
+			else if (m_fDeathTimer > 6.0f)
 			{
+				// Pass out and die
 				if (!m_bDead)
 				{
 					m_ts.ResetCurrFrame();
 					m_bDead = true;
 				}
 
-				// Pass out and die
 				m_ts.SetCurrAnimation("Bull_Stunned");
 				m_ts.SetSpeed(1.0f);
 				SetVelocity({ 0.0f, 0.0f });
+
+				// Fire effect
+				m_eFire1->Update(elapsedTime);
+				m_eFire2->Update(elapsedTime);
+			}
+			else if (m_fDeathTimer > 3.0f)
+			{
+				m_bRenderFire = true;
+
+				// Fire effect
+				m_eFire1->Update(elapsedTime);
+				m_eFire2->Update(elapsedTime);
+			}
+			else
+			{
+				// Fire effect
+				m_eFire1->Update(elapsedTime);
+				m_eFire2->Update(elapsedTime);
+
+				// Alpha fade
+				unsigned char alpha = (char)(((3.0f - m_fDeathTimer) / 3.0f) * 255.0f);
+				GameplayState::GetInstance()->SetScreenFadeout(alpha);
 			}
 
 			// Update timer
 			if (m_fDeathTimer > 0.0f)
 			{
 				m_fDeathTimer -= elapsedTime;
+			}
+			else
+			{
+				GameplayState::GetInstance()->SetScreenFadeout(0);
+				// TODO Delete bull, give player dash, update room
+
 			}
 			break;
 		}
@@ -267,6 +344,8 @@ void Bull::Update(float elapsedTime)
 	{
 		m_fTurnTimer -= elapsedTime;
 	}
+
+	m_bTouchingPlayer = false;
 
 	// Reset hitting a wall
 	SetHitWall(false);
@@ -285,6 +364,14 @@ void Bull::Render(void)
 	newPosition.y += 38;
 	newPosition.x += 50;
 	Camera::GetInstance()->DrawAnimation(newPosition, 0, m_ts, !m_bFacingRight, 1.0f);
+	if (m_bRenderFire)
+	{
+		SGD::Point renderPosition = m_ptPosition;
+		renderPosition.x -= 32;
+		renderPosition.y += 64;
+		m_eFire1->Render(renderPosition);
+		m_eFire2->Render(renderPosition);
+	}
 }
 
 ///////////////////////////////////////////////////
@@ -292,10 +379,29 @@ void Bull::Render(void)
 // -Handle collisions
 void Bull::HandleCollision(const IEntity* pOther)
 {
-	Boss::HandleCollision(pOther);
+	// Solid wall
+	if (pOther->GetType() == ENT_SOLID_WALL)
+	{
+		BasicCollision(pOther);
+	}
+
+	// Doors
+	if (pOther->GetType() == ENT_DOOR)
+	{
+		if (m_bsCurrState != BS_RETURNING)
+		{
+			BasicCollision(pOther);
+		}
+	}
 
 	// Death
-	if (pOther->GetType() == ENT_DEATH)
+	if (pOther->GetType() == ENT_PLAYER)
+	{
+		m_bTouchingPlayer = true;
+	}
+
+	// Death
+	else if (pOther->GetType() == ENT_DEATH)
 	{
 		// Set returning to true and start moving back towards the platform
 		if (m_bsCurrState != BS_RETURNING)
@@ -333,14 +439,30 @@ void Bull::HandleEvent(const SGD::Event* pEvent)
 			m_bFacingRight = true;
 			m_fTurnTimer = 0.25f;
 		}
+
+		// Turn around when charging if the door is open
+		else if (m_bsCurrState == BS_RUNNING &&
+				 !m_bWillChargeLeft)
+		{
+			m_bFacingRight = true;
+			m_fTurnTimer = 0.25f;
+		}
 	}
 	// Turn to the left
 	else if (pEvent->GetEventID() == "BullMarkerRight" &&
-		pEvent->GetSender() == this)
+			 pEvent->GetSender() == this)
 	{
 		// Turn around if he can
 		if (m_fTurnTimer <= 0.0f &&
 			m_bsCurrState == BS_WALKING)
+		{
+			m_bFacingRight = false;
+			m_fTurnTimer = 0.25f;
+		}
+
+		// Turn around when charging if the door is open
+		else if (m_bsCurrState == BS_RUNNING &&
+				 !m_bWillChargeRight)
 		{
 			m_bFacingRight = false;
 			m_fTurnTimer = 0.25f;
@@ -350,6 +472,18 @@ void Bull::HandleEvent(const SGD::Event* pEvent)
 	else if (pEvent->GetEventID() == "ResetRoom")
 	{
 		ResetBull();
+	}
+	else if (pEvent->GetEventID() == "FLIP_DOOR")
+	{
+		Activator* pActivator = reinterpret_cast<Activator*>(pEvent->GetSender());
+		if (pActivator->GetKeyID() == 0)
+		{
+			m_bWillChargeLeft = !m_bWillChargeLeft;
+		}
+		else if (pActivator->GetKeyID() == 1)
+		{
+			m_bWillChargeRight = !m_bWillChargeRight;
+		}
 	}
 }
 
@@ -362,7 +496,13 @@ void Bull::ResetBull()
 	SetPosition(GetStartPosition());
 	m_bFacingRight = false;
 	m_bCanCharge = false;
+	m_bAudioPlayed = false;
+	m_bWillChargeRight = true;
+	m_bWillChargeLeft = true;
+	m_bTouchingPlayer = false;
 	m_bsCurrState = BS_WALKING;
+	m_fAlphaFade = 0;
+	m_bRenderFire = false;
 	m_ts.SetCurrAnimation("Bull_Running");
 	m_ts.SetPlaying(true);
 	m_ts.ResetCurrFrame();
@@ -375,4 +515,12 @@ void Bull::ResetBull()
 	m_fSlowTimer = 0.0f;
 	m_fStunTimer = 0.0f;
 	m_fDeathTimer = 0.0f;
+}
+
+///////////////////////////////////////////////////
+// GetAttacking
+// -Return if the bull is running or stomping at the player
+bool Bull::GetAttacking() const
+{
+	return (m_bsCurrState == BS_RUNNING || (m_bsCurrState == BS_STOMPING && m_ts.GetCurrFrame() == 4));
 }
