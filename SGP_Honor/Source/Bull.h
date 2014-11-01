@@ -3,6 +3,9 @@
 
 #include "../SGD Wrappers/SGD_Listener.h"
 
+// Forward declarations
+class Emitter;
+
 class Bull :
 	public Boss, SGD::Listener
 {
@@ -30,9 +33,14 @@ private:
 	////////////////////////////////////////////////
 	////////////// Member fields //////////////
 	bool m_bCanCharge = false;
+	bool m_bWillChargeRight = true;
+	bool m_bWillChargeLeft = true;
 	bool m_bDead = false;
+	bool m_bRenderFire = false;
+	bool m_bAudioPlayed = false;
 
 	float m_fStunSpeed = 0.0f;
+	char m_fAlphaFade = 0;
 
 	float m_fTurnTimer = 0.0f;
 	float m_fChargeTimer = 0.0f;
@@ -43,6 +51,10 @@ private:
 	float m_fDeathTimer = 0.0f;
 
 	BullState m_bsCurrState;
-	
+
+	Emitter * m_eFire1;
+	Emitter * m_eFire2;
+
+	SGD::HAudio m_hVictory = SGD::INVALID_HANDLE;
 };
 

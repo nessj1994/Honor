@@ -469,7 +469,10 @@ bool Level::LoadLevel(const char * _path)
 						dir = SGD::Vector(0, 1);
 						break;
 					}
-					GameplayState::GetInstance()->CreateLaser(x, y, dir, ID);
+					pArg = pArg->NextSiblingElement();
+					int on;
+					pArg->Attribute("value", &on);
+					GameplayState::GetInstance()->CreateLaser(x, y, dir, ID, on ? true : false);
 					break;
 				}
 				case 3: // Turret

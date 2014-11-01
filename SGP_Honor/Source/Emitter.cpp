@@ -145,10 +145,9 @@ void Emitter::StartParticles(bool restart)
 		Temp.SetImage(m_hImage);
 		Temp.SetGravity(m_fGravity);
 		Temp.Reset();
-		if (!m_bLooping)
-		{
+
 			Temp.SetDead(true);
-		}
+
 		m_vecParticles.push_back(Temp);
 		
 	}
@@ -186,6 +185,14 @@ void Emitter::Update(float elapsedTime)
 					{
 						m_fSpawnTimer = 0;
 						m_iSpawned++;
+					}
+					if (m_vecParticles[i].IsDead() && !m_bFinish)
+					{
+						Recylce(&m_vecParticles[i]);
+					}
+					if (!m_vecParticles[i].IsDead())
+					{
+						m_bDone = false;
 					}
 					m_vecParticles[i].Update(elapsedTime);					
 				}
@@ -232,7 +239,7 @@ void Emitter::Render(SGD::Point _Pos)
 	{
 		
 		SGD::Rectangle Rect{ { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, m_szSize };
-		//SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
+		SGD::GraphicsManager::GetInstance()->DrawRectangle(Rect, { 255, 0, 0, 0 }, {}, 2);
 	}
 
 

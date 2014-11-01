@@ -32,6 +32,7 @@ public:
 	void SetFreq(unsigned int _freq) { m_nFreq = _freq; }
 
 	void HandleEvent(const SGD::Event* pEvent);
+	void SetOn(bool on) { m_bOn = on; }
 
 
 	//SGD::Point	GetDirection(void) const	{ return m_ptDirection; }

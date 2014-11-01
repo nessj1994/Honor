@@ -29,6 +29,7 @@ private:
 	float rightSlamTimer = 0.0f;
 	float swipeTimer = 0.0f;
 	float swipeCD = 0.0f;
+	float wasHitCD = 0.0f;
 
 	bool castedBubbles = false;
 	bool castedLeftSlam = false;
@@ -37,5 +38,6 @@ private:
 	bool RightSlamOnCD = false;
 	bool castedSwipe = false;
 	bool SwipeOnCD = false;
+	bool wasHit = false;
 };
 

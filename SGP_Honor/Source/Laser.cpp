@@ -107,8 +107,16 @@ void Laser::HandleEvent(const SGD::Event* pEvent)
 	
 	if (pEvent->GetEventID() == "FLIP_LASER")
 	{
-		Activator* pActivator = reinterpret_cast<Activator*>(pEvent->GetSender());
-		if (pActivator->GetKeyID() == m_nFreq)
+		Entity* pEntity = reinterpret_cast<Entity*>(pEvent->GetSender());
+		if (pEntity->GetType() == ENT_SWITCH)
+		{
+			Activator* pActivator = reinterpret_cast<Activator*>(pEvent->GetSender());
+			if (pActivator->GetKeyID() == m_nFreq)
+			{
+				m_bOn = !m_bOn;
+			}
+		}
+		if (pEntity->GetType() == ENT_BOSS_CRAB)
 		{
 			m_bOn = !m_bOn;
 		}

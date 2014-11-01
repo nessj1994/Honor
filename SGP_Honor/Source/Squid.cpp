@@ -64,20 +64,20 @@ void Squid::Update(float elapsedTime)
 
 void Squid::Render(void)
 {
-	////Get the camera position for our offset
-	//SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
+	//Get the camera position for our offset
+	SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
 
-	////create a reference to our rectangle
-	//SGD::Rectangle rMyRect = GetRect();
+	//create a reference to our rectangle
+	SGD::Rectangle rMyRect = GetRect();
 
-	////Offset our rectangle by the camera position for rendering
-	//rMyRect.Offset({ -camPos.x, -camPos.y });
+	//Offset our rectangle by the camera position for rendering
+	rMyRect.Offset({ -camPos.x, -camPos.y });
 
-	////Render us with the camera
-	//Camera::GetInstance()->Draw(rMyRect,
-	//	SGD::Color::Color(255, 255, 0, 0));
+	//Render us with the camera
+	Camera::GetInstance()->Draw(rMyRect,
+		SGD::Color::Color(255, 255, 0, 0));
 
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, m_bFacingRight, 1.0f);
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, m_bFacingRight, 1);
 }
 
 SGD::Rectangle Squid::GetRect(void) const

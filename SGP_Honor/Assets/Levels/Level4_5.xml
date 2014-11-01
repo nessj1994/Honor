@@ -4044,10 +4044,6 @@
 		<Entity type="20" x="832" y="480" numArgs="1" name="Boss_1">
 			<Argument type="1" name="Type" value="3" />
 		</Entity>
-		<Entity type="2" x="864" y="32" numArgs="2" name="Laser_1">
-			<Argument type="1" name="Direction" value="3" />
-			<Argument type="1" name="ActivatorIndex" value="0" />
-		</Entity>
 		<Entity type="1" x="544" y="32" numArgs="3" name="Activator_1">
 			<Argument type="0" name="IsPressurePlate" value="0" />
 			<Argument type="0" name="Active" value="0" />
@@ -4057,6 +4053,11 @@
 			<Argument type="0" name="IsPressurePlate" value="0" />
 			<Argument type="0" name="Active" value="0" />
 			<Argument type="1" name="ID" value="0" />
+		</Entity>
+		<Entity type="2" x="864" y="32" numArgs="3" name="Laser_1">
+			<Argument type="1" name="Direction" value="3" />
+			<Argument type="1" name="ActivatorIndex" value="0" />
+			<Argument type="0" name="On/Off" value="0" />
 		</Entity>
 	</Entities>
 </Level>

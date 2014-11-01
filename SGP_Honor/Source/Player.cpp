@@ -6,6 +6,7 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "../SGD Wrappers/SGD_String.h"
+#include "GameplayState.h"
 #include "DestroyEntityMessage.h"
 #include "CreateProjectileMessage.h"
 #include "CreateSprayMessage.h"
@@ -62,6 +63,8 @@ Player::~Player()
 	delete m_pDash;
 	delete m_pBounce;
 	delete m_emHonor;
+	delete m_emFeatherExplosion;
+	delete m_emHawkReturn;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHonorParticleHUD);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hIceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBounceEffect);
@@ -199,11 +202,13 @@ void Player::Render(void)
 	//Emitter Renders
 	if (IsBouncing() || !GetBounce()->GetEMBubbles()->Done())
 	{
-		GetBounce()->GetEMBubbles()->Render(m_ptPosition);
+		GetBounce()->GetEMBubbles()->SetPosition(m_ptPosition);
+		GetBounce()->GetEMBubbles()->Render();
 	}	
 	if (IsDashing() || !GetDash()->GetEMDash()->Done())
 	{
-		GetDash()->GetEMDash()->Render(m_ptPosition);
+		GetDash()->GetEMDash()->SetPosition(m_ptPosition);
+		GetDash()->GetEMDash()->Render();
 	}
 	if (m_bHawkExplode || !m_emFeatherExplosion->Done())
 	{
@@ -240,11 +245,11 @@ void Player::Render(void)
 	Camera::GetInstance()->Draw(SGD::Rectangle(m_pSword->GetRect().left, m_pSword->GetRect().top, m_pSword->GetRect().right, m_pSword->GetRect().bottom),
 		SGD::Color::Color(255, 255, 255, 0));
 
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight(), 1.0f);
+	Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + 16, m_ptPosition.y + 60 }, 0, m_ts, !IsFacingRight(), 1.0f);
 	//Camera::GetInstance()->Draw(SGD::Rectangle(swingRect.left, swingRect.top, swingRect.right, swingRect.bottom),
 	//	SGD::Color::Color(255, 255, 255, 0));
 
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight(), 1.0f);
+	//Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight(), 1.0f);
 
 	// Draw gui for amount of honor
 	SGD::OStringStream output;
@@ -266,8 +271,7 @@ void Player::Render(void)
 	{
 		// Draw a fading rectangle
 		unsigned char alpha = (char)(((0.5f - m_fDeathTimer) / 0.5f) * 255.0f);
-		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
-		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+		GameplayState::GetInstance()->SetScreenFadeout(alpha);
 	}
 }
 
@@ -460,7 +464,8 @@ void Player::HandleCollision(const IEntity* pOther)
 			SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
 			SetVelocity({ throwSpeed, -1000 });
 			SetStunnded(true);
-			m_fStunTimer = 0.35f;
+			m_fStunTimer = 0.5f;
+
 		}
 	}
 
@@ -694,37 +699,37 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	float tempVal = 32.0f / 32.0f;
 
 
-	//SetGravity(0);
+	SetGravity(0);
 
-	//RECT rPlayer;
-	//rPlayer.left = (LONG)GetRect().left;
-	//rPlayer.top = (LONG)GetRect().top;
-	//rPlayer.right = (LONG)GetRect().right /*- 16*/;
-	//rPlayer.bottom = (LONG)GetRect().bottom /*- 10*/;
+	RECT rPlayer;
+	rPlayer.left = (LONG)GetRect().left;
+	rPlayer.top = (LONG)GetRect().top;
+	rPlayer.right = (LONG)GetRect().right /*- 16*/;
+	rPlayer.bottom = (LONG)GetRect().bottom /*- 10*/;
 
 	////Create a rectangle for the other object
-	//RECT rObject;
-	//rObject.left = (LONG)pOther->GetRect().left;
-	//rObject.top = (LONG)pOther->GetRect().top;
-	//rObject.right = (LONG)pOther->GetRect().right;
-	//rObject.bottom = (LONG)pOther->GetRect().bottom;
+	RECT rObject;
+	rObject.left = (LONG)pOther->GetRect().left;
+	rObject.top = (LONG)pOther->GetRect().top;
+	rObject.right = (LONG)pOther->GetRect().right;
+	rObject.bottom = (LONG)pOther->GetRect().bottom;
 
 	////Create a rectangle for the intersection
-	//RECT rIntersection = {};
+	RECT rIntersection = {};
 
 
-	//IntersectRect(&rIntersection, &rPlayer, &rObject);
+	IntersectRect(&rIntersection, &rPlayer, &rObject);
 
-	//int nIntersectWidth = rIntersection.right - rIntersection.left;
-	//int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+	int nIntersectWidth = rIntersection.right - rIntersection.left;
+	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
 
-	SGD::Rectangle rPlayer = GetRect();
-	SGD::Rectangle rOther = pOther->GetRect();
-	SGD::Rectangle rIntersecting = rPlayer.ComputeIntersection(rOther);
+	//SGD::Rectangle rPlayer = GetRect();
+	//SGD::Rectangle rOther = pOther->GetRect();
+	//SGD::Rectangle rIntersecting = rPlayer.ComputeIntersection(rObject);
 
-	float rIntersectWidth = rIntersecting.ComputeWidth();
-	float rIntersectHeight = rIntersecting.ComputeHeight();
+	//float rIntersectWidth = rIntersecting.ComputeWidth();
+	//float rIntersectHeight = rIntersecting.ComputeHeight();
 
 
 	//float tempInt = (/*(rObject.right - rObject.left) +*/ nIntersectWidth)* tempVal;
@@ -733,12 +738,17 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	//		&& rPlayer.bottom < rObject.top)
 	//	{
 
+	//SetVelocity({ GetVelocity().x + 1000, GetVelocity().y - 1000 });
 
 
-	if (/*nIntersectWidth*/ rIntersectWidth > 17)
+
+	SetPosition({ GetPosition().x, (float)rObject.bottom - tempVal - GetSize().height });
+	m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+
+
+	if (/*nIntersectWidth*/ nIntersectWidth > 17)
 	{
-		//SetPosition({ GetPosition().x, (float)rObject.bottom - tempInt - GetSize().height });
-		m_ptPosition.y -= rIntersectHeight;
+		
 	}
 	//else
 	//{
@@ -1139,10 +1149,6 @@ void Player::KillPlayer()
 		m_bDead = true;
 		m_unJumpCount = 0;
 
-		// Reset room
-		SGD::Event* pATEvent = new SGD::Event("ResetRoom", nullptr, this);
-		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		pATEvent = nullptr;
 
 		// TODO Add effects
 
@@ -1160,6 +1166,12 @@ void Player::UpdateDeath(float elapsedTime)
 		m_fDeathTimer = 0.0f;
 		m_ptPosition = m_ptStartPosition;
 		SetVelocity({ 0.0f, 0.0f });
+		GameplayState::GetInstance()->SetScreenFadeout(0);
+
+		// Reset room
+		SGD::Event* pATEvent = new SGD::Event("ResetRoom", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
 	}
 }
 
@@ -1193,10 +1205,14 @@ void Player::UpdateTimers(float elapsedTime)
 
 	if (m_fStunTimer > 0)
 		m_fStunTimer -= elapsedTime;
-	else
+	else if (m_bStunned)
 	{
 		m_fStunTimer = 0.0f;
 		m_bStunned = false;
+
+		//Kill the player
+		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}
 
 	if (m_fSwingTimer < 0.0f)
@@ -1263,19 +1279,18 @@ void Player::UpdateBounce(float elapsedTime)
 
 	//pInput->GetDPad(0);
 
-	if (pInput->IsKeyDown(SGD::Key::W) == true)
+	if (pInput->IsKeyDown(SGD::Key::W) == true
+		|| pInput->IsButtonDown(0, 4 /*Left Bumper*/ ))
 	{
 		//if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBounceEffect)))
 		//{
 		//}
 		GetBounce()->GetEMBubbles()->Finish(false);
-		GetBounce()->GetEMBubbles()->Burst(m_ptPosition);
 		SetIsBouncing(true);
 	}
 	else
 	{
 		GetBounce()->GetEMBubbles()->Finish();
-		GetBounce()->GetEMBubbles()->Burst(m_ptPosition);
 		if (GetBounce()->GetEMBubbles()->Done())
 		{
 			//Reseting particles for the bounce since its false
@@ -1431,7 +1446,6 @@ void Player::UpdateDash(float elapsedTime)
 			//Reset Dash Particles to the players position
 			GetDash()->GetEMDash()->KillParticles(m_ptPosition);
 		}
-
 	}
 	if (this->IsDashing() == false && m_ts.GetCurrAnimation() == "dashing")
 	{

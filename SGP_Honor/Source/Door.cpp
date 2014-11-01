@@ -104,6 +104,7 @@ void Door::HandleEvent(const SGD::Event* pEvent)
 	if(pEvent->GetEventID() == "FLIP_DOOR")
 	{
 		Activator* pActivator = reinterpret_cast<Activator*>(pEvent->GetSender());
+		unsigned int i = pActivator->GetKeyID();
 		if(pActivator->GetKeyID() == m_unKeyID)
 		{
 			m_bOpen = !m_bOpen;

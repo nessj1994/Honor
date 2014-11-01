@@ -398,6 +398,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_STALACTITE);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_GEYSER);
+
+	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_LASER);
 	
 
 	//if (m_pArmor != nullptr)
@@ -441,13 +443,10 @@ void GameplayState::Render(void)
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 
-	if (m_pPlayer->GetDead())
-	{
-		// Draw a fading rectangle
-		unsigned char alpha = (char)(((0.5f - m_pPlayer->GetDeathTimer()) / 0.5f) * 255.0f);
-		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
-		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
-	}
+	// Draw a fading rectangle
+	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
+	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { m_cScreenFade, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+
 
 }
 
@@ -971,14 +970,14 @@ void GameplayState::CreateActivator(int _x, int _y, bool _isPressure, bool _curr
 /////////////////////////
 // CreateLaser
 // -Creates a laser at the given coordinates
-void GameplayState::CreateLaser(int x, int y, SGD::Vector _direction, int _ID)
+void GameplayState::CreateLaser(int x, int y, SGD::Vector _direction, int _ID, bool _on)
 {
 	Laser* m_pLaser = new Laser;
 	m_pLaser->SetPosition({ (float)x, (float)y });
 	m_pLaser->SetOrigPosition({ (float)x, (float)y });
 	m_pLaser->SetDirection({ _direction });
 	m_pLaser->SetFreq(_ID);
-
+	m_pLaser->SetOn(_on);
 
 	//Activator* m_pLaserSwitch = new Activator(false);
 	//m_pLaserSwitch->SetPosition({ (float)_switchX, (float)_switchY });
@@ -1216,6 +1215,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 			MutantMan * pMutant = new MutantMan();
 			pMutant->SetPosition({ (float)_x, (float)_y });
 			pMutant->Begin({ (float)_x, (float)_y });
+			pMutant->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_MAN);
 			pMutant->Release();
 			break;
