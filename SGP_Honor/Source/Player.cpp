@@ -696,37 +696,37 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	float tempVal = 32.0f / 32.0f;
 
 
-	//SetGravity(0);
+	SetGravity(0);
 
-	//RECT rPlayer;
-	//rPlayer.left = (LONG)GetRect().left;
-	//rPlayer.top = (LONG)GetRect().top;
-	//rPlayer.right = (LONG)GetRect().right /*- 16*/;
-	//rPlayer.bottom = (LONG)GetRect().bottom /*- 10*/;
+	RECT rPlayer;
+	rPlayer.left = (LONG)GetRect().left;
+	rPlayer.top = (LONG)GetRect().top;
+	rPlayer.right = (LONG)GetRect().right /*- 16*/;
+	rPlayer.bottom = (LONG)GetRect().bottom /*- 10*/;
 
 	////Create a rectangle for the other object
-	//RECT rObject;
-	//rObject.left = (LONG)pOther->GetRect().left;
-	//rObject.top = (LONG)pOther->GetRect().top;
-	//rObject.right = (LONG)pOther->GetRect().right;
-	//rObject.bottom = (LONG)pOther->GetRect().bottom;
+	RECT rObject;
+	rObject.left = (LONG)pOther->GetRect().left;
+	rObject.top = (LONG)pOther->GetRect().top;
+	rObject.right = (LONG)pOther->GetRect().right;
+	rObject.bottom = (LONG)pOther->GetRect().bottom;
 
 	////Create a rectangle for the intersection
-	//RECT rIntersection = {};
+	RECT rIntersection = {};
 
 
-	//IntersectRect(&rIntersection, &rPlayer, &rObject);
+	IntersectRect(&rIntersection, &rPlayer, &rObject);
 
-	//int nIntersectWidth = rIntersection.right - rIntersection.left;
-	//int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+	int nIntersectWidth = rIntersection.right - rIntersection.left;
+	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
 
-	SGD::Rectangle rPlayer = GetRect();
-	SGD::Rectangle rOther = pOther->GetRect();
-	SGD::Rectangle rIntersecting = rPlayer.ComputeIntersection(rOther);
+	//SGD::Rectangle rPlayer = GetRect();
+	//SGD::Rectangle rOther = pOther->GetRect();
+	//SGD::Rectangle rIntersecting = rPlayer.ComputeIntersection(rObject);
 
-	float rIntersectWidth = rIntersecting.ComputeWidth();
-	float rIntersectHeight = rIntersecting.ComputeHeight();
+	//float rIntersectWidth = rIntersecting.ComputeWidth();
+	//float rIntersectHeight = rIntersecting.ComputeHeight();
 
 
 	//float tempInt = (/*(rObject.right - rObject.left) +*/ nIntersectWidth)* tempVal;
@@ -735,12 +735,17 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	//		&& rPlayer.bottom < rObject.top)
 	//	{
 
+	//SetVelocity({ GetVelocity().x + 1000, GetVelocity().y - 1000 });
 
 
-	if (/*nIntersectWidth*/ rIntersectWidth > 17)
+
+	SetPosition({ GetPosition().x, (float)rObject.bottom - tempVal - GetSize().height });
+	m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+
+
+	if (/*nIntersectWidth*/ nIntersectWidth > 17)
 	{
-		//SetPosition({ GetPosition().x, (float)rObject.bottom - tempInt - GetSize().height });
-		m_ptPosition.y -= rIntersectHeight;
+		
 	}
 	//else
 	//{
@@ -1266,7 +1271,8 @@ void Player::UpdateBounce(float elapsedTime)
 
 	//pInput->GetDPad(0);
 
-	if (pInput->IsKeyDown(SGD::Key::W) == true)
+	if (pInput->IsKeyDown(SGD::Key::W) == true
+		|| pInput->IsButtonDown(0, 4 /*Left Bumper*/ ))
 	{
 		//if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBounceEffect)))
 		//{
