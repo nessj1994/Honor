@@ -454,6 +454,7 @@ bool Level::LoadLevel(const char * _path)
 					int ID;
 					pArg->Attribute("value", &ID);
 					GameplayState::GetInstance()->CreateLaser(x, y, { 0, 0 }, ID);
+					break;
 				}
 				case 3: // Turret
 				{
