@@ -29,7 +29,7 @@
 #include "Jellyfish.h"
 
 
-#define JOYSTICK_DEADZONE  0.2f
+#define JOYSTICK_DEADZONE  0.6f
 
 Player::Player() : Listener(this)
 {
