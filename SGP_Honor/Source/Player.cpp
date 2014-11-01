@@ -462,7 +462,8 @@ void Player::HandleCollision(const IEntity* pOther)
 			SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
 			SetVelocity({ throwSpeed, -1000 });
 			SetStunnded(true);
-			m_fStunTimer = 0.35f;
+			m_fStunTimer = 0.5f;
+
 		}
 	}
 
@@ -1201,10 +1202,14 @@ void Player::UpdateTimers(float elapsedTime)
 
 	if (m_fStunTimer > 0)
 		m_fStunTimer -= elapsedTime;
-	else
+	else if (m_bStunned)
 	{
 		m_fStunTimer = 0.0f;
 		m_bStunned = false;
+
+		//Kill the player
+		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}
 
 	if (m_fSwingTimer < 0.0f)

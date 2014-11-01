@@ -3,8 +3,10 @@
 #include "Camera.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "ParticleEngine.h"
 #include "GameplayState.h"
+#include "Activator.h"
 
 
 ///////////////////////////////////////////////////
@@ -15,6 +17,7 @@ Bull::Bull() : Listener(this)
 	Listener::RegisterForEvent("BullMarkerLeft");
 	Listener::RegisterForEvent("BullMarkerRight");
 	Listener::RegisterForEvent("ResetRoom");
+	Listener::RegisterForEvent("FLIP_DOOR");
 	SetSize({ 160.0f, 96.0f });
 	m_bFacingRight = false;
 	m_bsCurrState = BS_WALKING;
@@ -25,6 +28,7 @@ Bull::Bull() : Listener(this)
 	SetHitPoints(1);
 	m_eFire1 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect1.xml", "FireEffect1", m_ptPosition);
 	m_eFire2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect2.xml", "FireEffect2", m_ptPosition);
+	m_hVictory = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/BossDefeat.wav");
 }
 
 ///////////////////////////////////////////////////
@@ -32,6 +36,9 @@ Bull::Bull() : Listener(this)
 // -Setup the size
 Bull::~Bull()
 {
+	delete m_eFire1;
+	delete m_eFire2;
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hVictory);
 }
 
 ///////////////////////////////////////////////////
@@ -97,11 +104,11 @@ void Bull::Update(float elapsedTime)
 			// Move in the direction he is facing
 			if (m_bFacingRight)
 			{
-				SetVelocity({8 * 128.0f, 0.0f });
+				SetVelocity({ 4 * 128.0f, 0.0f });
 			}
 			else
 			{
-				SetVelocity({8 * -128.0f, 0.0f });
+				SetVelocity({ 4 * -128.0f, 0.0f });
 			}
 
 			// Change states if a wall is hit
@@ -139,6 +146,10 @@ void Bull::Update(float elapsedTime)
 				m_bsCurrState = BS_RUNNING;
 				m_ts.ResetCurrFrame();
 			}
+
+			// Face the player
+			float playerX = GetPlayer()->GetPosition().x;
+			m_bFacingRight = playerX > m_ptPosition.x;
 
 
 			break;
@@ -219,7 +230,7 @@ void Bull::Update(float elapsedTime)
 				m_bsCurrState = BS_SLOWING;
 				if (GetHitPoints() <= 0)
 				{
-					m_fDeathTimer = 13.0f;
+					m_fDeathTimer = 10.0f;
 					m_bsCurrState = BS_DEATH;
 					m_ts.ResetCurrFrame();
 				}
@@ -228,8 +239,13 @@ void Bull::Update(float elapsedTime)
 		}
 		case BS_DEATH:
 		{
+			if (!m_bAudioPlayed)
+			{
+				m_bAudioPlayed = true;
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hVictory);
+			}
 			// Update animation
-			if (m_fDeathTimer > 10.0f)
+			if (m_fDeathTimer > 8.0f)
 			{
 				// Slowly walk a little
 				m_ts.SetCurrAnimation("Bull_Running");
@@ -244,7 +260,7 @@ void Bull::Update(float elapsedTime)
 					SetVelocity({ -32.0f, 0.0f });
 				}
 			}
-			else if (m_fDeathTimer > 9.0f)
+			else if (m_fDeathTimer > 6.0f)
 			{
 				// Pass out and die
 				if (!m_bDead)
@@ -261,7 +277,7 @@ void Bull::Update(float elapsedTime)
 				m_eFire1->Update(elapsedTime);
 				m_eFire2->Update(elapsedTime);
 			}
-			else if (m_fDeathTimer > 5.0f)
+			else if (m_fDeathTimer > 3.0f)
 			{
 				m_bRenderFire = true;
 
@@ -276,7 +292,7 @@ void Bull::Update(float elapsedTime)
 				m_eFire2->Update(elapsedTime);
 
 				// Alpha fade
-				unsigned char alpha = (char)(((5.0f - m_fDeathTimer) / 5.0f) * 255.0f);
+				unsigned char alpha = (char)(((3.0f - m_fDeathTimer) / 3.0f) * 255.0f);
 				GameplayState::GetInstance()->SetScreenFadeout(alpha);
 			}
 
@@ -289,6 +305,7 @@ void Bull::Update(float elapsedTime)
 			{
 				GameplayState::GetInstance()->SetScreenFadeout(0);
 				// TODO Delete bull, give player dash, update room
+
 			}
 			break;
 		}
@@ -373,14 +390,30 @@ void Bull::HandleEvent(const SGD::Event* pEvent)
 			m_bFacingRight = true;
 			m_fTurnTimer = 0.25f;
 		}
+
+		// Turn around when charging if the door is open
+		else if (m_bsCurrState == BS_RUNNING &&
+				 !m_bWillChargeLeft)
+		{
+			m_bFacingRight = true;
+			m_fTurnTimer = 0.25f;
+		}
 	}
 	// Turn to the left
 	else if (pEvent->GetEventID() == "BullMarkerRight" &&
-		pEvent->GetSender() == this)
+			 pEvent->GetSender() == this)
 	{
 		// Turn around if he can
 		if (m_fTurnTimer <= 0.0f &&
 			m_bsCurrState == BS_WALKING)
+		{
+			m_bFacingRight = false;
+			m_fTurnTimer = 0.25f;
+		}
+
+		// Turn around when charging if the door is open
+		else if (m_bsCurrState == BS_RUNNING &&
+				 !m_bWillChargeRight)
 		{
 			m_bFacingRight = false;
 			m_fTurnTimer = 0.25f;
@@ -390,6 +423,18 @@ void Bull::HandleEvent(const SGD::Event* pEvent)
 	else if (pEvent->GetEventID() == "ResetRoom")
 	{
 		ResetBull();
+	}
+	else if (pEvent->GetEventID() == "FLIP_DOOR")
+	{
+		Activator* pActivator = reinterpret_cast<Activator*>(pEvent->GetSender());
+		if (pActivator->GetKeyID() == 0)
+		{
+			m_bWillChargeLeft = !m_bWillChargeLeft;
+		}
+		else if (pActivator->GetKeyID() == 1)
+		{
+			m_bWillChargeRight = !m_bWillChargeRight;
+		}
 	}
 }
 
@@ -402,8 +447,12 @@ void Bull::ResetBull()
 	SetPosition(GetStartPosition());
 	m_bFacingRight = false;
 	m_bCanCharge = false;
+	m_bAudioPlayed = false;
+	m_bWillChargeRight = true;
+	m_bWillChargeLeft = true;
 	m_bsCurrState = BS_WALKING;
 	m_fAlphaFade = 0;
+	m_bRenderFire = false;
 	m_ts.SetCurrAnimation("Bull_Running");
 	m_ts.SetPlaying(true);
 	m_ts.ResetCurrFrame();

@@ -33,8 +33,11 @@ private:
 	////////////////////////////////////////////////
 	////////////// Member fields //////////////
 	bool m_bCanCharge = false;
+	bool m_bWillChargeRight = true;
+	bool m_bWillChargeLeft = true;
 	bool m_bDead = false;
 	bool m_bRenderFire = false;
+	bool m_bAudioPlayed = false;
 
 	float m_fStunSpeed = 0.0f;
 	char m_fAlphaFade = 0;
@@ -51,5 +54,7 @@ private:
 
 	Emitter * m_eFire1;
 	Emitter * m_eFire2;
+
+	SGD::HAudio m_hVictory = SGD::INVALID_HANDLE;
 };
 
