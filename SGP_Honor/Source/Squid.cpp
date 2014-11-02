@@ -31,12 +31,12 @@ void Squid::Update(float elapsedTime)
 		if (target->GetPosition().x <= m_ptPosition.x)
 		{
 			m_vtDirection = { -1, 0 };
-			m_bFacingRight = true;
+			SetFacingRight(true);
 		}
 		else if (target->GetPosition().x > m_ptPosition.x)
 		{
 			m_vtDirection = { 1, 0 };
-			m_bFacingRight = false;
+			SetFacingRight(false);
 		}
 
 		m_ts.SetCurrAnimation("Squid Shooting");
@@ -76,13 +76,13 @@ void Squid::Render(void)
 	//Camera::GetInstance()->Draw(rMyRect,
 	//	SGD::Color::Color(255, 255, 0, 0));
 
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, m_bFacingRight, 1.0f);
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, GetFacingRight(), 1.0f);
 }
 
 SGD::Rectangle Squid::GetRect(void) const
 {
 	//return SGD::Rectangle{ m_ptPosition, m_szSize };
-	return AnimationEngine::GetInstance()->GetRect(m_ts, m_bFacingRight, 1, m_ptPosition);
+	return AnimationEngine::GetInstance()->GetRect(m_ts, GetFacingRight(), 1, m_ptPosition);
 }
 
 void Squid::HandleCollision(const IEntity* pOther)

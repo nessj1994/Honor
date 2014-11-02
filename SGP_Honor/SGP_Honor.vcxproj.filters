@@ -258,6 +258,9 @@
     <ClCompile Include="Source\SwordSwing.cpp">
       <Filter>Entities\Spells</Filter>
     </ClCompile>
+    <ClCompile Include="Source\BullEnemy.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -540,6 +543,9 @@
     <ClInclude Include="Source\CreateHorizontalBubble.h" />
     <ClInclude Include="Source\SwordSwing.h">
       <Filter>Entities\Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BullEnemy.h">
+      <Filter>Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

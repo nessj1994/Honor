@@ -50,6 +50,7 @@
 #include "Pouncer.h"
 #include "Jellyfish.h"
 #include "Teleporter.h"
+#include "BullEnemy.h"
 #include "Bull.h"
 #include "MutantMan.h"
 #include "Crab.h"
@@ -376,6 +377,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_BULL);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STATUE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BULL_ENEMY);
 
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
 	m_pEntities->CheckCollisions(Entity::ENT_PRESSURE_PLATE, Entity::ENT_SWORD);
@@ -415,11 +417,13 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_MUTANT_MAN);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
+	m_pEntities->CheckWorldCollision(Entity::ENT_BULL_ENEMY);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_POUNCER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_JELLYFISH);
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_BULL);
+	m_pEntities->CheckWorldEvent(Entity::ENT_BULL_ENEMY);
 
 
 	//Process messages and events
@@ -1201,6 +1205,11 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 	{
 		case 0: // bull
 		{
+			BullEnemy * pBull = new BullEnemy();
+			pBull->SetPosition({ (float)_x, (float)_y });
+			pBull->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pBull, Entity::ENT_BULL_ENEMY);
+			pBull->Release();
 			break;
 		}
 		case 1: // skeleton

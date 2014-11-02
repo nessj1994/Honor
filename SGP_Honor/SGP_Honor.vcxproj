@@ -32,6 +32,7 @@
     <ClCompile Include="Source\BossDoor.cpp" />
     <ClCompile Include="Source\Bounce.cpp" />
     <ClCompile Include="Source\Bull.cpp" />
+    <ClCompile Include="Source\BullEnemy.cpp" />
     <ClCompile Include="Source\BuzzSaw.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Caveman.cpp" />
@@ -131,6 +132,7 @@
     <ClInclude Include="Source\BossDoor.h" />
     <ClInclude Include="Source\Bounce.h" />
     <ClInclude Include="Source\Bull.h" />
+    <ClInclude Include="Source\BullEnemy.h" />
     <ClInclude Include="Source\BuzzSaw.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Caveman.h" />
