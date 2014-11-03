@@ -71,6 +71,7 @@ void Turret::Update(float elapsedTime)
 	{
 		m_vtDirection = { 0, 1 };
 		m_bFacingRight = false;
+		m_fRotation = 30.0f;
 		
 	}
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
@@ -86,11 +87,14 @@ void Turret::Render(void)
 	//Offset our rectangle by the camera position for rendering
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
+	float fRotX = rMyRect.left + m_szSize.width / 2;
+	float fRotY = rMyRect.top + m_szSize.height / 2;
+
 	//Render us with the camera
 	if(m_bFacingRight == true)
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, m_fRotation, m_ts, false, 1.0f, m_szSize);
+		Camera::GetInstance()->DrawAnimation(m_ptPosition, m_fRotation, m_ts, false, 1.0f, {});
 	else
-		Camera::GetInstance()->DrawAnimation(m_ptPosition, m_fRotation, m_ts, true, 1.0f, m_szSize);
+		Camera::GetInstance()->DrawAnimation(m_ptPosition, m_fRotation, m_ts, true, 1.0f, {});
 
 }
 

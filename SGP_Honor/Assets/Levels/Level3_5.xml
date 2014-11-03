@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level name="NewLevel" width="128" height="64" fixed="0" playerX="625" playerY="22">
+<Level name="NewLevel" width="128" height="64" fixed="0" playerX="446" playerY="1932">
 	<ImageLayers numLayers="0" />
 	<CollisionLayer>
 		<CollisionTile type="0" />
@@ -16389,5 +16389,9 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="0" />
+	<Entities numEntities="1">
+		<Entity type="20" x="160" y="1888" numArgs="1" name="Boss_1">
+			<Argument type="1" name="Type" value="2" />
+		</Entity>
+	</Entities>
 </Level>
