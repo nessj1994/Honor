@@ -16,6 +16,7 @@ public:
 	int GetType(void) const override { return ENT_POUNCER; }
 	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
+	bool GetInAir() const { return inAir; }
 
 	void HandleEvent(const SGD::Event* pEvent);
 	void SetTarget(Player* plr);

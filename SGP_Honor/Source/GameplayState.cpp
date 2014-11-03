@@ -53,10 +53,12 @@
 #include "Jellyfish.h"
 #include "MutantBat.h"
 #include "Teleporter.h"
+#include "BullEnemy.h"
 #include "Bull.h"
 #include "MutantMan.h"
 #include "Crab.h"
 #include "SwordSwing.h"
+#include "Skeleton.h"
 #include "Vomit.h"
 #include "Poop.h"
 
@@ -381,6 +383,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_BULL);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STATUE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_POUNCER);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BULL_ENEMY);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MUTANT_MAN);
 
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
@@ -403,6 +407,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_STALACTITE);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_GEYSER);
+
+	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_LASER);
 	
 
 	//if (m_pArmor != nullptr)
@@ -422,6 +428,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_VOMIT);
 	m_pEntities->CheckWorldCollision(Entity::ENT_POOP); 
 	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
+	m_pEntities->CheckWorldCollision(Entity::ENT_BULL_ENEMY);
+	m_pEntities->CheckWorldCollision(Entity::ENT_SKELETON);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_POUNCER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_MUTANT_BIRD);
@@ -429,6 +437,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_SPRAY);
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_BULL);
+	m_pEntities->CheckWorldEvent(Entity::ENT_BULL_ENEMY);
 
 	//Entities WHich SLow the Player
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_VOMIT);
@@ -588,10 +597,18 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 			Entity* pProj = pSelf->CreateGravProjectile(pCreateMsg->GetOwner());
 
 
-			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_SQUID)
 			{
-				 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+				GravProjectile * temp = (GravProjectile*)pProj;
+				temp->SetProjectileType(GravProjectile::INK);
 			}
+			else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_SKELETON)
+			{
+				GravProjectile * temp = (GravProjectile*)pProj;
+				temp->SetProjectileType(GravProjectile::BONE);
+			}
+
+			pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
 
 			pProj->Release();
 			pProj = nullptr;
@@ -1013,14 +1030,14 @@ void GameplayState::CreateActivator(int _x, int _y, bool _isPressure, bool _curr
 /////////////////////////
 // CreateLaser
 // -Creates a laser at the given coordinates
-void GameplayState::CreateLaser(int x, int y, SGD::Vector _direction, int _ID)
+void GameplayState::CreateLaser(int x, int y, SGD::Vector _direction, int _ID, bool _on)
 {
 	Laser* m_pLaser = new Laser;
 	m_pLaser->SetPosition({ (float)x, (float)y });
 	m_pLaser->SetOrigPosition({ (float)x, (float)y });
 	m_pLaser->SetDirection({ _direction });
 	m_pLaser->SetFreq(_ID);
-
+	m_pLaser->SetOn(_on);
 
 	//Activator* m_pLaserSwitch = new Activator(false);
 	//m_pLaserSwitch->SetPosition({ (float)_switchX, (float)_switchY });
@@ -1189,11 +1206,20 @@ void GameplayState::CreateArmor(int _x, int _y)
 // -Creates a freezable ground at the given coordinates
 void GameplayState::CreateFreezableGround(int _x, int _y)
 {
-	// TODO
-	FreezeableGround * mFreeze = new FreezeableGround();
-	mFreeze->SetPosition({ (float)_x, (float)_y });
-	m_pEntities->AddEntity(mFreeze, Entity::ENT_FROZEN);
-	mFreeze->Release();
+	FreezeableGround* pFreeze = new FreezeableGround;
+
+	//// TYPE STATE WILL CHANGE ( Needs to be done through TYPE with enttiyManger) Two types for each frozen tile === It's Current state and it's Bucket type (temp or perm tile)
+	pFreeze->SetType(Entity::ENT_NOT_FROZEN);
+
+	pFreeze->SetSize(SGD::Size(20, 20));
+	pFreeze->SetPosition(SGD::Point((float)_x, (float)_y));
+	pFreeze->SetIsFrozen(false);
+	pFreeze->SetIsPerm(false);
+
+	////// TYPE OF TILE Bucket
+	m_pEntities->AddEntity(pFreeze, Entity::ENT_TEMP_FREEZE);
+
+	pFreeze->Release();
 }
 
 /////////////////////////
@@ -1247,10 +1273,20 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 	{
 		case 0: // bull
 		{
+			BullEnemy * pBull = new BullEnemy();
+			pBull->SetPosition({ (float)_x, (float)_y });
+			pBull->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pBull, Entity::ENT_BULL_ENEMY);
+			pBull->Release();
 			break;
 		}
 		case 1: // skeleton
 		{
+			Skeleton * pSkeleton = new Skeleton();
+			pSkeleton->SetPosition({ (float)_x, (float)_y });
+			pSkeleton->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pSkeleton, Entity::ENT_SKELETON);
+			pSkeleton->Release();
 			break;
 		}
 		case 2: // mutant man

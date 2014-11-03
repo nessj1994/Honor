@@ -453,7 +453,27 @@ bool Level::LoadLevel(const char * _path)
 					pArg = pArg->NextSiblingElement();
 					int ID;
 					pArg->Attribute("value", &ID);
-					GameplayState::GetInstance()->CreateLaser(x, y, { 0, 0 }, ID);
+					SGD::Vector dir;
+					switch (direction)
+					{
+					case 0:
+						dir = SGD::Vector(1, 0);
+						break;
+					case 1:
+						dir = SGD::Vector(0, -1);
+						break;
+					case 2:
+						dir = SGD::Vector(-1, 0);
+						break;
+					case 3:
+						dir = SGD::Vector(0, 1);
+						break;
+					}
+					pArg = pArg->NextSiblingElement();
+					int on;
+					pArg->Attribute("value", &on);
+					GameplayState::GetInstance()->CreateLaser(x, y, dir, ID, on ? true : false);
+					break;
 				}
 				case 3: // Turret
 				{
@@ -585,21 +605,22 @@ bool Level::LoadLevel(const char * _path)
 					TiXmlElement * pArg = pEntity->FirstChildElement();
 					std::string level = pArg->Attribute("value");
 					GameplayState::GetInstance()->CreateTeleporter(x, y, level);
+					break;
 				}
 				case 19: // Enemy
 				{
 					TiXmlElement * pArg = pEntity->FirstChildElement();
-					int type;
-					pArg->Attribute("value", &type);
-					GameplayState::GetInstance()->CreateEnemy(x, y, type);
+					int enemyType;
+					pArg->Attribute("value", &enemyType);
+					GameplayState::GetInstance()->CreateEnemy(x, y, enemyType);
 					break;
 				}
 				case 20: // Boss
 				{
 					TiXmlElement * pArg = pEntity->FirstChildElement();
-					int type;
-					pArg->Attribute("value", &type);
-					GameplayState::GetInstance()->CreateBoss(x, y, type);
+					int bossType;
+					pArg->Attribute("value", &bossType);
+					GameplayState::GetInstance()->CreateBoss(x, y, bossType);
 					break;
 				}
 			}

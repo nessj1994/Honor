@@ -32,6 +32,7 @@
     <ClCompile Include="Source\BossDoor.cpp" />
     <ClCompile Include="Source\Bounce.cpp" />
     <ClCompile Include="Source\Bull.cpp" />
+    <ClCompile Include="Source\BullEnemy.cpp" />
     <ClCompile Include="Source\BuzzSaw.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Caveman.cpp" />
@@ -89,6 +90,7 @@
     <ClCompile Include="Source\Pouncer.cpp" />
     <ClCompile Include="Source\ProfileState.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
+    <ClCompile Include="Source\Skeleton.cpp" />
     <ClCompile Include="Source\Squid.cpp" />
     <ClCompile Include="Source\Stalactite.cpp" />
     <ClCompile Include="Source\SwordSwing.cpp" />
@@ -136,6 +138,7 @@
     <ClInclude Include="Source\BossDoor.h" />
     <ClInclude Include="Source\Bounce.h" />
     <ClInclude Include="Source\Bull.h" />
+    <ClInclude Include="Source\BullEnemy.h" />
     <ClInclude Include="Source\BuzzSaw.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Caveman.h" />
@@ -196,6 +199,7 @@
     <ClInclude Include="Source\Pouncer.h" />
     <ClInclude Include="Source\ProfileState.h" />
     <ClInclude Include="Source\Projectile.h" />
+    <ClInclude Include="Source\Skeleton.h" />
     <ClInclude Include="Source\Squid.h" />
     <ClInclude Include="Source\Stalactite.h" />
     <ClInclude Include="Source\SwordSwing.h" />

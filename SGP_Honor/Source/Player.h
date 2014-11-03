@@ -72,7 +72,7 @@ public:
 	unsigned int GetCurrentState(void) const { return m_unCurrentState; }
 	void JellyfishCollision(const IEntity* pOther);
 	void KillPlayer();
-
+	void ThrowPlayer(bool _right);
 
 
 	//SGD::Rectangle GetWallRect(void) const;
@@ -204,6 +204,7 @@ private:
 	//Sound Effects
 	SGD::HAudio m_hIceEffect = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hBounceEffect = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hJellyfishEffect = SGD::INVALID_HANDLE;
 
 	//SLowing Down with friction
 	bool m_bSlowed;

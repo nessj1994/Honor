@@ -258,6 +258,12 @@
     <ClCompile Include="Source\SwordSwing.cpp">
       <Filter>Entities\Spells</Filter>
     </ClCompile>
+    <ClCompile Include="Source\BullEnemy.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Skeleton.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Vomit.cpp">
       <Filter>Entities\Obstacles</Filter>
     </ClCompile>
@@ -553,6 +559,12 @@
     <ClInclude Include="Source\CreateHorizontalBubble.h" />
     <ClInclude Include="Source\SwordSwing.h">
       <Filter>Entities\Spells</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BullEnemy.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Skeleton.h">
+      <Filter>Entities\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Source\Vomit.h">
       <Filter>Entities\Obstacles</Filter>
