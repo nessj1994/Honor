@@ -87,7 +87,7 @@ public:
 	///////////////////// Factory Methods  ////////////////////
 	void CreateHonor(int x, int y, int _amount, unsigned int _index);
 	void CreateActivator(int x, int y, bool _pressurePlate, bool _active, int _ID);
-	void CreateLaser(int x, int y, SGD::Vector _direction, int _ID);
+	void CreateLaser(int x, int y, SGD::Vector _direction, int _ID, bool _on);
 	void CreateTurret(int x, int y, int _direction, float _timer);
 	void CreateDoor(int _x, int _y, bool _isHorizontal, int _ID);
 	void CreateMovingPlatform(int _x, int _y, bool _vertical, float _turnDistance, float _speed);

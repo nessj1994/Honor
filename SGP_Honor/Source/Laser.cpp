@@ -34,8 +34,27 @@ void Laser::Update(float elapsedTime)
 
 		if (m_bFull == false)
 		{
-			m_ptPosition.y -= 100 * elapsedTime;
-			m_szSize.height += 100 * elapsedTime;
+			if (m_vtDirection.y == -1)
+			{
+				m_ptPosition.y -= 100 * elapsedTime;
+				m_szSize.height += 100 * elapsedTime;
+			}
+			else if (m_vtDirection.y == 1)
+			{
+				//m_ptPosition.y -= 100 * elapsedTime;
+				m_szSize.height += 100 * elapsedTime;
+			}
+
+			if (m_vtDirection.x == -1)
+			{
+				m_ptPosition.x -= 100 * elapsedTime;
+				m_szSize.width += 100 * elapsedTime;
+			}
+			else if (m_vtDirection.x == 1)
+			{
+				//m_ptPosition.x -= 100 * elapsedTime;
+				m_szSize.width += 100 * elapsedTime;
+			}
 		}
 
 	}
@@ -88,8 +107,16 @@ void Laser::HandleEvent(const SGD::Event* pEvent)
 	
 	if (pEvent->GetEventID() == "FLIP_LASER")
 	{
-		Activator* pActivator = reinterpret_cast<Activator*>(pEvent->GetSender());
-		if (pActivator->GetKeyID() == m_nFreq)
+		Entity* pEntity = reinterpret_cast<Entity*>(pEvent->GetSender());
+		if (pEntity->GetType() == ENT_SWITCH)
+		{
+			Activator* pActivator = reinterpret_cast<Activator*>(pEvent->GetSender());
+			if (pActivator->GetKeyID() == m_nFreq)
+			{
+				m_bOn = !m_bOn;
+			}
+		}
+		if (pEntity->GetType() == ENT_BOSS_CRAB)
 		{
 			m_bOn = !m_bOn;
 		}

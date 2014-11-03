@@ -26,6 +26,7 @@ Squid::~Squid()
 
 void Squid::Update(float elapsedTime)
 {
+	Enemy::Update(elapsedTime);
 	if (target != nullptr)
 	{
 		if (target->GetPosition().x <= m_ptPosition.x)
@@ -63,20 +64,24 @@ void Squid::Update(float elapsedTime)
 
 void Squid::Render(void)
 {
-	////Get the camera position for our offset
-	//SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
+	//Get the camera position for our offset
+	SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
 
-	////create a reference to our rectangle
-	//SGD::Rectangle rMyRect = GetRect();
+	//create a reference to our rectangle
+	SGD::Rectangle rMyRect = GetRect();
 
-	////Offset our rectangle by the camera position for rendering
-	//rMyRect.Offset({ -camPos.x, -camPos.y });
+	//Offset our rectangle by the camera position for rendering
+	rMyRect.Offset({ -camPos.x, -camPos.y });
 
-	////Render us with the camera
-	//Camera::GetInstance()->Draw(rMyRect,
-	//	SGD::Color::Color(255, 255, 0, 0));
+	//Render us with the camera
+	Camera::GetInstance()->Draw(rMyRect,
+		SGD::Color::Color(255, 255, 0, 0));
 
+<<<<<<< HEAD
 	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, GetFacingRight(), 1.0f);
+=======
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, m_bFacingRight, 1);
+>>>>>>> remotes/origin/master
 }
 
 SGD::Rectangle Squid::GetRect(void) const
