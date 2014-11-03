@@ -977,7 +977,7 @@ void GameplayState::CreateTempFrozenTiles(void)
 		//// TYPE STATE WILL CHANGE ( Needs to be done through TYPE with enttiyManger) Two types for each frozen tile === It's Current state and it's Bucket type (temp or perm tile)
 		pFreeze->SetType(Entity::ENT_NOT_FROZEN);
 
-		pFreeze->SetSize(SGD::Size(20, 20));
+		pFreeze->SetSize(SGD::Size(100, 100));
 		pFreeze->SetPosition(SGD::Point(500 + (i * 20.0f), 400.0f));
 		pFreeze->SetIsFrozen(false);
 		pFreeze->SetIsPerm(false);

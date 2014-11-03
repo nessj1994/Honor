@@ -18,6 +18,7 @@ FreezeableGround::FreezeableGround()
 
 FreezeableGround::~FreezeableGround()
 {
+	delete m_eEffect;
 }
 
 /////////////////////////////////////////////////
@@ -38,17 +39,14 @@ void FreezeableGround::Update(float elapsedTime)
 		m_fFreezeTimer = 0.0f;
 	}
 
-	
-
-	if (m_fFreezeTimer > 2.0f
+	if (m_fFreezeTimer > 5.0f
 		&& m_bPermFrozen == false)
 	{
 		m_bIsFrozen = false;
 		m_fFreezeTimer = 0.0f;
 		this->SetType(ENT_NOT_FROZEN);
-
-
 	}
+
 
 }
 void FreezeableGround::Render(void)
@@ -76,6 +74,9 @@ void FreezeableGround::Render(void)
 			m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
 			SGD::Color::Color(255, 0, 255, 255));
 	}
+
+
+		
 
 }
 
