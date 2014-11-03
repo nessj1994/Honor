@@ -78,7 +78,7 @@ void AnimationEngine::Update(float elapsedTime, AnimTimeStamp& ts, IEntity* send
 	}
 }
 
-void AnimationEngine::Render(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale, SGD::Point camerapos)
+void AnimationEngine::Render(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale, SGD::Point camerapos, SGD::Vector rotationOffset)
 {
 	float scaleX = scale;
 	if (flipped == false)
