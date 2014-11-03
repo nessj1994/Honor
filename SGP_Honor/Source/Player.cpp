@@ -457,6 +457,15 @@ void Player::HandleCollision(const IEntity* pOther)
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}
 
+	if (pOther->GetType() == Entity::ENT_POOP)
+	{
+		m_bSliding = false;
+
+		//if so move back up but kill the player
+		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+		SGD::EventManager::GetInstance()->SendEventNow(&Event);
+	}
+
 	if(pOther->GetType() == Entity::ENT_BOSS_BULL)
 	{
 		// Throw the player back

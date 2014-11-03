@@ -60,12 +60,12 @@ void MutantBat::Update(float _elapsedTime)
 		{
 			if (m_ptPosition.x < m_pPatrolPoint.x)
 			{
-				//m_bFacingRight = false;
+				SetFacingRight(false);
 				m_vtVelocity.x = 300;
 			}
 			if (m_ptPosition.x > m_pPatrolPoint.x)
 			{
-				//m_bFacingRight = true;
+				SetFacingRight(true);
 				m_vtVelocity.x = -300;
 			}
 		}
@@ -145,7 +145,7 @@ void MutantBat::Update(float _elapsedTime)
 void MutantBat::Render()
 {
 	SGD::GraphicsManager::GetInstance()->DrawRectangle({ { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, m_szSize }, { 255, 255, 255, 255 });
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, 1/*m_bFacingRight*/, 1);
+	Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height / 2 }, 0, m_ts, GetFacingRight(), 1);
 }
 
 void MutantBat::HandleCollision(const IEntity* pOther)

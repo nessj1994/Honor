@@ -73,11 +73,7 @@ void FreezeableGround::Render(void)
 			m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
 			m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
 			SGD::Color::Color(255, 0, 255, 255));
-	}
-
-
-		
-
+	}		
 }
 
 

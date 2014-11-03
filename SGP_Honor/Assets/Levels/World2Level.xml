@@ -4616,7 +4616,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="9">
+	<Entities numEntities="8">
 		<Entity type="18" x="128" y="864" numArgs="1" name="HubTeleporter">
 			<Argument type="3" name="Level" value="HubLevel" />
 		</Entity>
@@ -4629,8 +4629,5 @@
 		<Entity type="14" x="736" y="960" numArgs="0" name="FreezableGround_4" />
 		<Entity type="14" x="768" y="960" numArgs="0" name="FreezableGround_5" />
 		<Entity type="14" x="800" y="960" numArgs="0" name="FreezableGround_6" />
-		<Entity type="19" x="576" y="896" numArgs="1" name="Enemy_1">
-			<Argument type="1" name="Type" value="2" />
-		</Entity>
 	</Entities>
 </Level>
