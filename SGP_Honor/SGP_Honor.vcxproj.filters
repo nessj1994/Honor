@@ -266,6 +266,7 @@
     <ClCompile Include="Source\CreateVerticalBubble.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
+    <ClCompile Include="source\IceBat.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -557,6 +558,7 @@
     <ClInclude Include="Source\CreateVerticalBubble.h">
       <Filter>Messages</Filter>
     </ClInclude>
+    <ClInclude Include="source\IceBat.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />

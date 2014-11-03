@@ -65,6 +65,7 @@
     <ClCompile Include="Source\Honor.cpp" />
     <ClCompile Include="Source\HorizontalBubble.cpp" />
     <ClCompile Include="Source\Ice.cpp" />
+    <ClCompile Include="source\IceBat.cpp" />
     <ClCompile Include="Source\InstructionsState.cpp" />
     <ClCompile Include="Source\Jellyfish.cpp" />
     <ClCompile Include="Source\Laser.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Source\Honor.h" />
     <ClInclude Include="Source\HorizontalBubble.h" />
     <ClInclude Include="Source\Ice.h" />
+    <ClInclude Include="source\IceBat.h" />
     <ClInclude Include="Source\IEntity.h" />
     <ClInclude Include="Source\IGameState.h" />
     <ClInclude Include="Source\InstructionsState.h" />

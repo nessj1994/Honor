@@ -41,7 +41,7 @@ public:
 
 	//Draw
 	void Draw(SGD::Rectangle _rect, SGD::Color _color);
-	void DrawAnimation(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale);
+	void DrawAnimation(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale, SGD::Vector rotationOffset = {});
 	void DrawTexture(SGD::Point position, float rotation, SGD::HTexture m_hImage, bool flipped, float scale, SGD::Color color, SGD::Vector rotationOffset);
 	void DrawTextureSection(SGD::HTexture handle, SGD::Point position, SGD::Rectangle section, float rotation, SGD::Vector rotationOffset, SGD::Color color, SGD::Size scale);
 	void DrawString(std::string str, SGD::Point position);

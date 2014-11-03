@@ -745,9 +745,13 @@ Entity* GameplayState::CreateProjectile(Entity* pOwner) const
 {
 	Projectile* proj = new Projectile();
 	if (pOwner->GetDirection().x == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
-	else
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetRect().right, pOwner->GetPosition().y - pOwner->GetSize().height / 2));
+	else if(pOwner->GetDirection().x == -1)
+		proj->SetPosition(SGD::Point(pOwner->GetRect().left, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+	else if(pOwner->GetDirection().y == -1)
+		proj->SetPosition(SGD::Point(pOwner->GetSize().width / 2, pOwner->GetRect().top));
+	else if(pOwner->GetDirection().y == 1)
+		proj->SetPosition(SGD::Point(pOwner->GetSize().width / 2, pOwner->GetRect().bottom));
 
 	proj->SetSize({ 40, 40 });
 	proj->SetDirection({ pOwner->GetDirection() });
