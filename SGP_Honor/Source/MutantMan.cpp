@@ -7,6 +7,7 @@
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "CreateVomitMessage.h"
 #include "AnimationEngine.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "Camera.h"
 
 #include <cmath>
@@ -23,6 +24,9 @@ MutantMan::MutantMan() : Listener(this)
 	m_szSize = {50,70};
 	SetGravity(-1000.0f);
 	m_bPlayerAttacked = false;
+	m_hHurt = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/ZombieAttacked.wav");
+	m_hGag = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Gag.wav");
+	m_hPunch = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Punch-Mark.wav");
 }
 
 
@@ -96,6 +100,10 @@ void MutantMan::Update(float _elapsedTime)
 			}
 			if (m_ts.GetCurrFrame() == 1)
 			{
+				if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hPunch))
+				{
+					SGD::AudioManager::GetInstance()->PlayAudio(m_hPunch);
+				}
 				m_bPlayerAttacked = true;
 			}
 			m_vtVelocity.x = 0;
@@ -116,6 +124,10 @@ void MutantMan::Update(float _elapsedTime)
 			//if he does need to vomit, Vomit and stop at the current location
 			if (m_ts.GetCurrAnimation() != "Mutant_Vomiting")
 			{
+				if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hGag))
+				{
+					SGD::AudioManager::GetInstance()->PlayAudio(m_hGag);
+				}
 				CreateVomitMessage* temp = new CreateVomitMessage(this);
 				temp->QueueMessage();
 				temp = nullptr;
@@ -148,6 +160,10 @@ void MutantMan::Update(float _elapsedTime)
 		{
 			if (m_ts.GetCurrAnimation() != "Mutant_Vomiting")
 			{
+				if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hGag))
+				{
+					SGD::AudioManager::GetInstance()->PlayAudio(m_hGag);
+				}		
 				CreateVomitMessage* temp = new CreateVomitMessage(this);
 				temp->QueueMessage();
 				temp = nullptr;

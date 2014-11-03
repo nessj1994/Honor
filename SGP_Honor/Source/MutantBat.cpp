@@ -4,6 +4,7 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "AnimationEngine.h"
 #include "CreatePoopMessage.h"
 #include "Camera.h"
@@ -21,6 +22,8 @@ MutantBat::MutantBat()
 	m_szSize = { 50, 70 };
 	SetGravity(-1000.0f);
 	m_fPoopTimer = 0;
+	m_hHurt = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/BatHurt.wav");
+	m_hPoop = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Sharp_Fart.wav");
 }
 
 
@@ -114,11 +117,15 @@ void MutantBat::Update(float _elapsedTime)
 
 			if (m_fPoopTimer > .8f && m_fPoopTimer < .84f)
 			{
+				if (!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hPoop)))
+				{
+					SGD::AudioManager::GetInstance()->PlayAudio(m_hPoop);
+				}				
 				CreatePoopMessage* Temp = new CreatePoopMessage(this);
 				Temp->QueueMessage();
 				Temp = nullptr;
 			}
-
+			
 			if (m_fPoopTimer > 1.0f)
 			{
 				m_fPoopTimer = 0;
