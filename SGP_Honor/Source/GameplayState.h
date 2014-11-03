@@ -74,8 +74,7 @@ public:
 	/////////////////////// Accessors ////////////////////////
 	Camera* GetCamera(void) const { return m_pCamera; }
 	Level* GetCurrentLevel(void) const { return m_pLevel; }
-
-
+	std::string GetLevelString(void) const { return m_strCurrLevel; }
 
 	//////////////////////////////////////////////////////////
 	////////////////////// Mutators /////////////////////////

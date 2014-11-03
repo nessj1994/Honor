@@ -3,6 +3,7 @@
 
 #include "../SGD Wrappers/SGD_Listener.h"
 
+class WizardDash;
 
 class Wizard :
 	public Boss, SGD::Listener
@@ -22,17 +23,34 @@ public:
 
 	//void HandleEvent(const SGD::Event* pEvent);
 
+	void CastClones();
+	void ResetClones();
+
+	//DashPtrs
+	void SetDash1(WizardDash* _ptr) { dashPtr1 = _ptr; }
+	void SetDash2(WizardDash* _ptr) { dashPtr2 = _ptr; }
+	void SetDash3(WizardDash* _ptr) { dashPtr3 = _ptr; }
+	void SetDash4(WizardDash* _ptr) { dashPtr4 = _ptr; }
 
 private:
 
 	float m_fFloatTimer = 0.0f;
 	float m_fXTimerLoop = 0.0f;
 	float m_fYTimerLoop = 0.0f;
+	float m_fDashStateTimer = 3.5f;
+
 
 	bool floatingLeft = true;
+	bool clonesCasted = false;
 
 	WizardState m_bsCurrState;
 	SGD::HAudio m_hVictory = SGD::INVALID_HANDLE;
+
+	WizardDash* dashPtr1 = nullptr;
+	WizardDash* dashPtr2 = nullptr;
+	WizardDash* dashPtr3 = nullptr;
+	WizardDash* dashPtr4 = nullptr;
+
 
 };
 

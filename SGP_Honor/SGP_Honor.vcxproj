@@ -74,7 +74,6 @@
     <ClCompile Include="Source\Level.cpp" />
     <ClCompile Include="Source\LevelCollider.cpp" />
     <ClCompile Include="Source\MainMenuState.cpp" />
-    <ClCompile Include="Source\MiniWizard.cpp" />
     <ClCompile Include="Source\MovingPlatform.cpp" />
     <ClCompile Include="Source\MutantMan.cpp" />
     <ClCompile Include="Source\OptionsState.cpp" />
@@ -95,6 +94,8 @@
     <ClCompile Include="Source\VerticalBubble.cpp" />
     <ClCompile Include="Source\WinMain.cpp" />
     <ClCompile Include="Source\Wizard.cpp" />
+    <ClCompile Include="Source\WizardDash.cpp" />
+    <ClCompile Include="Source\WizardHawk.cpp" />
     <ClCompile Include="Source\World.cpp" />
     <ClCompile Include="Source\Yeti.cpp" />
     <ClCompile Include="TinyXML\tinystr.cpp" />
@@ -177,7 +178,6 @@
     <ClInclude Include="Source\LevelCollider.h" />
     <ClInclude Include="Source\MainMenuState.h" />
     <ClInclude Include="Source\MessageID.h" />
-    <ClInclude Include="Source\MiniWizard.h" />
     <ClInclude Include="Source\MovingPlatform.h" />
     <ClInclude Include="Source\MutantMan.h" />
     <ClInclude Include="Source\OptionsState.h" />
@@ -197,6 +197,8 @@
     <ClInclude Include="Source\Unit.h" />
     <ClInclude Include="Source\VerticalBubble.h" />
     <ClInclude Include="Source\Wizard.h" />
+    <ClInclude Include="Source\WizardDash.h" />
+    <ClInclude Include="Source\WizardHawk.h" />
     <ClInclude Include="Source\World.h" />
     <ClInclude Include="Source\Yeti.h" />
     <ClInclude Include="TinyXML\tinystr.h" />
