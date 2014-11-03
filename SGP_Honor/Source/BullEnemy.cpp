@@ -200,8 +200,8 @@ void BullEnemy::Render()
 {
 	Enemy::Render();
 	SGD::Point newPosition = m_ptPosition;
-	newPosition.y -= 12;
-	newPosition.x += 16;
+	newPosition.y += 48;
+	newPosition.x += 32;
 	Camera::GetInstance()->DrawAnimation(newPosition, 0, m_ts, !GetFacingRight(), 1.0f);
 }
 

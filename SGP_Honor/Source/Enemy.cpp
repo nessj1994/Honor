@@ -161,13 +161,6 @@ int Enemy::GetType(void) const
 }
 
 
-SGD::Rectangle Enemy::GetRect(void) const
-{
-
-	return SGD::Rectangle();//{ m_ptPosition, m_szSize };
-}
-
-
 void Enemy::HandleCollision(const IEntity* pOther)
 {
 	Unit::HandleCollision(pOther);

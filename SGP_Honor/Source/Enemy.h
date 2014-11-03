@@ -18,7 +18,6 @@ public:
 	virtual void Render(void) override;
 
 	virtual int GetType(void) const override;
-	virtual SGD::Rectangle GetRect(void) const override;
 
 	void BasicCollision(const IEntity* pOther) override;
 	virtual void HandleCollision(const IEntity* pOther) override;
