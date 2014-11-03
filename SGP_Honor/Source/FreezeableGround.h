@@ -1,6 +1,9 @@
 #pragma once
+
 #include "Entity.h"
 #include "../SGD Wrappers/SGD_Geometry.h"
+
+class Emitter;
 
 class FreezeableGround :
 	public Entity
@@ -32,6 +35,7 @@ public:
 
 
 private:
+	Emitter* m_eEffect;
 
 	int frozenTYPE = 0;
 	float m_fFreezeTimer = 0.0f;

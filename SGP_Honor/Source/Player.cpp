@@ -6,6 +6,7 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "../SGD Wrappers/SGD_String.h"
+#include "GameplayState.h"
 #include "DestroyEntityMessage.h"
 #include "CreateProjectileMessage.h"
 #include "CreateSprayMessage.h"
@@ -19,6 +20,7 @@
 #include "BitmapFont.h"
 #include "Game.h"
 #include "Bull.h"
+#include "Vomit.h"
 #include "SwordSwing.h"
 
 #include <Windows.h>
@@ -121,10 +123,17 @@ void Player::Update(float elapsedTime)
 		if (IsDashing() == false)///////////////Dash check begins
 		{
 
+			/////////////////////////////////////////////////
+			////////////////////Jump/////////////////////////
+
+			UpdateJump(elapsedTime);
+
+
 			//	if(GetIsFalling() == false
 			//		&& GetIsJumping() == false)
 			if (m_unCurrentState == RESTING_STATE
-				|| m_unCurrentState == LANDING_STATE)
+				|| m_unCurrentState == LANDING_STATE
+				|| ( m_unCurrentState == JUMPING_STATE && m_bSlowed == true))
 			{
 				/////////////////////////////////////////////////
 				/////////////////Friction////////////////////////
@@ -151,10 +160,7 @@ void Player::Update(float elapsedTime)
 
 
 
-			/////////////////////////////////////////////////
-			////////////////////Jump/////////////////////////
-
-			UpdateJump(elapsedTime);
+			
 
 			/////////////////////////////////////////////////
 			///////////////////Shoot/////////////////////////
@@ -268,8 +274,7 @@ void Player::Render(void)
 	{
 		// Draw a fading rectangle
 		unsigned char alpha = (char)(((0.5f - m_fDeathTimer) / 0.5f) * 255.0f);
-		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
-		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+		GameplayState::GetInstance()->SetScreenFadeout(alpha);
 	}
 }
 
@@ -280,6 +285,7 @@ SGD::Rectangle Player::GetRect(void) const
 
 void Player::HandleCollision(const IEntity* pOther)
 {
+	m_bSlowed = false;
 	if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::W))
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hBounceEffect);
@@ -434,6 +440,15 @@ void Player::HandleCollision(const IEntity* pOther)
 		else
 		{
 			LaserCollision(pOther);
+		}
+	}
+
+	if (pOther->GetType() == Entity::ENT_VOMIT)
+	{
+		if (!((Vomit*)pOther)->Finished())
+		{
+			SetFriction(40);
+			m_bSlowed = true;
 		}
 	}
 
@@ -696,37 +711,37 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	float tempVal = 32.0f / 32.0f;
 
 
-	//SetGravity(0);
+	SetGravity(0);
 
-	//RECT rPlayer;
-	//rPlayer.left = (LONG)GetRect().left;
-	//rPlayer.top = (LONG)GetRect().top;
-	//rPlayer.right = (LONG)GetRect().right /*- 16*/;
-	//rPlayer.bottom = (LONG)GetRect().bottom /*- 10*/;
+	RECT rPlayer;
+	rPlayer.left = (LONG)GetRect().left;
+	rPlayer.top = (LONG)GetRect().top;
+	rPlayer.right = (LONG)GetRect().right /*- 16*/;
+	rPlayer.bottom = (LONG)GetRect().bottom /*- 10*/;
 
 	////Create a rectangle for the other object
-	//RECT rObject;
-	//rObject.left = (LONG)pOther->GetRect().left;
-	//rObject.top = (LONG)pOther->GetRect().top;
-	//rObject.right = (LONG)pOther->GetRect().right;
-	//rObject.bottom = (LONG)pOther->GetRect().bottom;
+	RECT rObject;
+	rObject.left = (LONG)pOther->GetRect().left;
+	rObject.top = (LONG)pOther->GetRect().top;
+	rObject.right = (LONG)pOther->GetRect().right;
+	rObject.bottom = (LONG)pOther->GetRect().bottom;
 
 	////Create a rectangle for the intersection
-	//RECT rIntersection = {};
+	RECT rIntersection = {};
 
 
-	//IntersectRect(&rIntersection, &rPlayer, &rObject);
+	IntersectRect(&rIntersection, &rPlayer, &rObject);
 
-	//int nIntersectWidth = rIntersection.right - rIntersection.left;
-	//int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+	int nIntersectWidth = rIntersection.right - rIntersection.left;
+	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
 
-	SGD::Rectangle rPlayer = GetRect();
-	SGD::Rectangle rOther = pOther->GetRect();
-	SGD::Rectangle rIntersecting = rPlayer.ComputeIntersection(rOther);
+	//SGD::Rectangle rPlayer = GetRect();
+	//SGD::Rectangle rOther = pOther->GetRect();
+	//SGD::Rectangle rIntersecting = rPlayer.ComputeIntersection(rObject);
 
-	float rIntersectWidth = rIntersecting.ComputeWidth();
-	float rIntersectHeight = rIntersecting.ComputeHeight();
+	//float rIntersectWidth = rIntersecting.ComputeWidth();
+	//float rIntersectHeight = rIntersecting.ComputeHeight();
 
 
 	//float tempInt = (/*(rObject.right - rObject.left) +*/ nIntersectWidth)* tempVal;
@@ -735,12 +750,17 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	//		&& rPlayer.bottom < rObject.top)
 	//	{
 
+	//SetVelocity({ GetVelocity().x + 1000, GetVelocity().y - 1000 });
 
 
-	if (/*nIntersectWidth*/ rIntersectWidth > 17)
+
+	SetPosition({ GetPosition().x, (float)rObject.bottom - tempVal - GetSize().height });
+	m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+
+
+	if (/*nIntersectWidth*/ nIntersectWidth > 17)
 	{
-		//SetPosition({ GetPosition().x, (float)rObject.bottom - tempInt - GetSize().height });
-		m_ptPosition.y -= rIntersectHeight;
+		
 	}
 	//else
 	//{
@@ -1139,14 +1159,10 @@ void Player::KillPlayer()
 		m_fDeathTimer = 0.5f;
 		m_bDead = true;
 		m_unJumpCount = 0;
-
-		// Reset room
-		SGD::Event* pATEvent = new SGD::Event("ResetRoom", nullptr, this);
-		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		pATEvent = nullptr;
+		
 
 		// TODO Add effects
-
+		m_bSlowed = false;
 	}
 }
 
@@ -1161,6 +1177,12 @@ void Player::UpdateDeath(float elapsedTime)
 		m_fDeathTimer = 0.0f;
 		m_ptPosition = m_ptStartPosition;
 		SetVelocity({ 0.0f, 0.0f });
+		GameplayState::GetInstance()->SetScreenFadeout(0);
+
+		// Reset room
+		SGD::Event* pATEvent = new SGD::Event("ResetRoom", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
 	}
 }
 
@@ -1187,6 +1209,11 @@ void Player::UpdateTimers(float elapsedTime)
 	m_fIceTimer += elapsedTime;
 
 	m_fJumpTimer -= elapsedTime;
+	if (m_bSlowed == true)
+	{
+		m_fJumpTimer -= elapsedTime;
+
+	}
 
 	m_fLandTimer -= elapsedTime;
 
@@ -1255,6 +1282,52 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 			SetVelocity(SGD::Vector(0, GetVelocity().y));
 		}
 	}
+
+	if (m_bSlowed)
+	{
+		if ( m_unCurrentState != JUMPING_STATE
+			/*&& m_unCurrentState != FALLING_STATE*/
+			 )
+		{
+
+			if (GetVelocity().x > 0)
+			{
+				SetVelocity(SGD::Vector(GetVelocity().x - GetFriction(), GetVelocity().y));
+				if (GetVelocity().x < 0)
+				{
+					SetVelocity({ 0, GetVelocity().y });
+				}
+			}
+			else
+			{
+				SetVelocity(SGD::Vector(GetVelocity().x + GetFriction(), GetVelocity().y));
+				if (GetVelocity().x > 0)
+				{
+					SetVelocity({ 0, GetVelocity().y });
+				}
+			}
+
+		}
+
+		if (GetVelocity().y > 0)
+		{
+			SetVelocity(SGD::Vector(GetVelocity().x, GetVelocity().y - GetFriction()));
+			if (GetVelocity().y < 0)
+			{
+				SetVelocity({ GetVelocity().x, 0 });
+			}
+		}
+		else
+		{
+			SetVelocity(SGD::Vector(GetVelocity().x, GetVelocity().y + GetFriction()));
+			if (GetVelocity().y > 0)
+			{
+				SetVelocity({ GetVelocity().x, 0 });
+				
+			}
+		}
+		
+	}
 }
 
 void Player::UpdateBounce(float elapsedTime)
@@ -1264,7 +1337,8 @@ void Player::UpdateBounce(float elapsedTime)
 
 	//pInput->GetDPad(0);
 
-	if (pInput->IsKeyDown(SGD::Key::W) == true)
+	if (pInput->IsKeyDown(SGD::Key::W) == true
+		|| pInput->IsButtonDown(0, 4 /*Left Bumper*/ ))
 	{
 		//if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBounceEffect)))
 		//{
@@ -1466,6 +1540,12 @@ void Player::UpdateJump(float elapsedTime)
 			m_ts.ResetCurrFrame();
 			m_ts.SetPlaying(false);
 			m_ts.SetCurrAnimation("Jump");
+			if (m_bSlowed == true)
+			{
+				m_fJumpTimer = 0.25f;
+
+			}
+			else
 			m_fJumpTimer = 0.3f;
 			m_unCurrentState = JUMPING_STATE;
 

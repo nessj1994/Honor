@@ -258,6 +258,19 @@
     <ClCompile Include="Source\SwordSwing.cpp">
       <Filter>Entities\Spells</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Vomit.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CreateVomitMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="source\MutantBat.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Poop.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CreatePoopMessage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -541,6 +554,19 @@
     <ClInclude Include="Source\SwordSwing.h">
       <Filter>Entities\Spells</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Vomit.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CreateVomitMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="source\MutantBat.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Poop.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CreatePoopMessage.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />

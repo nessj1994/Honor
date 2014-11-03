@@ -1,8 +1,11 @@
 #include "MutantMan.h"
 #include "Player.h"
+#include "Vomit.h"
+#include "EntityManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include "CreateVomitMessage.h"
 #include "AnimationEngine.h"
 #include "Camera.h"
 
@@ -19,38 +22,37 @@ MutantMan::MutantMan() : Listener(this)
 	m_ts.SetPlaying(true);
 	m_szSize = {50,70};
 	SetGravity(-1000.0f);
+	m_bPlayerAttacked = false;
 }
 
 
 MutantMan::~MutantMan()
 {
-	SetTarget(nullptr);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 void MutantMan::Update(float _elapsedTime)
 {
+	//Timer Updates
+	m_fVomitTimer += _elapsedTime;
+	//
 	//Update Animation
 	AnimationEngine::GetInstance()->Update(_elapsedTime, m_ts, this);
 	SGD::Vector distance;
 	
 	
-	if (m_pptarget != nullptr)
+	if (GetPlayer() != nullptr)
 	{
 		//Set Point if you have a target
-		m_pPatrolPoint = m_pptarget->GetPosition();
+		m_pPatrolPoint = GetPlayer()->GetPosition();
 	}
 
 	//Find Distance to point
 	distance = m_ptPosition - m_pPatrolPoint;
 	if (distance.ComputeLength() < 255)
 	{
-		if (m_ts.GetCurrAnimation() != "Mutant_Walking")
-		{
-			m_ts.ResetCurrFrame();
-			m_ts.SetCurrAnimation("Mutant_Walking");
-			m_ts.SetPlaying(true);
-		}
+		
+		
 		//Move to patrol point
 		if (m_ptPosition.x < m_pPatrolPoint.x)
 		{
@@ -83,17 +85,86 @@ void MutantMan::Update(float _elapsedTime)
 		//	m_pPatrolPoint = m_ptPosition;
 		//	m_pPatrolPoint.x += 50;
 		//}
+		if (distance.ComputeLength() < 60)
+		{
+			//Attack the player
+			if (m_ts.GetCurrAnimation() != "Mutant_Attacking")
+			{
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Mutant_Attacking");
+				m_ts.SetPlaying(true);				
+			}
+			if (m_ts.GetCurrFrame() == 1)
+			{
+				m_bPlayerAttacked = true;
+			}
+			m_vtVelocity.x = 0;
+		}
+		else 
+		//if Mutant is going towards player change to walking animation if he doesnt need to vomit
+		if ((m_ts.GetCurrAnimation() != "Mutant_Walking" || m_ts.GetCurrAnimation() != "Mutant_Vomiting") && m_fVomitTimer < 5)
+		{
+			if (m_ts.GetCurrAnimation() != "Mutant_Walking")
+			{
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Mutant_Walking");
+				m_ts.SetPlaying(true);
+			}
+		}
+		else
+		{
+			//if he does need to vomit, Vomit and stop at the current location
+			if (m_ts.GetCurrAnimation() != "Mutant_Vomiting")
+			{
+				CreateVomitMessage* temp = new CreateVomitMessage(this);
+				temp->QueueMessage();
+				temp = nullptr;
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Mutant_Vomiting");
+				m_ts.SetPlaying(true);
+			}
+			if (m_fVomitTimer > 6.5f)
+			{
+				m_fVomitTimer = 0;
+			}
+			m_vtVelocity.x = 0;
+		}
+		
 	}
 	else
 	{
-		m_ts.ResetCurrFrame();
-		m_ts.SetCurrAnimation("Mutant_Idle");
-		m_ts.SetPlaying(true);
+		//Make Mutant Change ANimation when he need to vomit without reseting animations over and over
+		if ((m_ts.GetCurrAnimation() != "Mutant_Idle" || m_ts.GetCurrAnimation() != "Mutant_Vomiting") && m_fVomitTimer < 5)
+		{
+			if (m_ts.GetCurrAnimation() != "Mutant_Idle")
+			{
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Mutant_Idle");
+				m_ts.SetPlaying(true);
+			}
+		}
+		//Vomit if its Time
+		else
+		{
+			if (m_ts.GetCurrAnimation() != "Mutant_Vomiting")
+			{
+				CreateVomitMessage* temp = new CreateVomitMessage(this);
+				temp->QueueMessage();
+				temp = nullptr;
+				m_ts.ResetCurrFrame();
+				m_ts.SetCurrAnimation("Mutant_Vomiting");
+				m_ts.SetPlaying(true);
+			}
+			if (m_fVomitTimer > 6.5f)
+			{
+				m_fVomitTimer = rand() % 6;
+			}
+		}
 		m_vtVelocity = { m_vtVelocity.x != 0 ? m_vtVelocity.x -= GetGravity() * _elapsedTime : m_vtVelocity.x = 0, 300 };
 	}
 
 	SetVelocity({ GetVelocity().x, (GetVelocity().y - GetGravity() * _elapsedTime) });
-
+	//Use the Units Update
 	Unit::Update(_elapsedTime);
 }
 
@@ -114,9 +185,12 @@ void MutantMan::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_PLAYER && GetRect().IsIntersecting(pOther->GetRect()) == true)
 	{
-		//if so move back up but kill the player
-		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
-		SGD::EventManager::GetInstance()->SendEventNow(&Event);
+		if (m_bPlayerAttacked)
+		{
+			//if so move back up but kill the player
+			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+			SGD::EventManager::GetInstance()->SendEventNow(&Event);
+		}
 	}
 
 	RECT rMutant;
@@ -174,18 +248,9 @@ void MutantMan::HandleCollision(const IEntity* pOther)
 
 void MutantMan::HandleEvent(const SGD::Event* pEvent)
 {
-	if (pEvent->GetEventID() == "ASSESS_PLAYER_RANGE" && m_pptarget == nullptr)
+	if (pEvent->GetEventID() == "ASSESS_PLAYER_RANGE" && GetPlayer() == nullptr)
 	{
-		SetTarget((Player*)pEvent->GetSender());
+		
 	}
 
-}
-
-void MutantMan::SetTarget(Player* plr)
-{
-	if (m_pptarget != nullptr)
-		m_pptarget->Release();
-	m_pptarget = plr;
-	if (m_pptarget != nullptr)
-		m_pptarget->AddRef();
 }

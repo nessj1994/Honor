@@ -36,6 +36,7 @@ void Activator::Update(float elapsedTime)
 	{
 		m_fSwitchTimer = 0.0f;
 	}
+
 	else if(m_fSwitchTimer < 0.0f && m_bPressurePlate == true)
 	{
 		m_fSwitchTimer = 0.0f;
@@ -47,7 +48,7 @@ void Activator::Update(float elapsedTime)
 
 
 	if (m_pPlayer->GetIsSwinging() == true
-		&& GetType() == ENT_SWITCH)
+		&& GetType() == ENT_SWITCH  && m_fSwitchTimer <= 0.0f)
 	{
 		
 		RECT rSwingRect;
@@ -69,44 +70,16 @@ void Activator::Update(float elapsedTime)
 		int nIntersectWidth = rIntersection.right - rIntersection.left;
 		int nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
+		//Open Door
+		SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
 
-		if (nIntersectHeight > nIntersectWidth)
-		{
-			//Open Door
-			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
-			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-			pATEvent = nullptr;
+		pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
+		m_fSwitchTimer = 0.25f;
 
-			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
-			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-			pATEvent = nullptr;
-			m_fSwitchTimer = 3.0f;
-		}
-
-		if (nIntersectHeight < nIntersectWidth)
-		{
-			//Open Door
-			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
-			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-			pATEvent = nullptr;
-
-			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
-			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-			pATEvent = nullptr;
-			m_fSwitchTimer = 3.0f;
-		}
-		if (nIntersectHeight == nIntersectWidth)
-		{
-			//Open Door
-			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
-			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-			pATEvent = nullptr;
-
-			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
-			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-			pATEvent = nullptr;
-			m_fSwitchTimer = 3.0f;
-		}
 	}
 
 
@@ -234,7 +207,7 @@ void Activator::HandleCollision(const IEntity* pOther)
 			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
-			m_fSwitchTimer = 3.0f;
+			m_fSwitchTimer = 1.0f;
 		}
 
 		if (nIntersectHeight < nIntersectWidth)
@@ -247,7 +220,7 @@ void Activator::HandleCollision(const IEntity* pOther)
 			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
-			m_fSwitchTimer = 3.0f;
+			m_fSwitchTimer = 1.0f;
 		}
 
 	}

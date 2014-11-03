@@ -14,6 +14,8 @@
 #include "CreateVerticalBubble.h"
 #include "CreateSprayMessage.h"
 #include "CreateHawkMessage.h"
+#include "CreateVomitMessage.h"
+#include "CreatePoopMessage.h"
 #include "ChangeLevelMessage.h"
 #include "MovingPlatform.h"
 
@@ -49,11 +51,14 @@
 #include "Squid.h"
 #include "Pouncer.h"
 #include "Jellyfish.h"
+#include "MutantBat.h"
 #include "Teleporter.h"
 #include "Bull.h"
 #include "MutantMan.h"
 #include "Crab.h"
 #include "SwordSwing.h"
+#include "Vomit.h"
+#include "Poop.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -376,6 +381,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_BULL);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STATUE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MUTANT_MAN);
 
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
 	m_pEntities->CheckCollisions(Entity::ENT_PRESSURE_PLATE, Entity::ENT_SWORD);
@@ -388,7 +394,7 @@ void GameplayState::Update(float elapsedTime)
 
 	m_pEntities->CheckCollisions(Entity::ENT_TEMP_FREEZE, Entity::ENT_SPRAY);
 	m_pEntities->CheckCollisions(Entity::ENT_GEYSER, Entity::ENT_SPRAY);
-
+	m_pEntities->CheckCollisions(Entity::ENT_SPRAY, Entity::ENT_TEMP_FREEZE);
 
 
 	m_pEntities->CheckCollisions(Entity::ENT_PROJ, Entity::ENT_BLOCK);
@@ -413,15 +419,19 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_LASER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_BULL);
 	m_pEntities->CheckWorldCollision(Entity::ENT_MUTANT_MAN);
-
+	m_pEntities->CheckWorldCollision(Entity::ENT_VOMIT);
+	m_pEntities->CheckWorldCollision(Entity::ENT_POOP); 
 	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_POUNCER);
+	m_pEntities->CheckWorldCollision(Entity::ENT_MUTANT_BIRD);
 	m_pEntities->CheckWorldCollision(Entity::ENT_JELLYFISH);
+	m_pEntities->CheckWorldCollision(Entity::ENT_SPRAY);
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_BULL);
 
-
+	//Entities WHich SLow the Player
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_VOMIT);
 	//Process messages and events
 	SGD::EventManager::GetInstance()->Update();
 	SGD::MessageManager::GetInstance()->Update();
@@ -440,13 +450,10 @@ void GameplayState::Render(void)
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
 
-	if (m_pPlayer->GetDead())
-	{
-		// Draw a fading rectangle
-		unsigned char alpha = (char)(((0.5f - m_pPlayer->GetDeathTimer()) / 0.5f) * 255.0f);
-		SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
-		SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { alpha, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
-	}
+	// Draw a fading rectangle
+	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
+	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { m_cScreenFade, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+
 
 }
 
@@ -461,6 +468,42 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 	//What type of message is this
 	switch (pMsg->GetMessageID())
 	{
+		case MessageID::MSG_CREATE_VOMIT:
+		{
+			//Downcast to the real message type
+			const CreateVomitMessage* pCreateMsg =
+				dynamic_cast<const CreateVomitMessage*>(pMsg);
+
+			//Make sure the message isnt a nullptr
+			assert(pCreateMsg != nullptr
+				&& "GameplayState::MessageProc - MSG_CREATE_VOMIT is not actually a CreateVomitMessage");
+			pCreateMsg->GetOwner()->GetPosition();
+			Vomit* Temp = new Vomit(pCreateMsg->GetOwner()->GetPosition());
+			
+			GetInstance()->m_pEntities->AddEntity(Temp, Entity::ENT_VOMIT);
+
+			Temp->Release();
+			Temp = nullptr;
+			break;
+		}
+		case MessageID::MSG_CREATE_POOP:
+		{
+			//Downcast to the real message type
+			const CreatePoopMessage* pCreateMsg =
+				dynamic_cast<const CreatePoopMessage*>(pMsg);
+
+			//Make sure the message isnt a nullptr
+			assert(pCreateMsg != nullptr
+				&& "GameplayState::MessageProc - MSG_CREATE_POOP is not actually a CreatePoopMessage");
+			pCreateMsg->GetOwner()->GetPosition();
+			Poop* Temp = new Poop(pCreateMsg->GetOwner()->GetPosition());
+
+			GetInstance()->m_pEntities->AddEntity(Temp, Entity::ENT_POOP);
+
+			Temp->Release();
+			Temp = nullptr;
+			break;
+		}
 		case MessageID::MSG_DESTROY_ENTITY:
 		{
 			//Downcast to the real message type
@@ -1222,7 +1265,12 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		}
 		case 3: // mutant bird
 		{
-			
+			MutantBat * pMutant = new MutantBat();
+			pMutant->SetPosition({ (float)_x, (float)_y });
+			pMutant->Begin({ (float)_x, (float)_y });
+			pMutant->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_BIRD);
+			pMutant->Release();
 			break;
 		}
 		case 4: // ice golem
