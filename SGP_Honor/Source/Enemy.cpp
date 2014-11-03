@@ -140,7 +140,7 @@ int Enemy::GetType(void) const
 SGD::Rectangle Enemy::GetRect(void) const
 {
 
-	return SGD::Rectangle();//{ m_ptPosition, m_szSize };
+	return SGD::Rectangle({ m_ptPosition, m_szSize });
 }
 
 
