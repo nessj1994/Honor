@@ -46,12 +46,12 @@ void MutantMan::Update(float _elapsedTime)
 		//Move to patrol point
 		if (m_ptPosition.x < m_pPatrolPoint.x)
 		{
-			m_bFacingRight = false;
+			SetFacingRight(false);
 			m_vtVelocity.x = 300;
 		}
 		if (m_ptPosition.x > m_pPatrolPoint.x)
 		{
-			m_bFacingRight = true;
+			SetFacingRight(true);
 			m_vtVelocity.x = -300;
 		}
 		////Patrol if no target
@@ -81,7 +81,7 @@ void MutantMan::Update(float _elapsedTime)
 void MutantMan::Render()
 {
 	SGD::GraphicsManager::GetInstance()->DrawRectangle({{ m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x,m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y}, m_szSize}, { 255, 255, 255, 255 });
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, m_bFacingRight,1);
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, GetFacingRight(),1);
 }
 
 SGD::Rectangle MutantMan::GetRect(void) const 

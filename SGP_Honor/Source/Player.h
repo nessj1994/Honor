@@ -72,7 +72,7 @@ public:
 	unsigned int GetCurrentState(void) const { return m_unCurrentState; }
 	void JellyfishCollision(const IEntity* pOther);
 	void KillPlayer();
-
+	void ThrowPlayer(bool _right);
 
 
 	//SGD::Rectangle GetWallRect(void) const;

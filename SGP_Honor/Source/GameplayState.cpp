@@ -50,11 +50,13 @@
 #include "Pouncer.h"
 #include "Jellyfish.h"
 #include "Teleporter.h"
+#include "BullEnemy.h"
 #include "Bull.h"
 #include "MutantMan.h"
 #include "Crab.h"
 #include "SwordSwing.h"
 #include "Yeti.h"
+#include "Skeleton.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -378,6 +380,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STATUE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_POUNCER);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BULL_ENEMY);
 
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
 	m_pEntities->CheckCollisions(Entity::ENT_PRESSURE_PLATE, Entity::ENT_SWORD);
@@ -420,11 +423,14 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_YETI);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
+	m_pEntities->CheckWorldCollision(Entity::ENT_BULL_ENEMY);
+	m_pEntities->CheckWorldCollision(Entity::ENT_SKELETON);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_POUNCER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_JELLYFISH);
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_BULL);
+	m_pEntities->CheckWorldEvent(Entity::ENT_BULL_ENEMY);
 
 
 
@@ -548,13 +554,21 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 												 Entity* pProj = pSelf->CreateGravProjectile(pCreateMsg->GetOwner());
 
 
-												 if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_SQUID)
-												 {
-													 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
-												 }
+			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_SQUID)
+			{
+				GravProjectile * temp = (GravProjectile*)pProj;
+				temp->SetProjectileType(GravProjectile::INK);
+			}
+			else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_SKELETON)
+			{
+				GravProjectile * temp = (GravProjectile*)pProj;
+				temp->SetProjectileType(GravProjectile::BONE);
+			}
 
-												 pProj->Release();
-												 pProj = nullptr;
+			pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+
+			pProj->Release();
+			pProj = nullptr;
 
 
 												 break;
@@ -1153,11 +1167,20 @@ void GameplayState::CreateArmor(int _x, int _y)
 // -Creates a freezable ground at the given coordinates
 void GameplayState::CreateFreezableGround(int _x, int _y)
 {
-	// TODO
-	FreezeableGround * mFreeze = new FreezeableGround();
-	mFreeze->SetPosition({ (float)_x, (float)_y });
-	m_pEntities->AddEntity(mFreeze, Entity::ENT_FROZEN);
-	mFreeze->Release();
+	FreezeableGround* pFreeze = new FreezeableGround;
+
+	//// TYPE STATE WILL CHANGE ( Needs to be done through TYPE with enttiyManger) Two types for each frozen tile === It's Current state and it's Bucket type (temp or perm tile)
+	pFreeze->SetType(Entity::ENT_NOT_FROZEN);
+
+	pFreeze->SetSize(SGD::Size(32, 32));
+	pFreeze->SetPosition(SGD::Point((float)_x, (float)_y));
+	pFreeze->SetIsFrozen(false);
+	pFreeze->SetIsPerm(false);
+
+	////// TYPE OF TILE Bucket
+	m_pEntities->AddEntity(pFreeze, Entity::ENT_TEMP_FREEZE);
+
+	pFreeze->Release();
 }
 
 /////////////////////////
@@ -1209,70 +1232,140 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 {
 	switch(_type)
 	{
-	case 0: // bull
-	{
-				break;
+		case 0: // bull
+		{
+			BullEnemy * pBull = new BullEnemy();
+			pBull->SetPosition({ (float)_x, (float)_y });
+			pBull->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pBull, Entity::ENT_BULL_ENEMY);
+			pBull->Release();
+			break;
+		}
+		case 1: // skeleton
+		{
+			Skeleton * pSkeleton = new Skeleton();
+			pSkeleton->SetPosition({ (float)_x, (float)_y });
+			pSkeleton->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pSkeleton, Entity::ENT_SKELETON);
+			pSkeleton->Release();
+			break;
+		}
+		case 2: // mutant man
+		{
+			MutantMan * pMutant = new MutantMan();
+			pMutant->SetPosition({ (float)_x, (float)_y });
+			pMutant->Begin({ (float)_x, (float)_y });
+			pMutant->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_MAN);
+			pMutant->Release();
+			break;
+		}
+		case 3: // mutant bird
+		{
+			
+			break;
+		}
+		case 4: // ice golem
+		{
+			break;
+		}
+		case 5: // ice bat
+		{
+			break;
+		}
+		case 6: // ice turtle
+		{
+			break;
+		}
+		case 7: // hermit crab
+		{
+			Pouncer * pPouncer = new Pouncer();
+			pPouncer->SetPosition({ (float)_x, (float)_y });
+			pPouncer->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pPouncer, Entity::ENT_POUNCER);
+			pPouncer->Release();
+			break;
+		}
+		case 8: // squid
+		{
+			Squid * pSquid = new Squid();
+			pSquid->SetPosition({ (float)_x, (float)_y });
+			pSquid->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pSquid, Entity::ENT_ENEMY);
+			pSquid->Release();
+			break;
+		}
+		case 9: // jellyfish
+		{
+			Jellyfish * pJelly = new Jellyfish();
+			pJelly->SetPosition({ (float)_x, (float)_y });
+			pJelly->SetPlayer(m_pPlayer);
+			pJelly->SetPatrol();
+			m_pEntities->AddEntity(pJelly, Entity::ENT_ENEMY);
+			pJelly->Release();
+			break;
+		}
 	}
-	case 1: // skeleton
-	{
-				break;
-	}
-	case 2: // mutant man
-	{
-				MutantMan * pMutant = new MutantMan();
-				pMutant->SetPosition({ (float)_x, (float)_y });
-				pMutant->Begin({ (float)_x, (float)_y });
-				pMutant->SetPlayer(m_pPlayer);
-				m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_MAN);
-				pMutant->Release();
-				break;
-	}
-	case 3: // mutant bird
-	{
+	//case 1: // skeleton
+	//{
+	//			break;
+	//}
+	//case 2: // mutant man
+	//{
+	//			MutantMan * pMutant = new MutantMan();
+	//			pMutant->SetPosition({ (float)_x, (float)_y });
+	//			pMutant->Begin({ (float)_x, (float)_y });
+	//			pMutant->SetPlayer(m_pPlayer);
+	//			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_MAN);
+	//			pMutant->Release();
+	//			break;
+	//}
+	//case 3: // mutant bird
+	//{
 
-				break;
-	}
-	case 4: // ice golem
-	{
-				break;
-	}
-	case 5: // ice bat
-	{
-				break;
-	}
-	case 6: // ice turtle
-	{
-				break;
-	}
-	case 7: // hermit crab
-	{
-				Pouncer * pPouncer = new Pouncer();
-				pPouncer->SetPosition({ (float)_x, (float)_y });
-				pPouncer->SetPlayer(m_pPlayer);
-				m_pEntities->AddEntity(pPouncer, Entity::ENT_POUNCER);
-				pPouncer->Release();
-				break;
-	}
-	case 8: // squid
-	{
-				Squid * pSquid = new Squid();
-				pSquid->SetPosition({ (float)_x, (float)_y });
-				pSquid->SetPlayer(m_pPlayer);
-				m_pEntities->AddEntity(pSquid, Entity::ENT_ENEMY);
-				pSquid->Release();
-				break;
-	}
-	case 9: // jellyfish
-	{
-				Jellyfish * pJelly = new Jellyfish();
-				pJelly->SetPosition({ (float)_x, (float)_y });
-				pJelly->SetPlayer(m_pPlayer);
-				pJelly->SetPatrol();
-				m_pEntities->AddEntity(pJelly, Entity::ENT_ENEMY);
-				pJelly->Release();
-				break;
-	}
-	}
+	//			break;
+	//}
+	//case 4: // ice golem
+	//{
+	//			break;
+	//}
+	//case 5: // ice bat
+	//{
+	//			break;
+	//}
+	//case 6: // ice turtle
+	//{
+	//			break;
+	//}
+	//case 7: // hermit crab
+	//{
+	//			Pouncer * pPouncer = new Pouncer();
+	//			pPouncer->SetPosition({ (float)_x, (float)_y });
+	//			pPouncer->SetPlayer(m_pPlayer);
+	//			m_pEntities->AddEntity(pPouncer, Entity::ENT_POUNCER);
+	//			pPouncer->Release();
+	//			break;
+	//}
+	//case 8: // squid
+	//{
+	//			Squid * pSquid = new Squid();
+	//			pSquid->SetPosition({ (float)_x, (float)_y });
+	//			pSquid->SetPlayer(m_pPlayer);
+	//			m_pEntities->AddEntity(pSquid, Entity::ENT_ENEMY);
+	//			pSquid->Release();
+	//			break;
+	//}
+	//case 9: // jellyfish
+	//{
+	//			Jellyfish * pJelly = new Jellyfish();
+	//			pJelly->SetPosition({ (float)_x, (float)_y });
+	//			pJelly->SetPlayer(m_pPlayer);
+	//			pJelly->SetPatrol();
+	//			m_pEntities->AddEntity(pJelly, Entity::ENT_ENEMY);
+	//			pJelly->Release();
+	//			break;
+	//}
+	//}
 }
 
 /////////////////////////

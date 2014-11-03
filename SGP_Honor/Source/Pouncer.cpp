@@ -36,14 +36,14 @@ void Pouncer::Update(float elapsedTime)
 		{
 			if (target->GetPosition().x < m_ptPosition.x && fabsf(distance.y) < 40 && inAir == false)
 			{
-				m_bFacingRight = false;
+				SetFacingRight(false);
 				SetVelocity({ -200, -300 });
 				isPouncing = true;
 				inAir = true;
 			}
 			else if (target->GetPosition().x > m_ptPosition.x && fabsf(distance.y) < 40 && inAir == false)
 			{
-				m_bFacingRight = true;
+				SetFacingRight(true);
 				SetVelocity({ 200, -300 });
 				isPouncing = true;
 				inAir = true;

@@ -16389,9 +16389,12 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="1">
+	<Entities numEntities="4">
 		<Entity type="20" x="160" y="1888" numArgs="1" name="Boss_1">
 			<Argument type="1" name="Type" value="2" />
 		</Entity>
+		<Entity type="14" x="320" y="2016" numArgs="0" name="FreezableGround_1" />
+		<Entity type="14" x="288" y="2016" numArgs="0" name="FreezableGround_2" />
+		<Entity type="14" x="256" y="2016" numArgs="0" name="FreezableGround_3" />
 	</Entities>
 </Level>

@@ -20,6 +20,7 @@
 #include "BitmapFont.h"
 #include "Game.h"
 #include "Bull.h"
+#include "BullEnemy.h"
 #include "SwordSwing.h"
 
 #include <Windows.h>
@@ -443,26 +444,23 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if(pOther->GetType() == Entity::ENT_BOSS_BULL)
 	{
-		// TODO use states
 		// Throw the player back
 		Bull * bull = (Bull*)(pOther);
 		if (bull->GetAttacking())
 		{
-			float throwSpeed = -3000;
-			if(bull->IsFacingRight())
-			{
-				throwSpeed = 3000;
-			}
-			SetGravity(0);
-			SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
-			SetVelocity({ throwSpeed, -1000 });
-			SetStunnded(true);
-			m_fStunTimer = 0.5f;
-
+			ThrowPlayer(bull->IsFacingRight());
 		}
 	}
 
-
+	if (pOther->GetType() == Entity::ENT_BULL_ENEMY)
+	{
+		// Throw the player back
+		BullEnemy * bull = (BullEnemy*)(pOther);
+		if (bull->GetAttacking())
+		{
+			ThrowPlayer(bull->GetFacingRight());
+		}
+	}
 }
 
 void Player::BasicCollision(const IEntity* pOther)
@@ -1995,3 +1993,19 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 
 
 #pragma endregion
+////////////////////////////////
+// ThrowPlayer
+// -Tosses the player left or right and kills him
+void Player::ThrowPlayer(bool _right)
+{
+	float throwSpeed = -3000;
+	if (_right)
+	{
+		throwSpeed = 3000;
+	}
+	SetGravity(0);
+	SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
+	SetVelocity({ throwSpeed, -1000 });
+	SetStunnded(true);
+	m_fStunTimer = 0.5f;
+}
