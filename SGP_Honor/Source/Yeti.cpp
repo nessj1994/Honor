@@ -4,6 +4,7 @@
 #include "CreateSprayMessage.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include <cmath>
+#include "Player.h"
 
 Yeti::Yeti() : Listener(this)
 {
@@ -13,7 +14,7 @@ Yeti::Yeti() : Listener(this)
 	m_ts.ResetCurrFrame();
 	m_ts.SetCurrAnimation("yetispecial");
 	m_ts.SetPlaying(true);
-	m_szSize = { 64, 128 };
+	m_szSize = { 128, 128 };
 	SetStartPosition(m_ptPosition);
 	SetCurrentState(CHASING_STATE);
 
@@ -32,6 +33,18 @@ void Yeti::Update(float elapsedTime)
 	{
 	case CHASING_STATE:
 	{
+						  if(GetPlayer()->GetRect().right < m_ptPosition.x)
+						  {
+							  m_bFacingRight = false;
+						  }
+						  else
+						  {
+							  m_bFacingRight = true;
+						  }
+						  if(!m_ts.IsPlaying() == false)
+						  {
+							  m_ts.SetPlaying(true);
+						  }
 						  //Use the walking animation
 						  if(m_ts.GetCurrAnimation() != "yetiwalking")
 						  {
@@ -54,7 +67,7 @@ void Yeti::Update(float elapsedTime)
 							  else
 							  {
 								  //m_ts.ResetCurrFrame();
-								 // m_ts.SetCurrAnimation("yetiranged");
+								  // m_ts.SetCurrAnimation("yetiranged");
 								  //SetCurrentState(RANGED_STATE);
 
 							  }
@@ -64,7 +77,7 @@ void Yeti::Update(float elapsedTime)
 	case MELEE_STATE:
 	{
 						//Commence melee attack
-						m_ts.SetCurrAnimation("yetismash");
+
 
 						if(!m_ts.IsPlaying())
 						{
@@ -81,29 +94,32 @@ void Yeti::Update(float elapsedTime)
 	}
 	case JUMPING_STATE:
 	{
-			
+
 
 						  if(m_fJumpTimer > 0.2f)
 						  {
 							  SetVelocity({ GetVelocity().x, GetVelocity().y + (2200 * elapsedTime) });
-						/*	  if(GetVelocity().y > 0)
-							  {
-								  SetVelocity({ GetVelocity().x, 0 });
+							  /*	  if(GetVelocity().y > 0)
+									{
+									SetVelocity({ GetVelocity().x, 0 });
 
-							  }*/
+									}*/
 
 						  }
 						  else
 							  SetVelocity({ GetVelocity().x, -600 });
-							
+
 						  break;
 	}
 	case SPRAYING_STATE:
 	{
 						   //Spraying Blocks
-						   CreateSprayMessage* pMsg = new CreateSprayMessage(this);
-						   pMsg->QueueMessage();
-						   pMsg = nullptr;
+						   if(m_bSpraying == true)
+						   {
+							   CreateSprayMessage* pMsg = new CreateSprayMessage(this);
+							   pMsg->QueueMessage();
+							   pMsg = nullptr;
+						   }
 						   break;
 	}
 	case BLIZZARD_STATE:
@@ -144,9 +160,9 @@ void Yeti::Render(void)
 
 	//Render us with the camera
 	if(m_bFacingRight == true)
-		Camera::GetInstance()->DrawAnimation({ m_ptPosition.x, m_ptPosition.y + m_szSize.height}, 0.0f, m_ts, false, 1.0f, {});
+		Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + 64, m_ptPosition.y + m_szSize.height }, 0.0f, m_ts, false, 1.0f, {});
 	else
-		Camera::GetInstance()->DrawAnimation(m_ptPosition, 0.0f, m_ts, true, 1.0f, {});
+		Camera::GetInstance()->DrawAnimation({m_ptPosition.x + 64, m_ptPosition.y + m_szSize.height }, 0.0f, m_ts, true, 1.0, {});
 
 
 
@@ -179,6 +195,10 @@ void Yeti::HandleCollision(const IEntity* pOther)
 	{
 		if(rMyRect.right == rIntersect.right)
 		{
+			if(GetVelocity().y != 0)
+			{
+				SetCurrentState(CHASING_STATE);
+			}
 			SetVelocity({ GetVelocity().x, 0 });
 			SetPosition({ GetPosition().x, rOther.top - m_szSize.height + 1 });
 		}
@@ -200,7 +220,7 @@ void Yeti::HandleEvent(const SGD::Event* pEvent)
 	if(pEvent->GetEventID() == "ASSESS_PLAYER_RANGE")
 	{
 		Entity* pPlayer = reinterpret_cast<Entity*>(pEvent->GetSender());
-		
+
 		if(GetPosition().x - (pPlayer->GetPosition().x + pPlayer->GetSize().width) <= m_fAggroRange || (GetPosition().x + m_szSize.width) - pPlayer->GetPosition().x <= m_fAggroRange)
 		{
 			m_bInRange = true;

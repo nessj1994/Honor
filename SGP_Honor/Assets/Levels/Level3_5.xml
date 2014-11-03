@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level name="NewLevel" width="128" height="64" fixed="0" playerX="446" playerY="1932">
+<Level name="NewLevel" width="128" height="64" fixed="0" playerX="797" playerY="1943">
 	<ImageLayers numLayers="0" />
 	<CollisionLayer>
 		<CollisionTile type="0" />
@@ -1213,71 +1213,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="0" />
-		<CollisionTile type="0" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
+		<CollisionTile type="3" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -1342,7 +1278,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
+		<CollisionTile type="3" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
@@ -1407,8 +1343,72 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
+		<CollisionTile type="3" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="0" />
+		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="3" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
@@ -16389,12 +16389,15 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="4">
+	<Entities numEntities="7">
 		<Entity type="20" x="160" y="1888" numArgs="1" name="Boss_1">
 			<Argument type="1" name="Type" value="2" />
 		</Entity>
 		<Entity type="14" x="320" y="2016" numArgs="0" name="FreezableGround_1" />
 		<Entity type="14" x="288" y="2016" numArgs="0" name="FreezableGround_2" />
 		<Entity type="14" x="256" y="2016" numArgs="0" name="FreezableGround_3" />
+		<Entity type="14" x="224" y="2016" numArgs="0" name="FreezableGround_1" />
+		<Entity type="14" x="192" y="2016" numArgs="0" name="FreezableGround_2" />
+		<Entity type="14" x="160" y="2016" numArgs="0" name="FreezableGround_3" />
 	</Entities>
 </Level>

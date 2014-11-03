@@ -1,6 +1,7 @@
 #include "Dash.h"
 #include "ParticleEngine.h"
 #include "Emitter.h"
+#include "Player.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 
 Dash::Dash()
@@ -25,10 +26,21 @@ void Dash:: CastDash(Unit* pOther)
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
 		pOther->SetIsDashing(true);
 		
-		if (pOther->IsFacingRight() == true)
-			pOther->SetVelocity({ 2000, 0});
+		if (((Player*)pOther)->Slowed())
+		{
+			if (pOther->IsFacingRight() == true)
+				pOther->SetVelocity({ 800, 0 });
+			else
+				pOther->SetVelocity({ -800, 0 });
+		}
 		else
-			pOther->SetVelocity({ - 2000, 0 });
+		{
+			if (pOther->IsFacingRight() == true)
+				pOther->SetVelocity({ 2000, 0 });
+			else
+				pOther->SetVelocity({ -2000, 0 });
+		}
+		
 
 
 

@@ -48,6 +48,7 @@ private:
 	float m_fDistance = 0.0f;
 	float m_fJumpTimer = 0.0f;
 	bool m_bInRange = false;
+	bool m_bSpraying = false;
 
 
 };

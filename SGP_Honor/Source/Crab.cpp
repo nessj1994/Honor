@@ -321,6 +321,6 @@ void Crab::HandleEvent(const SGD::Event* pEvent)
 {
 	if (pEvent->GetEventID() == "ASSESS_PLAYER_RANGE" && GetPlayer() == nullptr)
 	{
-		SetPlayer((Entity*)pEvent->GetSender());
+		SetPlayer((Player*)pEvent->GetSender());
 	}
 }

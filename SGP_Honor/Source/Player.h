@@ -107,6 +107,9 @@ public:
 	//Unsigned ints
 	unsigned int GetHonorCollected(void) const { return m_unHonorCollected; }
 
+	//Slowed
+	bool Slowed() { return m_bSlowed; }
+
 	////////////////////////////////////////////
 	/////////////////Mutators//////////////////
 	void SetStunnded(bool _stun) { m_bStunned = _stun; }
@@ -202,6 +205,9 @@ private:
 	SGD::HAudio m_hIceEffect = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hBounceEffect = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hJellyfishEffect = SGD::INVALID_HANDLE;
+
+	//SLowing Down with friction
+	bool m_bSlowed;
 
 };
 
