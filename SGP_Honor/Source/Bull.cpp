@@ -7,6 +7,7 @@
 #include "ParticleEngine.h"
 #include "GameplayState.h"
 #include "Activator.h"
+#include "Player.h"
 
 
 ///////////////////////////////////////////////////

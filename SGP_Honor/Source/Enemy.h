@@ -43,6 +43,5 @@ private:
 	bool m_bWalker = true;
 	unsigned int m_unCurrentState;
 	float m_fAggroDistance = 0.0f;
-
 };
 

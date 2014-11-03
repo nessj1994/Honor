@@ -3,6 +3,8 @@
 #include "Unit.h"
 #include "../SGD Wrappers/SGD_Geometry.h"
 
+class Player;
+
 class Boss :
 	public Unit
 {
@@ -21,7 +23,7 @@ public:
 
 	 ////////////////////////////////////////////////
 	////////////////////Accessors///////////////////
-	Entity* GetPlayer(void) const { return m_pPlayer; }
+	Player* GetPlayer(void) const { return m_pPlayer; }
 	unsigned int GetHitPoints(void) const { return m_unHitPoints; }
 	unsigned int GetCurrentState(void) const { return m_unCurrentState; }
 	SGD::Point GetStartPosition(void) const { return m_ptStartPosition; }
@@ -30,7 +32,7 @@ public:
 
 	 /////////////////////////////////////////////
 	/////////////////Mutators////////////////////
-	void SetPlayer(Entity* player) { m_pPlayer = player; }
+	void SetPlayer(Player* player) { m_pPlayer = player; }
 	void SetHitPoints(unsigned int hitPoints) { m_unHitPoints = hitPoints; }
 	void SetCurrentState(unsigned int state) { m_unCurrentState = state; }
 	void SetIsFalling(bool _fall) { is_Falling = _fall; }
@@ -39,7 +41,7 @@ public:
 
 private:
 
-	Entity* m_pPlayer = nullptr;
+	Player* m_pPlayer = nullptr;
 	unsigned int m_unHitPoints;
 	unsigned int m_unCurrentState;
 	SGD::Point m_ptStartPosition;

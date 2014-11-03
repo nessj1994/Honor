@@ -12,11 +12,14 @@ VerticalBubble::VerticalBubble()
 		SetDirection({ 1, 0 });
 	else
 		SetDirection({ -1, 0 });
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/VerticalBubble.png");
+	m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage);
 }
 
 
 VerticalBubble::~VerticalBubble()
 {
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 void VerticalBubble::Update(float elapsedTime)
@@ -45,10 +48,11 @@ void VerticalBubble::Update(float elapsedTime)
 
 void VerticalBubble::Render(void)
 {
-	Camera::GetInstance()->Draw(SGD::Rectangle(
+	/*Camera::GetInstance()->Draw(SGD::Rectangle(
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
-		SGD::Color::Color(255, 0, 255, 255));
+		SGD::Color::Color(255, 0, 255, 255));*/
+	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1, SGD::Color(255, 255, 255, 255), {});
 }
 
 SGD::Rectangle VerticalBubble::GetRect(void) const
