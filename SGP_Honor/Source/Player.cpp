@@ -37,8 +37,20 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("KILL_PLAYER");
 	Listener::RegisterForEvent("BOUNCE_VERTICAL");
 	Listener::RegisterForEvent("BOUNCE_HORIZONTAL");
+
 	//Screen events
+	Listener::RegisterForEvent("Screen2x2");
 	Listener::RegisterForEvent("Screen2x3");
+	Listener::RegisterForEvent("Screen2x4");
+	Listener::RegisterForEvent("Screen3x3");
+	Listener::RegisterForEvent("Screen2x1.5");
+	Listener::RegisterForEvent("Screen1.5x2");
+	Listener::RegisterForEvent("Screen1.5x3");
+
+
+
+
+
 
 	SetDirection({ 1, 0 });
 	m_pDash = new Dash();
@@ -755,17 +767,20 @@ void Player::LeftRampCollision(const IEntity* pOther)
 		m_ptPosition.y = (float)rObject.bottom - tempVal -  GetSize().height;
 		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
 	}
+	 
 	
 	else if(nIntersectWidth == 31)
 	{
-		//m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
-		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
-		tempVal = 31 / 32;
+		m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
+		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
 
-		m_ptPosition.y = (float)rObject.bottom - GetSize().height - tempVal;
-		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * 1);
 
-		BasicCollision(pOther);
+		//tempVal = 31 / 32;
+		//
+		//m_ptPosition.y = (float)rObject.bottom - GetSize().height - tempVal;
+		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * 1);
+		//
+		//BasicCollision(pOther);
 		
 	
 	}
@@ -775,6 +790,7 @@ void Player::LeftRampCollision(const IEntity* pOther)
 
 		m_ptPosition.x += 1;
 	}
+
 
 
 	//else
@@ -1158,9 +1174,40 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 
 	}
 
+	if (pEvent->GetEventID() == "Screen2x2")
+	{
+		m_fPanX = 2;
+		m_fPanY = 2;
+	}
 	if (pEvent->GetEventID() == "Screen2x3")
 	{
-
+		m_fPanX = 2;
+		m_fPanY = 3;
+	}
+	if (pEvent->GetEventID() == "Screen2x4")
+	{
+		m_fPanX = 2;
+		m_fPanY = 4;
+	}
+	if (pEvent->GetEventID() == "Screen3x3")
+	{
+		m_fPanX = 3;
+		m_fPanY = 3;
+	}
+	if (pEvent->GetEventID() == "Screen2x1.5")
+	{
+		m_fPanX = 2;
+		m_fPanY = 1.5;
+	}
+	if (pEvent->GetEventID() == "Screen1.5x2")
+	{
+		m_fPanX = 1.5;
+		m_fPanY = 2;
+	}
+	if (pEvent->GetEventID() == "Screen1.5x3")
+	{
+		m_fPanX = 1.5;
+		m_fPanY = 3;
 	}
 }
 
