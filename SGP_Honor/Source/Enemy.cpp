@@ -53,30 +53,22 @@ void Enemy::Update(float elapsedTime)
 			//if evenmy call event to kill enemy
 			//SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
 
-			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-			pMsg->QueueMessage();
-			pMsg = nullptr;
+			//DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+			//pMsg->QueueMessage();
+			//pMsg = nullptr;
 
+			m_bDead = true;
 		}
 
 		if (nIntersectHeight < nIntersectWidth)
 		{
-			//if switch, activate switch
-			//if evenmy call event to kill enemy
-			//SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
-
-			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-			pMsg->QueueMessage();
-			pMsg = nullptr;
-
+			m_bDead = true;
 		}
 
 		if (nIntersectHeight == nIntersectWidth
 			&& nIntersectHeight != 0)
 		{
-			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-			pMsg->QueueMessage();
-			pMsg = nullptr;
+			m_bDead = true;
 		}
 	}
 

@@ -24,12 +24,16 @@ public:
 	virtual void HandleCollision(const IEntity* pOther) override;
 	void HandleEvent(const SGD::Event* pEvent);
 
+	bool GetAttacking();
+
 private:
 	/////////////////////////////
 	// Member fields
 	float m_fTurnTimer = 0.0f;
 	float m_fRunSpeed = 256.0f;
 	float m_fChangeTimer = 0.0f;
+	float m_fDeathTimer = 0.0f;
+	bool m_bDying = false;
 	BullState m_bsCurrState;
 
 };

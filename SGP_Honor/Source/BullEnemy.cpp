@@ -1,4 +1,7 @@
 #include "BullEnemy.h"
+#include "AnimationEngine.h"
+#include "Camera.h"
+#include "DestroyEntityMessage.h"
 
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
@@ -9,10 +12,12 @@
 BullEnemy::BullEnemy() : Listener(this)
 {
 	Listener::RegisterForEvent("TurnMarker");
-	m_szSize = { 64, 64 };
+	m_szSize = { 64, 48 };
 	m_bsCurrState = BS_RUNNING;
 	m_fChangeTimer = 0.0f;
 	SetFacingRight(true);
+	AnimationEngine::GetInstance()->LoadAnimation("Assets/Bull_Enemy_Animation.xml");
+	m_ts.SetCurrAnimation("Bull_Enemy_Running");
 }
 
 BullEnemy::~BullEnemy()
@@ -25,10 +30,20 @@ BullEnemy::~BullEnemy()
 // -Main update loop
 void BullEnemy::Update(float elapsedTime)
 {
+	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
+
 	// Update timer
 	if (m_fTurnTimer > 0.0f)
 	{
 		m_fTurnTimer -= elapsedTime;
+	}
+
+	// Check if dying
+	if (GetDead() && !m_bDying)
+	{
+		m_bDying = true;
+		m_fDeathTimer = 0.5f;
+		m_bsCurrState = BS_DEATH;
 	}
 
 	// Every few seconds randomly change direction or switch states
@@ -63,6 +78,11 @@ void BullEnemy::Update(float elapsedTime)
 	{
 		case BS_IDLE:
 		{
+			// Update animation
+			m_ts.SetCurrAnimation("Bull_Enemy_Idle");
+			m_ts.SetPlaying(true);
+			m_ts.SetSpeed(1.0f);
+
 			// Stand still
 			SetVelocity({ 0.0f, m_vtVelocity.y });
 
@@ -84,6 +104,11 @@ void BullEnemy::Update(float elapsedTime)
 		}
 		case BS_WALKING:
 		{
+			// Update animation
+			m_ts.SetCurrAnimation("Bull_Enemy_Running");
+			m_ts.SetPlaying(true);
+			m_ts.SetSpeed(1.0f);
+
 			// walk left or right
 			if (GetFacingRight())
 			{
@@ -114,6 +139,11 @@ void BullEnemy::Update(float elapsedTime)
 		}
 		case BS_RUNNING:
 		{
+			// Update animation
+			m_ts.SetCurrAnimation("Bull_Enemy_Running");
+			m_ts.SetPlaying(true);
+			m_ts.SetSpeed(2.0f);
+
 			// Run left or right
 			if (GetFacingRight())
 			{
@@ -139,8 +169,22 @@ void BullEnemy::Update(float elapsedTime)
 		}
 		case BS_DEATH:
 		{
+			// Update animation
+			m_ts.SetCurrAnimation("Bull_Enemy_Death");
+			m_ts.SetPlaying(true);
+			m_ts.SetSpeed(2.0f);
+
 			// Stand still
 			SetVelocity({ 0.0f, m_vtVelocity.y });
+
+			// Timer to death
+			m_fDeathTimer -= elapsedTime;
+			if (m_fDeathTimer <= 0.0f)
+			{
+				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+				pMsg->QueueMessage();
+				pMsg = nullptr;
+			}
 
 			break;
 		}
@@ -155,6 +199,10 @@ void BullEnemy::Update(float elapsedTime)
 void BullEnemy::Render()
 {
 	Enemy::Render();
+	SGD::Point newPosition = m_ptPosition;
+	newPosition.y -= 12;
+	newPosition.x += 16;
+	Camera::GetInstance()->DrawAnimation(newPosition, 0, m_ts, !GetFacingRight(), 1.0f);
 }
 
 ///////////////////////////////
@@ -189,4 +237,12 @@ void BullEnemy::HandleEvent(const SGD::Event* pEvent)
 			m_fTurnTimer = 1.0f;
 		}
 	}
+}
+
+///////////////////////////////
+// GetAttacking
+// -Returns if this bull is attacking
+bool BullEnemy::GetAttacking()
+{
+	return m_bsCurrState == BS_RUNNING;
 }

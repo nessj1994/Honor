@@ -31,6 +31,7 @@ public:
 	bool GetFacingRight(void) const { return m_bFacingRight; }
 	unsigned int GetCurrentState(void) const { return m_unCurrentState; }
 	float GetAggroDistance(void) const { return m_fAggroDistance; }
+	bool GetDead(void) const { return m_bDead; }
 
 	//////////////////////////////////////////////
 	///////////////////Mutators//////////////////
@@ -39,12 +40,14 @@ public:
 	void SetState(unsigned int state) { m_unCurrentState = state; }
 	void SetAggroDistance(float distance) { m_fAggroDistance = distance; }
 	void SetFacingRight(bool _right) { m_bFacingRight = _right; }
+	void SetDead(bool _dead) { m_bDead = _dead; }
 
 private:
 
 	Player* m_pPlayer = nullptr;
 	bool m_bFalling = true;
 	bool m_bFacingRight = false;
+	bool m_bDead = false;
 	unsigned int m_unCurrentState;
 	float m_fAggroDistance = 0.0f;
 
