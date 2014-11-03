@@ -4,6 +4,7 @@
 #include "GameplayState.h"
 #include "Projectile.h"
 #include "WizardDash.h"
+#include "WizardHawk.h"
 
 Wizard::Wizard() : Listener(this)
 {
@@ -81,7 +82,10 @@ void Wizard::Update(float elapsedTime)
 					if (m_fDashStateTimer < 0)
 					{
 						m_fDashStateTimer = 0.0f;
-						m_bsCurrState = WZ_FLOATING;
+						//m_bsCurrState = WZ_FLOATING;
+						m_bsCurrState = WZ_HAWK;
+
+
 
 						ResetClones();
 
@@ -115,6 +119,27 @@ void Wizard::Update(float elapsedTime)
 
 					break;
 
+	}
+	case WZ_HAWK:
+	{
+
+					m_fHawkStateTimer -= elapsedTime;
+
+
+					if (m_fHawkStateTimer < 0)
+					{
+						m_fHawkStateTimer = 0.0f;
+						m_bsCurrState = WZ_FLOATING;
+
+						ResetHawks();
+
+					}
+
+					if (hawksCasted == false)
+					{
+						m_fHawkStateTimer = 5.5f;
+						CastHawks();
+					}
 	}
 
 	}
@@ -174,5 +199,49 @@ void Wizard::ResetClones()
 	dashPtr4->SetTimer(2.0f);
 
 	clonesCasted = true;
+
+}
+
+void Wizard::CastHawks()
+{
+	hawkPtr1->SetPosition({ m_ptPosition.x + GetSize().width / 2, m_ptPosition.y });
+	hawkPtr1->SetTimer(0.1f);
+
+	hawkPtr2->SetPosition({ m_ptPosition.x + GetSize().width / 2, m_ptPosition.y });
+	hawkPtr2->SetTimer(0.2f);
+
+
+	hawkPtr3->SetPosition({ m_ptPosition.x + GetSize().width / 2, m_ptPosition.y });
+	hawkPtr3->SetTimer(0.3f);
+
+
+	hawkPtr4->SetPosition({ m_ptPosition.x + GetSize().width / 2, m_ptPosition.y });
+	hawkPtr4->SetTimer(0.4f);
+	
+
+
+	
+	hawkPtr1->SetDestPos({ 100, 1600 });
+	hawkPtr2->SetDestPos({ 170, 1600 });
+	hawkPtr3->SetDestPos({ 240, 1600 });
+	hawkPtr4->SetDestPos({ 310, 1600 });
+
+
+	hawkPtr1->SetDestSize({ 70, 70 });
+	hawkPtr2->SetDestSize({ 70, 70 });
+	hawkPtr3->SetDestSize({ 70, 70 });
+	hawkPtr4->SetDestSize({ 70, 70 });
+
+	hawksCasted = true;
+}
+void Wizard::ResetHawks()
+{
+	hawkPtr1->SetDestPos({ -300, -300 });
+	hawkPtr2->SetDestPos({ -300, -300 });
+	hawkPtr3->SetDestPos({ -300, -300 });
+	hawkPtr4->SetDestPos({ -300, -300 });
+
+	hawksCasted = false;
+
 
 }

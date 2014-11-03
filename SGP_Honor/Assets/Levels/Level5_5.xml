@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level name="NewLevel" width="128" height="64" fixed="0" playerX="258" playerY="1932">
+<Level name="NewLevel" width="128" height="64" fixed="0" playerX="141" playerY="1909">
 	<ImageLayers numLayers="1">
 		<ImageLayer speed="1" depth="0" image="\Assets\graphics\TileSet1.png" name="NewLayer" render="1" tileSetWidth="16" tileSetHeight="16" tileSetSize="16">
 			<ImageTile type="-1" />
@@ -24585,7 +24585,7 @@
 		<EventTile event="" />
 	</EventLayer>
 	<Entities numEntities="1">
-		<Entity type="20" x="478" y="1788" numArgs="1" name="Boss_1">
+		<Entity type="20" x="412" y="1580" numArgs="1" name="Boss_1">
 			<Argument type="1" name="Type" value="4" />
 		</Entity>
 	</Entities>
