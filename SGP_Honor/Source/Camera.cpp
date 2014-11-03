@@ -119,5 +119,6 @@ void Camera::Update(float _elapsedTime)
 	m_ptCameraPosition.x = (m_pPlayer->GetPosition().x  - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX) ; // Divide by Scale
 	m_ptCameraPosition.y = (m_pPlayer->GetPosition().y - Game::GetInstance()->GetScreenHeight() / m_fCurrentPanY) ;// Divide by Scale
 
+	//level.GetWidth() for the soft lock on camera player
 }
 

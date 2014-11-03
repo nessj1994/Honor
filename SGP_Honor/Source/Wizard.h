@@ -1,7 +1,11 @@
 #pragma once
 #include "Boss.h"
+
+#include "../SGD Wrappers/SGD_Listener.h"
+
+
 class Wizard :
-	public Boss
+	public Boss, SGD::Listener
 {
 public:
 	Wizard();
@@ -16,10 +20,19 @@ public:
 	virtual int GetType(void) const override { return ENT_BOSS_WIZARD; }
 	void HandleCollision(const IEntity* pOther) override;
 
+	//void HandleEvent(const SGD::Event* pEvent);
+
 
 private:
 
+	float m_fFloatTimer = 0.0f;
+	float m_fXTimerLoop = 0.0f;
+	float m_fYTimerLoop = 0.0f;
+
+	bool floatingLeft = true;
+
 	WizardState m_bsCurrState;
+	SGD::HAudio m_hVictory = SGD::INVALID_HANDLE;
 
 };
 

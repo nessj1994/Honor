@@ -74,6 +74,7 @@
     <ClCompile Include="Source\Level.cpp" />
     <ClCompile Include="Source\LevelCollider.cpp" />
     <ClCompile Include="Source\MainMenuState.cpp" />
+    <ClCompile Include="Source\MiniWizard.cpp" />
     <ClCompile Include="Source\MovingPlatform.cpp" />
     <ClCompile Include="Source\MutantMan.cpp" />
     <ClCompile Include="Source\OptionsState.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Source\LevelCollider.h" />
     <ClInclude Include="Source\MainMenuState.h" />
     <ClInclude Include="Source\MessageID.h" />
+    <ClInclude Include="Source\MiniWizard.h" />
     <ClInclude Include="Source\MovingPlatform.h" />
     <ClInclude Include="Source\MutantMan.h" />
     <ClInclude Include="Source\OptionsState.h" />

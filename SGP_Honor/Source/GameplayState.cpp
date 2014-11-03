@@ -54,6 +54,7 @@
 #include "MutantMan.h"
 #include "Crab.h"
 #include "SwordSwing.h"
+#include "Wizard.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -183,9 +184,9 @@ void GameplayState::Enter(void) //Load Resources
 	LoadHonorVector();
 	
 	
-	//LoadLevel("Level3_1");
+	LoadLevel("Level5_5");
 
-	LoadLevel("HubLevel");
+	//LoadLevel("HubLevel");
 
 	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
@@ -1302,6 +1303,12 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 		}
 		case 4: // wizard
 		{
+					Wizard* m_pWizard = new Wizard;
+					m_pWizard->SetPosition({ (float)_x, (float)_y });
+					m_pWizard->SetStartPosition({ (float)_x, (float)_y });
+					m_pWizard->SetPlayer(m_pPlayer);
+					m_pEntities->AddEntity(m_pWizard, Entity::ENT_BOSS_WIZARD);
+					m_pWizard->Release();
 			break;
 		}
 	}
