@@ -86,6 +86,7 @@
     <ClCompile Include="Source\Pouncer.cpp" />
     <ClCompile Include="Source\ProfileState.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
+    <ClCompile Include="Source\Skeleton.cpp" />
     <ClCompile Include="Source\Squid.cpp" />
     <ClCompile Include="Source\Stalactite.cpp" />
     <ClCompile Include="Source\SwordSwing.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="Source\Pouncer.h" />
     <ClInclude Include="Source\ProfileState.h" />
     <ClInclude Include="Source\Projectile.h" />
+    <ClInclude Include="Source\Skeleton.h" />
     <ClInclude Include="Source\Squid.h" />
     <ClInclude Include="Source\Stalactite.h" />
     <ClInclude Include="Source\SwordSwing.h" />

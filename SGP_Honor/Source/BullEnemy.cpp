@@ -67,7 +67,10 @@ void BullEnemy::Update(float elapsedTime)
 				}
 				case 2:
 				{
-					SetFacingRight(!GetFacingRight());
+					if (m_fTurnTimer > 0.0f)
+					{
+						SetFacingRight(!GetFacingRight());
+					}
 				}
 			}
 		}
@@ -172,7 +175,7 @@ void BullEnemy::Update(float elapsedTime)
 			// Update animation
 			m_ts.SetCurrAnimation("Bull_Enemy_Death");
 			m_ts.SetPlaying(true);
-			m_ts.SetSpeed(2.0f);
+			m_ts.SetSpeed(1.0f);
 
 			// Stand still
 			SetVelocity({ 0.0f, m_vtVelocity.y });
@@ -234,7 +237,7 @@ void BullEnemy::HandleEvent(const SGD::Event* pEvent)
 		if (m_fTurnTimer <= 0.0f)
 		{
 			SetFacingRight(!GetFacingRight());
-			m_fTurnTimer = 1.0f;
+			m_fTurnTimer = .25f;
 		}
 	}
 }

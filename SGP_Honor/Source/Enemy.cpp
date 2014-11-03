@@ -66,12 +66,9 @@ void Enemy::Update(float elapsedTime)
 			}
 			else
 			{
-				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-				pMsg->QueueMessage();
-				pMsg = nullptr;
+				m_bDead = true;
 			}
 
-			m_bDead = true;
 		}
 
 		if (nIntersectHeight < nIntersectWidth)
@@ -93,9 +90,7 @@ void Enemy::Update(float elapsedTime)
 			}
 			else
 			{
-				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-				pMsg->QueueMessage();
-				pMsg = nullptr;
+				m_bDead = true;
 			}
 
 		}
@@ -116,9 +111,7 @@ void Enemy::Update(float elapsedTime)
 			}
 			else
 			{
-				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-				pMsg->QueueMessage();
-				pMsg = nullptr;
+				m_bDead = true;
 			}
 		}
 	}
