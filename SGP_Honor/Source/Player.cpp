@@ -39,6 +39,23 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("KILL_PLAYER");
 	Listener::RegisterForEvent("BOUNCE_VERTICAL");
 	Listener::RegisterForEvent("BOUNCE_HORIZONTAL");
+
+	//Screen events
+	Listener::RegisterForEvent("Screen2x2");
+	Listener::RegisterForEvent("Screen2x3");
+	Listener::RegisterForEvent("Screen2x4");
+	Listener::RegisterForEvent("Screen3x3");
+	Listener::RegisterForEvent("Screen2x1.5");
+	Listener::RegisterForEvent("Screen1.5x2");
+	Listener::RegisterForEvent("Screen1.5x3");
+	Listener::RegisterForEvent("FINALBOSS");
+
+
+
+
+
+
+
 	SetDirection({ 1, 0 });
 	m_pDash = new Dash();
 	m_pBounce = new Bounce();
@@ -51,6 +68,7 @@ Player::Player() : Listener(this)
 	//
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/PlayerAnimations.xml");
 	m_ts.SetCurrAnimation("Idle");
+	AnimationEngine::GetInstance()->LoadAnimation("Assets/ArmoredPlayerAnimations.xml");
 
 	//Load Sounds
 	m_hIceEffect = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/IceSpray.wav");
@@ -797,17 +815,20 @@ void Player::LeftRampCollision(const IEntity* pOther)
 		m_ptPosition.y = (float)rObject.bottom - tempVal -  GetSize().height;
 		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
 	}
+	 
 	
 	else if(nIntersectWidth == 31)
 	{
-		//m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
-		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
-		tempVal = 31 / 32;
+		m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
+		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
 
-		m_ptPosition.y = (float)rObject.bottom - GetSize().height - tempVal;
-		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * 1);
 
-		BasicCollision(pOther);
+		//tempVal = 31 / 32;
+		//
+		//m_ptPosition.y = (float)rObject.bottom - GetSize().height - tempVal;
+		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * 1);
+		//
+		//BasicCollision(pOther);
 		
 	
 	}
@@ -817,6 +838,7 @@ void Player::LeftRampCollision(const IEntity* pOther)
 
 		m_ptPosition.x += 1;
 	}
+
 
 
 	//else
@@ -989,7 +1011,14 @@ void Player::GeyserCollision(const IEntity* pOther)
 			{
 				m_ts.SetPlaying(true);
 				m_ts.ResetCurrFrame();
-				m_ts.SetCurrAnimation("Idle");
+				if (m_bHasArmor == false)
+				{
+					m_ts.SetCurrAnimation("Idle");
+				}
+				else
+				{
+					m_ts.SetCurrAnimation("Armor Player Idle");
+				}
 
 			}
 
@@ -1215,6 +1244,60 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	{
 		SetVelocity({ 10000.0f * (*(float*)pEvent->GetData()), -1000 });
 		SetPosition({ GetPosition().x, GetPosition().y - 10 });
+
+	}
+
+	if (pEvent->GetEventID() == "Screen2x2")
+	{
+		m_fPanX = 2;
+		m_fPanY = 2;
+		Camera::GetInstance()->SetCameraCap(0);
+	}
+	if (pEvent->GetEventID() == "Screen2x3")
+	{
+		m_fPanX = 2;
+		m_fPanY = 3;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "Screen2x4")
+	{
+		m_fPanX = 2;
+		m_fPanY = 4;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "Screen3x3")
+	{
+		m_fPanX = 3;
+		m_fPanY = 3;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "Screen2x1.5")
+	{
+		m_fPanX = 2;
+		m_fPanY = 1.5;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "Screen1.5x2")
+	{
+		m_fPanX = 1.5;
+		m_fPanY = 2;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "Screen1.5x3")
+	{
+		m_fPanX = 1.5;
+		m_fPanY = 3;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "FINALBOSS")
+	{
+		Camera::GetInstance()->SetCameraCap(5);
 
 	}
 }
@@ -1469,7 +1552,14 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		{
 			m_ts.SetPlaying(false);
 			m_ts.ResetCurrFrame();
-			m_ts.SetCurrAnimation("Idle");
+			if (m_bHasArmor == false)
+			{
+				m_ts.SetCurrAnimation("Idle");
+			}
+			else
+			{
+				m_ts.SetCurrAnimation("Armor Player Idle");
+			}
 			m_ts.SetPlaying(true);
 		}
 	}
@@ -1477,7 +1567,14 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 	{
 		m_ts.SetPlaying(false);
 		m_ts.ResetCurrFrame();
-		m_ts.SetCurrAnimation("Idle");
+		if (m_bHasArmor == false)
+		{
+			m_ts.SetCurrAnimation("Idle");
+		}
+		else
+		{
+			m_ts.SetCurrAnimation("Armor Player Idle");
+		}
 		m_ts.SetPlaying(true);
 
 	}
@@ -1522,7 +1619,14 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		}
 		if(m_unCurrentState == RESTING_STATE)
 		{
-			m_ts.SetCurrAnimation("Walking");
+			if (m_bHasArmor == false)
+			{
+				m_ts.SetCurrAnimation("Walking");
+			}
+			else
+			{
+				m_ts.SetCurrAnimation("Armor Player Walking");
+			}
 		}
 		SetFacingRight(true);
 	}
@@ -1563,7 +1667,14 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		}
 		if(m_unCurrentState == RESTING_STATE)
 		{
-			m_ts.SetCurrAnimation("Walking");
+			if (m_bHasArmor == false)
+			{
+				m_ts.SetCurrAnimation("Walking");
+			}
+			else
+			{
+				m_ts.SetCurrAnimation("Armor Player Walking");
+			}
 		}
 		SetFacingRight(false);
 	}
@@ -1579,7 +1690,14 @@ void Player::UpdateDash(float elapsedTime)
 		CastDash();
 		m_ts.SetPlaying(true);
 		m_ts.ResetCurrFrame();
-		m_ts.SetCurrAnimation("dashing");
+		if (m_bHasArmor == false)
+		{
+			m_ts.SetCurrAnimation("dashing");
+		}
+		else
+		{
+			m_ts.SetCurrAnimation("Armor Player dashing");
+		}
 	}
 	else
 	{
@@ -1590,11 +1708,18 @@ void Player::UpdateDash(float elapsedTime)
 			GetDash()->GetEMDash()->KillParticles(m_ptPosition);
 		}
 	}
-	if(this->IsDashing() == false && m_ts.GetCurrAnimation() == "dashing")
+	if (this->IsDashing() == false && (m_ts.GetCurrAnimation() == "dashing" || m_ts.GetCurrAnimation() == "Armor Player dashing"))
 	{
 		m_ts.SetPlaying(true);
 		m_ts.ResetCurrFrame();
-		m_ts.SetCurrAnimation("Idle");
+		if (m_bHasArmor == false)
+		{
+			m_ts.SetCurrAnimation("Idle");
+		}
+		else
+		{
+			m_ts.SetCurrAnimation("Armor Player Idle");
+		}
 	}
 }
 
@@ -1624,7 +1749,14 @@ void Player::UpdateJump(float elapsedTime)
 		{
 			m_ts.ResetCurrFrame();
 			m_ts.SetPlaying(false);
-			m_ts.SetCurrAnimation("Jump");
+			if (m_bHasArmor == false)
+			{
+				m_ts.SetCurrAnimation("Jump");
+			}
+			else
+			{
+				m_ts.SetCurrAnimation("Armor Player Jump");
+			}
 			if (m_bSlowed == true)
 			{
 				m_fJumpTimer = 0.25f;
@@ -1855,19 +1987,19 @@ void Player::UpdateHawk(float elapsedTime)
 			SGD::Vector VEL = { 0, 0 };
 			if(m_ptPosition.x < m_emHawkReturn->GetPosition().x)
 			{
-				VEL.x = -300;
+				VEL.x = -600;
 			}
 			if(m_ptPosition.y < m_emHawkReturn->GetPosition().y)
 			{
-				VEL.y = -300;
+				VEL.y = -600;
 			}
 			if(m_ptPosition.x > m_emHawkReturn->GetPosition().x)
 			{
-				VEL.x = 300;
+				VEL.x = 600;
 			}
 			if(m_ptPosition.y > m_emHawkReturn->GetPosition().y)
 			{
-				VEL.y = 300;
+				VEL.y = 600;
 			}
 			SGD::Point TempPos = m_emHawkReturn->GetPosition();
 			TempPos += VEL * elapsedTime;
@@ -1942,7 +2074,14 @@ void Player::UpdateVelocity(float elapsedTime)
 		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false
 		)
 	{
-		m_ts.SetCurrAnimation("Idle");
+		if (m_bHasArmor == false)
+		{
+			m_ts.SetCurrAnimation("Idle");
+		}
+		else
+		{
+			m_ts.SetCurrAnimation("Armor Player Idle");
+		}
 		m_unCurrentState = RESTING_STATE;
 	}
 
