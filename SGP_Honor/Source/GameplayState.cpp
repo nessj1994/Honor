@@ -62,6 +62,7 @@
 #include "Skeleton.h"
 #include "Vomit.h"
 #include "Poop.h"
+#include "Caveman.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -430,6 +431,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_BULL);
 	m_pEntities->CheckWorldCollision(Entity::ENT_MUTANT_MAN);
 	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_YETI);
+	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_CAVEMAN);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_VOMIT);
 	m_pEntities->CheckWorldCollision(Entity::ENT_POOP); 
@@ -444,6 +446,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_BULL);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BULL_ENEMY);
+	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_CAVEMAN);
 
 	//Entities WHich SLow the Player
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_VOMIT);
@@ -1442,6 +1445,12 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 	}
 	case 1: // caveman
 	{
+				Caveman* Temp = new Caveman();
+				Temp->SetPosition({ (float)_x, (float)_y });
+				Temp->SetStartPosition({ (float)_x, (float)_y });
+				Temp->SetPlayer(m_pPlayer);
+				m_pEntities->AddEntity(Temp, Entity::ENT_BOSS_BULL);
+				Temp->Release();
 				break;
 	}
 	case 2: // yeti
