@@ -189,7 +189,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("Level3_5");
+	LoadLevel("Level4_1");
 
 	//LoadLevel("HubLevel");
 
@@ -411,6 +411,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_GEYSER);
 
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_LASER);
+	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_PLAYER);
+	
 
 
 	//if (m_pArmor != nullptr)
@@ -831,9 +833,9 @@ Entity* GameplayState::CreateGravProjectile(Entity* pOwner) const
 {
 	GravProjectile* proj = new GravProjectile();
 	if(pOwner->GetDirection().x == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width / 2, pOwner->GetPosition().y - pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetRect().right, pOwner->GetRect().top + pOwner->GetRect().ComputeHeight() / 2));
 	else
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width, pOwner->GetPosition().y - pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetRect().left, pOwner->GetRect().top + pOwner->GetRect().ComputeHeight() / 2));
 
 	proj->SetDirection({ pOwner->GetDirection() });
 	proj->SetOwner(pOwner);

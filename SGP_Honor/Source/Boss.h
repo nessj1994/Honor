@@ -5,6 +5,8 @@
 #include "Player.h"
 
 
+class Player;
+
 class Boss :
 	public Unit
 {

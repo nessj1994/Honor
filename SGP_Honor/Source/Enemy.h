@@ -45,10 +45,9 @@ private:
 
 	Player* m_pPlayer = nullptr;
 	bool m_bFalling = true;
-	bool m_bFacingRight = false;
+	//bool m_bFacingRight = false;
 	bool m_bDead = false;
 	unsigned int m_unCurrentState;
 	float m_fAggroDistance = 0.0f;
-
 };
 

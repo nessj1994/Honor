@@ -8,6 +8,7 @@
 #include "AnimationEngine.h"
 #include "DestroyEntityMessage.h"
 #include <Windows.h>
+#include "Player.h"
 
 #define SlamCooldown 1.5f
 #define BubbleCastLength 2.0f
@@ -37,7 +38,7 @@ Crab::~Crab()
 
 void Crab::Update(float elapsedTime)
 {
-	/*if (GetHitPoints() > 0)
+	if (GetHitPoints() > 0)
 	{
 		if (GetPlayer() != nullptr)
 		{
@@ -227,26 +228,27 @@ void Crab::Update(float elapsedTime)
 	}
 	else
 	{
+		GetPlayer()->SetHasBounce(true);
 		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
 		pMsg->QueueMessage();
 		pMsg = nullptr;
-	}*/
+	}
 }
 
 void Crab::Render(void)
 {
-	//Get the camera position for our offset
-	SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
+	////Get the camera position for our offset
+	//SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
 
-	//create a reference to our rectangle
-	SGD::Rectangle rMyRect = GetRect();
+	////create a reference to our rectangle
+	//SGD::Rectangle rMyRect = GetRect();
 
-	//Offset our rectangle by the camera position for rendering
-	rMyRect.Offset({ -camPos.x, -camPos.y });
+	////Offset our rectangle by the camera position for rendering
+	//rMyRect.Offset({ -camPos.x, -camPos.y });
 
-	//Render us with the camera
-	Camera::GetInstance()->Draw(rMyRect,
-		SGD::Color::Color(255, 255, 0, 0));
+	////Render us with the camera
+	//Camera::GetInstance()->Draw(rMyRect,
+	//	SGD::Color::Color(255, 255, 0, 0));
 
 	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, IsFacingRight(),1.0f);
 }
@@ -313,6 +315,17 @@ void Crab::HandleCollision(const IEntity* pOther)
 					SetCurrentState(hurt);
 				}
 			}
+		}
+	}
+
+	if (pOther->GetType() == ENT_PLAYER)
+	{
+		SGD::Rectangle atkRect = AnimationEngine::GetInstance()->GetAttackRect(m_ts, IsFacingRight(), 1, m_ptPosition);
+
+		if (pOther->GetRect().IsIntersecting(atkRect) == true)
+		{
+			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+			SGD::EventManager::GetInstance()->SendEventNow(&Event);
 		}
 	}
 }

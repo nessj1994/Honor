@@ -7,9 +7,10 @@
 #include "DestroyEntityMessage.h"
 #include "SwordSwing.h"
 #include "Pouncer.h"
+#include "Squid.h"
 
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
-
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 Enemy::Enemy()
 {
@@ -59,10 +60,15 @@ void Enemy::Update(float elapsedTime)
 				Pouncer* pnc = dynamic_cast<Pouncer*>(this);
 				if (pnc->GetInAir() == true)
 				{
-					DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-					pMsg->QueueMessage();
-					pMsg = nullptr;
+					SGD::AudioManager::GetInstance()->PlayAudio(pnc->GetDeathSound());
+					SetAlive(false);
 				}
+			}
+			else if (this->GetType() == ENT_SQUID)
+			{
+				Squid* squid = dynamic_cast<Squid*>(this);
+				SGD::AudioManager::GetInstance()->PlayAudio(squid->GetDeathSound());
+				SetAlive(false);
 			}
 			else
 			{
@@ -83,10 +89,15 @@ void Enemy::Update(float elapsedTime)
 				Pouncer* pnc = dynamic_cast<Pouncer*>(this);
 				if (pnc->GetInAir() == true)
 				{
-					DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-					pMsg->QueueMessage();
-					pMsg = nullptr;
+					SGD::AudioManager::GetInstance()->PlayAudio(pnc->GetDeathSound());
+					SetAlive(false);
 				}
+			}
+			else if (this->GetType() == ENT_SQUID)
+			{
+				Squid* squid = dynamic_cast<Squid*>(this);
+				SGD::AudioManager::GetInstance()->PlayAudio(squid->GetDeathSound());
+				SetAlive(false);
 			}
 			else
 			{
@@ -104,10 +115,15 @@ void Enemy::Update(float elapsedTime)
 				Pouncer* pnc = dynamic_cast<Pouncer*>(this);
 				if (pnc->GetInAir() == true)
 				{
-					DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-					pMsg->QueueMessage();
-					pMsg = nullptr;
+					SGD::AudioManager::GetInstance()->PlayAudio(pnc->GetDeathSound());
+					SetAlive(false);
 				}
+			}
+			else if (this->GetType() == ENT_SQUID)
+			{
+				Squid* squid = dynamic_cast<Squid*>(this);
+				SGD::AudioManager::GetInstance()->PlayAudio(squid->GetDeathSound());
+				SetAlive(false);
 			}
 			else
 			{
@@ -117,11 +133,11 @@ void Enemy::Update(float elapsedTime)
 	}
 
 	// Apply gravity
-	if (GetFalling() == true)
+	/*if (GetFalling() == true)
 	{
 		SetGravity(-3000);
 		SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
-	}
+	}*/
 
 	Unit::Update(elapsedTime);
 
