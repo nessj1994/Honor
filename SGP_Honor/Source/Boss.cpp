@@ -20,7 +20,8 @@ Boss::~Boss()
 void Boss::Update(float elapsedTime)
 {
 	// Apply gravity
-	if (GetIsFalling() == true)
+	if (GetIsFalling() == true
+		&& GetType() != ENT_BOSS_WIZARD)
 	{
 		SetGravity(-3000);
 		SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });

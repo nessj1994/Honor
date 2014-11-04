@@ -6,6 +6,7 @@
 #include "ParticleEngine.h"
 #include "Emitter.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
+#include "Caveman.h"
 
 Hawk::Hawk()
 {
@@ -21,6 +22,8 @@ Hawk::Hawk()
 
 	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/HawkEffect.wav");
 	SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
+	m_szSize = { 32, 32 };
+	m_bDead = false;
 }
 
 
@@ -35,7 +38,7 @@ Hawk::~Hawk()
 
 void Hawk::Update(float elapsedTime)
 {
-	
+
 	if (GetDirection().x == 1)
 	{
 		//SetVelocity({ GetVelocity().x /*+ GetSpeed() * elapsedTime*/, GetVelocity().y });
@@ -59,40 +62,82 @@ void Hawk::Update(float elapsedTime)
 	//else
 	//	m_fCooldown = 0.0f;
 
-
-
-
-
-	Entity::Update(elapsedTime);
-
-	SGD::Rectangle rSelf = this->GetRect();
-	SGD::Rectangle rScreen =
+	//For Caveman Boss use
+	if (m_pOwner->GetType() == ENT_BOSS_CAVEMAN)
 	{
-		0, 0,
-		Game::GetInstance()->GetScreenWidth() + Camera::GetInstance()->GetCameraPos().x,
-		Game::GetInstance()->GetScreenHeight() + Camera::GetInstance()->GetCameraPos().y
-	};
-
-
-	if (rSelf.IsIntersecting(rScreen) == false)
-	{
-		//DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-		//pMsg->QueueMessage();
-		//pMsg = nullptr;
-		if (GetOwner()->GetType() == ENT_PLAYER)
+		SGD::Vector distance = m_poTarget - m_ptPosition;
+		if (distance.ComputeLength() > 20)
 		{
-			Player* temp = dynamic_cast<Player*>(GetOwner());
-			temp->HawkExplode(m_ptPosition);
+			SGD::Vector VEL = { 0, 0 };
+			if (m_poTarget.x + 5 < m_ptPosition.x)
+			{
+				VEL.x = -800;
+			}
+			if (m_poTarget.y + 5 < m_ptPosition.y)
+			{
+				VEL.y = -800;
+			}
+			if (m_poTarget.x - 5 > m_ptPosition.x)
+			{
+				VEL.x = 800;
+			}
+			if (m_poTarget.y - 5 > m_ptPosition.y)
+			{
+				VEL.y = 800;
+			}
+
+			SetVelocity(VEL);
 		}
-		SetPosition({ -100, -100 });
-
-		SetVelocity({ 0, 0 });
-
-		
+		else
+		{
+			((Caveman*)m_pOwner)->HawkExplode(m_ptPosition);
+			m_bDead = true;
+		}
 	}
 
 
+
+		Entity::Update(elapsedTime);
+
+		SGD::Rectangle rSelf = this->GetRect();
+		SGD::Rectangle rScreen =
+		{
+			0, 0,
+			Game::GetInstance()->GetScreenWidth() + Camera::GetInstance()->GetCameraPos().x,
+			Game::GetInstance()->GetScreenHeight() + Camera::GetInstance()->GetCameraPos().y
+		};
+
+
+		if (rSelf.IsIntersecting(rScreen) == false && m_pOwner->GetType() != ENT_BOSS_CAVEMAN)
+		{
+			//DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+			//pMsg->QueueMessage();
+			//pMsg = nullptr;
+			if (GetOwner()->GetType() == ENT_PLAYER)
+			{
+				Player* temp = dynamic_cast<Player*>(GetOwner());
+				temp->HawkExplode(m_ptPosition);
+			}
+			SetPosition({ -1000, -1000 });
+
+			SetVelocity({ 0, 0 });
+
+
+		}
+
+
 }
+
+
+void Hawk::Attack(SGD::Point _Pos)
+{
+	if (m_pOwner->GetType() == ENT_BOSS_CAVEMAN)
+	{
+		m_poTarget = _Pos;
+		m_bDead = false;
+	}
+}
+
 
 void Hawk::HandleCollision(const IEntity* pOther)
 {
@@ -113,7 +158,7 @@ void Hawk::HandleCollision(const IEntity* pOther)
 			Player* temp = dynamic_cast<Player*>(GetOwner());
 			temp->HawkExplode(m_ptPosition);
 		}
-		SetPosition({ -100, -100 });
+		SetPosition({ -1000, -1000 });
 
 		SetVelocity({ 0, 0 });
 
@@ -136,7 +181,7 @@ void Hawk::HandleCollision(const IEntity* pOther)
 			Player* temp = dynamic_cast<Player*>(GetOwner());
 			temp->HawkExplode(m_ptPosition);
 		}
-		SetPosition({ -100, -100 });
+		SetPosition({ -1000, -1000 });
 
 		SetVelocity({ 0, 0 });
 
@@ -161,10 +206,24 @@ void Hawk::HandleCollision(const IEntity* pOther)
 			Player* temp = dynamic_cast<Player*>(GetOwner());
 			temp->HawkExplode(m_ptPosition);
 		}
-		SetPosition({ -100, -100 });
+		SetPosition({ -1000, -1000 });
 
 		SetVelocity({ 0, 0 });
 
+	}
+
+	if(pOther->GetType() == ENT_BOSS_WIZARD &&
+		pOther != GetOwner())
+	{
+		if (GetOwner()->GetType() == ENT_PLAYER)
+		{
+			Player* temp = dynamic_cast<Player*>(GetOwner());
+			temp->HawkExplode(m_ptPosition);
+		}
+
+		SetPosition({ -100, -100 });
+
+		SetVelocity({ 0, 0 });
 	}
 
 	if (pOther->GetType() == ENT_SWITCH &&
@@ -183,7 +242,7 @@ void Hawk::HandleCollision(const IEntity* pOther)
 			temp->HawkExplode(m_ptPosition);
 		}
 
-		SetPosition({ -100, -100 });
+		SetPosition({ -1000, -1000 });
 
 		SetVelocity({ 0, 0 });
 

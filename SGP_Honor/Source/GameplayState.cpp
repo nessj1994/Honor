@@ -58,10 +58,14 @@
 #include "MutantMan.h"
 #include "Crab.h"
 #include "SwordSwing.h"
+#include "Wizard.h"
+#include "WizardDash.h"
+#include "WizardHawk.h"
 #include "Yeti.h"
 #include "Skeleton.h"
 #include "Vomit.h"
 #include "Poop.h"
+#include "Caveman.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -105,6 +109,10 @@ GameplayState* GameplayState::GetInstance(void)
 // - set up entities
 void GameplayState::Enter(void) //Load Resources
 {
+	// Calculate mini map dimensions
+	m_fMiniMapWidth = Game::GetInstance()->GetScreenWidth() - (m_fBorderSize * 2);
+	m_fMiniMapHeight = Game::GetInstance()->GetScreenHeight() - (m_fBorderSize * 2);
+
 	//Create Local references to the SGD Wrappers
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
@@ -118,8 +126,6 @@ void GameplayState::Enter(void) //Load Resources
 	//Initialize the Event and Message Managers
 	SGD::EventManager::GetInstance()->Initialize();
 	SGD::MessageManager::GetInstance()->Initialize(&MessageProc);
-
-
 
 
 	//Load Audio
@@ -189,7 +195,10 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("Level3_5");
+	
+	LoadLevel("Level4_4");
+
+	//LoadLevel("Level5_5");
 
 	//LoadLevel("HubLevel");
 
@@ -361,7 +370,11 @@ void GameplayState::Update(float elapsedTime)
 	//m_pEmitter2->Update(elapsedTime);
 	float x = elapsedTime;
 
-
+	// Toggle for mini map
+	if (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M))
+	{
+		m_bRenderMiniMap = !m_bRenderMiniMap;
+	}
 
 	m_pEntities->UpdateAll(elapsedTime);
 	Camera::GetInstance()->Update(elapsedTime);
@@ -388,6 +401,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BULL_ENEMY);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MUTANT_MAN);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_POOP);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STALACTITE);
 
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
 	m_pEntities->CheckCollisions(Entity::ENT_PRESSURE_PLATE, Entity::ENT_SWORD);
@@ -409,6 +423,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_STALACTITE);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_GEYSER);
+	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_BOSS_WIZARD);
+
 
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_LASER);
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_PLAYER);
@@ -416,10 +432,10 @@ void GameplayState::Update(float elapsedTime)
 
 
 	//if (m_pArmor != nullptr)
-	//	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ARMOR);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ARMOR);
 
 	//if (m_pHonor != nullptr)
-	//	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
+	//m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_FALLING_BLOCK);
@@ -430,6 +446,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_BULL);
 	m_pEntities->CheckWorldCollision(Entity::ENT_MUTANT_MAN);
 	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_YETI);
+	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_CAVEMAN);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_VOMIT);
 	m_pEntities->CheckWorldCollision(Entity::ENT_POOP); 
@@ -444,6 +461,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_BULL);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BULL_ENEMY);
+	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_CAVEMAN);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_YETI);
 
 	//Entities WHich SLow the Player
@@ -466,6 +484,12 @@ void GameplayState::Render(void)
 	//Camera::GetInstance()->DrawTexture({ 270, 400 }, {}, SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/images.jpg"), false);
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
+
+	// Draw the mini map
+	if (m_bRenderMiniMap)
+	{
+		RenderMiniMap();
+	}
 
 	// Draw a fading rectangle
 	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
@@ -812,6 +836,8 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 Entity* GameplayState::CreateProjectile(Entity* pOwner) const
 {
 	Projectile* proj = new Projectile();
+	//if (pOwner->GetType() != Entity::ENT_BOSS_WIZARD)
+	
 	if(pOwner->GetDirection().x == 1)
 		proj->SetPosition(SGD::Point(pOwner->GetRect().right, pOwner->GetPosition().y - pOwner->GetSize().height / 2));
 	else if(pOwner->GetDirection().x == -1)
@@ -820,6 +846,12 @@ Entity* GameplayState::CreateProjectile(Entity* pOwner) const
 		proj->SetPosition(SGD::Point(pOwner->GetSize().width / 2, pOwner->GetRect().top));
 	else if(pOwner->GetDirection().y == 1)
 		proj->SetPosition(SGD::Point(pOwner->GetSize().width / 2, pOwner->GetRect().bottom));
+
+		if (pOwner->GetDirection().x == 1)
+			proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		else
+			proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+	
 
 	proj->SetSize({ 40, 40 });
 	proj->SetDirection({ pOwner->GetDirection() });
@@ -834,9 +866,9 @@ Entity* GameplayState::CreateGravProjectile(Entity* pOwner) const
 {
 	GravProjectile* proj = new GravProjectile();
 	if(pOwner->GetDirection().x == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetRect().right, pOwner->GetRect().top + pOwner->GetRect().ComputeHeight() / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetRect().right, pOwner->GetRect().top /*- pOwner->GetRect().ComputeHeight() / 2*/));
 	else
-		proj->SetPosition(SGD::Point(pOwner->GetRect().left, pOwner->GetRect().top + pOwner->GetRect().ComputeHeight() / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetRect().left, pOwner->GetRect().top /*- pOwner->GetRect().ComputeHeight() / 2*/));
 
 	proj->SetDirection({ pOwner->GetDirection() });
 	proj->SetOwner(pOwner);
@@ -1361,6 +1393,11 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 			pJelly->Release();
 			break;
 		}
+		case 10: //Mini-Wizard (for final boss fight)
+		{
+			
+
+		}
 	}
 	//case 1: // skeleton
 	//{
@@ -1431,44 +1468,129 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 {
 	switch(_type)
 	{
-	case 0: // bull
-	{
-				Bull * pBull = new Bull();
-				pBull->SetPosition({ (float)_x, (float)_y });
-				pBull->SetStartPosition({ (float)_x, (float)_y });
-				pBull->SetPlayer(m_pPlayer);
-				m_pEntities->AddEntity(pBull, Entity::ENT_BOSS_BULL);
-				pBull->Release();
-				break;
-	}
-	case 1: // caveman
-	{
-				break;
-	}
-	case 2: // yeti
-	{
+		case 0: // bull
+		{
+			Bull * pBull = new Bull();
+			pBull->SetPosition({ (float)_x, (float)_y });
+			pBull->SetStartPosition({ (float)_x, (float)_y });
+			pBull->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pBull, Entity::ENT_BOSS_BULL);
+			pBull->Release();
+			break;
+		}
+		case 1: // caveman
+		{
+					Caveman* Temp = new Caveman();
+					Temp->SetPosition({ (float)_x, (float)_y });
+					Temp->SetStartPosition({ (float)_x, (float)_y });
+					Temp->SetPlayer(m_pPlayer);
+					m_pEntities->AddEntity(Temp, Entity::ENT_BOSS_BULL);
+					Temp->Release();
+					break;
+		}
+		case 2: // yeti
+		{
 
-				Yeti * pYeti = new Yeti();
-				pYeti->SetPosition({ (float)_x, (float)_y });
-				pYeti->SetStartPosition({ (float)_x, (float)_y });
-				pYeti->SetPlayer(m_pPlayer);
-				m_pEntities->AddEntity(pYeti, Entity::ENT_BOSS_YETI);
-				pYeti->Release();
-				break;
+					Yeti * pYeti = new Yeti();
+					pYeti->SetPosition({ (float)_x, (float)_y });
+					pYeti->SetStartPosition({ (float)_x, (float)_y });
+					pYeti->SetPlayer(m_pPlayer);
+					m_pEntities->AddEntity(pYeti, Entity::ENT_BOSS_YETI);
+					pYeti->Release();
+					break;
+		}
+		case 3: // crab
+		{
+					Crab * mCrab = new Crab();
+					mCrab->SetPosition({ (float)_x, (float)_y });
+					m_pEntities->AddEntity(mCrab, Entity::ENT_BOSS_CRAB);
+					mCrab->Release();
+					break;
+		}
+		case 4: // wizard
+		{
+					WizardDash* m_pDash1 = new WizardDash;
+				//	m_pDash1->SetPosition({ 100, 400 });
+					m_pDash1->SetPosition({ -200, -200 });
+					m_pDash1->SetFacingRight(true);
+
+					WizardDash* m_pDash2 = new WizardDash;
+					//m_pDash2->SetPosition({ 400, 400 });
+					m_pDash2->SetPosition({ -200, -200 });
+					m_pDash2->SetFacingRight(false);
+
+
+					WizardDash* m_pDash3 = new WizardDash;
+					//m_pDash3->SetPosition({ 100, 700 });
+					m_pDash3->SetPosition({ -200, -200 });
+					m_pDash3->SetFacingRight(true);
+
+
+					WizardDash* m_pDash4 = new WizardDash;
+					//m_pDash4->SetPosition({ 400, 700 });
+					m_pDash4->SetPosition({ -200, -200 });
+					m_pDash4->SetFacingRight(false);
+
+
+
+
+					Wizard* m_pWizard = new Wizard;
+					m_pWizard->SetPosition({ (float)_x, (float)_y });
+					m_pWizard->SetStartPosition({ (float)_x, (float)_y });
+
+
+					WizardHawk* m_pHawk1 = new WizardHawk;
+					m_pHawk1->SetPosition({ -300, -300 });
+					m_pHawk1->SetSize({ 1, 1 });
+
+					WizardHawk* m_pHawk2 = new WizardHawk;
+					m_pHawk2->SetPosition({ -300, -300 });
+					m_pHawk2->SetSize({ 1, 1 });
+
+
+					WizardHawk* m_pHawk3 = new WizardHawk;
+					m_pHawk3->SetPosition({ -300, -300 });
+					m_pHawk3->SetSize({ 1, 1 });
+
+
+					WizardHawk* m_pHawk4 = new WizardHawk;
+					m_pHawk4->SetPosition({ -300, -300 });
+					m_pHawk4->SetSize({ 1, 1 });
+
+
+					m_pWizard->SetPlayer(m_pPlayer);
+
+					//Dashptrs
+					m_pWizard->SetDash1(m_pDash1);
+					m_pWizard->SetDash2(m_pDash2);
+					m_pWizard->SetDash3(m_pDash3);
+					m_pWizard->SetDash4(m_pDash4);
+
+					//Hawkptrs
+					m_pWizard->SetHawk1(m_pHawk1);
+					m_pWizard->SetHawk2(m_pHawk2);
+					m_pWizard->SetHawk3(m_pHawk3);
+					m_pWizard->SetHawk4(m_pHawk4);
+
+
+					m_pEntities->AddEntity(m_pDash1, Entity::ENT_WIZARD_DASH);
+					m_pEntities->AddEntity(m_pDash2, Entity::ENT_WIZARD_DASH);
+					m_pEntities->AddEntity(m_pDash3, Entity::ENT_WIZARD_DASH);
+					m_pEntities->AddEntity(m_pDash4, Entity::ENT_WIZARD_DASH);
+
+					m_pEntities->AddEntity(m_pHawk1, Entity::ENT_WIZARD_HAWK);
+					m_pEntities->AddEntity(m_pHawk2, Entity::ENT_WIZARD_HAWK);
+					m_pEntities->AddEntity(m_pHawk3, Entity::ENT_WIZARD_HAWK);
+					m_pEntities->AddEntity(m_pHawk4, Entity::ENT_WIZARD_HAWK);
+
+					m_pEntities->AddEntity(m_pWizard, Entity::ENT_BOSS_WIZARD);
+					m_pWizard->Release();
+			break;
+		}
 	}
-	case 3: // crab
-	{
-				Crab * mCrab = new Crab();
-				mCrab->SetPosition({ (float)_x, (float)_y });
-				m_pEntities->AddEntity(mCrab, Entity::ENT_BOSS_CRAB);
-				mCrab->Release();
-				break;
-	}
-	case 4: // wizard
-	{
-				break;
-	}
-	}
+
+	
+	
 }
 
 #pragma endregion
@@ -1716,4 +1838,25 @@ bool GameplayState::GetHonorValue(unsigned int _index)
 unsigned int GameplayState::GetHonorVectorSize()
 {
 	return m_mCollectedHonor[m_strCurrLevel].size();
+}
+
+/////////////////////////////////////////////
+// RenderMiniMap
+// -Renders the mini map
+void GameplayState::RenderMiniMap()
+{
+	// Reference to the graphics manager
+	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
+
+	// Draw the backdrop
+	SGD::Rectangle backDrop = SGD::Rectangle(m_fBorderSize, m_fBorderSize,
+		Game::GetInstance()->GetScreenWidth() - m_fBorderSize,
+		Game::GetInstance()->GetScreenHeight() - m_fBorderSize);
+	pGraphics->DrawRectangle(backDrop, {100, 200, 200, 200 }, { 0, 0, 0 }, 0);
+
+	// Render the terrain onto the minimap
+	m_pLevel->RenderMiniMap();
+
+	// Render the entities onto the minimap
+	m_pEntities->RenderMiniMap();
 }

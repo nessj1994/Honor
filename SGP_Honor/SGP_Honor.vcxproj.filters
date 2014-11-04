@@ -258,6 +258,8 @@
     <ClCompile Include="Source\SwordSwing.cpp">
       <Filter>Entities\Spells</Filter>
     </ClCompile>
+    <ClCompile Include="Source\WizardDash.cpp" />
+    <ClCompile Include="Source\WizardHawk.cpp" />
     <ClCompile Include="Source\BullEnemy.cpp">
       <Filter>Entities\Enemies</Filter>
     </ClCompile>
@@ -560,6 +562,8 @@
     <ClInclude Include="Source\SwordSwing.h">
       <Filter>Entities\Spells</Filter>
     </ClInclude>
+    <ClInclude Include="Source\WizardDash.h" />
+    <ClInclude Include="Source\WizardHawk.h" />
     <ClInclude Include="Source\BullEnemy.h">
       <Filter>Entities\Enemies</Filter>
     </ClInclude>
