@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level name="World2Level" width="48" height="32" fixed="0" playerX="308" playerY="876">
+<Level name="World2Level" width="48" height="32" fixed="0" playerX="181" playerY="916">
 	<ImageLayers numLayers="1">
 		<ImageLayer speed="1" depth="0" image="\Assets\graphics\TileSet1.png" name="Terrain" render="1" tileSetWidth="6" tileSetHeight="16" tileSetSize="32">
 			<ImageTile type="77" />
@@ -4616,12 +4616,21 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="2">
+	<Entities numEntities="9">
 		<Entity type="18" x="128" y="864" numArgs="1" name="HubTeleporter">
 			<Argument type="3" name="Level" value="HubLevel" />
 		</Entity>
-		<Entity type="19" x="1312" y="896" numArgs="1" name="Enemy_1">
+		<Entity type="19" x="315" y="786" numArgs="1" name="Enemy_1">
 			<Argument type="1" name="Type" value="2" />
+		</Entity>
+		<Entity type="14" x="640" y="960" numArgs="0" name="FreezableGround_1" />
+		<Entity type="14" x="704" y="960" numArgs="0" name="FreezableGround_2" />
+		<Entity type="14" x="672" y="960" numArgs="0" name="FreezableGround_3" />
+		<Entity type="14" x="736" y="960" numArgs="0" name="FreezableGround_4" />
+		<Entity type="14" x="768" y="960" numArgs="0" name="FreezableGround_5" />
+		<Entity type="14" x="800" y="960" numArgs="0" name="FreezableGround_6" />
+		<Entity type="19" x="1248" y="768" numArgs="1" name="Enemy_1">
+			<Argument type="1" name="Type" value="3" />
 		</Entity>
 	</Entities>
 </Level>

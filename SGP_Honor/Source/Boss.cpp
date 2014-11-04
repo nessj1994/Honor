@@ -1,5 +1,6 @@
 #include "Boss.h"
 #include "Camera.h"
+#include "Player.h"
 
 #include <Windows.h>
 

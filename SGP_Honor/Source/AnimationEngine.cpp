@@ -78,7 +78,7 @@ void AnimationEngine::Update(float elapsedTime, AnimTimeStamp& ts, IEntity* send
 	}
 }
 
-void AnimationEngine::Render(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale, SGD::Point camerapos)
+void AnimationEngine::Render(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale, SGD::Point camerapos, SGD::Vector rotationOffset)
 {
 	float scaleX = scale;
 	if (flipped == false)
@@ -90,7 +90,7 @@ void AnimationEngine::Render(SGD::Point position, float rotation, AnimTimeStamp&
 	SGD::Rectangle frame = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetSourceRect();
 	SGD::Point anchor = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetAnchor();
 	SGD::GraphicsManager::GetInstance()->DrawTextureSection(m_mAnimationMap[ts.GetCurrAnimation()].GetImage(),
-	{ position.x - (anchor.x * scaleX) + 16, position.y - (anchor.y * scale) + 60}, frame, rotation, {}, {}, { scaleX, scale });
+	{ position.x - (anchor.x * scaleX) /*+ 16*/, position.y - (anchor.y * scale) /*+ 60*/}, frame, rotation, {}, {}, { scaleX, scale });
 }
 
 void AnimationEngine::Terminate(void)
@@ -121,8 +121,8 @@ SGD::Rectangle AnimationEngine::GetRect(const AnimTimeStamp& ts, bool facingRigh
 
 	if (facingRight == false)
 	{
-		rect.left -= colRect.ComputeWidth() / 2.0f;
-		rect.right -= colRect.ComputeWidth() / 2.0f;
+		/*rect.left -= colRect.ComputeWidth() / 2.0f;
+		rect.right -= colRect.ComputeWidth() / 2.0f;*/
 	}
 	/*SGD::GraphicsManager::GetInstance()->DrawRectangle({ rect.left - Camera::GetInstance()->GetCameraPos().x,
 	rect.top - Camera::GetInstance()->GetCameraPos().y, rect.right - Camera::GetInstance()->GetCameraPos().x,

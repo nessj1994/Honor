@@ -3,6 +3,9 @@
 class GravProjectile : public Projectile
 {
 public:
+
+	enum ProjectileType { INK, BONE };
+
 	GravProjectile();
 	virtual ~GravProjectile();
 
@@ -13,7 +16,10 @@ public:
 	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
 
+	void SetProjectileType(ProjectileType _type);
+
 private:
+	ProjectileType m_ptType;
 	float gravity = 0.0f;
 	float gravTimer = 0.0f;
 };

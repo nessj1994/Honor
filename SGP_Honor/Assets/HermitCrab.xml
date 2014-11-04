@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations Character="Hermit Crab">
+  <Animation name="Hermit Crab Hide" spritesheet="HermitCrab.png" looping="0">
+    <Frame RenderRectLeft="17" RenderRectTop="45" RenderRectRight="82" RenderRectBottom="74" CollisionRectLeft="23" CollisionRectTop="45" CollisionRectRight="78" CollisionRectBottom="67" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="29" anchorpointY="22" />
+  </Animation>
+  <Animation name="Hermit Crab Pounce" spritesheet="HermitCrab.png" looping="0">
+    <Frame RenderRectLeft="103" RenderRectTop="20" RenderRectRight="161" RenderRectBottom="83" CollisionRectLeft="112" CollisionRectTop="47" CollisionRectRight="152" CollisionRectBottom="69" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="25" anchorpointY="49" />
+    <Frame RenderRectLeft="186" RenderRectTop="23" RenderRectRight="256" RenderRectBottom="79" CollisionRectLeft="200" CollisionRectTop="54" CollisionRectRight="233" CollisionRectBottom="74" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="27" anchorpointY="51" />
+    <Frame RenderRectLeft="288" RenderRectTop="21" RenderRectRight="360" RenderRectBottom="77" CollisionRectLeft="301" CollisionRectTop="50" CollisionRectRight="333" CollisionRectBottom="71" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="26" anchorpointY="50" />
+  </Animation>
+</Animations>
