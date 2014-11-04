@@ -2,6 +2,8 @@
 
 #include "Unit.h"
 #include "../SGD Wrappers/SGD_Geometry.h"
+#include "Player.h"
+
 
 class Player;
 
