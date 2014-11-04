@@ -72,14 +72,14 @@ void Enemy::Update(float elapsedTime)
 			}
 			else
 			{
-				m_bDead = true;
+				SetAlive(false);
 			}
 
 		}
 
 		if (nIntersectHeight < nIntersectWidth)
 		{
-			m_bDead = true;
+			SetAlive(false);
 			//if switch, activate switch
 			//if evenmy call event to kill enemy
 			//SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
@@ -101,7 +101,7 @@ void Enemy::Update(float elapsedTime)
 			}
 			else
 			{
-				m_bDead = true;
+				SetAlive(false);
 			}
 
 		}
@@ -109,7 +109,7 @@ void Enemy::Update(float elapsedTime)
 		if (nIntersectHeight == nIntersectWidth
 			&& nIntersectHeight != 0)
 		{
-			m_bDead = true;
+			SetAlive(false);
 			if (this->GetType() == ENT_POUNCER)
 			{
 				Pouncer* pnc = dynamic_cast<Pouncer*>(this);
@@ -127,7 +127,7 @@ void Enemy::Update(float elapsedTime)
 			}
 			else
 			{
-				m_bDead = true;
+				SetAlive(false);
 			}
 		}
 	}

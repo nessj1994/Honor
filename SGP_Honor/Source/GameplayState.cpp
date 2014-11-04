@@ -190,7 +190,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("Level4_1");
+	LoadLevel("Level3_5");
 
 	//LoadLevel("HubLevel");
 
@@ -447,6 +447,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_BULL);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BULL_ENEMY);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_CAVEMAN);
+	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_YETI);
 
 	//Entities WHich SLow the Player
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_VOMIT);

@@ -33,7 +33,7 @@ Squid::~Squid()
 
 void Squid::Update(float elapsedTime)
 {
-	if (IsAlive())
+	if (GetAlive())
 	{
 		Enemy::Update(elapsedTime);
 		if (target != nullptr)
@@ -97,7 +97,7 @@ void Squid::Render(void)
 	//Camera::GetInstance()->Draw(rMyRect,
 	//	SGD::Color::Color(255, 255, 0, 0));
 
-	if (IsAlive())
+	if (GetAlive())
 	{
 		Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, m_bFacingRight, 1);
 	}
