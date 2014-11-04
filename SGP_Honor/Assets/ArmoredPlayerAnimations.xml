@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations Character="Player">
+  <Animation name="Armor Player Jump" spritesheet="CharArmor_beard.png" looping="1">
+    <Frame RenderRectLeft="1" RenderRectTop="0" RenderRectRight="61" RenderRectBottom="80" CollisionRectLeft="17" CollisionRectTop="13" CollisionRectRight="44" CollisionRectBottom="70" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="31" anchorpointY="72" />
+  </Animation>
+  <Animation name="Armor Player Idle" spritesheet="CharArmor_beard.png" looping="1">
+    <Frame RenderRectLeft="64" RenderRectTop="0" RenderRectRight="124" RenderRectBottom="80" CollisionRectLeft="82" CollisionRectTop="10" CollisionRectRight="102" CollisionRectBottom="75" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.4" anchorpointX="28" anchorpointY="72" />
+    <Frame RenderRectLeft="127" RenderRectTop="1" RenderRectRight="187" RenderRectBottom="79" CollisionRectLeft="147" CollisionRectTop="9" CollisionRectRight="164" CollisionRectBottom="74" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.4" anchorpointX="27" anchorpointY="71" />
+    <Frame RenderRectLeft="187" RenderRectTop="1" RenderRectRight="247" RenderRectBottom="79" CollisionRectLeft="205" CollisionRectTop="14" CollisionRectRight="232" CollisionRectBottom="76" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.4" anchorpointX="30" anchorpointY="71" />
+  </Animation>
+  <Animation name="Armor Player Walking" spritesheet="CharArmor_beard.png" looping="1">
+    <Frame RenderRectLeft="96" RenderRectTop="194" RenderRectRight="150" RenderRectBottom="267" CollisionRectLeft="110" CollisionRectTop="199" CollisionRectRight="136" CollisionRectBottom="265" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.18" anchorpointX="28" anchorpointY="71" />
+    <Frame RenderRectLeft="157" RenderRectTop="194" RenderRectRight="212" RenderRectBottom="268" CollisionRectLeft="173" CollisionRectTop="196" CollisionRectRight="199" CollisionRectBottom="265" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.18" anchorpointX="29" anchorpointY="71" />
+    <Frame RenderRectLeft="219" RenderRectTop="194" RenderRectRight="274" RenderRectBottom="268" CollisionRectLeft="232" CollisionRectTop="195" CollisionRectRight="260" CollisionRectBottom="265" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.18" anchorpointX="29" anchorpointY="71" />
+    <Frame RenderRectLeft="281" RenderRectTop="194" RenderRectRight="336" RenderRectBottom="268" CollisionRectLeft="294" CollisionRectTop="196" CollisionRectRight="324" CollisionRectBottom="264" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.18" anchorpointX="29" anchorpointY="71" />
+  </Animation>
+  <Animation name="Armor Player dashing" spritesheet="CharArmor_beard.png" looping="0">
+    <Frame RenderRectLeft="248" RenderRectTop="2" RenderRectRight="336" RenderRectBottom="68" CollisionRectLeft="260" CollisionRectTop="2" CollisionRectRight="299" CollisionRectBottom="68" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="35" anchorpointY="65" />
+  </Animation>
+</Animations>

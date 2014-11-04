@@ -24,6 +24,7 @@ public:
 	//Entity Upkeep
 	void UpdateAll		(float elapsedTime);
 	void RenderAll		(void);
+	void RenderMiniMap	(void);
 
 	void CheckCollisions(unsigned int _bucket1, unsigned int _bucket2);
 	void CheckWorldCollision(unsigned int _bucket);

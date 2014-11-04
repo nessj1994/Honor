@@ -75,6 +75,9 @@ public:
 	Camera* GetCamera(void) const { return m_pCamera; }
 	Level* GetCurrentLevel(void) const { return m_pLevel; }
 	std::string GetLevelString(void) const { return m_strCurrLevel; }
+	float GetBorderSize(void) const { return m_fBorderSize; }
+	float GetMiniMapWidth(void) const { return m_fMiniMapWidth; }
+	float GetMiniMapHeight(void) const { return m_fMiniMapHeight; }
 
 	//////////////////////////////////////////////////////////
 	////////////////////// Mutators /////////////////////////
@@ -140,6 +143,7 @@ private:
 	void CreateBlocks(void);
 	void CreatePermFrozenTiles(void);
 	void CreateTempFrozenTiles(void);
+	void RenderMiniMap(void);
 	
 
 	///////////////////////////////////////////////////////////
@@ -194,6 +198,10 @@ private:
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
 
 	unsigned char m_cScreenFade = 0;
+	bool m_bRenderMiniMap = false;
+	float m_fBorderSize = 160.0f;
+	float m_fMiniMapWidth = 0.0f;
+	float m_fMiniMapHeight = 0.0f;
 
 };
 

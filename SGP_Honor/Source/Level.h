@@ -30,6 +30,7 @@ public:
 	// Main interface
 	void Update(float _dt);
 	void Render();
+	void RenderMiniMap();
 	void RenderImageLayer(bool background);
 	void Startup();
 	void Exit();
@@ -44,6 +45,8 @@ public:
 	int GetPlayerY() const { return m_nPlayerY; }
 	int GetLevelWidth() const { return (m_nWidth * 32); }
 	int GetLevelHeight() const { return (m_nHeight * 32); }
+	int GetWidth() const { return m_nWidth; }
+	int GetHeight() const { return m_nHeight; }
 
 
 	//////////////////////////////

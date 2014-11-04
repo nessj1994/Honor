@@ -21,7 +21,7 @@ Pouncer::Pouncer() : Listener(this)
 	m_ts.SetCurrAnimation("Hermit Crab Hide");
 	//m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/hermitcrabPlaceholder.png");
 	//m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage);
-	SetGravity(-500.0f);
+	SetGravity(-800.0f);
 	m_bFacingRight = false;
 	m_aPounce = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Pouncer.wav");
 	m_aDeath = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/PouncerDeath.wav");
