@@ -167,6 +167,20 @@ void Hawk::HandleCollision(const IEntity* pOther)
 
 	}
 
+	if(pOther->GetType() == ENT_BOSS_WIZARD &&
+		pOther != GetOwner())
+	{
+		if (GetOwner()->GetType() == ENT_PLAYER)
+		{
+			Player* temp = dynamic_cast<Player*>(GetOwner());
+			temp->HawkExplode(m_ptPosition);
+		}
+
+		SetPosition({ -100, -100 });
+
+		SetVelocity({ 0, 0 });
+	}
+
 	if (pOther->GetType() == ENT_SWITCH &&
 		pOther != GetOwner())
 	{

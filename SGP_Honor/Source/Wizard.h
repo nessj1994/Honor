@@ -13,7 +13,7 @@ public:
 	Wizard();
 	virtual ~Wizard();
 
-	enum WizardState { WZ_FLOATING, WZ_BULL, WZ_HAWK, WZ_BUBBLE, WZ_ICE, WZ_VUNERABLE, WZ_DEATH, };
+	enum WizardState { WZ_FLOATING, WZ_BULL, WZ_HAWK, WZ_BUBBLE, WZ_ICE, WZ_VUNERABLE, WZ_DEATH, WZ_DAMAGED };
 
 	/////////////////////////////////////////////////
 	/////////////////Interface//////////////////////
@@ -25,9 +25,11 @@ public:
 	//void HandleEvent(const SGD::Event* pEvent);
 
 	void CastClones();
+	void ClonesUpdate( float elapsedTime);
 	void ResetClones();
 
 	void CastHawks();
+	void HawkUpdate(float elapsedTime);
 	void ResetHawks();
 
 
@@ -47,14 +49,24 @@ public:
 private:
 
 	float m_fFloatTimer = 0.0f;
-	float m_fXTimerLoop = 0.0f;
-	float m_fYTimerLoop = 0.0f;
+	float m_fPreCastTimer = 0.0f;
+
+	//State timers
+	float m_fOrigStateTimer = 0.0f;
+	float m_fCurStateTimer = 0.0f;
+
+
 	float m_fDashStateTimer = 3.5f;
 	float m_fHawkStateTimer = 13.5f;
+	float m_fVunerableTimer = 6.0f;
+	
 
 	bool floatingLeft = true;
 	bool clonesCasted = false;
 	bool hawksCasted = false;
+
+	unsigned int m_nDamage = 0;
+	unsigned int m_nBullCount = 0;
 
 
 	WizardState m_bsCurrState;

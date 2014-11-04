@@ -46,6 +46,8 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("Screen2x1.5");
 	Listener::RegisterForEvent("Screen1.5x2");
 	Listener::RegisterForEvent("Screen1.5x3");
+	Listener::RegisterForEvent("FINALBOSS");
+
 
 
 
@@ -1178,36 +1180,54 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	{
 		m_fPanX = 2;
 		m_fPanY = 2;
+		Camera::GetInstance()->SetCameraCap(0);
 	}
 	if (pEvent->GetEventID() == "Screen2x3")
 	{
 		m_fPanX = 2;
 		m_fPanY = 3;
+		Camera::GetInstance()->SetCameraCap(0);
+
 	}
 	if (pEvent->GetEventID() == "Screen2x4")
 	{
 		m_fPanX = 2;
 		m_fPanY = 4;
+		Camera::GetInstance()->SetCameraCap(0);
+
 	}
 	if (pEvent->GetEventID() == "Screen3x3")
 	{
 		m_fPanX = 3;
 		m_fPanY = 3;
+		Camera::GetInstance()->SetCameraCap(0);
+
 	}
 	if (pEvent->GetEventID() == "Screen2x1.5")
 	{
 		m_fPanX = 2;
 		m_fPanY = 1.5;
+		Camera::GetInstance()->SetCameraCap(0);
+
 	}
 	if (pEvent->GetEventID() == "Screen1.5x2")
 	{
 		m_fPanX = 1.5;
 		m_fPanY = 2;
+		Camera::GetInstance()->SetCameraCap(0);
+
 	}
 	if (pEvent->GetEventID() == "Screen1.5x3")
 	{
 		m_fPanX = 1.5;
 		m_fPanY = 3;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "FINALBOSS")
+	{
+		Camera::GetInstance()->SetCameraCap(5);
+
 	}
 }
 
@@ -1784,19 +1804,19 @@ void Player::UpdateHawk(float elapsedTime)
 			SGD::Vector VEL = { 0, 0 };
 			if(m_ptPosition.x < m_emHawkReturn->GetPosition().x)
 			{
-				VEL.x = -300;
+				VEL.x = -600;
 			}
 			if(m_ptPosition.y < m_emHawkReturn->GetPosition().y)
 			{
-				VEL.y = -300;
+				VEL.y = -600;
 			}
 			if(m_ptPosition.x > m_emHawkReturn->GetPosition().x)
 			{
-				VEL.x = 300;
+				VEL.x = 600;
 			}
 			if(m_ptPosition.y > m_emHawkReturn->GetPosition().y)
 			{
-				VEL.y = 300;
+				VEL.y = 600;
 			}
 			SGD::Point TempPos = m_emHawkReturn->GetPosition();
 			TempPos += VEL * elapsedTime;

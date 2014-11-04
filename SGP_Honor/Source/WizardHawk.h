@@ -22,6 +22,9 @@ public:
 	virtual void HandleCollision(const IEntity* pOther) override;
 
 
+	void SetFall(bool _logic) { m_bSet = _logic; }
+	bool GetFall(void) { return m_bSet; }
+
 	void SetTimer(float _timer) { m_fTimer = _timer; }
 
 	SGD::Point GetDestPos(void) { return m_ptDestPos; }
@@ -35,6 +38,9 @@ private:
 	//particle effect 
 	//SGD::Vector m_vtDirection = { 0, 0 };
 	float m_fTimer = 0.0f;
+
+	//Reached Y destination ready to fall == true
+	bool m_bSet = false;
 
 	Wizard* m_pWizard = nullptr;
 	SGD::Size m_szDestSize = { 0, 0 };

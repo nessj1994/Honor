@@ -21,6 +21,7 @@ WizardHawk::~WizardHawk()
 void WizardHawk::Update(float elapsedTime)
 {
 	
+	SetGravity(0);
 
 	m_fTimer -= elapsedTime;
 
@@ -33,7 +34,7 @@ void WizardHawk::Update(float elapsedTime)
 			{
 				m_ptPosition.x += elapsedTime * 20;
 
-				if ((m_ptDestPos.x - m_ptPosition.x) < 5)
+				if ((m_ptDestPos.x - m_ptPosition.x) < 1)
 				{
 					m_ptPosition.x = m_ptDestPos.x;
 				}
@@ -44,7 +45,7 @@ void WizardHawk::Update(float elapsedTime)
 				m_ptPosition.x -= elapsedTime * 20;
 
 
-				if ((m_ptDestPos.x - m_ptPosition.x) < 5)
+				if ((m_ptDestPos.x - m_ptPosition.x) < 1)
 				{
 					m_ptPosition.x = m_ptDestPos.x;
 				}
@@ -55,12 +56,27 @@ void WizardHawk::Update(float elapsedTime)
 			if (m_ptPosition.y < m_ptDestPos.y)
 			{
 				m_ptPosition.y += elapsedTime * 200;
+
+				if ((m_ptDestPos.y - m_ptPosition.y) < 1)
+				{
+					m_ptPosition.y = m_ptDestPos.y;
+
+				}
+
 			}
 
 			if (m_szSize.width < m_szDestSize.width)
 			{
 				m_szSize.width += elapsedTime * 200;
 				m_szSize.height += elapsedTime * 200;
+
+
+				if ((m_ptDestPos.y - m_ptPosition.y) < 1)
+				{
+					m_ptPosition.y = m_ptDestPos.y;
+
+				}
+
 			}
 		}
 
@@ -70,7 +86,7 @@ void WizardHawk::Update(float elapsedTime)
 
 	}
 
-
+	Entity::Update(elapsedTime);
 
 
 }

@@ -38,6 +38,7 @@ public:
 	void SetZoomScale(float _zoom) { m_fScale = _zoom; }
 
 	void SetPlayer(Player* _player) { m_pPlayer = _player; }
+	void SetCameraCap(unsigned int _BossRm) { m_nBossCamera = _BossRm; }
 
 	//Draw
 	void Draw(SGD::Rectangle _rect, SGD::Color _color);
@@ -56,7 +57,7 @@ private:
 	Camera(const Camera&)				= delete;
 	Camera& operator= (const Camera&)	= delete;
 
-	
+	unsigned int m_nBossCamera = 0;
 
 	unsigned int m_nScreenWidth = 0;
 	unsigned int m_nScreenHeight = 0;
