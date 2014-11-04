@@ -1,5 +1,6 @@
 #include "Stalactite.h"
 #include "LevelCollider.h"
+#include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "Camera.h"
 
 Stalactite::Stalactite()
@@ -7,6 +8,7 @@ Stalactite::Stalactite()
 	m_szSize = { 16, 16 };
 	m_ptPosition = { 900, 200 };
 	m_ptStartPosition = { 900, 200 };
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/Fallingspike.png", {});
 }
 
 
@@ -51,6 +53,7 @@ void Stalactite::Render(void)
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
 	Camera::GetInstance()->Draw(rMyRect, { 255, 0, 255, 255 });
+	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1, {}, {});
 }
 
 int Stalactite::GetType(void) const
