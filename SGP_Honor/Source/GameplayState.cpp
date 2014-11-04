@@ -14,6 +14,8 @@
 #include "CreateVerticalBubble.h"
 #include "CreateSprayMessage.h"
 #include "CreateHawkMessage.h"
+#include "CreateVomitMessage.h"
+#include "CreatePoopMessage.h"
 #include "ChangeLevelMessage.h"
 #include "MovingPlatform.h"
 
@@ -49,11 +51,16 @@
 #include "Squid.h"
 #include "Pouncer.h"
 #include "Jellyfish.h"
+#include "MutantBat.h"
 #include "Teleporter.h"
+#include "BullEnemy.h"
 #include "Bull.h"
 #include "MutantMan.h"
 #include "Crab.h"
 #include "SwordSwing.h"
+#include "Skeleton.h"
+#include "Vomit.h"
+#include "Poop.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -181,7 +188,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("Level4_5");
+	LoadLevel("Level4_1");
 
 	//LoadLevel("HubLevel");
 
@@ -324,7 +331,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level3_1");
+		LoadLevel("World2Level");
 	}
 
 	if (pInput->IsKeyPressed(SGD::Key::Escape)
@@ -377,6 +384,9 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STATUE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_POUNCER);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BULL_ENEMY);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MUTANT_MAN);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_POOP);
 
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
 	m_pEntities->CheckCollisions(Entity::ENT_PRESSURE_PLATE, Entity::ENT_SWORD);
@@ -389,7 +399,7 @@ void GameplayState::Update(float elapsedTime)
 
 	m_pEntities->CheckCollisions(Entity::ENT_TEMP_FREEZE, Entity::ENT_SPRAY);
 	m_pEntities->CheckCollisions(Entity::ENT_GEYSER, Entity::ENT_SPRAY);
-
+	m_pEntities->CheckCollisions(Entity::ENT_SPRAY, Entity::ENT_TEMP_FREEZE);
 
 
 	m_pEntities->CheckCollisions(Entity::ENT_PROJ, Entity::ENT_BLOCK);
@@ -417,15 +427,22 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_LASER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_BOSS_BULL);
 	m_pEntities->CheckWorldCollision(Entity::ENT_MUTANT_MAN);
-
+	m_pEntities->CheckWorldCollision(Entity::ENT_VOMIT);
+	m_pEntities->CheckWorldCollision(Entity::ENT_POOP); 
 	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
+	m_pEntities->CheckWorldCollision(Entity::ENT_BULL_ENEMY);
+	m_pEntities->CheckWorldCollision(Entity::ENT_SKELETON);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_POUNCER);
+	m_pEntities->CheckWorldCollision(Entity::ENT_MUTANT_BIRD);
 	m_pEntities->CheckWorldCollision(Entity::ENT_JELLYFISH);
+	m_pEntities->CheckWorldCollision(Entity::ENT_SPRAY);
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_BULL);
+	m_pEntities->CheckWorldEvent(Entity::ENT_BULL_ENEMY);
 
-
+	//Entities WHich SLow the Player
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_VOMIT);
 	//Process messages and events
 	SGD::EventManager::GetInstance()->Update();
 	SGD::MessageManager::GetInstance()->Update();
@@ -462,6 +479,42 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 	//What type of message is this
 	switch (pMsg->GetMessageID())
 	{
+		case MessageID::MSG_CREATE_VOMIT:
+		{
+			//Downcast to the real message type
+			const CreateVomitMessage* pCreateMsg =
+				dynamic_cast<const CreateVomitMessage*>(pMsg);
+
+			//Make sure the message isnt a nullptr
+			assert(pCreateMsg != nullptr
+				&& "GameplayState::MessageProc - MSG_CREATE_VOMIT is not actually a CreateVomitMessage");
+			pCreateMsg->GetOwner()->GetPosition();
+			Vomit* Temp = new Vomit(pCreateMsg->GetOwner()->GetPosition());
+			
+			GetInstance()->m_pEntities->AddEntity(Temp, Entity::ENT_VOMIT);
+
+			Temp->Release();
+			Temp = nullptr;
+			break;
+		}
+		case MessageID::MSG_CREATE_POOP:
+		{
+			//Downcast to the real message type
+			const CreatePoopMessage* pCreateMsg =
+				dynamic_cast<const CreatePoopMessage*>(pMsg);
+
+			//Make sure the message isnt a nullptr
+			assert(pCreateMsg != nullptr
+				&& "GameplayState::MessageProc - MSG_CREATE_POOP is not actually a CreatePoopMessage");
+			pCreateMsg->GetOwner()->GetPosition();
+			Poop* Temp = new Poop(pCreateMsg->GetOwner()->GetPosition());
+
+			GetInstance()->m_pEntities->AddEntity(Temp, Entity::ENT_POOP);
+
+			Temp->Release();
+			Temp = nullptr;
+			break;
+		}
 		case MessageID::MSG_DESTROY_ENTITY:
 		{
 			//Downcast to the real message type
@@ -548,8 +601,16 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 
 			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_SQUID)
 			{
-				 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+				GravProjectile * temp = (GravProjectile*)pProj;
+				temp->SetProjectileType(GravProjectile::INK);
 			}
+			else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_SKELETON)
+			{
+				GravProjectile * temp = (GravProjectile*)pProj;
+				temp->SetProjectileType(GravProjectile::BONE);
+			}
+
+			pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
 
 			pProj->Release();
 			pProj = nullptr;
@@ -918,7 +979,7 @@ void GameplayState::CreateTempFrozenTiles(void)
 		//// TYPE STATE WILL CHANGE ( Needs to be done through TYPE with enttiyManger) Two types for each frozen tile === It's Current state and it's Bucket type (temp or perm tile)
 		pFreeze->SetType(Entity::ENT_NOT_FROZEN);
 
-		pFreeze->SetSize(SGD::Size(20, 20));
+		pFreeze->SetSize(SGD::Size(100, 100));
 		pFreeze->SetPosition(SGD::Point(500 + (i * 20.0f), 400.0f));
 		pFreeze->SetIsFrozen(false);
 		pFreeze->SetIsPerm(false);
@@ -1147,11 +1208,20 @@ void GameplayState::CreateArmor(int _x, int _y)
 // -Creates a freezable ground at the given coordinates
 void GameplayState::CreateFreezableGround(int _x, int _y)
 {
-	// TODO
-	FreezeableGround * mFreeze = new FreezeableGround();
-	mFreeze->SetPosition({ (float)_x, (float)_y });
-	m_pEntities->AddEntity(mFreeze, Entity::ENT_FROZEN);
-	mFreeze->Release();
+	FreezeableGround* pFreeze = new FreezeableGround;
+
+	//// TYPE STATE WILL CHANGE ( Needs to be done through TYPE with enttiyManger) Two types for each frozen tile === It's Current state and it's Bucket type (temp or perm tile)
+	pFreeze->SetType(Entity::ENT_NOT_FROZEN);
+
+	pFreeze->SetSize(SGD::Size(20, 20));
+	pFreeze->SetPosition(SGD::Point((float)_x, (float)_y));
+	pFreeze->SetIsFrozen(false);
+	pFreeze->SetIsPerm(false);
+
+	////// TYPE OF TILE Bucket
+	m_pEntities->AddEntity(pFreeze, Entity::ENT_TEMP_FREEZE);
+
+	pFreeze->Release();
 }
 
 /////////////////////////
@@ -1205,10 +1275,20 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 	{
 		case 0: // bull
 		{
+			BullEnemy * pBull = new BullEnemy();
+			pBull->SetPosition({ (float)_x, (float)_y });
+			pBull->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pBull, Entity::ENT_BULL_ENEMY);
+			pBull->Release();
 			break;
 		}
 		case 1: // skeleton
 		{
+			Skeleton * pSkeleton = new Skeleton();
+			pSkeleton->SetPosition({ (float)_x, (float)_y });
+			pSkeleton->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pSkeleton, Entity::ENT_SKELETON);
+			pSkeleton->Release();
 			break;
 		}
 		case 2: // mutant man
@@ -1223,7 +1303,12 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		}
 		case 3: // mutant bird
 		{
-			
+			MutantBat * pMutant = new MutantBat();
+			pMutant->SetPosition({ (float)_x, (float)_y });
+			pMutant->Begin({ (float)_x, (float)_y });
+			pMutant->SetPlayer(m_pPlayer);
+			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_BIRD);
+			pMutant->Release();
 			break;
 		}
 		case 4: // ice golem

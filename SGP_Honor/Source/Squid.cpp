@@ -15,11 +15,12 @@
 Squid::Squid() : Listener(this)
 {
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
-	m_ptPosition = { 800, 200 };
+	//m_ptPosition = { 800, 200 };
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/Squid.xml");
 	m_ts.SetCurrAnimation("Squid Idle");
 	spit = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/SquidSpit.wav");
 	m_aDeath = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/SquidDeath.wav");
+	SetAlive(true);
 }
 
 

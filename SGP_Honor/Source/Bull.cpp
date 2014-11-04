@@ -362,8 +362,8 @@ void Bull::Render(void)
 {
 	Boss::Render();
 	SGD::Point newPosition = m_ptPosition;
-	newPosition.y += 38;
-	newPosition.x += 50;
+	newPosition.y += 96;
+	newPosition.x += 64;
 	Camera::GetInstance()->DrawAnimation(newPosition, 0, m_ts, !m_bFacingRight, 1.0f);
 	if (m_bRenderFire)
 	{

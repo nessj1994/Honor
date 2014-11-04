@@ -20,6 +20,8 @@
 #include "BitmapFont.h"
 #include "Game.h"
 #include "Bull.h"
+#include "BullEnemy.h"
+#include "Vomit.h"
 #include "SwordSwing.h"
 
 #include <Windows.h>
@@ -125,10 +127,17 @@ void Player::Update(float elapsedTime)
 		if(IsDashing() == false)///////////////Dash check begins
 		{
 
+			/////////////////////////////////////////////////
+			////////////////////Jump/////////////////////////
+
+			UpdateJump(elapsedTime);
+
+
 			//	if(GetIsFalling() == false
 			//		&& GetIsJumping() == false)
 			if(m_unCurrentState == RESTING_STATE
-				|| m_unCurrentState == LANDING_STATE)
+				|| m_unCurrentState == LANDING_STATE
+				|| ( m_unCurrentState == JUMPING_STATE && m_bSlowed == true))
 			{
 				/////////////////////////////////////////////////
 				/////////////////Friction////////////////////////
@@ -155,10 +164,7 @@ void Player::Update(float elapsedTime)
 
 
 
-			/////////////////////////////////////////////////
-			////////////////////Jump/////////////////////////
-
-			UpdateJump(elapsedTime);
+			
 
 			/////////////////////////////////////////////////
 			///////////////////Shoot/////////////////////////
@@ -283,6 +289,7 @@ SGD::Rectangle Player::GetRect(void) const
 
 void Player::HandleCollision(const IEntity* pOther)
 {
+	m_bSlowed = false;
 	if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::W))
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hBounceEffect);
@@ -433,7 +440,25 @@ void Player::HandleCollision(const IEntity* pOther)
 		}
 	}
 
+	if (pOther->GetType() == Entity::ENT_VOMIT)
+	{
+		if (!((Vomit*)pOther)->Finished())
+		{
+			SetFriction(40);
+			m_bSlowed = true;
+		}
+	}
+
 	if(pOther->GetType() == Entity::ENT_LAVA)
+	{
+		m_bSliding = false;
+
+		//if so move back up but kill the player
+		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+		SGD::EventManager::GetInstance()->SendEventNow(&Event);
+	}
+
+	if (pOther->GetType() == Entity::ENT_POOP)
 	{
 		m_bSliding = false;
 
@@ -444,26 +469,23 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if(pOther->GetType() == Entity::ENT_BOSS_BULL)
 	{
-		// TODO use states
 		// Throw the player back
 		Bull * bull = (Bull*)(pOther);
 		if (bull->GetAttacking())
 		{
-			float throwSpeed = -3000;
-			if(bull->IsFacingRight())
-			{
-				throwSpeed = 3000;
-			}
-			SetGravity(0);
-			SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
-			SetVelocity({ throwSpeed, -1000 });
-			SetStunnded(true);
-			m_fStunTimer = 0.5f;
-
+			ThrowPlayer(bull->IsFacingRight());
 		}
 	}
 
-
+	if (pOther->GetType() == Entity::ENT_BULL_ENEMY)
+	{
+		// Throw the player back
+		BullEnemy * bull = (BullEnemy*)(pOther);
+		if (bull->GetAttacking())
+		{
+			ThrowPlayer(bull->GetFacingRight());
+		}
+	}
 }
 
 void Player::BasicCollision(const IEntity* pOther)
@@ -1175,10 +1197,10 @@ void Player::KillPlayer()
 		m_fDeathTimer = 0.5f;
 		m_bDead = true;
 		m_unJumpCount = 0;
-
+		
 
 		// TODO Add effects
-
+		m_bSlowed = false;
 	}
 }
 
@@ -1225,6 +1247,11 @@ void Player::UpdateTimers(float elapsedTime)
 	m_fIceTimer += elapsedTime;
 
 	m_fJumpTimer -= elapsedTime;
+	if (m_bSlowed == true)
+	{
+		m_fJumpTimer -= elapsedTime;
+
+	}
 
 	m_fLandTimer -= elapsedTime;
 
@@ -1296,6 +1323,52 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 		{
 			SetVelocity(SGD::Vector(0, GetVelocity().y));
 		}
+	}
+
+	if (m_bSlowed)
+	{
+		if ( m_unCurrentState != JUMPING_STATE
+			/*&& m_unCurrentState != FALLING_STATE*/
+			 )
+		{
+
+			if (GetVelocity().x > 0)
+			{
+				SetVelocity(SGD::Vector(GetVelocity().x - GetFriction(), GetVelocity().y));
+				if (GetVelocity().x < 0)
+				{
+					SetVelocity({ 0, GetVelocity().y });
+				}
+			}
+			else
+			{
+				SetVelocity(SGD::Vector(GetVelocity().x + GetFriction(), GetVelocity().y));
+				if (GetVelocity().x > 0)
+				{
+					SetVelocity({ 0, GetVelocity().y });
+				}
+			}
+
+		}
+
+		if (GetVelocity().y > 0)
+		{
+			SetVelocity(SGD::Vector(GetVelocity().x, GetVelocity().y - GetFriction()));
+			if (GetVelocity().y < 0)
+			{
+				SetVelocity({ GetVelocity().x, 0 });
+			}
+		}
+		else
+		{
+			SetVelocity(SGD::Vector(GetVelocity().x, GetVelocity().y + GetFriction()));
+			if (GetVelocity().y > 0)
+			{
+				SetVelocity({ GetVelocity().x, 0 });
+				
+			}
+		}
+		
 	}
 }
 
@@ -1509,6 +1582,12 @@ void Player::UpdateJump(float elapsedTime)
 			m_ts.ResetCurrFrame();
 			m_ts.SetPlaying(false);
 			m_ts.SetCurrAnimation("Jump");
+			if (m_bSlowed == true)
+			{
+				m_fJumpTimer = 0.25f;
+
+			}
+			else
 			m_fJumpTimer = 0.3f;
 			m_unCurrentState = JUMPING_STATE;
 
@@ -1999,3 +2078,19 @@ void Player::SetHasBounce(bool bounce)
 
 
 #pragma endregion
+////////////////////////////////
+// ThrowPlayer
+// -Tosses the player left or right and kills him
+void Player::ThrowPlayer(bool _right)
+{
+	float throwSpeed = -3000;
+	if (_right)
+	{
+		throwSpeed = 3000;
+	}
+	SetGravity(0);
+	SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
+	SetVelocity({ throwSpeed, -1000 });
+	SetStunnded(true);
+	m_fStunTimer = 0.5f;
+}

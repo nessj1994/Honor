@@ -251,21 +251,32 @@
     <ClCompile Include="Source\MutantMan.cpp">
       <Filter>Entities\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="Source\HorizontalBubble.cpp" />
+    <ClCompile Include="Source\VerticalBubble.cpp" />
+    <ClCompile Include="Source\CreateVerticalBubble.cpp" />
+    <ClCompile Include="Source\CreateHorizontalBubble.cpp" />
     <ClCompile Include="Source\SwordSwing.cpp">
       <Filter>Entities\Spells</Filter>
     </ClCompile>
-    <ClCompile Include="Source\HorizontalBubble.cpp">
-      <Filter>Entities</Filter>
+    <ClCompile Include="Source\BullEnemy.cpp">
+      <Filter>Entities\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="Source\VerticalBubble.cpp">
-      <Filter>Entities</Filter>
+    <ClCompile Include="Source\Skeleton.cpp">
+      <Filter>Entities\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CreateHorizontalBubble.cpp">
+    <ClCompile Include="Source\Vomit.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CreateVomitMessage.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CreateVerticalBubble.cpp">
-      <Filter>Messages</Filter>
+    <ClCompile Include="source\MutantBat.cpp">
+      <Filter>Entities\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Poop.cpp">
+      <Filter>Entities\Obstacles</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CreatePoopMessage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -542,21 +553,32 @@
     <ClInclude Include="Source\MutantMan.h">
       <Filter>Entities\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="Source\HorizontalBubble.h" />
+    <ClInclude Include="Source\VerticalBubble.h" />
+    <ClInclude Include="Source\CreateVerticalBubble.h" />
+    <ClInclude Include="Source\CreateHorizontalBubble.h" />
     <ClInclude Include="Source\SwordSwing.h">
       <Filter>Entities\Spells</Filter>
     </ClInclude>
-    <ClInclude Include="Source\HorizontalBubble.h">
-      <Filter>Entities</Filter>
+    <ClInclude Include="Source\BullEnemy.h">
+      <Filter>Entities\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Source\VerticalBubble.h">
-      <Filter>Entities</Filter>
+    <ClInclude Include="Source\Skeleton.h">
+      <Filter>Entities\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CreateHorizontalBubble.h">
+    <ClInclude Include="Source\Vomit.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CreateVomitMessage.h">
       <Filter>Messages</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CreateVerticalBubble.h">
-      <Filter>Messages</Filter>
+    <ClInclude Include="source\MutantBat.h">
+      <Filter>Entities\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Poop.h">
+      <Filter>Entities\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CreatePoopMessage.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />
