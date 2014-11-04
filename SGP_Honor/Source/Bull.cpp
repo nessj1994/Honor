@@ -7,7 +7,7 @@
 #include "ParticleEngine.h"
 #include "GameplayState.h"
 #include "Activator.h"
-
+#include "Player.h"
 
 ///////////////////////////////////////////////////
 // Constructor
@@ -333,7 +333,8 @@ void Bull::Update(float elapsedTime)
 			{
 				GameplayState::GetInstance()->SetScreenFadeout(0);
 				// TODO Delete bull, give player dash, update room
-
+				Player * player = (Player*)(GetPlayer());
+				player->SetHasDash(true);
 			}
 			break;
 		}
