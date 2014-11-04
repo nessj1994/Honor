@@ -29,13 +29,14 @@ public:
 	/////////////////Accessors///////////////////
 	std::string GetCurrentAnimation(void) const { return m_stCurrentAnimation; }
 	bool IsFacingRight(void) const { return m_bFacingRight;}
-	bool IsAlive(void) const { return m_bAlive; }
+	bool GetAlive(void) const { return m_bAlive; }
 	float GetGravity(void) const { return m_fGravity; }
 
 	bool IsDashing(void)	const { return m_bDashing; }
 	bool IsIcing(void)		const { return m_bIcing; }
 	bool IsHawking(void)	const { return m_bHawking; }
 	bool IsBouncing(void)	const { return m_bBouncing; }
+	bool GetFalling(void) const { return m_bFalling; }
 
 	Hawk* GetHawkPtr(void) const { return m_pHawk; }
 
@@ -52,11 +53,13 @@ public:
 	void SetIsHawking(	bool hawking) {m_bHawking = hawking;}
 	void SetIsBouncing(	bool bouncing) {m_bBouncing = bouncing;}
 	void SetHawkPtr(Hawk* _hawk) { m_pHawk = _hawk; }
+	void SetFalling(bool walker) { m_bFalling = walker; }
 
 
 private:
 
 	bool m_bAlive = true;
+	bool m_bFalling = true;
 	
 	std::map<Animation, std::string> m_mAnimations;
 	std::string m_stCurrentAnimation;

@@ -9,7 +9,6 @@
 #include "Activator.h"
 #include "Player.h"
 
-
 ///////////////////////////////////////////////////
 // Constructor
 // -Setup the size
@@ -334,7 +333,8 @@ void Bull::Update(float elapsedTime)
 			{
 				GameplayState::GetInstance()->SetScreenFadeout(0);
 				// TODO Delete bull, give player dash, update room
-
+				Player * player = (Player*)(GetPlayer());
+				player->SetHasDash(true);
 			}
 			break;
 		}
