@@ -194,8 +194,9 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadHonorVector();
 	
-	
-	LoadLevel("Level5_5");
+	LoadLevel("Level4_4");
+
+	//LoadLevel("Level5_5");
 
 	//LoadLevel("HubLevel");
 
@@ -1466,19 +1467,32 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 		}
 		case 1: // caveman
 		{
-			break;
+					Caveman* Temp = new Caveman();
+					Temp->SetPosition({ (float)_x, (float)_y });
+					Temp->SetStartPosition({ (float)_x, (float)_y });
+					Temp->SetPlayer(m_pPlayer);
+					m_pEntities->AddEntity(Temp, Entity::ENT_BOSS_BULL);
+					Temp->Release();
+					break;
 		}
 		case 2: // yeti
 		{
-			break;
+
+					Yeti * pYeti = new Yeti();
+					pYeti->SetPosition({ (float)_x, (float)_y });
+					pYeti->SetStartPosition({ (float)_x, (float)_y });
+					pYeti->SetPlayer(m_pPlayer);
+					m_pEntities->AddEntity(pYeti, Entity::ENT_BOSS_YETI);
+					pYeti->Release();
+					break;
 		}
 		case 3: // crab
 		{
-			Crab * mCrab = new Crab();
-			mCrab->SetPosition({ (float)_x, (float)_y });
-			m_pEntities->AddEntity(mCrab, Entity::ENT_BOSS_CRAB);
-			mCrab->Release();
-			break;
+					Crab * mCrab = new Crab();
+					mCrab->SetPosition({ (float)_x, (float)_y });
+					m_pEntities->AddEntity(mCrab, Entity::ENT_BOSS_CRAB);
+					mCrab->Release();
+					break;
 		}
 		case 4: // wizard
 		{
@@ -1561,40 +1575,9 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 			break;
 		}
 	}
-	case 1: // caveman
-	{
-				Caveman* Temp = new Caveman();
-				Temp->SetPosition({ (float)_x, (float)_y });
-				Temp->SetStartPosition({ (float)_x, (float)_y });
-				Temp->SetPlayer(m_pPlayer);
-				m_pEntities->AddEntity(Temp, Entity::ENT_BOSS_BULL);
-				Temp->Release();
-				break;
-	}
-	case 2: // yeti
-	{
 
-				Yeti * pYeti = new Yeti();
-				pYeti->SetPosition({ (float)_x, (float)_y });
-				pYeti->SetStartPosition({ (float)_x, (float)_y });
-				pYeti->SetPlayer(m_pPlayer);
-				m_pEntities->AddEntity(pYeti, Entity::ENT_BOSS_YETI);
-				pYeti->Release();
-				break;
-	}
-	case 3: // crab
-	{
-				Crab * mCrab = new Crab();
-				mCrab->SetPosition({ (float)_x, (float)_y });
-				m_pEntities->AddEntity(mCrab, Entity::ENT_BOSS_CRAB);
-				mCrab->Release();
-				break;
-	}
-	case 4: // wizard
-	{
-				break;
-	}
-	}
+	
+	
 }
 
 #pragma endregion
