@@ -258,6 +258,8 @@
     <ClCompile Include="Source\SwordSwing.cpp">
       <Filter>Entities\Spells</Filter>
     </ClCompile>
+    <ClCompile Include="Source\WizardDash.cpp" />
+    <ClCompile Include="Source\WizardHawk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -541,6 +543,8 @@
     <ClInclude Include="Source\SwordSwing.h">
       <Filter>Entities\Spells</Filter>
     </ClInclude>
+    <ClInclude Include="Source\WizardDash.h" />
+    <ClInclude Include="Source\WizardHawk.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />

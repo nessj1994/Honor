@@ -54,6 +54,9 @@
 #include "MutantMan.h"
 #include "Crab.h"
 #include "SwordSwing.h"
+#include "Wizard.h"
+#include "WizardDash.h"
+#include "WizardHawk.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -183,9 +186,9 @@ void GameplayState::Enter(void) //Load Resources
 	LoadHonorVector();
 	
 	
-	//LoadLevel("Level3_1");
+	LoadLevel("Level5_5");
 
-	LoadLevel("HubLevel");
+	//LoadLevel("HubLevel");
 
 	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
@@ -743,10 +746,14 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 Entity* GameplayState::CreateProjectile(Entity* pOwner) const
 {
 	Projectile* proj = new Projectile();
-	if (pOwner->GetDirection().x == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
-	else
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+	//if (pOwner->GetType() != Entity::ENT_BOSS_WIZARD)
+	
+
+		if (pOwner->GetDirection().x == 1)
+			proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		else
+			proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+	
 
 	proj->SetSize({ 40, 40 });
 	proj->SetDirection({ pOwner->GetDirection() });
@@ -1264,6 +1271,11 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 			pJelly->Release();
 			break;
 		}
+		case 10: //Mini-Wizard (for final boss fight)
+		{
+			
+
+		}
 	}
 }
 
@@ -1302,6 +1314,82 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 		}
 		case 4: // wizard
 		{
+					WizardDash* m_pDash1 = new WizardDash;
+				//	m_pDash1->SetPosition({ 100, 400 });
+					m_pDash1->SetPosition({ -200, -200 });
+					m_pDash1->SetFacingRight(true);
+
+					WizardDash* m_pDash2 = new WizardDash;
+					//m_pDash2->SetPosition({ 400, 400 });
+					m_pDash2->SetPosition({ -200, -200 });
+					m_pDash2->SetFacingRight(false);
+
+
+					WizardDash* m_pDash3 = new WizardDash;
+					//m_pDash3->SetPosition({ 100, 700 });
+					m_pDash3->SetPosition({ -200, -200 });
+					m_pDash3->SetFacingRight(true);
+
+
+					WizardDash* m_pDash4 = new WizardDash;
+					//m_pDash4->SetPosition({ 400, 700 });
+					m_pDash4->SetPosition({ -200, -200 });
+					m_pDash4->SetFacingRight(false);
+
+
+
+
+					Wizard* m_pWizard = new Wizard;
+					m_pWizard->SetPosition({ (float)_x, (float)_y });
+					m_pWizard->SetStartPosition({ (float)_x, (float)_y });
+
+
+					WizardHawk* m_pHawk1 = new WizardHawk;
+					m_pHawk1->SetPosition({ -300, -300 });
+					m_pHawk1->SetSize({ 1, 1 });
+
+					WizardHawk* m_pHawk2 = new WizardHawk;
+					m_pHawk2->SetPosition({ -300, -300 });
+					m_pHawk2->SetSize({ 1, 1 });
+
+
+					WizardHawk* m_pHawk3 = new WizardHawk;
+					m_pHawk3->SetPosition({ -300, -300 });
+					m_pHawk3->SetSize({ 1, 1 });
+
+
+					WizardHawk* m_pHawk4 = new WizardHawk;
+					m_pHawk4->SetPosition({ -300, -300 });
+					m_pHawk4->SetSize({ 1, 1 });
+
+
+					m_pWizard->SetPlayer(m_pPlayer);
+
+					//Dashptrs
+					m_pWizard->SetDash1(m_pDash1);
+					m_pWizard->SetDash2(m_pDash2);
+					m_pWizard->SetDash3(m_pDash3);
+					m_pWizard->SetDash4(m_pDash4);
+
+					//Hawkptrs
+					m_pWizard->SetHawk1(m_pHawk1);
+					m_pWizard->SetHawk2(m_pHawk2);
+					m_pWizard->SetHawk3(m_pHawk3);
+					m_pWizard->SetHawk4(m_pHawk4);
+
+
+					m_pEntities->AddEntity(m_pDash1, Entity::ENT_WIZARD_DASH);
+					m_pEntities->AddEntity(m_pDash2, Entity::ENT_WIZARD_DASH);
+					m_pEntities->AddEntity(m_pDash3, Entity::ENT_WIZARD_DASH);
+					m_pEntities->AddEntity(m_pDash4, Entity::ENT_WIZARD_DASH);
+
+					m_pEntities->AddEntity(m_pHawk1, Entity::ENT_WIZARD_HAWK);
+					m_pEntities->AddEntity(m_pHawk2, Entity::ENT_WIZARD_HAWK);
+					m_pEntities->AddEntity(m_pHawk3, Entity::ENT_WIZARD_HAWK);
+					m_pEntities->AddEntity(m_pHawk4, Entity::ENT_WIZARD_HAWK);
+
+					m_pEntities->AddEntity(m_pWizard, Entity::ENT_BOSS_WIZARD);
+					m_pWizard->Release();
 			break;
 		}
 	}

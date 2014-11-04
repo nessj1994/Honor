@@ -94,6 +94,8 @@
     <ClCompile Include="Source\VerticalBubble.cpp" />
     <ClCompile Include="Source\WinMain.cpp" />
     <ClCompile Include="Source\Wizard.cpp" />
+    <ClCompile Include="Source\WizardDash.cpp" />
+    <ClCompile Include="Source\WizardHawk.cpp" />
     <ClCompile Include="Source\World.cpp" />
     <ClCompile Include="Source\Yeti.cpp" />
     <ClCompile Include="TinyXML\tinystr.cpp" />
@@ -195,6 +197,8 @@
     <ClInclude Include="Source\Unit.h" />
     <ClInclude Include="Source\VerticalBubble.h" />
     <ClInclude Include="Source\Wizard.h" />
+    <ClInclude Include="Source\WizardDash.h" />
+    <ClInclude Include="Source\WizardHawk.h" />
     <ClInclude Include="Source\World.h" />
     <ClInclude Include="Source\Yeti.h" />
     <ClInclude Include="TinyXML\tinystr.h" />

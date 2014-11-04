@@ -63,7 +63,7 @@ private:
 	unsigned int m_nHorizontalBuffer = 0;
 	unsigned int m_nVerticalBuffer = 0;
 
-	Level* m_pCurrentLevel = nullptr;
+	//Level* m_pCurrentLevel = nullptr;
 	Player* m_pPlayer = nullptr;
 
 	SGD::Point m_ptCameraPosition = { 0, 0 };
