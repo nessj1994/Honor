@@ -222,15 +222,15 @@ void Wizard::CastHawks()
 
 	
 	hawkPtr1->SetDestPos({ 100, 1600 });
-	hawkPtr2->SetDestPos({ 170, 1600 });
-	hawkPtr3->SetDestPos({ 240, 1600 });
-	hawkPtr4->SetDestPos({ 310, 1600 });
+	hawkPtr2->SetDestPos({ 300, 1600 });
+	hawkPtr3->SetDestPos({ 500, 1600 });
+	hawkPtr4->SetDestPos({ 700, 1600 });
 
 
-	hawkPtr1->SetDestSize({ 70, 70 });
-	hawkPtr2->SetDestSize({ 70, 70 });
-	hawkPtr3->SetDestSize({ 70, 70 });
-	hawkPtr4->SetDestSize({ 70, 70 });
+	hawkPtr1->SetDestSize({ 200, 70 });
+	hawkPtr2->SetDestSize({ 200, 70 });
+	hawkPtr3->SetDestSize({ 200, 70 });
+	hawkPtr4->SetDestSize({ 200, 70 });
 
 	hawksCasted = true;
 }
