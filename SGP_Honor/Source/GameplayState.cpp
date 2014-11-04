@@ -442,6 +442,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldEvent(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_BULL);
 	m_pEntities->CheckWorldEvent(Entity::ENT_BULL_ENEMY);
+	m_pEntities->CheckWorldEvent(Entity::ENT_BOSS_YETI);
 
 	//Entities WHich SLow the Player
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_VOMIT);

@@ -347,7 +347,13 @@ void Player::HandleCollision(const IEntity* pOther)
 		is_Ramp = true;
 	}
 
-	else if(pOther->GetType() == Entity::ENT_RIGHT_RAMP)
+	if(pOther->GetType() == Entity::ENT_ICE_LEFT_RAMP)
+	{
+		LeftRampCollision(pOther);
+		is_Ramp = true;
+		SetFriction(0.1f);
+	}
+	if(pOther->GetType() == Entity::ENT_RIGHT_RAMP)
 	{
 		m_bSliding = false;
 
@@ -355,7 +361,12 @@ void Player::HandleCollision(const IEntity* pOther)
 		SetFriction(25.0f);
 		is_Ramp = true;
 	}
-
+	if(pOther->GetType() == Entity::ENT_ICE_RIGHT_RAMP)
+	{
+		RightRampCollision(pOther);
+		is_Ramp = true;
+		SetFriction(0.1f);
+	}
 
 	if(pOther->GetType() == Entity::ENT_MOVING_PLATFORM)
 	{
@@ -379,7 +390,19 @@ void Player::HandleCollision(const IEntity* pOther)
 	{
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(0.1f);
+		SetFriction(1.0f);
+		if(GetVelocity().x > 0 && m_bFacingRight == false)
+		{
+			m_vtVelocity.x -= 400;
+		}
+		else if(GetVelocity().x < 0 && m_bFacingRight == true)
+		{
+			m_vtVelocity.x += 400;
+		}
+		SetVelocity(GetVelocity() * 1.2);
+
+
+
 	}
 
 	if(pOther->GetType() == Entity::ENT_NOT_FROZEN)
@@ -388,7 +411,7 @@ void Player::HandleCollision(const IEntity* pOther)
 
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(1.0f);
+		SetFriction(25.0f);
 	}
 
 	if(pOther->GetType() == Entity::ENT_DEATH)
@@ -405,16 +428,20 @@ void Player::HandleCollision(const IEntity* pOther)
 	{
 		m_bSliding = true;
 		BasicCollision(pOther);
-		SetFriction(0.1f);
-		SetVelocity(GetVelocity() * 2);
+		SetFriction(0.0f);
+		if(GetVelocity().x > 0 && m_bFacingRight == false)
+		{
+			m_vtVelocity.x -= 50;
+		}
+		else if(GetVelocity().x < 0 && m_bFacingRight == true)
+		{
+			m_vtVelocity.x += 50;
+		}
+		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
+		SetVelocity(GetVelocity() * 1.01 );
+
 	}
 
-	if(pOther->GetType() == Entity::ENT_ICE_LEFT_RAMP)
-	{
-		LeftRampCollision(pOther);
-		is_Ramp = true;
-		SetFriction(0.1f);
-	}
 
 	if(pOther->GetType() == Entity::ENT_GEYSER)
 	{
@@ -821,51 +848,66 @@ void Player::RightRampCollision(const IEntity* pOther)
 	///////for RIGHT ramp LEFT side of player
 
 	float tempVal = 32.0f / 32.0f;
+	
+	
+	SetGravity(GetGravity() * 4);
+	SetVelocity({ GetVelocity().x, 0 });
+	if(GetVelocity().x > 300)
+	{
+		m_vtVelocity.x = 300;
+
+	}
+	if(GetVelocity().x < -400)
+	{
+		m_vtVelocity.x = -400;
+	}
 
 
 	//SetGravity(0);
 
-	//RECT rPlayer;
-	//rPlayer.left = (LONG)GetRect().left;
-	//rPlayer.top = (LONG)GetRect().top;
-	//rPlayer.right = (LONG)GetRect().right /*- 16*/;
-	//rPlayer.bottom = (LONG)GetRect().bottom /*- 10*/;
+	RECT rPlayer;
+	rPlayer.left = (LONG)GetRect().left;
+	rPlayer.top = (LONG)GetRect().top;
+	rPlayer.right = (LONG)GetRect().right /*- 16*/;
+	rPlayer.bottom = (LONG)GetRect().bottom /*- 10*/;
 
-	////Create a rectangle for the other object
-	//RECT rObject;
-	//rObject.left = (LONG)pOther->GetRect().left;
-	//rObject.top = (LONG)pOther->GetRect().top;
-	//rObject.right = (LONG)pOther->GetRect().right;
-	//rObject.bottom = (LONG)pOther->GetRect().bottom;
+	//Create a rectangle for the other object
+	RECT rObject;
+	rObject.left = (LONG)pOther->GetRect().left;
+	rObject.top = (LONG)pOther->GetRect().top;
+	rObject.right = (LONG)pOther->GetRect().right;
+	rObject.bottom = (LONG)pOther->GetRect().bottom;
 
-	////Create a rectangle for the intersection
-	//RECT rIntersection = {};
-
-
-	//IntersectRect(&rIntersection, &rPlayer, &rObject);
+	//Create a rectangle for the intersection
+	RECT rIntersection = {};
 
 
-	//int nIntersectWidth = rIntersection.right - rIntersection.left;
-	//int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+	IntersectRect(&rIntersection, &rPlayer, &rObject);
 
 
-
-	//float tempInt = nIntersectWidth * tempVal;
+	int nIntersectWidth = rIntersection.right - rIntersection.left;
+	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
 
 
-	SGD::Rectangle rPlayer = GetRect();
+	float tempInt = nIntersectWidth * tempVal;
+
+
+
+	/*SGD::Rectangle rPlayer = GetRect();
 	SGD::Rectangle rOther = pOther->GetRect();
-	SGD::Rectangle rIntersecting = rPlayer.ComputeIntersection(rOther);
+	SGD::Rectangle rIntersecting = rPlayer.ComputeIntersection(rOther);*/
 
-	float rIntersectWidth = rIntersecting.ComputeWidth();
-	float rIntersectHeight = rIntersecting.ComputeHeight();
+	//float rIntersectWidth = rIntersection.ComputeWidth();
+	//float rIntersectHeight = rIntersection.ComputeHeight();
 
 
-	if(/*nIntersectWidth*/ rIntersectWidth > 17)
+	if(/*nIntersectWidth*/ nIntersectWidth > -31)
 	{
-		//SetPosition({ GetPosition().x, (float)rObject.bottom - tempInt - GetSize().height });
-		m_ptPosition.y -= rIntersectHeight;
+		tempVal = 31 / 32;
+
+		m_ptPosition.y = (float)rObject.bottom - GetSize().height - tempVal;
+		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * 1);
 	}
 	//else
 	//{
@@ -874,11 +916,13 @@ void Player::RightRampCollision(const IEntity* pOther)
 	//}
 
 
+	if(m_ptPosition.x + m_szSize.width < rObject.left)
+		SetVelocity({ m_vtVelocity.x, 1000 });
 
 
 
 
-	SetVelocity({ 0, 0 });
+	
 
 
 
@@ -1968,10 +2012,10 @@ void Player::UpdateVelocity(float elapsedTime)
 			if(IsDashing() == false)
 				SetVelocity(SGD::Vector(1150, GetVelocity().y));
 		}
-		if(GetVelocity().x > 1800 && m_bSliding == true)
+		if(GetVelocity().x > 1500 && m_bSliding == true)
 		{
 			if(IsDashing() == false)
-				SetVelocity(SGD::Vector(1800, GetVelocity().y));
+				SetVelocity(SGD::Vector(1500, GetVelocity().y));
 		}
 
 		if(GetVelocity().x < -1150 && m_bSliding == false)
@@ -1979,11 +2023,11 @@ void Player::UpdateVelocity(float elapsedTime)
 			if(IsDashing() == false)
 				SetVelocity(SGD::Vector(-1150, GetVelocity().y));
 		}
-		if(GetVelocity().x < -1800 && m_bSliding == true)
+		if(GetVelocity().x < -1500 && m_bSliding == true)
 		{
 			if(IsDashing() == false)
 
-				SetVelocity(SGD::Vector(-1800, GetVelocity().y));
+				SetVelocity(SGD::Vector(-1500, GetVelocity().y));
 		}
 
 	}

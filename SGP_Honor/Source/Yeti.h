@@ -20,6 +20,9 @@ public:
 
 	void BasicCollision(const IEntity* pOther) override;
 	void HandleCollision(const IEntity* pOther) override;
+	void RightRampCollision(const IEntity* pOther);
+	void LeftRampCollision(const IEntity* pOther);
+
 
 
 	///////////////////////////////////////////////

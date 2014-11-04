@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Levels totalHonor="1074">
+<Levels totalHonor="0">
     <Level name="HubLevel" />
     <Level name="Level1_1" />
     <Level name="Level1_2" />
@@ -16,28 +16,7 @@
     <Level name="Level3_3" />
     <Level name="Level3_4" />
     <Level name="Level3_5" />
-    <Level name="Level4_1">
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-    </Level>
+    <Level name="Level4_1" />
     <Level name="Level4_2" />
     <Level name="Level4_3" />
     <Level name="Level4_4" />
