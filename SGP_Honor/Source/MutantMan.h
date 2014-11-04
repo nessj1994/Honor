@@ -24,5 +24,9 @@ private:
 	//Vomiting Timer
 	float m_fVomitTimer;
 	bool m_bPlayerAttacked;
+	//Sound Effects
+	SGD::HAudio m_hHurt = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hGag = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hPunch = SGD::INVALID_HANDLE;
 };
 

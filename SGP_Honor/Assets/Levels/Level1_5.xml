@@ -4616,7 +4616,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="11">
+	<Entities numEntities="9">
 		<Entity type="4" x="32" y="576" numArgs="2" name="Door_1">
 			<Argument type="0" name="IsHorizontal" value="1" />
 			<Argument type="1" name="ActivatorIndex" value="0" />
@@ -4651,8 +4651,8 @@
 			<Argument type="0" name="Active" value="1" />
 			<Argument type="1" name="ID" value="1" />
 		</Entity>
-		<Entity type="14" x="736" y="544" numArgs="0" name="FreezableGround_1" />
-		<Entity type="14" x="768" y="544" numArgs="0" name="FreezableGround_2" />
-		<Entity type="14" x="800" y="544" numArgs="0" name="FreezableGround_3" />
+		<Entity type="19" x="1056" y="448" numArgs="1" name="Enemy_1">
+			<Argument type="1" name="Type" value="0" />
+		</Entity>
 	</Entities>
 </Level>

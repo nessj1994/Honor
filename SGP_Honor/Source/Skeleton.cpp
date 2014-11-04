@@ -31,7 +31,7 @@ void Skeleton::Update(float elapsedTime)
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 
 	// Check if dying
-	if (GetDead() && !m_bDying)
+	if (!GetAlive() && !m_bDying)
 	{
 		m_bDying = true;
 		m_fDeathTimer = 0.5f;

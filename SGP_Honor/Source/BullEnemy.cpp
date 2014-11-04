@@ -39,7 +39,7 @@ void BullEnemy::Update(float elapsedTime)
 	}
 
 	// Check if dying
-	if (GetDead() && !m_bDying)
+	if (!GetAlive() && !m_bDying)
 	{
 		m_bDying = true;
 		m_fDeathTimer = 0.5f;
@@ -191,6 +191,13 @@ void BullEnemy::Update(float elapsedTime)
 
 			break;
 		}
+	}
+
+	// Apply gravity
+	if (GetFalling() == true)
+	{
+		SetGravity(-3000);
+		SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
 	}
 
 	Enemy::Update(elapsedTime);

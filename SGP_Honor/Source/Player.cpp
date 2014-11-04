@@ -56,7 +56,7 @@ Player::Player() : Listener(this)
 	m_hIceEffect = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/IceSpray.wav");
 	m_hBounceEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/BounceEffect.wav");
 	m_hJellyfishEffect = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/JellyfishBounce.wav");
-
+	m_hGainAbility = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/GainAbility.wav");
 }
 
 
@@ -71,6 +71,7 @@ Player::~Player()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hIceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBounceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hJellyfishEffect);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGainAbility);
 }
 
 /////////////////////////////////////////////////
@@ -2112,6 +2113,15 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 
 	m_pSword->Update(elapsedTime);
 
+}
+
+void Player::SetHasBounce(bool bounce)
+{ 
+	m_bHasBounce = bounce; 
+	if (bounce == true)
+	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hGainAbility);
+	}
 }
 
 

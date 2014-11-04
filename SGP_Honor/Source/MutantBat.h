@@ -21,5 +21,8 @@ private:
 	SGD::Point m_pPatrolPoint;
 	//Pooping Timer
 	float m_fPoopTimer;
+	//Sound Effects
+	SGD::HAudio m_hHurt = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hPoop = SGD::INVALID_HANDLE;
 };
 
