@@ -21,6 +21,7 @@
 #include "Game.h"
 #include "Bull.h"
 #include "BullEnemy.h"
+#include "Vomit.h"
 #include "SwordSwing.h"
 
 #include <Windows.h>
@@ -55,7 +56,7 @@ Player::Player() : Listener(this)
 	m_hIceEffect = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/IceSpray.wav");
 	m_hBounceEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/BounceEffect.wav");
 	m_hJellyfishEffect = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/JellyfishBounce.wav");
-
+	m_hGainAbility = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/GainAbility.wav");
 }
 
 
@@ -70,6 +71,7 @@ Player::~Player()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hIceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBounceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hJellyfishEffect);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGainAbility);
 }
 
 /////////////////////////////////////////////////
@@ -125,10 +127,17 @@ void Player::Update(float elapsedTime)
 		if(IsDashing() == false)///////////////Dash check begins
 		{
 
+			/////////////////////////////////////////////////
+			////////////////////Jump/////////////////////////
+
+			UpdateJump(elapsedTime);
+
+
 			//	if(GetIsFalling() == false
 			//		&& GetIsJumping() == false)
 			if(m_unCurrentState == RESTING_STATE
-				|| m_unCurrentState == LANDING_STATE)
+				|| m_unCurrentState == LANDING_STATE
+				|| ( m_unCurrentState == JUMPING_STATE && m_bSlowed == true))
 			{
 				/////////////////////////////////////////////////
 				/////////////////Friction////////////////////////
@@ -155,10 +164,7 @@ void Player::Update(float elapsedTime)
 
 
 
-			/////////////////////////////////////////////////
-			////////////////////Jump/////////////////////////
-
-			UpdateJump(elapsedTime);
+			
 
 			/////////////////////////////////////////////////
 			///////////////////Shoot/////////////////////////
@@ -283,6 +289,7 @@ SGD::Rectangle Player::GetRect(void) const
 
 void Player::HandleCollision(const IEntity* pOther)
 {
+	m_bSlowed = false;
 	if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::W))
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hBounceEffect);
@@ -433,7 +440,25 @@ void Player::HandleCollision(const IEntity* pOther)
 		}
 	}
 
+	if (pOther->GetType() == Entity::ENT_VOMIT)
+	{
+		if (!((Vomit*)pOther)->Finished())
+		{
+			SetFriction(40);
+			m_bSlowed = true;
+		}
+	}
+
 	if(pOther->GetType() == Entity::ENT_LAVA)
+	{
+		m_bSliding = false;
+
+		//if so move back up but kill the player
+		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+		SGD::EventManager::GetInstance()->SendEventNow(&Event);
+	}
+
+	if (pOther->GetType() == Entity::ENT_POOP)
 	{
 		m_bSliding = false;
 
@@ -1172,10 +1197,10 @@ void Player::KillPlayer()
 		m_fDeathTimer = 0.5f;
 		m_bDead = true;
 		m_unJumpCount = 0;
-
+		
 
 		// TODO Add effects
-
+		m_bSlowed = false;
 	}
 }
 
@@ -1222,6 +1247,11 @@ void Player::UpdateTimers(float elapsedTime)
 	m_fIceTimer += elapsedTime;
 
 	m_fJumpTimer -= elapsedTime;
+	if (m_bSlowed == true)
+	{
+		m_fJumpTimer -= elapsedTime;
+
+	}
 
 	m_fLandTimer -= elapsedTime;
 
@@ -1294,6 +1324,52 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 			SetVelocity(SGD::Vector(0, GetVelocity().y));
 		}
 	}
+
+	if (m_bSlowed)
+	{
+		if ( m_unCurrentState != JUMPING_STATE
+			/*&& m_unCurrentState != FALLING_STATE*/
+			 )
+		{
+
+			if (GetVelocity().x > 0)
+			{
+				SetVelocity(SGD::Vector(GetVelocity().x - GetFriction(), GetVelocity().y));
+				if (GetVelocity().x < 0)
+				{
+					SetVelocity({ 0, GetVelocity().y });
+				}
+			}
+			else
+			{
+				SetVelocity(SGD::Vector(GetVelocity().x + GetFriction(), GetVelocity().y));
+				if (GetVelocity().x > 0)
+				{
+					SetVelocity({ 0, GetVelocity().y });
+				}
+			}
+
+		}
+
+		if (GetVelocity().y > 0)
+		{
+			SetVelocity(SGD::Vector(GetVelocity().x, GetVelocity().y - GetFriction()));
+			if (GetVelocity().y < 0)
+			{
+				SetVelocity({ GetVelocity().x, 0 });
+			}
+		}
+		else
+		{
+			SetVelocity(SGD::Vector(GetVelocity().x, GetVelocity().y + GetFriction()));
+			if (GetVelocity().y > 0)
+			{
+				SetVelocity({ GetVelocity().x, 0 });
+				
+			}
+		}
+		
+	}
 }
 
 void Player::UpdateBounce(float elapsedTime)
@@ -1338,6 +1414,12 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		m_ts.SetPlaying(true);
 	}
 
+	if(pInput->IsKeyPressed(SGD::Key::J))
+	{
+		SGD::Event* pATEvent = new SGD::Event("JUMP_TIME", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
+	}
 
 	//reset currframe to 0 & set the animation playing to false
 	if((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true) || pInput->IsKeyDown(SGD::Key::Space) == true)
@@ -1506,6 +1588,12 @@ void Player::UpdateJump(float elapsedTime)
 			m_ts.ResetCurrFrame();
 			m_ts.SetPlaying(false);
 			m_ts.SetCurrAnimation("Jump");
+			if (m_bSlowed == true)
+			{
+				m_fJumpTimer = 0.25f;
+
+			}
+			else
 			m_fJumpTimer = 0.3f;
 			m_unCurrentState = JUMPING_STATE;
 
@@ -1981,6 +2069,15 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 
 	m_pSword->Update(elapsedTime);
 
+}
+
+void Player::SetHasBounce(bool bounce)
+{ 
+	m_bHasBounce = bounce; 
+	if (bounce == true)
+	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hGainAbility);
+	}
 }
 
 

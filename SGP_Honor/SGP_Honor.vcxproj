@@ -41,9 +41,11 @@
     <ClCompile Include="Source\CreateGravProjectileMessage.cpp" />
     <ClCompile Include="Source\CreateHawkMessage.cpp" />
     <ClCompile Include="Source\CreateHorizontalBubble.cpp" />
+    <ClCompile Include="Source\CreatePoopMessage.cpp" />
     <ClCompile Include="Source\CreateProjectileMessage.cpp" />
     <ClCompile Include="Source\CreateSprayMessage.cpp" />
     <ClCompile Include="Source\CreateVerticalBubble.cpp" />
+    <ClCompile Include="Source\CreateVomitMessage.cpp" />
     <ClCompile Include="Source\CreditsState.cpp" />
     <ClCompile Include="Source\Dash.cpp" />
     <ClCompile Include="Source\DestroyEntityMessage.cpp" />
@@ -66,6 +68,7 @@
     <ClCompile Include="Source\Honor.cpp" />
     <ClCompile Include="Source\HorizontalBubble.cpp" />
     <ClCompile Include="Source\Ice.cpp" />
+    <ClCompile Include="source\IceBat.cpp" />
     <ClCompile Include="Source\InstructionsState.cpp" />
     <ClCompile Include="Source\Jellyfish.cpp" />
     <ClCompile Include="Source\Laser.cpp" />
@@ -76,6 +79,7 @@
     <ClCompile Include="Source\LevelCollider.cpp" />
     <ClCompile Include="Source\MainMenuState.cpp" />
     <ClCompile Include="Source\MovingPlatform.cpp" />
+    <ClCompile Include="source\MutantBat.cpp" />
     <ClCompile Include="Source\MutantMan.cpp" />
     <ClCompile Include="Source\OptionsState.cpp" />
     <ClCompile Include="Source\Particle.cpp" />
@@ -83,6 +87,7 @@
     <ClCompile Include="Source\PauseState.cpp" />
     <ClCompile Include="Source\Pendulum.cpp" />
     <ClCompile Include="Source\Player.cpp" />
+    <ClCompile Include="Source\Poop.cpp" />
     <ClCompile Include="Source\Pouncer.cpp" />
     <ClCompile Include="Source\ProfileState.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
@@ -94,6 +99,7 @@
     <ClCompile Include="Source\Turret.cpp" />
     <ClCompile Include="Source\Unit.cpp" />
     <ClCompile Include="Source\VerticalBubble.cpp" />
+    <ClCompile Include="Source\Vomit.cpp" />
     <ClCompile Include="Source\WinMain.cpp" />
     <ClCompile Include="Source\Wizard.cpp" />
     <ClCompile Include="Source\World.cpp" />
@@ -142,9 +148,11 @@
     <ClInclude Include="Source\CreateGravProjectileMessage.h" />
     <ClInclude Include="Source\CreateHawkMessage.h" />
     <ClInclude Include="Source\CreateHorizontalBubble.h" />
+    <ClInclude Include="Source\CreatePoopMessage.h" />
     <ClInclude Include="Source\CreateProjectileMessage.h" />
     <ClInclude Include="Source\CreateSprayMessage.h" />
     <ClInclude Include="Source\CreateVerticalBubble.h" />
+    <ClInclude Include="Source\CreateVomitMessage.h" />
     <ClInclude Include="Source\CreditsState.h" />
     <ClInclude Include="Source\Dash.h" />
     <ClInclude Include="Source\DestroyEntityMessage.h" />
@@ -167,6 +175,7 @@
     <ClInclude Include="Source\Honor.h" />
     <ClInclude Include="Source\HorizontalBubble.h" />
     <ClInclude Include="Source\Ice.h" />
+    <ClInclude Include="source\IceBat.h" />
     <ClInclude Include="Source\IEntity.h" />
     <ClInclude Include="Source\IGameState.h" />
     <ClInclude Include="Source\InstructionsState.h" />
@@ -180,6 +189,7 @@
     <ClInclude Include="Source\MainMenuState.h" />
     <ClInclude Include="Source\MessageID.h" />
     <ClInclude Include="Source\MovingPlatform.h" />
+    <ClInclude Include="source\MutantBat.h" />
     <ClInclude Include="Source\MutantMan.h" />
     <ClInclude Include="Source\OptionsState.h" />
     <ClInclude Include="Source\Particle.h" />
@@ -187,6 +197,7 @@
     <ClInclude Include="Source\PauseState.h" />
     <ClInclude Include="Source\Pendulum.h" />
     <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\Poop.h" />
     <ClInclude Include="Source\Pouncer.h" />
     <ClInclude Include="Source\ProfileState.h" />
     <ClInclude Include="Source\Projectile.h" />
@@ -198,6 +209,7 @@
     <ClInclude Include="Source\Turret.h" />
     <ClInclude Include="Source\Unit.h" />
     <ClInclude Include="Source\VerticalBubble.h" />
+    <ClInclude Include="Source\Vomit.h" />
     <ClInclude Include="Source\Wizard.h" />
     <ClInclude Include="Source\World.h" />
     <ClInclude Include="Source\Yeti.h" />

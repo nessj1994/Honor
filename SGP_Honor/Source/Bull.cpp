@@ -8,6 +8,10 @@
 #include "GameplayState.h"
 #include "Activator.h"
 #include "Player.h"
+<<<<<<< HEAD
+=======
+
+>>>>>>> remotes/origin/master
 
 ///////////////////////////////////////////////////
 // Constructor

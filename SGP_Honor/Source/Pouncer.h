@@ -20,11 +20,14 @@ public:
 
 	void HandleEvent(const SGD::Event* pEvent);
 	void SetTarget(Player* plr);
+	SGD::HAudio GetDeathSound() const { return m_aDeath; }
 
 private:
 	Player* target = nullptr;
 	bool isPouncing = false;
 	float apex = 0.0f;
 	bool inAir = false;
+	SGD::HAudio m_aPounce = SGD::INVALID_HANDLE;
+	SGD::HAudio m_aDeath = SGD::INVALID_HANDLE;
 };
 
