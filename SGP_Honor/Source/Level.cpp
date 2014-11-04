@@ -712,10 +712,11 @@ void Level::CheckEvent(IEntity * _entity)
 				// Figure out what is at this position
 				std::string levelEvent = m_stEventLayer[xx][yy];
 
-				if (levelEvent != "") // only throw non blank events
+				SGD::Rectangle rEvent = { xx*32.0f, yy*32.0f, xx*32.0f + 32.0f, yy*32.0f + 32.0f };
+				if (levelEvent != "" && rEvent.IsIntersecting(_entity->GetRect())) // only throw non blank events
 				{
 					// Throw event
-					SGD::Event* pATEvent = new SGD::Event(levelEvent.c_str(), nullptr, _entity);
+ 					SGD::Event* pATEvent = new SGD::Event(levelEvent.c_str(), nullptr, _entity);
 					SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 					pATEvent = nullptr;
 				}
