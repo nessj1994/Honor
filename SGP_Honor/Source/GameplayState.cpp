@@ -105,6 +105,10 @@ GameplayState* GameplayState::GetInstance(void)
 // - set up entities
 void GameplayState::Enter(void) //Load Resources
 {
+	// Calculate mini map dimensions
+	m_fMiniMapWidth = Game::GetInstance()->GetScreenWidth() - (m_fBorderSize * 2);
+	m_fMiniMapHeight = Game::GetInstance()->GetScreenHeight() - (m_fBorderSize * 2);
+
 	//Create Local references to the SGD Wrappers
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
@@ -118,8 +122,6 @@ void GameplayState::Enter(void) //Load Resources
 	//Initialize the Event and Message Managers
 	SGD::EventManager::GetInstance()->Initialize();
 	SGD::MessageManager::GetInstance()->Initialize(&MessageProc);
-
-
 
 
 	//Load Audio
@@ -361,7 +363,11 @@ void GameplayState::Update(float elapsedTime)
 	//m_pEmitter2->Update(elapsedTime);
 	float x = elapsedTime;
 
-
+	// Toggle for mini map
+	if (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M))
+	{
+		m_bRenderMiniMap = !m_bRenderMiniMap;
+	}
 
 	m_pEntities->UpdateAll(elapsedTime);
 	Camera::GetInstance()->Update(elapsedTime);
@@ -465,6 +471,12 @@ void GameplayState::Render(void)
 	//Camera::GetInstance()->DrawTexture({ 270, 400 }, {}, SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/images.jpg"), false);
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
+
+	// Draw the mini map
+	if (m_bRenderMiniMap)
+	{
+		RenderMiniMap();
+	}
 
 	// Draw a fading rectangle
 	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
@@ -1715,4 +1727,25 @@ bool GameplayState::GetHonorValue(unsigned int _index)
 unsigned int GameplayState::GetHonorVectorSize()
 {
 	return m_mCollectedHonor[m_strCurrLevel].size();
+}
+
+/////////////////////////////////////////////
+// RenderMiniMap
+// -Renders the mini map
+void GameplayState::RenderMiniMap()
+{
+	// Reference to the graphics manager
+	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
+
+	// Draw the backdrop
+	SGD::Rectangle backDrop = SGD::Rectangle(m_fBorderSize, m_fBorderSize,
+		Game::GetInstance()->GetScreenWidth() - m_fBorderSize,
+		Game::GetInstance()->GetScreenHeight() - m_fBorderSize);
+	pGraphics->DrawRectangle(backDrop, {100, 200, 200, 200 }, { 0, 0, 0 }, 0);
+
+	// Render the terrain onto the minimap
+	m_pLevel->RenderMiniMap();
+
+	// Render the entities onto the minimap
+	m_pEntities->RenderMiniMap();
 }

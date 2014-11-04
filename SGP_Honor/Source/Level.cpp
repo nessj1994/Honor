@@ -726,8 +726,78 @@ void Level::CheckEvent(IEntity * _entity)
 
 //////////////////////////////
 // UpdateHonorVector
-// - Updates if the honor at the given index has been collected
+// -Updates if the honor at the given index has been collected
 void Level::UpdateHonorVector(int _index, bool _value)
 {
 	m_vCollectedHonor[_index] = _value;
+}
+
+//////////////////////////////
+// RenderMiniMap
+// -Draws the collisionlayer onto the mini map
+void Level::RenderMiniMap()
+{
+	// Reference to the graphics manager
+	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
+
+	// References to width and height of the mini map
+	float mapWidth = GameplayState::GetInstance()->GetMiniMapWidth();
+	float mapHeight = GameplayState::GetInstance()->GetMiniMapHeight();
+	float mapOffset = GameplayState::GetInstance()->GetBorderSize();
+
+	// Figure out some values needed
+	float tileWidth = mapWidth / m_nWidth;
+	float tileHeight = mapHeight / m_nHeight;
+
+	// Loop through collision layer
+	for (int xx = 0; xx < m_nWidth; ++xx)
+	{
+		for (int yy = 0; yy < m_nHeight; ++yy)
+		{
+			// Determine color based on tile type
+			int value = m_nCollisionLayer[xx][yy];
+			SGD::Color color = { 100, 100, 100, 100 };
+
+			switch (value)
+			{
+				// Walls
+				case 0:
+					color = { 100, 100, 100, 100 }; // gray
+					break;
+					// Death
+				case 1:
+					color = { 100, 200, 0, 0 }; // red
+					break;
+					// Left/Right ramp
+				case 2:
+				case 3:
+					color = { 100, 30, 220, 0 }; // light green
+					break;
+					// Ice
+				case 4:
+					color = { 100, 0, 220, 220 }; // Cyan
+					break;
+					// Ice left/right ramp
+				case 5:
+				case 6:
+					color = { 100, 30, 220, 0 }; // light green
+					break;
+
+			}
+
+			// Don't draw empty tiles
+			if (value != -1)
+			{
+				float xScale = ((float)xx / (float)m_nWidth) * mapWidth;
+				float yScale = ((float)yy / (float)m_nHeight) * mapHeight;
+				// Rectangle for drawing
+				SGD::Rectangle rect = { xx * tileWidth + mapOffset,
+										yy * tileHeight + mapOffset,
+										xx * tileWidth + tileWidth + mapOffset,
+										yy * tileHeight + tileHeight + mapOffset };
+				pGraphics->DrawRectangle(rect, color, {100, 0, 0, 0 }, 2);
+			}
+
+		}
+	}
 }
