@@ -38,7 +38,7 @@ Pouncer::~Pouncer()
 
 void Pouncer::Update(float elapsedTime)
 {
-	if (IsAlive())
+	if (GetAlive())
 	{
 		Enemy::Update(elapsedTime);
 		if (target != nullptr)
@@ -122,7 +122,7 @@ void Pouncer::Render(void)
 	//	SGD::Color::Color(255, 255, 0, 0));
 	//Enemy::Render();
 	//Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1, SGD::Color(255, 255, 255, 255), {});
-	if (IsAlive())
+	if (GetAlive())
 	{
 		Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, m_bFacingRight, 1);
 	}
@@ -137,7 +137,7 @@ SGD::Rectangle Pouncer::GetRect(void) const
 void Pouncer::HandleCollision(const IEntity* pOther)
 {
 
-	if (IsAlive())
+	if (GetAlive())
 	{
 		Enemy::HandleCollision(pOther);
 
