@@ -401,6 +401,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BULL_ENEMY);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MUTANT_MAN);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_POOP);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STALACTITE);
 
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
 	m_pEntities->CheckCollisions(Entity::ENT_PRESSURE_PLATE, Entity::ENT_SWORD);
