@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations Character="Jellyfish">
+  <Animation name="Jellyfish Moving" spritesheet="Jellyfish.png" looping="1">
+    <Frame RenderRectLeft="9" RenderRectTop="24" RenderRectRight="61" RenderRectBottom="90" CollisionRectLeft="9" CollisionRectTop="24" CollisionRectRight="61" CollisionRectBottom="60" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="24" anchorpointY="32" />
+    <Frame RenderRectLeft="80" RenderRectTop="24" RenderRectRight="132" RenderRectBottom="87" CollisionRectLeft="80" CollisionRectTop="24" CollisionRectRight="132" CollisionRectBottom="59" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="24" anchorpointY="32" />
+    <Frame RenderRectLeft="147" RenderRectTop="24" RenderRectRight="199" RenderRectBottom="83" CollisionRectLeft="147" CollisionRectTop="24" CollisionRectRight="199" CollisionRectBottom="58" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="24" anchorpointY="32" />
+    <Frame RenderRectLeft="218" RenderRectTop="24" RenderRectRight="270" RenderRectBottom="77" CollisionRectLeft="218" CollisionRectTop="24" CollisionRectRight="270" CollisionRectBottom="59" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="24" anchorpointY="32" />
+    <Frame RenderRectLeft="290" RenderRectTop="24" RenderRectRight="340" RenderRectBottom="91" CollisionRectLeft="290" CollisionRectTop="24" CollisionRectRight="340" CollisionRectBottom="60" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="23" anchorpointY="32" />
+  </Animation>
+</Animations>
