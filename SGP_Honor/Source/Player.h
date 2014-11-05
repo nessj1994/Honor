@@ -113,6 +113,7 @@ public:
 
 	//Slowed
 	bool Slowed() { return m_bSlowed; }
+	void SetSlowed(bool _logic) { m_bSlowed = _logic; }
 
 	////////////////////////////////////////////
 	/////////////////Mutators//////////////////

@@ -1242,7 +1242,16 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 
 	if(pEvent->GetEventID() == "BOUNCE_HORIZONTAL")
 	{
+		m_unCurrentState = JUMPING_STATE;
+		if (*(float*)pEvent->GetData() > -1.0f
+			&& *(float*)pEvent->GetData() < 1.0f)
+		{
+			SetVelocity({ 10000.0f, -1000 });
+		}
+		else
 		SetVelocity({ 10000.0f * (*(float*)pEvent->GetData()), -1000 });
+		//SetVelocity({ 10000.0f, -1000 });
+
 		SetPosition({ GetPosition().x, GetPosition().y - 10 });
 
 	}
