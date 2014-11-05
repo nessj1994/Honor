@@ -14,7 +14,12 @@
 Yeti::Yeti() : Listener(this)
 {
 	Listener::RegisterForEvent("JUMP_TIME");
+	Listener::RegisterForEvent("LONG_JUMP");
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
+	Listener::RegisterForEvent("KILL_BOSS");
+	Listener::RegisterForEvent("FROST_SPRAY");
+	Listener::RegisterForEvent("END_SPRAY");
+
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/YetiAnimations.xml");
 	m_ts.ResetCurrFrame();
 	m_ts.SetCurrAnimation("yetispecial");
@@ -38,51 +43,58 @@ void Yeti::Update(float elapsedTime)
 	{
 	case CHASING_STATE:
 	{
-						  if(GetPlayer()->GetRect().right < m_ptPosition.x)
+						  m_fStartTimer -= elapsedTime;
+						  if(m_fStartTimer <= 0.0f)
 						  {
-							  m_bFacingRight = false;
-						  }
-						  else
-						  {
-							  m_bFacingRight = true;
-						  }
-						  if(!m_ts.IsPlaying() == false)
-						  {
-							  m_ts.SetPlaying(true);
-						  }
-						  //Use the walking animation
-						  if(m_ts.GetCurrAnimation() != "yetiwalking")
-						  {
-							  m_ts.ResetCurrFrame();
-							  m_ts.SetCurrAnimation("yetiwalking");
-						  }
 
-						  //is the player in range of an attack
-						  if(m_bInRange)
-						  {
-							  //melee attack?
-							  if(fabs(m_fDistance) <= m_fMeleeRange)
+
+							  if(GetPlayer()->GetRect().right < m_ptPosition.x)
 							  {
-								  m_ts.ResetCurrFrame();
-								  m_ts.SetCurrAnimation("yetismash");
-								  SetCurrentState(MELEE_STATE);
-
+								  m_bFacingRight = false;
 							  }
-							  //ranged attack?
 							  else
 							  {
-								  //m_ts.ResetCurrFrame();
-								  // m_ts.SetCurrAnimation("yetiranged");
-								  //SetCurrentState(RANGED_STATE);
-
+								  m_bFacingRight = true;
 							  }
-						  }
+							  if(!m_ts.IsPlaying() == false)
+							  {
+								  m_ts.SetPlaying(true);
+							  }
+							  //Use the walking animation
+							  if(m_ts.GetCurrAnimation() != "yetiwalking")
+							  {
+								  m_ts.ResetCurrFrame();
+								  m_ts.SetCurrAnimation("yetiwalking");
+							  }
+
+							  //is the player in range of an attack
+							  if(m_bInRange)
+							  {
+								  //melee attack?
+								  if(fabs(m_fDistance) <= m_fMeleeRange)
+								  {
+									  m_ts.ResetCurrFrame();
+									  m_ts.SetCurrAnimation("yetismash");
+									  SetCurrentState(MELEE_STATE);
+
+								  }
+								  //ranged attack?
+								  else
+								  {
+									  //m_ts.ResetCurrFrame();
+									  // m_ts.SetCurrAnimation("yetiranged");
+									  //SetCurrentState(RANGED_STATE);
+
+								  }
+							  }
 
 
-						 
-						  if(m_vtVelocity.x < 275)
-						  {
-							  m_vtVelocity.x = 275;
+
+							  if(m_vtVelocity.x < 400)
+							  {
+								  m_vtVelocity.x = 400;
+							  }
+
 						  }
 						  break;
 	}
@@ -106,7 +118,8 @@ void Yeti::Update(float elapsedTime)
 	}
 	case JUMPING_STATE:
 	{
-
+						  m_ts.ResetCurrFrame();
+						  m_ts.SetCurrAnimation("yetijump");
 
 						  if(m_fJumpTimer > 0.2f)
 						  {
@@ -119,7 +132,7 @@ void Yeti::Update(float elapsedTime)
 
 						  }
 						  else
-							  SetVelocity({ GetVelocity().x, -600 });
+							  SetVelocity({ GetVelocity().x, GetVelocity().y });
 
 						  break;
 	}
@@ -132,6 +145,11 @@ void Yeti::Update(float elapsedTime)
 							   pMsg->QueueMessage();
 							   pMsg = nullptr;
 						   }
+
+						   if(m_vtVelocity.x < 400)
+						   {
+							   m_vtVelocity.x = 400;
+						   }
 						   break;
 	}
 	case BLIZZARD_STATE:
@@ -140,6 +158,8 @@ void Yeti::Update(float elapsedTime)
 	}
 	case DEAD_STATE:
 	{
+					   m_ts.ResetCurrFrame();
+					   m_ts.SetCurrAnimation("yetideath");
 					   break;
 	}
 	default:
@@ -204,13 +224,16 @@ void Yeti::BasicCollision(const IEntity* pOther)
 	SGD::Rectangle rOther = pOther->GetRect();
 
 	SGD::Rectangle rIntersect = rMyRect.ComputeIntersection(rOther);
+	
+	SetGravity(-3000);
+
 
 	//Colliding with top or bottom
 	if(rIntersect.ComputeWidth() > rIntersect.ComputeHeight())
 	{
-		if(rMyRect.right == rIntersect.right)
+		if(rMyRect.bottom == rIntersect.bottom)
 		{
-			if(GetVelocity().y != 0)
+			if(GetVelocity().y != 0 && GetCurrentState() != MELEE_STATE)
 			{
 				SetCurrentState(CHASING_STATE);
 			}
@@ -219,9 +242,19 @@ void Yeti::BasicCollision(const IEntity* pOther)
 		}
 	}
 	//Colliding with side
-	else
+	else if(rIntersect.ComputeHeight() > rIntersect.ComputeWidth())
 	{
+		if(rMyRect.right == rIntersect.right)
+		{
+			SetVelocity({ 0, GetVelocity().y });
+			SetPosition({ rOther.left - m_szSize.width, GetPosition().y });
 
+		}
+		else
+		{
+			SetVelocity({ 0, GetVelocity().y });
+			SetPosition({ rOther.right , GetPosition().y });
+		}
 	}
 }
 void Yeti::HandleCollision(const IEntity* pOther)
@@ -294,6 +327,7 @@ void Yeti::HandleCollision(const IEntity* pOther)
 
 		BasicCollision(pOther);
 		SetFriction(0.0f);
+		m_vtVelocity *= 1.004;
 		if(GetVelocity().x > 0 && m_bFacingRight == false)
 		{
 			m_vtVelocity.x -= 50;
@@ -305,6 +339,9 @@ void Yeti::HandleCollision(const IEntity* pOther)
 	
 
 	}
+
+
+
 }
 
 void Yeti::HandleEvent(const SGD::Event* pEvent)
@@ -316,10 +353,48 @@ void Yeti::HandleEvent(const SGD::Event* pEvent)
 			if(GetCurrentState() != JUMPING_STATE)
 			{
 				SetCurrentState(JUMPING_STATE);
+				m_vtVelocity = { 400, -700 };
 				m_fJumpTimer = 0.0f;
 			}
 		}
+		if(pEvent->GetEventID() == "LONG_JUMP")
+		{
+
+			SetCurrentState(JUMPING_STATE);
+			m_vtVelocity = { 700, -1000 };
+			m_fJumpTimer = 0.0f;
+
+		}
+
+		if(pEvent->GetEventID() == "KILL_BOSS")
+		{
+			SetCurrentState(DEAD_STATE);
+		}
+
+		if(pEvent->GetEventID() == "FROST_SPRAY")
+		{
+			m_bSpraying = true;
+			SetCurrentState(SPRAYING_STATE);
+	
+		}
+
+		if(pEvent->GetEventID() == "END_SPRAY")
+		{
+			m_bSpraying = false;
+			SetCurrentState(CHASING_STATE);
+		}
 	}
+	//if(pEvent->GetSender() == this)
+	//{
+	//	if(pEvent->GetEventID() == "LONG_JUMP")
+	//	{
+
+	//			SetCurrentState(JUMPING_STATE);
+	//			m_vtVelocity = { 700, -1000 };
+	//			m_fJumpTimer = 0.0f;
+
+	//	}
+	//}
 	if(pEvent->GetEventID() == "ASSESS_PLAYER_RANGE")
 	{
 		Entity* pPlayer = reinterpret_cast<Entity*>(pEvent->GetSender());
@@ -342,6 +417,8 @@ void Yeti::HandleEvent(const SGD::Event* pEvent)
 			m_bInRange = false;
 		}
 	}
+
+
 }
 
 

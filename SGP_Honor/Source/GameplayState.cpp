@@ -1,5 +1,7 @@
 #include "GameplayState.h"
 
+#include <ostream>
+#include <ShlObj.h>
 
 #include "Game.h"
 #include "MainMenuState.h"
@@ -66,6 +68,8 @@
 #include "Vomit.h"
 #include "Poop.h"
 #include "Caveman.h"
+#include "IceTurtle.h"
+#include "IceGolem.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -196,7 +200,7 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadHonorVector();
 	
-	LoadLevel("Level1_1");
+	LoadLevel("Level3_1");
 
 	//LoadLevel("Level5_5");
 
@@ -341,7 +345,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if(pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level2_5");
+		LoadLevel("Level3_5");
 	}
 
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
@@ -401,8 +405,16 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BULL_ENEMY);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MUTANT_MAN);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_POOP);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STALACTITE);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_YETI);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ICE_GOLEM);
+
+
 
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
+	m_pEntities->CheckCollisions(Entity::ENT_ICE_TURTLE, Entity::ENT_SWORD);
+	m_pEntities->CheckCollisions(Entity::ENT_ICE_GOLEM, Entity::ENT_SWORD);
+
 	m_pEntities->CheckCollisions(Entity::ENT_PRESSURE_PLATE, Entity::ENT_SWORD);
 
 	m_pEntities->CheckCollisions(Entity::ENT_SWITCH, Entity::ENT_SWORD);
@@ -427,6 +439,11 @@ void GameplayState::Update(float elapsedTime)
 
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_LASER);
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_PLAYER);
+	m_pEntities->CheckCollisions(Entity::ENT_BOSS_YETI, Entity::ENT_PLAYER);
+	m_pEntities->CheckCollisions(Entity::ENT_BOSS_YETI, Entity::ENT_PERM_FREEZE);
+	m_pEntities->CheckCollisions(Entity::ENT_BOSS_YETI, Entity::ENT_TEMP_FREEZE);
+
+
 	
 
 
@@ -852,7 +869,7 @@ Entity* GameplayState::CreateProjectile(Entity* pOwner) const
 			proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	
 
-	proj->SetSize({ 40, 40 });
+	proj->SetSize({ 16, 16 });
 	proj->SetDirection({ pOwner->GetDirection() });
 	//proj->SetVelocity({ pOwner->GetDirection() });
 	proj->SetOwner(pOwner);
@@ -1354,6 +1371,13 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		}
 		case 4: // ice golem
 		{
+
+					IceGolem * pIceGolem = new IceGolem();
+					pIceGolem->SetPosition({ (float)_x, (float)_y });
+					pIceGolem->SetPlayer(m_pPlayer);
+					pIceGolem->SetDirection(2);
+					m_pEntities->AddEntity(pIceGolem, Entity::ENT_ICE_GOLEM);
+					pIceGolem->Release();
 			break;
 		}
 		case 5: // ice bat
@@ -1362,6 +1386,11 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		}
 		case 6: // ice turtle
 		{
+					IceTurtle * pIceTurtle = new IceTurtle();
+					pIceTurtle->SetPosition({ (float)_x, (float)_y });
+					pIceTurtle->SetPlayer(m_pPlayer);
+					m_pEntities->AddEntity(pIceTurtle, Entity::ENT_ICE_TURTLE);
+					/*pIceTurtle->Release();*/
 			break;
 		}
 		case 7: // hermit crab
@@ -1596,6 +1625,32 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 
 void GameplayState::SaveGame()
 {
+	HRESULT hr;
+	std::ostringstream stringstream;
+	char path[MAX_PATH];
+	LPWSTR wszPath = NULL;
+	size_t   size;
+
+	// Get the path to the app data folder
+	hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, 0, &wszPath);
+
+	// Convert from LPWSTR to char[]
+	wcstombs_s(&size, path, MAX_PATH, wszPath, MAX_PATH);
+
+	// Convert char types
+	if(hr == S_OK)
+		stringstream << path;
+	std::string pathtowrite = stringstream.str();
+
+	// Add the company and game information
+	pathtowrite += "\\honor\\";
+
+	// Create our directory
+	SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
+
+	// Create our save file
+	pathtowrite += "\\savefile.xml";
+
 
 
 	//Create the doc
@@ -1613,15 +1668,43 @@ void GameplayState::SaveGame()
 	rootElement->LinkEndChild(element);
 	element->SetAttribute("x", (int)m_pPlayer->GetPosition().x);
 	element->SetAttribute("y", (int)m_pPlayer->GetPosition().y);
-	doc.SaveFile("Assets/SaveGame.xml");
+	doc.SaveFile(pathtowrite.c_str());
 }
 
 void GameplayState::LoadGame()
 {
+	HRESULT hr;
+	std::ostringstream stringstream;
+	char path[MAX_PATH];
+	LPWSTR wszPath = NULL;
+	size_t   size;
+
+	// Get the path to the app data folder
+	hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, 0, &wszPath);
+
+	// Convert from LPWSTR to char[]
+	wcstombs_s(&size, path, MAX_PATH, wszPath, MAX_PATH);
+
+	// Convert char types
+	if(hr == S_OK)
+		stringstream << path;
+	std::string pathtowrite = stringstream.str();
+
+	// Add the company and game information
+	pathtowrite += "\\honor\\";
+
+	// Create our directory
+	SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
+
+	// Create our save file
+	pathtowrite += "\\savefile.xml";
+
+
+
 	//Create the doc
 	TiXmlDocument doc;
 
-	doc.LoadFile("Assets/SaveGame.xml");
+	doc.LoadFile(pathtowrite.c_str());
 
 	TiXmlElement* pRoot = doc.RootElement();
 

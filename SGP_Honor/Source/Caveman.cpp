@@ -1,5 +1,6 @@
 #include "Caveman.h"
 #include "Hawk.h"
+#include "Stalactite.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "ParticleEngine.h"
 #include "AnimationEngine.h"
@@ -21,12 +22,21 @@ Caveman::Caveman() : SGD::Listener(this)
 	m_iDoorSkip = 1;
 	m_fStopTimer = 0;
 	m_fDoorTimer = 0;
+	m_fStalacTimer = 0;
 	m_pHawk = new Hawk();
 	m_pHawk->SetOwner(this);
 	m_hHawkExplode = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FeatherExplosion.xml", "FeatherExplosion", m_ptPosition);
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/CaveManAnim.xml");
 	m_ts.SetCurrAnimation("CaveManWalking");
 	m_ts.SetPlaying(true);
+	for (size_t i = 0; i < 3; i++)
+	{
+		Stalactite Temp;
+		Temp.SetPosition({-1000,-1000});
+		Temp.SetSize({ 64, 64 });
+		Temp.SetFallSpeed(1300);
+		m_vStalac.push_back(Temp);
+	}
 }
 
 
@@ -36,6 +46,11 @@ Caveman::~Caveman()
 
 void Caveman::Update(float elapsedTime)
 {
+	//Stalactite Updates
+	for (size_t i = 0; i < m_vStalac.size(); i++)
+	{
+		m_vStalac[i].Update(elapsedTime);
+	}
 	//Emitter updates
 	m_hHawkExplode->Update(elapsedTime);
 
@@ -49,6 +64,7 @@ void Caveman::Update(float elapsedTime)
 	m_fStopTimer += elapsedTime;
 	m_fHidingTimer += elapsedTime;
 	m_fAttackingTimer += elapsedTime;
+	m_fStalacTimer += elapsedTime;
 	//
 
 	//Hawk Update
@@ -140,7 +156,7 @@ void Caveman::Update(float elapsedTime)
 			m_ts.SetCurrAnimation("CaveManAttack");
 			m_ts.SetPlaying(true);
 		}
-		m_pHawk->Attack({1000,33});
+		m_pHawk->Attack({ GetPlayer()->GetPosition().x - GetPlayer()->GetSize().width / 2, 33 });
 		SetVelocity({ 0, 0 });
 		if (m_fAttackingTimer > 1)
 		{
@@ -172,10 +188,23 @@ void Caveman::Update(float elapsedTime)
 
 void Caveman::HawkExplode(SGD::Point _Pos)
 {
-	if (!m_pHawk->IsDead())
+	if (!m_pHawk->IsDead() && m_fStalacTimer > .4f)
 	{
+		//reset the timer
+		m_fStalacTimer = 0;
+		//start the emitter 
 		m_hHawkExplode->Finish();
 		m_hHawkExplode->Burst(_Pos);
+		//make a stalactite
+		m_vStalac[0].SetPosition({ _Pos.x + (64), _Pos.y });
+		m_vStalac[0].SetSize({ 64, 64 });
+		m_vStalac[0].SetFallSpeed(1300);
+		m_vStalac[1].SetPosition({ _Pos.x , _Pos.y });
+		m_vStalac[1].SetSize({ 64, 64 });
+		m_vStalac[1].SetFallSpeed(1300);
+		m_vStalac[2].SetPosition({ _Pos.x - (64), _Pos.y });
+		m_vStalac[2].SetSize({ 64, 64 });
+		m_vStalac[2].SetFallSpeed(1300);
 	}
 }
 
@@ -187,6 +216,10 @@ void Caveman::Render(void)
 	//Emitter Renders
 	m_hHawkExplode->Render();
 	// 
+	for (size_t i = 0; i < m_vStalac.size(); i++)
+	{
+		m_vStalac[i].Render();
+	}
 	if (!m_pHawk->IsDead())
 	{
 		m_pHawk->Render();

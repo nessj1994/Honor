@@ -1,7 +1,8 @@
 #pragma once
 #include "Boss.h"
-
+#include <vector>
 class Hawk;
+class Stalactite;
 
 class Caveman :
 	public Boss, SGD::Listener
@@ -55,6 +56,8 @@ private:
 	float m_fAttackingTimer;
 
 	//For Falling Stalactites
-
+	std::vector<Stalactite> m_vStalac;
+	//check amount of Stalactites been made 
+	float m_fStalacTimer;
 };
 

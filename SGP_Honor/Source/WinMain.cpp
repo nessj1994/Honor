@@ -150,8 +150,8 @@ HWND MakeWindow(HINSTANCE hInstance)
 	winClassEx.cbClsExtra = 0;
 	winClassEx.cbWndExtra = 0;
 	winClassEx.hInstance = hInstance;
-	winClassEx.hIcon = LoadIconW(hInstance, MAKEINTRESOURCE(IDI_HonorIcon));
-	winClassEx.hIconSm = LoadIconW(hInstance, MAKEINTRESOURCE(IDI_HonorIcon));
+	winClassEx.hIcon = LoadIconW(hInstance,(LPCWSTR)MAKEINTRESOURCE(IDI_HonorIcon));
+	winClassEx.hIconSm = LoadIconW(hInstance, (LPCWSTR)MAKEINTRESOURCE(IDI_HonorIcon));
 	winClassEx.hCursor = LoadCursorW(NULL, (LPWSTR)IDC_ARROW);
 	winClassEx.hbrBackground = (HBRUSH)(1 + COLOR_WINDOW);
 	winClassEx.lpszMenuName = NULL;
