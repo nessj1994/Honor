@@ -311,7 +311,7 @@ void Player::HandleCollision(const IEntity* pOther)
 	if(pOther->GetType() == ENT_DOOR)
 	{
 		m_bSliding = false;
-
+		SetFriction(25.0f);
 		BasicCollision(pOther);
 	}
 

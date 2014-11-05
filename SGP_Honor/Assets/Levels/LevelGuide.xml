@@ -9,6 +9,8 @@
 <Level key="World4Level" path="Assets/Levels/World4Level.xml" />
 <Level key="World5Level" path="Assets/Levels/World5Level.xml" />
 
+<Level key="Level0_1" path="Assets/Levels/Level0_1.xml" />
+
 <Level key="Level1_1" path="Assets/Levels/Level1_1.xml" />
 <Level key="Level1_2" path="Assets/Levels/Level1_2.xml" />
 <Level key="Level1_3" path="Assets/Levels/Level1_3.xml" />

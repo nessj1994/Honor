@@ -196,9 +196,9 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadHonorVector();
 	
-	//LoadLevel("Level3_1");
+	LoadLevel("Level0_1");
 
-	LoadLevel("Level5_5");
+	//LoadLevel("Level1_1");
 
 	//("HubLevel");
 
@@ -402,6 +402,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MUTANT_MAN);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_POOP);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STALACTITE);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_DOOR);
+
 
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
 	m_pEntities->CheckCollisions(Entity::ENT_PRESSURE_PLATE, Entity::ENT_SWORD);

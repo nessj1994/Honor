@@ -74,6 +74,11 @@ void HorizontalBubble::Update(float elapsedTime)
 		SetVelocity({ 550, GetVelocity().y });
 	}
 
+	if (GetVelocity().x < -550)
+	{
+		SetVelocity({ -550, GetVelocity().y });
+	}
+
 	Entity::Update(elapsedTime);
 }
 
