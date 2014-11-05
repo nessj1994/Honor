@@ -55,6 +55,7 @@ public:
 	void UpdateConstants(float elapsedTime);
 	void UpdateVelocity(float elapsedTime);
 	void UpdatePlayerSwing(float elapsedTime);
+	void UpdateSnared(float elapsedTime);
 
 	////////////////////////////////////////////////
 	/////////////////////Methods///////////////////
@@ -90,8 +91,8 @@ public:
 	bool GetIsInputStuck(void)const { return is_Stuck; }
 	bool GetDead(void) const { return m_bDead; }
 	bool GetIsSwinging(void) const { return is_Swinging; }
-	bool GetStunned(void) const { return m_bStunned; }
-
+	bool GetSnared(void) const { return m_bSnared; }
+	bool GetStunned(void) const{ return m_bStunned; }
 	//Floats
 	float GetDashTime(void) const { return m_fDashTime; }
 	//float GetJumpCapTime(void) const { return m_fJumpVelCap; }
@@ -137,6 +138,10 @@ public:
 
 	//Hawk Explosion function
 	void HawkExplode(SGD::Point _pos);
+
+	//Updateing and changeing Snared factors
+	void SetSnared(bool _Snared) { m_bSnared = _Snared;  m_fSnareTimer = 0; }
+
 private:
 
 
@@ -219,6 +224,9 @@ private:
 	//SLowing Down with friction
 	bool m_bSlowed;
 
+	//GEtting Snared
+	bool m_bSnared;
+	float m_fSnareTimer;
 };
 
 

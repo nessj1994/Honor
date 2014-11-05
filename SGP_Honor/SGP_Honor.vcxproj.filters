@@ -278,7 +278,13 @@
     <ClCompile Include="Source\Poop.cpp">
       <Filter>Entities\Obstacles</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CreatePoopMessage.cpp" />
+    <ClCompile Include="source\IceBat.cpp" />
+    <ClCompile Include="Source\CreatePoopMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CreateStalactite.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -582,7 +588,13 @@
     <ClInclude Include="Source\Poop.h">
       <Filter>Entities\Obstacles</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CreatePoopMessage.h" />
+    <ClInclude Include="source\IceBat.h" />
+    <ClInclude Include="Source\CreatePoopMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CreateStalactite.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />

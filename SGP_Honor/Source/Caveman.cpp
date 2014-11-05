@@ -1,6 +1,6 @@
 #include "Caveman.h"
 #include "Hawk.h"
-#include "Stalactite.h"
+#include "CreateStalactite.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "ParticleEngine.h"
 #include "AnimationEngine.h"
@@ -26,17 +26,11 @@ Caveman::Caveman() : SGD::Listener(this)
 	m_pHawk = new Hawk();
 	m_pHawk->SetOwner(this);
 	m_hHawkExplode = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FeatherExplosion.xml", "FeatherExplosion", m_ptPosition);
+	m_emEYES = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/EYEEffect.xml", "RedEyes", m_ptPosition);
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/CaveManAnim.xml");
 	m_ts.SetCurrAnimation("CaveManWalking");
 	m_ts.SetPlaying(true);
-	for (size_t i = 0; i < 3; i++)
-	{
-		Stalactite Temp;
-		Temp.SetPosition({-1000,-1000});
-		Temp.SetSize({ 64, 64 });
-		Temp.SetFallSpeed(1300);
-		m_vStalac.push_back(Temp);
-	}
+
 }
 
 
@@ -46,14 +40,10 @@ Caveman::~Caveman()
 
 void Caveman::Update(float elapsedTime)
 {
-	//Stalactite Updates
-	for (size_t i = 0; i < m_vStalac.size(); i++)
-	{
-		m_vStalac[i].Update(elapsedTime);
-	}
+
 	//Emitter updates
 	m_hHawkExplode->Update(elapsedTime);
-
+	m_emEYES->Update(elapsedTime);
 	//
 	//Animation Update
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
@@ -67,14 +57,41 @@ void Caveman::Update(float elapsedTime)
 	m_fStalacTimer += elapsedTime;
 	//
 
+	//Slash at player if close and not jumping or falling or attacking or emerging or hideing
+	if (m_bsCurrState == CM_RUNING && !GetPlayer()->GetSnared())
+	{
+		//Find Distance to point
+		SGD::Vector distance = m_ptPosition - GetPlayer()->GetPosition();
+		if (distance.ComputeLength() < 50)
+		{
+			m_bsCurrState = CM_SLASHING;
+		}
+			
+	}
+
 	//Hawk Update
 	m_pHawk->Update(elapsedTime);
-
+	//Drop stalactite if hawk is ready
+	DropStalactites();
 	//Switch statement inisialisations
 	int Door;
 	//AI State MAchine
 	switch (m_bsCurrState)
 	{
+	case Caveman::CM_SLASHING:
+		SetVelocity({ 0, 0 });
+		if (m_ts.GetCurrAnimation() != "CaveManStunned")
+		{
+			m_ts.ResetCurrFrame();
+			m_ts.SetCurrAnimation("CaveManStunned");
+			m_ts.SetPlaying(true);
+			GetPlayer()->SetSnared(true);
+		}
+		if (m_ts.GetCurrFrame() == 4)
+		{			
+			m_bsCurrState = CM_RUNING;
+		}
+		break;
 	case Caveman::CM_RUNING:
 		if (m_ts.GetCurrAnimation() != "CaveManWalking")
 		{
@@ -147,8 +164,6 @@ void Caveman::Update(float elapsedTime)
 		break;
 	case Caveman::CM_FALLING:
 		break;
-	case Caveman::CM_SLASHING:
-		break;
 	case Caveman::CM_ATTACKING:		
 		if (m_ts.GetCurrAnimation() != "CaveManAttack")
 		{
@@ -156,7 +171,15 @@ void Caveman::Update(float elapsedTime)
 			m_ts.SetCurrAnimation("CaveManAttack");
 			m_ts.SetPlaying(true);
 		}
-		m_pHawk->Attack({ GetPlayer()->GetPosition().x - GetPlayer()->GetSize().width / 2, 33 });
+		if (GetPlayer()->IsFacingRight())
+		{
+			m_pHawk->Attack({ GetPlayer()->GetPosition().x + 300, 33 });
+		}
+		else
+		{
+			m_pHawk->Attack({ GetPlayer()->GetPosition().x - 300, 33 });
+		}		
+		m_fStalacTimer = 0;
 		SetVelocity({ 0, 0 });
 		if (m_fAttackingTimer > 1)
 		{
@@ -188,42 +211,44 @@ void Caveman::Update(float elapsedTime)
 
 void Caveman::HawkExplode(SGD::Point _Pos)
 {
-	if (!m_pHawk->IsDead() && m_fStalacTimer > .4f)
+	if (!m_pHawk->IsDead())
 	{
 		//reset the timer
 		m_fStalacTimer = 0;
+		m_bDrop = false;
 		//start the emitter 
 		m_hHawkExplode->Finish();
-		m_hHawkExplode->Burst(_Pos);
+		m_hHawkExplode->Burst(_Pos);		
+	}
+}
+
+void Caveman::DropStalactites()
+{
+	if (m_fStalacTimer > .1f && m_bDrop)
+	{
+		m_fStalacTimer = 0;
 		//make a stalactite
-		m_vStalac[0].SetPosition({ _Pos.x + (64), _Pos.y });
-		m_vStalac[0].SetSize({ 64, 64 });
-		m_vStalac[0].SetFallSpeed(1300);
-		m_vStalac[1].SetPosition({ _Pos.x , _Pos.y });
-		m_vStalac[1].SetSize({ 64, 64 });
-		m_vStalac[1].SetFallSpeed(1300);
-		m_vStalac[2].SetPosition({ _Pos.x - (64), _Pos.y });
-		m_vStalac[2].SetSize({ 64, 64 });
-		m_vStalac[2].SetFallSpeed(1300);
+		CreateStalactiteMessage* Temp1 = new CreateStalactiteMessage(m_pHawk);
+		Temp1->QueueMessage();
+		Temp1 = nullptr;
 	}
 }
 
 void Caveman::Render(void)
 {
-	Boss::Render();
-	//Animation Render
-	Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height / 2 }, 0, m_ts, m_bFacingRight, 1);
 	//Emitter Renders
 	m_hHawkExplode->Render();
+	m_emEYES->Render();
 	// 
-	for (size_t i = 0; i < m_vStalac.size(); i++)
-	{
-		m_vStalac[i].Render();
-	}
 	if (!m_pHawk->IsDead())
 	{
 		m_pHawk->Render();
 	}
+	
+	Boss::Render();
+	//Animation Render
+	Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height / 2 }, 0, m_ts, m_bFacingRight, 1);
+
 }
 
 void Caveman::HandleCollision(const IEntity* pOther)

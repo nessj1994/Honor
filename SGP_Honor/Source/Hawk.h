@@ -35,6 +35,7 @@ private:
 
 	//For caveman Boss use
 	SGD::Point m_poTarget;
+	SGD::Point m_pEndPos;
 	bool m_bDead;
 };
 

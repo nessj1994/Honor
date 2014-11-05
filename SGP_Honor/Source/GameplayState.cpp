@@ -17,6 +17,7 @@
 #include "CreateVomitMessage.h"
 #include "CreatePoopMessage.h"
 #include "ChangeLevelMessage.h"
+#include "CreateStalactite.h"
 #include "MovingPlatform.h"
 
 #include "Entity.h"
@@ -509,6 +510,25 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 	//What type of message is this
 	switch(pMsg->GetMessageID())
 	{
+		case MessageID::MSG_CREATE_STALACTITE:
+		{
+			//Downcast to the real message type
+			const CreateStalactiteMessage* pCreateMsg =
+				dynamic_cast<const CreateStalactiteMessage*>(pMsg);
+
+			//Make sure the message isnt a nullptr
+			assert(pCreateMsg != nullptr
+				&& "GameplayState::MessageProc - MSG_CREATE_STALACTITE is not actually a CreateSTALACTITEMessage");
+			Stalactite* Temp = new Stalactite();
+			Temp->SetPosition(pCreateMsg->GetOwner()->GetPosition());
+			Temp->SetSize({ 64, 64 });
+			Temp->SetFallSpeed(1000);
+			GetInstance()->m_pEntities->AddEntity(Temp, Entity::ENT_STALACTITE);
+
+			Temp->Release();
+			Temp = nullptr;
+			break;
+		}
 		case MessageID::MSG_CREATE_VOMIT:
 		{
 			//Downcast to the real message type

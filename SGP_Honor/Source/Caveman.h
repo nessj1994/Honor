@@ -29,7 +29,8 @@ public:
 
 	//For Hawk Events
 	void HawkExplode(SGD::Point);
-
+	void DropStalactites();
+	void ReadyToDrop(bool _Drop = true){ m_bDrop = _Drop; }
 private:
 	//Dont do this event for this time
 	float m_fStopTimer;
@@ -55,9 +56,10 @@ private:
 		Emitter* m_hHawkExplode;
 	float m_fAttackingTimer;
 
-	//For Falling Stalactites
-	std::vector<Stalactite> m_vStalac;
 	//check amount of Stalactites been made 
 	float m_fStalacTimer;
+	bool m_bDrop;
+	//Caveman Boss Level Background Effect
+	Emitter* m_emEYES;
 };
 

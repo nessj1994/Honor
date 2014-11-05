@@ -90,8 +90,18 @@ void Hawk::Update(float elapsedTime)
 		}
 		else
 		{
-			((Caveman*)m_pOwner)->HawkExplode(m_ptPosition);
-			m_bDead = true;
+			//Go to the second position if not at it.
+			if (m_poTarget == m_pEndPos)
+			{
+				((Caveman*)m_pOwner)->HawkExplode(m_ptPosition);
+				m_bDead = true;
+			}
+			else
+			{
+				((Caveman*)m_pOwner)->ReadyToDrop();
+				m_poTarget = m_pEndPos;
+			}
+			
 		}
 	}
 
@@ -134,6 +144,8 @@ void Hawk::Attack(SGD::Point _Pos)
 	if (m_pOwner->GetType() == ENT_BOSS_CAVEMAN)
 	{
 		m_poTarget = _Pos;
+		m_pEndPos = _Pos;
+		m_pEndPos.x += 600;
 		m_bDead = false;
 	}
 }
