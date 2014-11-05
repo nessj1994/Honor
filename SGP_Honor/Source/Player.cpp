@@ -39,6 +39,7 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("KILL_PLAYER");
 	Listener::RegisterForEvent("BOUNCE_VERTICAL");
 	Listener::RegisterForEvent("BOUNCE_HORIZONTAL");
+	Listener::RegisterForEvent("ADD_SPRAY");
 
 	//Screen events
 	Listener::RegisterForEvent("Screen2x2");
@@ -530,7 +531,22 @@ void Player::HandleCollision(const IEntity* pOther)
 			ThrowPlayer(bull->GetFacingRight());
 		}
 	}
+	if(pOther->GetType() == Entity::ENT_ICE_GOLEM)
+	{
+		SGD::Event* pATEvent = new SGD::Event("KILL_PLAYER", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
+	}
+
+	if(pOther->GetType() == Entity::ENT_BOSS_YETI)
+	{
+		//SGD::Event* pATEvent = new SGD::Event("KILL_PLAYER", nullptr, this);
+		//SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		//pATEvent = nullptr;
+	}
+
 }
+
 
 void Player::BasicCollision(const IEntity* pOther)
 {
@@ -1251,6 +1267,11 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		SetVelocity({ 10000.0f * (*(float*)pEvent->GetData()), -1000 });
 		SetPosition({ GetPosition().x, GetPosition().y - 10 });
 
+	}
+
+	if(pEvent->GetEventID() == "ADD_SPRAY")
+	{
+		m_bHasIce = true;
 	}
 
 	if (pEvent->GetEventID() == "Screen2x2")
@@ -2029,7 +2050,7 @@ void Player::UpdateSpray(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	if(pInput->IsKeyDown(SGD::Key::F) == true
-		/*&& m_fShotTimer > 0.25f*/)
+		/*&& m_fShotTimer > 0.25f*/ && m_bHasIce == true)
 	{
 		if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hIceEffect)))
 		{

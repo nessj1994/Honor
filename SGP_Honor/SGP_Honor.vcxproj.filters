@@ -286,6 +286,9 @@
       <Filter>Messages</Filter>
     </ClCompile>
     <ClCompile Include="Source\HubWorldOrb.cpp" />
+    <ClCompile Include="source\IceBat.cpp" />
+    <ClCompile Include="source\IceTurtle.cpp" />
+    <ClCompile Include="source\IceGolem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -597,6 +600,9 @@
       <Filter>Messages</Filter>
     </ClInclude>
     <ClInclude Include="Source\HubWorldOrb.h" />
+    <ClInclude Include="source\IceBat.h" />
+    <ClInclude Include="source\IceTurtle.h" />
+    <ClInclude Include="source\IceGolem.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />

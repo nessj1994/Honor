@@ -71,6 +71,8 @@
     <ClCompile Include="Source\HubWorldOrb.cpp" />
     <ClCompile Include="Source\Ice.cpp" />
     <ClCompile Include="source\IceBat.cpp" />
+    <ClCompile Include="source\IceGolem.cpp" />
+    <ClCompile Include="source\IceTurtle.cpp" />
     <ClCompile Include="Source\InstructionsState.cpp" />
     <ClCompile Include="Source\Jellyfish.cpp" />
     <ClCompile Include="Source\Laser.cpp" />
@@ -182,6 +184,8 @@
     <ClInclude Include="Source\HubWorldOrb.h" />
     <ClInclude Include="Source\Ice.h" />
     <ClInclude Include="source\IceBat.h" />
+    <ClInclude Include="source\IceGolem.h" />
+    <ClInclude Include="source\IceTurtle.h" />
     <ClInclude Include="Source\IEntity.h" />
     <ClInclude Include="Source\IGameState.h" />
     <ClInclude Include="Source\InstructionsState.h" />
@@ -244,7 +248,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>

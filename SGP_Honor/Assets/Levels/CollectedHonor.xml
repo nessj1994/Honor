@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Levels totalHonor="1174">
+<Levels totalHonor="1124">
     <Level name="HubLevel" />
     <Level name="Level1_1" />
     <Level name="Level1_2" />
@@ -26,7 +26,6 @@
     <Level name="Level5_3" />
     <Level name="Level5_4" />
     <Level name="Level5_5" />
-    <Level name="TestLevel" />
     <Level name="TutorialLevel" />
     <Level name="World1Level" />
     <Level name="World2Level" />
