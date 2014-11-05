@@ -68,6 +68,7 @@
     <ClCompile Include="Source\HintStatue.cpp" />
     <ClCompile Include="Source\Honor.cpp" />
     <ClCompile Include="Source\HorizontalBubble.cpp" />
+    <ClCompile Include="Source\HubWorldOrb.cpp" />
     <ClCompile Include="Source\Ice.cpp" />
     <ClCompile Include="source\IceBat.cpp" />
     <ClCompile Include="Source\InstructionsState.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Source\HintStatue.h" />
     <ClInclude Include="Source\Honor.h" />
     <ClInclude Include="Source\HorizontalBubble.h" />
+    <ClInclude Include="Source\HubWorldOrb.h" />
     <ClInclude Include="Source\Ice.h" />
     <ClInclude Include="source\IceBat.h" />
     <ClInclude Include="Source\IEntity.h" />

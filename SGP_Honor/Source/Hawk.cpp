@@ -139,13 +139,20 @@ void Hawk::Update(float elapsedTime)
 }
 
 
-void Hawk::Attack(SGD::Point _Pos)
+void Hawk::Attack(SGD::Point _Pos,bool PlayerFacing)
 {
 	if (m_pOwner->GetType() == ENT_BOSS_CAVEMAN)
 	{
 		m_poTarget = _Pos;
 		m_pEndPos = _Pos;
-		m_pEndPos.x += 600;
+		if (PlayerFacing)
+		{
+			m_pEndPos.x -= 600;
+		}
+		else
+		{
+			m_pEndPos.x += 600;
+		}		
 		m_bDead = false;
 	}
 }

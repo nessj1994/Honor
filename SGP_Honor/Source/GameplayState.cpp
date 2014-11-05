@@ -409,7 +409,7 @@ void GameplayState::Update(float elapsedTime)
 
 	m_pEntities->CheckCollisions(Entity::ENT_SWITCH, Entity::ENT_SWORD);
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_BULL, Entity::ENT_DOOR);
-
+	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CAVEMAN, Entity::ENT_LASER);
 
 
 
@@ -1504,7 +1504,7 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 					Temp->SetPosition({ (float)_x, (float)_y });
 					Temp->SetStartPosition({ (float)_x, (float)_y });
 					Temp->SetPlayer(m_pPlayer);
-					m_pEntities->AddEntity(Temp, Entity::ENT_BOSS_BULL);
+					m_pEntities->AddEntity(Temp, Entity::ENT_BOSS_CAVEMAN);
 					Temp->Release();
 					break;
 		}
