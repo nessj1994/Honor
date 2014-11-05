@@ -46,7 +46,8 @@ void Teleporter::HandleCollision(const IEntity* pOther)
 
 
 		//if (leftStickYOff < -0.8)
-		if (SGD::InputManager::GetInstance()->IsButtonPressed(0,3) == true)
+		if (SGD::InputManager::GetInstance()->IsButtonPressed(0,3) == true ||
+			SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::W))
 		{
 			ChangeLevelMessage* pMsg = new ChangeLevelMessage{ this };
 			pMsg->QueueMessage();

@@ -72,7 +72,7 @@ public:
 	unsigned int GetCurrentState(void) const { return m_unCurrentState; }
 	void JellyfishCollision(const IEntity* pOther);
 	void KillPlayer();
-
+	void ThrowPlayer(bool _right);
 
 
 	//SGD::Rectangle GetWallRect(void) const;
@@ -111,13 +111,16 @@ public:
 	//Unsigned ints
 	unsigned int GetHonorCollected(void) const { return m_unHonorCollected; }
 
+	//Slowed
+	bool Slowed() { return m_bSlowed; }
+
 	////////////////////////////////////////////
 	/////////////////Mutators//////////////////
 	void SetStunnded(bool _stun) { m_bStunned = _stun; }
 	void SetHasArmor(bool armor) { m_bHasArmor = armor; }
 	void SetHasDash(bool dash) { m_bHasDash = dash; }
 	void SetHasIce(bool ice) { m_bHasIce = ice; }
-	void SetHasBounce(bool bounce) { m_bHasBounce = bounce; }
+	void SetHasBounce(bool bounce);
 	void SetDashTimer(float timer) { m_fDashTime = timer; }
 	void SetDash(Dash& dash) {};
 	void SetIce(Ice& ice) {};
@@ -210,6 +213,11 @@ private:
 	//Sound Effects
 	SGD::HAudio m_hIceEffect = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hBounceEffect = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hJellyfishEffect = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hGainAbility = SGD::INVALID_HANDLE;
+
+	//SLowing Down with friction
+	bool m_bSlowed;
 
 };
 

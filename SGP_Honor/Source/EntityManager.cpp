@@ -1,5 +1,6 @@
 #include "EntityManager.h"
 #include "IEntity.h"
+#include "Entity.h"
 #include "Level.h"
 #include "GameplayState.h"
 #include <cassert>
@@ -334,4 +335,104 @@ void EntityManager::CheckWorldEvent(unsigned int _bucket)
 		// Call the check collision function and pass in each entity
 		level->CheckEvent(vec[i]);
 	}
+}
+
+/**************************************************************/
+// RenderMiniMap
+//	- Renders each entity as a dot on the minimap
+void EntityManager::RenderMiniMap(void)
+{
+	// Reference to the graphics manager
+	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
+
+	// References to width and height of the mini map
+	float mapWidth = GameplayState::GetInstance()->GetMiniMapWidth();
+	float mapHeight = GameplayState::GetInstance()->GetMiniMapHeight();
+	float mapOffset = GameplayState::GetInstance()->GetBorderSize();
+
+	// References to width and height of the level
+	int levelWidth = GameplayState::GetInstance()->GetCurrentLevel()->GetWidth();
+	int levelHeight = GameplayState::GetInstance()->GetCurrentLevel()->GetHeight();
+	
+	// Figure out some values needed
+	float tileWidth = mapWidth / levelWidth;
+	float tileHeight = mapHeight / levelHeight;
+
+	// Validate the iteration state
+	assert(m_bIterating == false && "EntityManager::RenderAll - cannot render while iterating");
+
+	// Lock the iterator
+	m_bIterating = true;
+	{
+		// Render every entity
+		for (unsigned int bucket = 0; bucket < m_tEntities.size(); bucket++)
+		{
+			EntityVector& vec = m_tEntities[bucket];
+			for (unsigned int i = 0; i < vec.size(); i++)
+			{
+				SGD::Color color = { 100, 0, 0, 200 };
+				// Change colors for different things
+				switch (vec[i]->GetType())
+				{
+					case Entity::ENT_HONOR:
+					{
+						color = { 100, 200, 100, 50 };
+						break;
+					}
+					case Entity::ENT_PLAYER:
+					{
+						color = { 100, 200, 200, 60 };
+						break;
+					}
+					case Entity::ENT_TELEPORTER:
+					{
+						color = { 100, 0, 200, 0 };
+						break;
+					}
+					case Entity::ENT_BULL_ENEMY:
+					case Entity::ENT_SKELETON:
+					case Entity::ENT_MUTANT_MAN:
+					case Entity::ENT_MUTANT_BIRD:
+					case Entity::ENT_ICE_BAT:
+					case Entity::ENT_ICE_GOLEM:
+					case Entity::ENT_ICE_TURTLE:
+					case Entity::ENT_SQUID:
+					case Entity::ENT_POUNCER:
+					case Entity::ENT_JELLYFISH:
+					case Entity::ENT_BOSS_BULL:
+					case Entity::ENT_BOSS_CAVEMAN:
+					case Entity::ENT_BOSS_YETI:
+					case Entity::ENT_BOSS_CRAB:
+					case Entity::ENT_BOSS_WIZARD:
+					case Entity::ENT_LASER:
+					case Entity::ENT_TURRET:
+					case Entity::ENT_LAVA:
+					case Entity::ENT_FALLING_BLOCK:
+					case Entity::ENT_PENDULUM:
+					case Entity::ENT_BUZZSAW:
+					{
+						color = { 100, 200, 0, 0 };
+					}
+
+				}
+
+				// Render as a dot at the correct position
+				float xPos = vec[i]->GetRect().left / 32.0f;
+				float yPos = vec[i]->GetRect().top / 32.0f;
+				float eWidth = (vec[i]->GetRect().right - vec[i]->GetRect().left) / 32.0f * tileWidth;
+				float eHeight = (vec[i]->GetRect().bottom - vec[i]->GetRect().top) / 32.0f * tileHeight;
+
+				// Rectangle for drawing
+				SGD::Rectangle rect = { xPos * tileWidth + mapOffset,
+					yPos * tileHeight + mapOffset,
+					xPos * tileWidth + eWidth + mapOffset,
+					yPos * tileHeight + eHeight + mapOffset };
+
+				pGraphics->DrawRectangle(rect, color, { 100, 255, 255, 255 }, 2);
+			}
+		}
+	}
+	// Unlock the iterator
+	m_bIterating = false;
+
 }

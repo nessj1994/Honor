@@ -4,6 +4,9 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
+#include <Windows.h>
+#include "../SGD Wrappers/SGD_AudioManager.h"
+#include "AnimationEngine.h"
 
 #define BTime 0.2f
 
@@ -11,15 +14,19 @@ Jellyfish::Jellyfish() : Listener(this)
 {
 	Listener::RegisterForEvent("RESET_JELLYFISH_BOUNCE");
 	//m_ptPosition = { 700, 700 };
-	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/Jellyfish.png");
-	m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage) * Camera::GetInstance()->GetZoomScale();
+	//m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/Jellyfish.png");
+	AnimationEngine::GetInstance()->LoadAnimation("Assets/Jellyfish.xml");
+	m_ts.SetCurrAnimation("Jellyfish Moving");
+	m_ts.SetPlaying(true);
+	m_bFacingRight = false;
+	//m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage) * Camera::GetInstance()->GetZoomScale();
 	m_vtVelocity = SGD::Vector(20, 0);
 }
 
 
 Jellyfish::~Jellyfish()
 {
-	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+	//SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 void Jellyfish::SetPatrol()
@@ -43,9 +50,11 @@ void Jellyfish::Update(float elapsedTime)
 	{
 		patrolDistance = -patrolDistance;
 		m_vtVelocity = -m_vtVelocity;
+		m_bFacingRight = !m_bFacingRight;
 		SetPatrol();
 	}
 	Entity::Update(elapsedTime);
+	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 }
 
 void Jellyfish::Render(void)
@@ -62,12 +71,14 @@ void Jellyfish::Render(void)
 	////Render us with the camera
 	//Camera::GetInstance()->Draw(rMyRect,
 	//	SGD::Color::Color(255, 255, 0, 0));
-	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1, SGD::Color(255, 255, 255, 255), {});
+	//Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1, SGD::Color(255, 255, 255, 255), {});
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, m_bFacingRight, 1);
 }
 
 SGD::Rectangle Jellyfish::GetRect(void) const
 {
-	return SGD::Rectangle{ m_ptPosition, m_szSize };
+	//return SGD::Rectangle{ m_ptPosition, m_szSize };
+	return AnimationEngine::GetInstance()->GetRect(m_ts, m_bFacingRight, 1, m_ptPosition);
 }
 
 void Jellyfish::HandleCollision(const IEntity* pOther)
@@ -82,9 +93,47 @@ void Jellyfish::HandleCollision(const IEntity* pOther)
 	}
 	if (pOther->GetType() == Entity::ENT_SOLID_WALL)
 	{
-		patrolDistance = -patrolDistance;
-		m_vtVelocity = -m_vtVelocity;
-		SetPatrol();
+		RECT rjFish;
+		rjFish.left = (LONG)GetRect().left;
+		rjFish.top = (LONG)GetRect().top;
+		rjFish.right = (LONG)GetRect().right;
+		rjFish.bottom = (LONG)GetRect().bottom;
+
+		//Create a rectangle for the other object
+		RECT rObject;
+		rObject.left = (LONG)pOther->GetRect().left;
+		rObject.top = (LONG)pOther->GetRect().top;
+		rObject.right = (LONG)pOther->GetRect().right;
+		rObject.bottom = (LONG)pOther->GetRect().bottom;
+
+		//Create a rectangle for the intersection
+		RECT rIntersection = {};
+
+		IntersectRect(&rIntersection, &rjFish, &rObject);
+
+		int nIntersectWidth = rIntersection.right - rIntersection.left;
+		int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+		//Colliding with the side of the object
+		if (nIntersectHeight > nIntersectWidth)
+		{
+			if (rjFish.right == rIntersection.right)
+			{
+				SetPosition({ (float)rObject.left - nIntersectWidth - 26, GetPosition().y });
+				patrolDistance = -patrolDistance;
+				m_vtVelocity = -m_vtVelocity;
+				m_bFacingRight = !m_bFacingRight;
+				SetPatrol();
+			}
+			if (rjFish.left == rIntersection.left)
+			{
+				SetPosition({ (float)rObject.right + nIntersectWidth + 26, GetPosition().y });
+				patrolDistance = -patrolDistance;
+				m_vtVelocity = -m_vtVelocity;
+				m_bFacingRight = !m_bFacingRight;
+				SetPatrol();
+			}
+		}
 	}
 }
 

@@ -46,12 +46,15 @@ void WizardDash::Update(float elapsedTime)
 		&& GetPosition().x < 50)
 	{
 		SetVelocity({ 0, 0 });
+		SetPosition({ -200, 200 });
 	}
 
 	if (GetVelocity().x > 0
-		&& GetPosition().x > 450)
+		&& GetPosition().x > 650)
 	{
 		SetVelocity({ 0, 0 });
+		SetPosition({ -200, 200 });
+
 	}
 
 	Entity::Update(elapsedTime);

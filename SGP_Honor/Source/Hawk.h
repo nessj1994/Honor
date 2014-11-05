@@ -21,6 +21,9 @@ public:
 	float GetAirFriction(void) const { return m_fAirFriction; }
 
 	void SetOwner(Entity* owner) { if (m_pOwner) m_pOwner->Release(); m_pOwner = owner; m_pOwner->AddRef(); }
+	//For Caveman boss use 
+	void Attack(SGD::Point _Pos);
+	bool IsDead() { return m_bDead; }
 
 private:
 	
@@ -29,5 +32,9 @@ private:
 	float m_fAirFriction = 1.5f;
 
 	SGD::HAudio m_hEffect = SGD::INVALID_HANDLE;
+
+	//For caveman Boss use
+	SGD::Point m_poTarget;
+	bool m_bDead;
 };
 

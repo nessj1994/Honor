@@ -8,7 +8,7 @@ Turret::Turret()
 	m_ptPosition = { 800, 150 };
 	m_szSize = { 32, 32 };
 	m_fFireTimer = 0.0f;
-	m_vtDirection = { 1, 0 };
+	
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/Graphics/Turret.png");
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/TurretAnimations.xml");
 	m_ts.SetCurrAnimation("turretidle");
@@ -44,6 +44,36 @@ void Turret::Update(float elapsedTime)
 
 	
 	}
+
+	//Right
+	if(m_nDirection == 0)
+	{
+		m_vtDirection = { 1, 0 };
+		//m_fRotation = 45.0f;
+		m_bFacingRight = true;
+	}
+	//Left
+	else if(m_nDirection == 2)
+	{
+		m_vtDirection = { -1, 0 };
+		m_bFacingRight = false;
+	}
+	//up
+	else if(m_nDirection == 1)
+	{
+		m_vtDirection = { 0, -1 };
+		m_bFacingRight = true;
+	
+
+	}
+	//down
+	else if(m_nDirection == 3)
+	{
+		m_vtDirection = { 0, 1 };
+		m_bFacingRight = false;
+		m_fRotation = 30.0f;
+		
+	}
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 }
 void Turret::Render(void)
@@ -57,8 +87,15 @@ void Turret::Render(void)
 	//Offset our rectangle by the camera position for rendering
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
+	float fRotX = rMyRect.left + m_szSize.width / 2;
+	float fRotY = rMyRect.top + m_szSize.height / 2;
+
 	//Render us with the camera
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0.0f, m_ts, false, 1.0f);
+	if(m_bFacingRight == true)
+		Camera::GetInstance()->DrawAnimation(m_ptPosition, m_fRotation, m_ts, false, 1.0f, {});
+	else
+		Camera::GetInstance()->DrawAnimation(m_ptPosition, m_fRotation, m_ts, true, 1.0f, {});
+
 }
 
 int Turret::GetType(void) const

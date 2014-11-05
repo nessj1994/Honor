@@ -453,7 +453,26 @@ bool Level::LoadLevel(const char * _path)
 					pArg = pArg->NextSiblingElement();
 					int ID;
 					pArg->Attribute("value", &ID);
-					GameplayState::GetInstance()->CreateLaser(x, y, { 0, 0 }, ID);
+					SGD::Vector dir;
+					switch (direction)
+					{
+					case 0:
+						dir = SGD::Vector(1, 0);
+						break;
+					case 1:
+						dir = SGD::Vector(0, -1);
+						break;
+					case 2:
+						dir = SGD::Vector(-1, 0);
+						break;
+					case 3:
+						dir = SGD::Vector(0, 1);
+						break;
+					}
+					pArg = pArg->NextSiblingElement();
+					int on;
+					pArg->Attribute("value", &on);
+					GameplayState::GetInstance()->CreateLaser(x, y, dir, ID, on ? true : false);
 					break;
 				}
 				case 3: // Turret
@@ -586,21 +605,22 @@ bool Level::LoadLevel(const char * _path)
 					TiXmlElement * pArg = pEntity->FirstChildElement();
 					std::string level = pArg->Attribute("value");
 					GameplayState::GetInstance()->CreateTeleporter(x, y, level);
+					break;
 				}
 				case 19: // Enemy
 				{
 					TiXmlElement * pArg = pEntity->FirstChildElement();
-					int type;
-					pArg->Attribute("value", &type);
-					GameplayState::GetInstance()->CreateEnemy(x, y, type);
+					int enemyType;
+					pArg->Attribute("value", &enemyType);
+					GameplayState::GetInstance()->CreateEnemy(x, y, enemyType);
 					break;
 				}
 				case 20: // Boss
 				{
 					TiXmlElement * pArg = pEntity->FirstChildElement();
-					int type;
-					pArg->Attribute("value", &type);
-					GameplayState::GetInstance()->CreateBoss(x, y, type);
+					int bossType;
+					pArg->Attribute("value", &bossType);
+					GameplayState::GetInstance()->CreateBoss(x, y, bossType);
 					break;
 				}
 			}
@@ -692,10 +712,11 @@ void Level::CheckEvent(IEntity * _entity)
 				// Figure out what is at this position
 				std::string levelEvent = m_stEventLayer[xx][yy];
 
-				if (levelEvent != "") // only throw non blank events
+				SGD::Rectangle rEvent = { xx*32.0f, yy*32.0f, xx*32.0f + 32.0f, yy*32.0f + 32.0f };
+				if (levelEvent != "" && rEvent.IsIntersecting(_entity->GetRect())) // only throw non blank events
 				{
 					// Throw event
-					SGD::Event* pATEvent = new SGD::Event(levelEvent.c_str(), nullptr, _entity);
+ 					SGD::Event* pATEvent = new SGD::Event(levelEvent.c_str(), nullptr, _entity);
 					SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 					pATEvent = nullptr;
 				}
@@ -706,8 +727,78 @@ void Level::CheckEvent(IEntity * _entity)
 
 //////////////////////////////
 // UpdateHonorVector
-// - Updates if the honor at the given index has been collected
+// -Updates if the honor at the given index has been collected
 void Level::UpdateHonorVector(int _index, bool _value)
 {
 	m_vCollectedHonor[_index] = _value;
+}
+
+//////////////////////////////
+// RenderMiniMap
+// -Draws the collisionlayer onto the mini map
+void Level::RenderMiniMap()
+{
+	// Reference to the graphics manager
+	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
+
+	// References to width and height of the mini map
+	float mapWidth = GameplayState::GetInstance()->GetMiniMapWidth();
+	float mapHeight = GameplayState::GetInstance()->GetMiniMapHeight();
+	float mapOffset = GameplayState::GetInstance()->GetBorderSize();
+
+	// Figure out some values needed
+	float tileWidth = mapWidth / m_nWidth;
+	float tileHeight = mapHeight / m_nHeight;
+
+	// Loop through collision layer
+	for (int xx = 0; xx < m_nWidth; ++xx)
+	{
+		for (int yy = 0; yy < m_nHeight; ++yy)
+		{
+			// Determine color based on tile type
+			int value = m_nCollisionLayer[xx][yy];
+			SGD::Color color = { 100, 100, 100, 100 };
+
+			switch (value)
+			{
+				// Walls
+				case 0:
+					color = { 100, 100, 100, 100 }; // gray
+					break;
+					// Death
+				case 1:
+					color = { 100, 200, 0, 0 }; // red
+					break;
+					// Left/Right ramp
+				case 2:
+				case 3:
+					color = { 100, 30, 220, 0 }; // light green
+					break;
+					// Ice
+				case 4:
+					color = { 100, 0, 220, 220 }; // Cyan
+					break;
+					// Ice left/right ramp
+				case 5:
+				case 6:
+					color = { 100, 30, 220, 0 }; // light green
+					break;
+
+			}
+
+			// Don't draw empty tiles
+			if (value != -1)
+			{
+				float xScale = ((float)xx / (float)m_nWidth) * mapWidth;
+				float yScale = ((float)yy / (float)m_nHeight) * mapHeight;
+				// Rectangle for drawing
+				SGD::Rectangle rect = { xx * tileWidth + mapOffset,
+										yy * tileHeight + mapOffset,
+										xx * tileWidth + tileWidth + mapOffset,
+										yy * tileHeight + tileHeight + mapOffset };
+				pGraphics->DrawRectangle(rect, color, {100, 0, 0, 0 }, 2);
+			}
+
+		}
+	}
 }

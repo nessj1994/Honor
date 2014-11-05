@@ -31,7 +31,7 @@ public:
 
 	void SetOwner(Entity* owner) { if (m_pOwner) m_pOwner->Release(); m_pOwner = owner; m_pOwner->AddRef(); }
 
-
+	virtual void HandleCollision(const IEntity* pOther) override;
 
 
 
@@ -44,7 +44,7 @@ private:
 
 	Entity* m_pOwner = nullptr;
 	Emitter* m_pEmitter = nullptr;
-
+	float m_fTimer = 0;
 
 };
 
