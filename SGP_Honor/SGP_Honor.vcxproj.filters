@@ -280,6 +280,8 @@
     </ClCompile>
     <ClCompile Include="Source\CreatePoopMessage.cpp" />
     <ClCompile Include="source\IceBat.cpp" />
+    <ClCompile Include="source\IceTurtle.cpp" />
+    <ClCompile Include="source\IceGolem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -585,6 +587,8 @@
     </ClInclude>
     <ClInclude Include="Source\CreatePoopMessage.h" />
     <ClInclude Include="source\IceBat.h" />
+    <ClInclude Include="source\IceTurtle.h" />
+    <ClInclude Include="source\IceGolem.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />

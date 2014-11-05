@@ -50,6 +50,7 @@ private:
 	float m_fMeleeRange = 70.0f;
 	float m_fDistance = 0.0f;
 	float m_fJumpTimer = 0.0f;
+	float m_fStartTimer = 2.0f;
 	bool m_bInRange = false;
 	bool m_bSpraying = false;
 

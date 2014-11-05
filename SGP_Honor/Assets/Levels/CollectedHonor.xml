@@ -1,32 +1,7 @@
 <?xml version="1.0" ?>
-<Levels totalHonor="31">
-    <Level name="HubLevel">
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-    </Level>
-    <Level name="Level0_1">
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-    </Level>
-    <Level name="Level1_1">
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-    </Level>
+<Levels totalHonor="1124">
+    <Level name="HubLevel" />
+    <Level name="Level1_1" />
     <Level name="Level1_2" />
     <Level name="Level1_3" />
     <Level name="Level1_4" />
@@ -51,7 +26,6 @@
     <Level name="Level5_3" />
     <Level name="Level5_4" />
     <Level name="Level5_5" />
-    <Level name="TestLevel" />
     <Level name="TutorialLevel" />
     <Level name="World1Level" />
     <Level name="World2Level" />
