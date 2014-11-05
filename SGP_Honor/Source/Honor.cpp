@@ -6,8 +6,9 @@
 #include "GameplayState.h"
 #include "Level.h"
 
-Honor::Honor()
+Honor::Honor() : Listener(this)
 {
+	Listener::RegisterForEvent("ResetRoom");
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/HonorPiece.png");
 	m_ptPosition = SGD::Point(200, 300);
 	SetSize(SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage));
@@ -81,5 +82,18 @@ void Honor::HandleCollision(const IEntity* pOther)
 			m_bIsCollected = true;
 			GameplayState::GetInstance()->GetCurrentLevel()->UpdateHonorVector(m_unVectorID, m_bIsCollected);
 		}
+	}
+}
+
+////////////////////////////////////////////////
+////////////// Listener Interface //////////////
+void Honor::HandleEvent(const SGD::Event* pEvent)
+{
+	//which event
+
+	//Turn around
+	if (pEvent->GetEventID() == "ResetRoom")
+	{
+		SetIsCollected(false);
 	}
 }

@@ -4651,7 +4651,7 @@
 			<Argument type="0" name="Active" value="1" />
 			<Argument type="1" name="ID" value="1" />
 		</Entity>
-		<Entity type="19" x="1056" y="448" numArgs="1" name="Enemy_1">
+		<Entity type="20" x="1024" y="480" numArgs="1" name="Boss_1">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
 	</Entities>
