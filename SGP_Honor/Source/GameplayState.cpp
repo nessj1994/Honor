@@ -419,6 +419,8 @@ void GameplayState::Update(float elapsedTime)
 
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_LASER);
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_PLAYER);
+	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_DOOR);
+	m_pEntities->CheckCollisions(Entity::ENT_PROJ, Entity::ENT_DOOR);
 	
 
 
