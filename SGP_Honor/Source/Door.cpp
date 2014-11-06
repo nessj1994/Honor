@@ -41,11 +41,14 @@ void Door::Update(float elapsedTime)
 	{
 		if (m_bHorizontal)
 		{
-			m_szSize = { 128.0f, 32.0f };
+			//m_szSize = { 128.0f, 32.0f };
+			m_szSize = { 192.0f, 32.0f };
+
 		}
 		else
 		{
-			m_szSize = { 32, 128.0f };
+			//m_szSize = { 32, 128.0f };
+			m_szSize = { 32, 192.0f };
 		}
 	}
 

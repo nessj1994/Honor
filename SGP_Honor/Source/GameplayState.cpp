@@ -200,9 +200,9 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadHonorVector();
 	
-	LoadLevel("Level0_1");
+	//LoadLevel("Level0_1");
 
-	//LoadLevel("Level1_1");
+	LoadLevel("Level2_2");
 
 	//("HubLevel");
 
