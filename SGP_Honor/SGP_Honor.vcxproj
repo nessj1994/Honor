@@ -91,6 +91,7 @@
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\Poop.cpp" />
     <ClCompile Include="Source\Pouncer.cpp" />
+    <ClCompile Include="source\Profile.cpp" />
     <ClCompile Include="Source\ProfileState.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
     <ClCompile Include="Source\Skeleton.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Poop.h" />
     <ClInclude Include="Source\Pouncer.h" />
+    <ClInclude Include="source\Profile.h" />
     <ClInclude Include="Source\ProfileState.h" />
     <ClInclude Include="Source\Projectile.h" />
     <ClInclude Include="Source\Skeleton.h" />
