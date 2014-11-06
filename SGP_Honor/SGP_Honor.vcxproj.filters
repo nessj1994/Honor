@@ -285,6 +285,7 @@
     <ClCompile Include="Source\CreateStalactite.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
+    <ClCompile Include="Source\HubWorldOrb.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -595,6 +596,7 @@
     <ClInclude Include="Source\CreateStalactite.h">
       <Filter>Messages</Filter>
     </ClInclude>
+    <ClInclude Include="Source\HubWorldOrb.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />

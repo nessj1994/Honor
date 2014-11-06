@@ -10092,9 +10092,29 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="1">
+	<Entities numEntities="5">
 		<Entity type="20" x="1086" y="540" numArgs="1" name="Boss_1">
 			<Argument type="1" name="Type" value="1" />
+		</Entity>
+		<Entity type="1" x="384" y="608" numArgs="3" name="Activator_1">
+			<Argument type="0" name="IsPressurePlate" value="0" />
+			<Argument type="0" name="Active" value="0" />
+			<Argument type="1" name="ID" value="1" />
+		</Entity>
+		<Entity type="1" x="1760" y="608" numArgs="3" name="Activator_2">
+			<Argument type="0" name="IsPressurePlate" value="0" />
+			<Argument type="0" name="Active" value="0" />
+			<Argument type="1" name="ID" value="1" />
+		</Entity>
+		<Entity type="2" x="704" y="32" numArgs="3" name="Laser_1">
+			<Argument type="1" name="Direction" value="3" />
+			<Argument type="1" name="ActivatorIndex" value="1" />
+			<Argument type="0" name="On" value="0" />
+		</Entity>
+		<Entity type="2" x="1472" y="32" numArgs="3" name="Laser_2">
+			<Argument type="1" name="Direction" value="3" />
+			<Argument type="1" name="ActivatorIndex" value="1" />
+			<Argument type="0" name="On" value="0" />
 		</Entity>
 	</Entities>
 </Level>

@@ -86,8 +86,8 @@ void Stalactite::HandleCollision(const IEntity* pOther)
 	if (pOther->GetType() == ENT_PLAYER)
 	{
 	  //if so move back up but kill the player
-	  SGD::Event Event = { "KILL_PLAYER", nullptr, this };
-	  SGD::EventManager::GetInstance()->SendEventNow(&Event);
+		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}
 
 

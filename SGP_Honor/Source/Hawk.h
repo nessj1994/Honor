@@ -22,7 +22,7 @@ public:
 
 	void SetOwner(Entity* owner) { if (m_pOwner) m_pOwner->Release(); m_pOwner = owner; m_pOwner->AddRef(); }
 	//For Caveman boss use 
-	void Attack(SGD::Point _Pos);
+	void Attack(SGD::Point _Pos,bool PlayerFacing);
 	bool IsDead() { return m_bDead; }
 
 private:

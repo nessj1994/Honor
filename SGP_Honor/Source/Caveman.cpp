@@ -13,7 +13,9 @@ Caveman::Caveman() : SGD::Listener(this)
 	Listener::RegisterForEvent("CaveMan_Jump_Right");
 	Listener::RegisterForEvent("CaveMan_Jump_Left");
 	Listener::RegisterForEvent("CaveMan_Stop");
+	Listener::RegisterForEvent("FLIP_LASER");
 	SetSize({ 64.0f, 96.0f });
+	m_szSize = { 64, 96 };
 	m_bFacingRight = false;
 	m_bsCurrState = CM_THINKING;
 	SetHitPoints(3);
@@ -30,6 +32,7 @@ Caveman::Caveman() : SGD::Listener(this)
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/CaveManAnim.xml");
 	m_ts.SetCurrAnimation("CaveManWalking");
 	m_ts.SetPlaying(true);
+	m_bLaserOn = false;
 
 }
 
@@ -48,6 +51,7 @@ void Caveman::Update(float elapsedTime)
 	//Animation Update
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 	//Timer additions 
+	m_fHitTimer += elapsedTime;
 	m_fThinkingTimer += elapsedTime;
 	m_fInTheAir += elapsedTime;
 	m_fDoorTimer += elapsedTime;
@@ -55,6 +59,8 @@ void Caveman::Update(float elapsedTime)
 	m_fHidingTimer += elapsedTime;
 	m_fAttackingTimer += elapsedTime;
 	m_fStalacTimer += elapsedTime;
+	m_fStunnedTimer += elapsedTime;
+	m_fSwitchJumpTimer += elapsedTime;
 	//
 
 	//Slash at player if close and not jumping or falling or attacking or emerging or hideing
@@ -73,6 +79,11 @@ void Caveman::Update(float elapsedTime)
 	m_pHawk->Update(elapsedTime);
 	//Drop stalactite if hawk is ready
 	DropStalactites();
+	//Die if zero HitPoints
+	if (GetHitPoints() == 0 && m_bsCurrState != CM_JUMPING && m_bsCurrState != CM_FALLING && m_bsCurrState != CM_STUNNED)
+	{
+		m_bsCurrState = CM_DEATH;
+	}
 	//Switch statement inisialisations
 	int Door;
 	//AI State MAchine
@@ -173,11 +184,11 @@ void Caveman::Update(float elapsedTime)
 		}
 		if (GetPlayer()->IsFacingRight())
 		{
-			m_pHawk->Attack({ GetPlayer()->GetPosition().x + 300, 33 });
+			m_pHawk->Attack({ GetPlayer()->GetPosition().x + 300, 33 },GetPlayer()->IsFacingRight());
 		}
 		else
 		{
-			m_pHawk->Attack({ GetPlayer()->GetPosition().x - 300, 33 });
+			m_pHawk->Attack({ GetPlayer()->GetPosition().x - 300, 33 }, GetPlayer()->IsFacingRight());
 		}		
 		m_fStalacTimer = 0;
 		SetVelocity({ 0, 0 });
@@ -201,6 +212,28 @@ void Caveman::Update(float elapsedTime)
 			m_ts.SetCurrAnimation("CaveManStunned");
 			m_ts.SetPlaying(true);
 		}
+		if (m_bFacingRight)
+		{
+			SetVelocity({ -350, -50 });
+		}
+		else
+		{
+			SetVelocity({ 350, -50 });
+		}
+		if (m_fStunnedTimer > .4f)
+		{
+			m_bFacingRight ? m_bFacingRight = false : m_bFacingRight = true;
+			m_bsCurrState = CM_FALLING;
+		}
+		break;
+	case Caveman::CM_DEATH:
+		if (m_ts.GetCurrAnimation() != "CaveManDeath")
+		{
+			m_ts.ResetCurrFrame();
+			m_ts.SetCurrAnimation("CaveManDeath");
+			m_ts.SetPlaying(true);
+		}
+		SetVelocity({ 0, 0 });
 		break;
 	default:
 		break;
@@ -260,6 +293,13 @@ void Caveman::HandleCollision(const IEntity* pOther)
 			m_bsCurrState = CM_RUNING;
 		}
 	}
+	if (pOther->GetType() == ENT_LASER && m_fHitTimer > 1)
+	{
+		m_fHitTimer = 0;
+		m_bsCurrState = CM_STUNNED;
+		m_fStunnedTimer = 0;
+		SetHitPoints(GetHitPoints() - 1);
+	}
 	Boss::HandleCollision(pOther);
 }
 
@@ -267,10 +307,17 @@ void Caveman::HandleCollision(const IEntity* pOther)
 ////////////// Listener Interface //////////////
 void Caveman::HandleEvent(const SGD::Event* pEvent)
 {
+	if (pEvent->GetEventID() == "FLIP_LASER")
+	{
+		m_bLaserOn ? m_bLaserOn = false : m_bLaserOn = true;
+	}
+
 	if (pEvent->GetSender() != this)
 	{
 		return;
 	}
+
+
 	//Skip or Hide
 	if (pEvent->GetEventID() == "CaveMan_Door" &&
 		pEvent->GetSender() == this)
@@ -303,29 +350,40 @@ void Caveman::HandleEvent(const SGD::Event* pEvent)
 	else if (pEvent->GetEventID() == "CaveMan_Jump_Right" &&
 		pEvent->GetSender() == this)
 	{
-		if (m_bsCurrState != CM_FALLING)
+ 		if (m_bLaserOn && m_bsCurrState != CM_JUMPING && m_fSwitchJumpTimer > 1)
+		{
+			m_fSwitchJumpTimer = 0;
+			m_bsCurrState = CM_RUNING;
+			m_bFacingRight ? m_bFacingRight = false : m_bFacingRight = true;
+			return;
+		}
+		if (m_bsCurrState != CM_FALLING && !m_bLaserOn)
 		{
 			m_bFacingRight = true;
-
 			m_bsCurrState = CM_JUMPING;
-
 			m_fInTheAir = 0;
 		}
 	}
 	//Jump Left
-	else if (pEvent->GetEventID() == "CaveMan_Jump_Left")
+	else if (pEvent->GetEventID() == "CaveMan_Jump_Left" &&
+		pEvent->GetSender() == this )
 	{
-		if (m_bsCurrState != CM_FALLING)
+		if (m_bLaserOn && m_bsCurrState != CM_JUMPING && m_fSwitchJumpTimer > 1)
+		{
+			m_fSwitchJumpTimer = 0;
+			m_bsCurrState = CM_RUNING;
+			m_bFacingRight ? m_bFacingRight = false : m_bFacingRight = true;
+			return;		
+		}
+		if (m_bsCurrState != CM_FALLING && !m_bLaserOn)
 		{
 			m_bFacingRight = false;
-
 			m_bsCurrState = CM_JUMPING;
-
 			m_fInTheAir = 0;
 		}
 	}
 	//Turn the Other Way
-	else if (pEvent->GetEventID() == "CaveMan_Stop")
+	else if (pEvent->GetEventID() == "CaveMan_Stop" )
 	{
 		if (m_fStopTimer > .4f)
 		{

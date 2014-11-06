@@ -11,7 +11,7 @@ public:
 	Caveman();
 	virtual ~Caveman();
 
-	enum CaveManStates { CM_RUNING, CM_JUMPING, CM_HIDING, CM_EMERGING, CM_FALLING, CM_SLASHING, CM_ATTACKING, CM_THINKING, CM_STUNNED };
+	enum CaveManStates { CM_RUNING, CM_JUMPING, CM_HIDING, CM_EMERGING, CM_FALLING, CM_SLASHING, CM_ATTACKING, CM_THINKING, CM_STUNNED, CM_DEATH };
 
 	/////////////////////////////////////////////////
 	/////////////////Interface//////////////////////
@@ -47,8 +47,13 @@ private:
 	//For Hiding state
 	float m_fHidingTimer;
 
+	//For Stunned State
+	float m_fStunnedTimer;
+
 	//For Door Events
 	int m_iDoorSkip;
+
+	
 
 	//For Attakcing Events
 	Hawk* m_pHawk;
@@ -61,5 +66,12 @@ private:
 	bool m_bDrop;
 	//Caveman Boss Level Background Effect
 	Emitter* m_emEYES;
+
+	//Laser are on or off
+	bool m_bLaserOn;
+	float m_fSwitchJumpTimer;
+
+	//Subtracting Hit points Timer
+	float m_fHitTimer;
 };
 
