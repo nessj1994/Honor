@@ -6,6 +6,7 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "CreateVomitMessage.h"
+#include "DestroyEntityMessage.h"
 #include "AnimationEngine.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "Camera.h"
@@ -33,17 +34,45 @@ MutantMan::MutantMan() : Listener(this)
 MutantMan::~MutantMan()
 {
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+
 }
 
 void MutantMan::Update(float _elapsedTime)
 {
+	//Use the Units Update
+	Enemy::Update(_elapsedTime);
+	
 	//Timer Updates
 	m_fVomitTimer += _elapsedTime;
+	m_fDeadTImer += _elapsedTime;
 	//
 	//Update Animation
 	AnimationEngine::GetInstance()->Update(_elapsedTime, m_ts, this);
 	SGD::Vector distance;
 	
+	//Dont do anything if dead switch animation and destroy entity after death timer reaches 1 second
+	if (!GetAlive())
+	{
+		SetVelocity({ GetVelocity().x, (GetVelocity().y - GetGravity() * _elapsedTime) });
+		if (m_ts.GetCurrAnimation() != "Mutant_Death")
+		{
+			m_ts.ResetCurrFrame();
+			m_ts.SetCurrAnimation("Mutant_Death");
+			m_ts.SetPlaying(true);
+		}
+		if (m_fDeadTImer > 1)
+		{
+			DestroyEntityMessage* Temp = new DestroyEntityMessage(this);
+			Temp->QueueMessage();
+			Temp = nullptr;
+		}
+
+		return;
+	}
+	else
+	{
+		m_fDeadTImer = 0;
+	}
 	
 	if (GetPlayer() != nullptr)
 	{
@@ -179,9 +208,7 @@ void MutantMan::Update(float _elapsedTime)
 		m_vtVelocity = { m_vtVelocity.x != 0 ? m_vtVelocity.x -= GetGravity() * _elapsedTime : m_vtVelocity.x = 0, 300 };
 	}
 
-	SetVelocity({ GetVelocity().x, (GetVelocity().y - GetGravity() * _elapsedTime) });
-	//Use the Units Update
-	Unit::Update(_elapsedTime);
+
 }
 
 void MutantMan::Render()

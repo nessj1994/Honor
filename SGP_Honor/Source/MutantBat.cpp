@@ -6,6 +6,7 @@
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "AnimationEngine.h"
+#include "DestroyEntityMessage.h"
 #include "CreatePoopMessage.h"
 #include "Camera.h"
 
@@ -39,13 +40,41 @@ SGD::Rectangle MutantBat::GetRect(void) const
 
 void MutantBat::Update(float _elapsedTime)
 {
+	//Enemy base class update 
+	Enemy::Update(_elapsedTime);
+
 	//Timer Updates
 	m_fPoopTimer += _elapsedTime;
+	m_fDieing += _elapsedTime;
 	//
+
+	
 	//Update Animation
 	AnimationEngine::GetInstance()->Update(_elapsedTime, m_ts, this);
 	SGD::Vector distance;
 
+	//Dont do anything if dead switch animation and destroy entity after death timer reaches 1 second
+	if (!GetAlive())
+	{
+		SetVelocity({ 0, -20 });
+		if (m_fDieing > 1.8)
+		{
+			DestroyEntityMessage* temp = new DestroyEntityMessage(this);
+			temp->QueueMessage();
+			temp = nullptr;
+		}
+		if (m_ts.GetCurrAnimation() != "Dieing")
+		{
+			m_ts.ResetCurrFrame();
+			m_ts.SetCurrAnimation("Dieing");
+			m_ts.SetPlaying(true);
+		}
+		return;
+	}
+	else
+	{
+		m_fDieing = 0;
+	}
 
 	if (GetPlayer() != nullptr)
 	{
@@ -145,8 +174,6 @@ void MutantBat::Update(float _elapsedTime)
 		}
 	}
 
-	//Use the Units Update
-	Unit::Update(_elapsedTime);
 }
 
 void MutantBat::Render()

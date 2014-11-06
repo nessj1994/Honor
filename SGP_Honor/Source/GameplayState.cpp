@@ -22,6 +22,8 @@
 #include "CreateStalactite.h"
 #include "MovingPlatform.h"
 
+#include "HubWorldOrb.h"
+
 #include "Entity.h"
 #include "Projectile.h"
 #include "GravProjectile.h"
@@ -215,6 +217,8 @@ void GameplayState::Enter(void) //Load Resources
 	// Temporary
 	//CreateBullBoss(500, 400);
 	//CreateCrabBoss();
+	//Hub World Orb 
+	m_pHubOrb = new HubWorldOrb();
 }
 
 
@@ -346,8 +350,10 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if(pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level3_5");
+		LoadLevel("World2Level");
 	}
+
+	
 
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
@@ -484,6 +490,12 @@ void GameplayState::Update(float elapsedTime)
 	//Entities WHich SLow the Player
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_VOMIT);
 
+	//Update The Hubworld Orb
+	if (m_strCurrLevel == "HubLevel")
+	{
+		m_pHubOrb->Update(elapsedTime, m_pPlayer->GetHonorCollected(), { (float)GetCurrentLevel()->GetLevelWidth() / 2, (float)GetCurrentLevel()->GetLevelHeight() / 2 });
+	}
+
 	//Process messages and events
 	SGD::EventManager::GetInstance()->Update();
 	SGD::MessageManager::GetInstance()->Update();
@@ -506,6 +518,12 @@ void GameplayState::Render(void)
 	if (m_bRenderMiniMap)
 	{
 		RenderMiniMap();
+	}
+
+	//Render the Hub world Orb
+	if (m_strCurrLevel == "HubLevel")
+	{
+		m_pHubOrb->Render();
 	}
 
 	// Draw a fading rectangle

@@ -41,6 +41,7 @@ class Pouncer;
 class Bull;
 class Jellyfish;
 class Crab;
+class HubWorldOrb;
 
 //
 //////////////////////////////////////////////////
@@ -203,5 +204,7 @@ private:
 	float m_fMiniMapWidth = 0.0f;
 	float m_fMiniMapHeight = 0.0f;
 
+	//Hub World Orb
+	HubWorldOrb* m_pHubOrb;
 };
 
