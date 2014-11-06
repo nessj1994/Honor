@@ -202,7 +202,7 @@ void MutantMan::Update(float _elapsedTime)
 			}
 			if (m_fVomitTimer > 6.5f)
 			{
-				m_fVomitTimer = rand() % 6;
+				m_fVomitTimer = (float)(rand() % 6);
 			}
 		}
 		m_vtVelocity = { m_vtVelocity.x != 0 ? m_vtVelocity.x -= GetGravity() * _elapsedTime : m_vtVelocity.x = 0, 300 };
@@ -237,16 +237,16 @@ void MutantMan::HandleCollision(const IEntity* pOther)
 	}
 
 	RECT rMutant;
-	rMutant.left = GetRect().left;
-	rMutant.top = GetRect().top;
-	rMutant.right = GetRect().right;
-	rMutant.bottom = GetRect().bottom;
+	rMutant.left = (LONG)GetRect().left;
+	rMutant.top = (LONG)GetRect().top;
+	rMutant.right = (LONG)GetRect().right;
+	rMutant.bottom = (LONG)GetRect().bottom;
 
 	RECT rObject;
-	rObject.left = pOther->GetRect().left;
-	rObject.top = pOther->GetRect().top;
-	rObject.right = pOther->GetRect().right;
-	rObject.bottom = pOther->GetRect().bottom;
+	rObject.left = (LONG)pOther->GetRect().left;
+	rObject.top = (LONG)pOther->GetRect().top;
+	rObject.right = (LONG)pOther->GetRect().right;
+	rObject.bottom = (LONG)pOther->GetRect().bottom;
 
 	RECT rIntersection = {};
 

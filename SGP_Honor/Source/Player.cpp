@@ -413,7 +413,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		{
 			m_vtVelocity.x += 400;
 		}
-		SetVelocity(GetVelocity() * 1.2);
+		SetVelocity(GetVelocity() * 1.2f);
 
 
 
@@ -452,7 +452,7 @@ void Player::HandleCollision(const IEntity* pOther)
 			m_vtVelocity.x += 50;
 		}
 		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
-		SetVelocity(GetVelocity() * 1.01 );
+		SetVelocity(GetVelocity() * 1.01f );
 
 	}
 

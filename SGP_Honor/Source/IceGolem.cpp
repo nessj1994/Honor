@@ -225,7 +225,7 @@ void IceGolem::HandleCollision(const IEntity* pOther)
 		{
 			m_vtVelocity.x += 400;
 		}
-		SetVelocity(GetVelocity() * 1.2);
+		SetVelocity(GetVelocity() * 1.2f);
 
 
 
@@ -242,7 +242,7 @@ void IceGolem::HandleCollision(const IEntity* pOther)
 
 		BasicCollision(pOther);
 		SetFriction(0.0f);
-		m_vtVelocity *= 1.004;
+		m_vtVelocity *= 1.004f;
 		if(GetVelocity().x > 0 && m_bFacingRight == false)
 		{
 			m_vtVelocity.x -= 50;
