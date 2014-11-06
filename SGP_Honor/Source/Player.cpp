@@ -47,6 +47,7 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("Screen2x4");
 	Listener::RegisterForEvent("Screen3x3");
 	Listener::RegisterForEvent("Screen2x1.5");
+	Listener::RegisterForEvent("Screen3x1.5");
 	Listener::RegisterForEvent("Screen1.5x2");
 	Listener::RegisterForEvent("Screen1.5x3");
 	Listener::RegisterForEvent("FINALBOSS");
@@ -1313,6 +1314,13 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	if (pEvent->GetEventID() == "Screen2x1.5")
 	{
 		m_fPanX = 2;
+		m_fPanY = 1.5;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "Screen3x1.5")
+	{
+		m_fPanX = 3;
 		m_fPanY = 1.5;
 		Camera::GetInstance()->SetCameraCap(0);
 
