@@ -4,6 +4,7 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "ParticleEngine.h"
 #include "AnimationEngine.h"
+#include "../SGD Wrappers/SGD_EventManager.h"
 #include "Camera.h"
 #include <random>
 
@@ -233,12 +234,17 @@ void Caveman::Update(float elapsedTime)
 			m_ts.SetCurrAnimation("CaveManDeath");
 			m_ts.SetPlaying(true);
 		}
-		SetVelocity({ 0, 0 });
+		SetVelocity({ 0, 0 });	
 		break;
 	default:
 		break;
 	}
-
+	if (m_bsCurrState == CM_DEATH)
+	{
+		SGD::Event* pATEvent = new SGD::Event("GainedHawk", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
+	}
 	Boss::Update(elapsedTime);
 }
 

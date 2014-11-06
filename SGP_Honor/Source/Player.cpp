@@ -51,7 +51,7 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("Screen1.5x3");
 	Listener::RegisterForEvent("FINALBOSS");
 	Listener::RegisterForEvent("BossLevel");
-
+	Listener::RegisterForEvent("GainedHawk");
 
 
 
@@ -1252,6 +1252,10 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		}
 	}
 
+	if (pEvent->GetEventID() == "GainedHawk")
+	{
+		m_bHasHawk = true;
+	}
 	if(pEvent->GetEventID() == "BOUNCE_VERTICAL")
 	{
 		SetVelocity({ GetVelocity().x, -2000 });
