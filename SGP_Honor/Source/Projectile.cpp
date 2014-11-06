@@ -17,6 +17,10 @@ Projectile::Projectile()
 
 Projectile::~Projectile()
 {
+	if (m_pOwner)
+	{
+		m_pOwner->Release();
+	}
 }
 
 
