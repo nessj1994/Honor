@@ -259,6 +259,10 @@ void GameplayState::Exit(void)
 		m_pPlayer->Release();
 	}
 
+	if (m_pHubOrb != nullptr)
+	{
+		delete m_pHubOrb;
+	}
 	//if (m_pStatue != nullptr)
 	//	m_pStatue->Release();
 
@@ -1839,7 +1843,6 @@ void GameplayState::LoadGame()
 	// Read in total honor collected
 	int totalHonor;
 	pRoot->Attribute("totalHonor", &totalHonor);
-	m_pPlayer->SetHonorCollected(totalHonor);
 
 	// Loop through each level
 	TiXmlElement * pLevel = pRoot->FirstChildElement();
