@@ -20,6 +20,7 @@
 #include "CreatePoopMessage.h"
 #include "ChangeLevelMessage.h"
 #include "MovingPlatform.h"
+#include "IceBat.h"
 
 #include "Entity.h"
 #include "Projectile.h"
@@ -200,7 +201,7 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadGame();
 	
-	LoadLevel("HubLevel");
+	LoadLevel("Level3_1");
 
 	//LoadLevel("Level5_5");
 
@@ -1383,6 +1384,12 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		}
 		case 5: // ice bat
 		{
+					IceBat * pIceBat = new IceBat();
+					pIceBat->SetPosition({ (float)_x, (float)_y });
+					pIceBat->SetPlayer(m_pPlayer);
+					pIceBat->SetDirection(2);
+					m_pEntities->AddEntity(pIceBat, Entity::ENT_ICE_BAT);
+					pIceBat->Release();
 			break;
 		}
 		case 6: // ice turtle
@@ -1391,7 +1398,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 					pIceTurtle->SetPosition({ (float)_x, (float)_y });
 					pIceTurtle->SetPlayer(m_pPlayer);
 					m_pEntities->AddEntity(pIceTurtle, Entity::ENT_ICE_TURTLE);
-					/*pIceTurtle->Release();*/
+					pIceTurtle->Release();
 			break;
 		}
 		case 7: // hermit crab
