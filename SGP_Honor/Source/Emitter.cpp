@@ -172,14 +172,14 @@ void Emitter::Update(float elapsedTime)
 	}
 
 	m_bDone = true;
-		for (int i = 0; i < m_vecParticles.size(); i++)
+		for (unsigned int i = 0; i < m_vecParticles.size(); i++)
 		{
 
 			//For Intital Burst
 			if (m_iSpawned != m_vecParticles.size())
 			{
 				m_fSpawnTimer += elapsedTime;
-				if (m_iSpawned >= i)
+				if ((unsigned int)m_iSpawned >= i)
 				{
 					if (m_fSpawnTimer > 2.0f)
 					{
@@ -243,10 +243,10 @@ void Emitter::Render(SGD::Point _Pos)
 	//}
 
 
-	for (size_t i = 0; i < m_vecParticles.size(); i++)
+	for (unsigned int i = 0; i < m_vecParticles.size(); i++)
 	{
 		//For Intital Burst
-		if (m_iSpawned >= i)
+		if ((unsigned int)m_iSpawned >= i)
 		{
 			m_vecParticles[i].Render();
 		}
@@ -262,10 +262,10 @@ void Emitter::RenderINworld(SGD::Point _Pos)
 		//StartParticles(true);
 	}
 
-	for (size_t i = 0; i < m_vecParticles.size(); i++)
+	for (unsigned int i = 0; i < m_vecParticles.size(); i++)
 	{
 		//For Intital Burst
-		if (m_iSpawned >= i)
+		if ((unsigned int)m_iSpawned >= i)
 		{
 			m_vecParticles[i].RenderINworld();
 		}
@@ -277,7 +277,7 @@ void Emitter::Burst(SGD::Point _pos)
 	m_ptPosition = _pos;
 	m_iSpawned = m_unMaxParticles / 2;
 	m_fSpawnTimer = 0;
-	for (size_t i = 0; i < m_vecParticles.size(); i++)
+	for (unsigned int i = 0; i < m_vecParticles.size(); i++)
 	{
 		m_vecParticles[i].SetDead(false);
 		Recylce(&m_vecParticles[i]);

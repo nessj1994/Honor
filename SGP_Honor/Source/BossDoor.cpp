@@ -1,37 +1,29 @@
 #include "BossDoor.h"
 #include "Camera.h"
-#include "../SGD Wrappers/SGD_EventManager.h"
-#include "../SGD Wrappers/SGD_Event.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
+#include "../SGD Wrappers/SGD_String.h"
+#include "../SGD Wrappers/SGD_InputManager.h"
 #include "Player.h"
+#include "Game.h"
+#include "GameplayState.h"
+#include "Font.h"
+#include "BitmapFont.h"
+#include "ChangeLevelMessage.h"
 
-BossDoor::BossDoor() : Listener(this)
+BossDoor::BossDoor()
 {
-	Listener::RegisterForEvent("HONOR_GAINED");
-	m_ptPosition = { 400, 150 };
-	m_szSize = { 100, 200 };
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/Graphics/Teleporter.png");
+	m_hDoorClosed = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Sharp_Fart.wav");
 
 }
 
 
 BossDoor::~BossDoor()
 {
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hDoorClosed);
 }
 
-/////////////////////////////////////////////////
-/////////////////Interface//////////////////////
-void BossDoor::Update(float elapsedTime)
-{
-
-	if(m_bOpen)
-	{
-		m_szSize = { 0, 0 };
-	}
-	else
-	{
-		m_szSize = { 100, 200 };
-	}
-
-}
 void BossDoor::Render(void)
 {
 	//Get the camera position for our offset
@@ -42,7 +34,16 @@ void BossDoor::Render(void)
 
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
-	Camera::GetInstance()->Draw(rMyRect, { 255, 0, 0, 255 });
+	//Camera::GetInstance()->Draw(rMyRect, { 255, 0, 0, 255 });
+
+	Camera::GetInstance()->DrawTexture({ m_ptPosition.x - 35, m_ptPosition.y - 40 }, 0.0f, m_hImage, false, 1.0f, {}, {});
+
+	// Draw required honor
+	SGD::OStringStream output;
+	output << ": " << m_unRequiredHonor;
+	//Local refernce to the font
+	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+	font.DrawString(output.str().c_str(), (int)m_ptPosition.x, (int)m_ptPosition.y, 1, SGD::Color{ 255, 255, 0, 0 });
 }
 
 int BossDoor::GetType(void) const
@@ -51,29 +52,31 @@ int BossDoor::GetType(void) const
 
 }
 
-SGD::Rectangle BossDoor::GetRect(void) const
+/////////////////////////////////////////////////
+// HandleCollision
+// -If the player collides, change the level
+void BossDoor::HandleCollision(const IEntity* pOther)
 {
-
-	return SGD::Rectangle{ m_ptPosition, m_szSize };
-
-}
-
-
-////////////////////////////////////////////////
-////////////// Listener Interface //////////////
-void BossDoor::HandleEvent(const SGD::Event* pEvent)
-{
-	//which event
-
-	//Set the player back to his last checkpoint 
-	//This is usually back to the level start
-	if(pEvent->GetEventID() == "HONOR_GAINED")
+	if (pOther->GetType() == ENT_PLAYER)
 	{
-		Player* pPlayer = reinterpret_cast<Player*>(pEvent->GetSender());
-		
-		if(pPlayer->GetHonorCollected() >= m_unRequiredHonor)
+		float leftStickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
+
+		//if (leftStickYOff < -0.8)
+		if (SGD::InputManager::GetInstance()->IsButtonPressed(0, 3) == true ||
+			SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::S))
 		{
-			m_bOpen = true;
+			Player * pPlayer = (Player*)pOther;
+			if (pPlayer->GetHonorCollected() >= m_unRequiredHonor)
+			{
+				ChangeLevelMessage* pMsg = new ChangeLevelMessage{ this };
+				pMsg->QueueMessage();
+				pMsg = nullptr;
+			}
+			else
+			{
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hDoorClosed);
+			}
 		}
+
 	}
 }
