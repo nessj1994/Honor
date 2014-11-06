@@ -20502,7 +20502,7 @@
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
 		<Entity type="19" x="1472" y="704" numArgs="1" name="Enemy_2">
-			<Argument type="1" name="Type" value="1" />
+			<Argument type="1" name="Type" value="0" />
 		</Entity>
 		<Entity type="19" x="2176" y="704" numArgs="1" name="Enemy_3">
 			<Argument type="1" name="Type" value="1" />
