@@ -14,6 +14,7 @@ FallingBlock::~FallingBlock()
 {
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 	SetTarget(nullptr);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 /////////////////////////////////////////////////
