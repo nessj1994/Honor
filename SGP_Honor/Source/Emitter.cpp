@@ -80,7 +80,7 @@ void Emitter::StartParticles(bool restart)
 	if (m_iEmitterShape)
 	{
 		m_EndPoint.y = m_ptPosition.y;
-		m_EndPoint.x = m_ptPosition.x + m_iRadius;
+		m_EndPoint.x = m_ptPosition.x + (m_iRadius-1000);
 	}
 
 	m_iSpawned = m_unMaxParticles / 2;

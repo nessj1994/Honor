@@ -44,6 +44,7 @@
     <ClCompile Include="Source\CreatePoopMessage.cpp" />
     <ClCompile Include="Source\CreateProjectileMessage.cpp" />
     <ClCompile Include="Source\CreateSprayMessage.cpp" />
+    <ClCompile Include="Source\CreateStalactite.cpp" />
     <ClCompile Include="Source\CreateVerticalBubble.cpp" />
     <ClCompile Include="Source\CreateVomitMessage.cpp" />
     <ClCompile Include="Source\CreditsState.cpp" />
@@ -67,6 +68,7 @@
     <ClCompile Include="Source\HintStatue.cpp" />
     <ClCompile Include="Source\Honor.cpp" />
     <ClCompile Include="Source\HorizontalBubble.cpp" />
+    <ClCompile Include="Source\HubWorldOrb.cpp" />
     <ClCompile Include="Source\Ice.cpp" />
     <ClCompile Include="source\IceBat.cpp" />
     <ClCompile Include="source\IceGolem.cpp" />
@@ -155,6 +157,7 @@
     <ClInclude Include="Source\CreatePoopMessage.h" />
     <ClInclude Include="Source\CreateProjectileMessage.h" />
     <ClInclude Include="Source\CreateSprayMessage.h" />
+    <ClInclude Include="Source\CreateStalactite.h" />
     <ClInclude Include="Source\CreateVerticalBubble.h" />
     <ClInclude Include="Source\CreateVomitMessage.h" />
     <ClInclude Include="Source\CreditsState.h" />
@@ -178,6 +181,7 @@
     <ClInclude Include="Source\HintStatue.h" />
     <ClInclude Include="Source\Honor.h" />
     <ClInclude Include="Source\HorizontalBubble.h" />
+    <ClInclude Include="Source\HubWorldOrb.h" />
     <ClInclude Include="Source\Ice.h" />
     <ClInclude Include="source\IceBat.h" />
     <ClInclude Include="source\IceGolem.h" />
