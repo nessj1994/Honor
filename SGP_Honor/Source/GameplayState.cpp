@@ -257,6 +257,7 @@ void GameplayState::Exit(void)
 	if (m_pPlayer != nullptr)
 	{
 		m_pPlayer->Release();
+		delete m_pPlayer;
 	}
 
 	if (m_pHubOrb != nullptr)
@@ -1444,6 +1445,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 			pIceTurtle->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pIceTurtle, Entity::ENT_ICE_TURTLE);
 			pIceTurtle->Release();
+			pIceTurtle = nullptr;
 			break;
 		}
 		case 7: // hermit crab
