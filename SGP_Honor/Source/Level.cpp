@@ -603,8 +603,11 @@ bool Level::LoadLevel(const char * _path)
 				case 18: // Teleporter
 				{
 					TiXmlElement * pArg = pEntity->FirstChildElement();
+					int hubTeleporter;
+					pArg->Attribute("value", &hubTeleporter);
+					pArg = pArg->NextSiblingElement();
 					std::string level = pArg->Attribute("value");
-					GameplayState::GetInstance()->CreateTeleporter(x, y, level);
+					GameplayState::GetInstance()->CreateTeleporter(x, y, level, hubTeleporter ? true : false);
 					break;
 				}
 				case 19: // Enemy

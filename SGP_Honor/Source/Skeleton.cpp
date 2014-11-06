@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "CreateGravProjectileMessage.h"
 #include "../SGD Wrappers/SGD_MessageManager.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 /////////////////////////////
 // Ctor/Dtor
@@ -16,11 +17,14 @@ Skeleton::Skeleton() : Listener(this)
 	m_ssCurrState = SS_IDLE;
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/Skeleton_Animation.xml");
 	m_ts.SetCurrAnimation("Skeleton_Idle");
+	m_hThrow = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/BoneThrow.wav");
+	m_hDeath = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/BoneBreak.wav");
 }
 
 Skeleton::~Skeleton()
 {
-
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hThrow);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hDeath);
 }
 
 /////////////////////////////
@@ -28,7 +32,14 @@ Skeleton::~Skeleton()
 // -Main update loop
 void Skeleton::Update(float elapsedTime)
 {
+	m_unPrevFrame = m_ts.GetCurrFrame();
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
+
+	// only play audio if the player is close
+	float playerDeltaX = abs(GetPlayer()->GetPosition().x - m_ptPosition.x);
+	float playerDeltaY = abs(GetPlayer()->GetPosition().y - m_ptPosition.y);
+	m_bPlayAudio = (playerDeltaX < 600.0f && playerDeltaY < 400.0f);
 
 	// Check if dying
 	if (!GetAlive() && !m_bDying)
@@ -37,6 +48,11 @@ void Skeleton::Update(float elapsedTime)
 		m_fDeathTimer = 0.5f;
 		m_ssCurrState = SS_DEATH;
 		m_ts.ResetCurrFrame();
+		// play sound
+		if (m_bPlayAudio)
+		{
+			pAudio->PlayAudio(m_hDeath);
+		}
 	}
 
 	// Update direction for bones
@@ -89,6 +105,11 @@ void Skeleton::Update(float elapsedTime)
 					pMsg->QueueMessage();
 					pMsg = nullptr;
 					m_bCanThrow = false;
+					// play sound
+					if (m_bPlayAudio && m_unPrevFrame != 2)
+					{
+						pAudio->PlayAudio(m_hThrow);
+					}
 				}
 				// End on the last frame
 				if (m_ts.GetCurrFrame() == 3)

@@ -5,6 +5,7 @@
 
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "Player.h"
 
 ///////////////////////////////
@@ -18,11 +19,18 @@ BullEnemy::BullEnemy() : Listener(this)
 	SetFacingRight(true);
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/Bull_Enemy_Animation.xml");
 	m_ts.SetCurrAnimation("Bull_Enemy_Running");
+	m_hWalking = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Walking.wav");
+	m_hRunning = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Running.wav");
+	m_hRoar1 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Roar1.wav");
+	m_hRoar2 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Roar3.wav");
 }
 
 BullEnemy::~BullEnemy()
 {
-
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hWalking);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hRunning);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hRoar1);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hRoar2);
 }
 
 ///////////////////////////////
@@ -30,7 +38,14 @@ BullEnemy::~BullEnemy()
 // -Main update loop
 void BullEnemy::Update(float elapsedTime)
 {
+	m_unPrevFrame = m_ts.GetCurrFrame();
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
+
+	// only play audio if the player is close
+	float playerDeltaX = abs(GetPlayer()->GetPosition().x - m_ptPosition.x);
+	float playerDeltaY = abs(GetPlayer()->GetPosition().y - m_ptPosition.y);
+	m_bPlayAudio = (playerDeltaX < 600.0f && playerDeltaY < 400.0f);
 
 	// Update timer
 	if (m_fTurnTimer > 0.0f)
@@ -44,6 +59,11 @@ void BullEnemy::Update(float elapsedTime)
 		m_bDying = true;
 		m_fDeathTimer = 0.5f;
 		m_bsCurrState = BS_DEATH;
+		m_ts.ResetCurrFrame();
+		if (m_bPlayAudio)
+		{
+			pAudio->PlayAudio(m_hRoar2);
+		}
 	}
 
 	// Every few seconds randomly change direction or switch states
@@ -86,6 +106,13 @@ void BullEnemy::Update(float elapsedTime)
 			m_ts.SetPlaying(true);
 			m_ts.SetSpeed(1.0f);
 
+			// Play sounds
+			if (m_bPlayAudio && m_ts.GetCurrFrame() == 0 && m_unPrevFrame != 0 &&
+				!pAudio->IsAudioPlaying(m_hRoar1))
+			{
+				pAudio->PlayAudio(m_hRoar1);
+			}
+
 			// Stand still
 			SetVelocity({ 0.0f, m_vtVelocity.y });
 
@@ -111,6 +138,12 @@ void BullEnemy::Update(float elapsedTime)
 			m_ts.SetCurrAnimation("Bull_Enemy_Running");
 			m_ts.SetPlaying(true);
 			m_ts.SetSpeed(1.0f);
+
+			// Play sounds
+			if (m_bPlayAudio && m_ts.GetCurrFrame() == 0 && m_unPrevFrame != 0)
+			{
+				pAudio->PlayAudio(m_hWalking);
+			}
 
 			// walk left or right
 			if (GetFacingRight())
@@ -147,6 +180,12 @@ void BullEnemy::Update(float elapsedTime)
 			m_ts.SetPlaying(true);
 			m_ts.SetSpeed(2.0f);
 
+			// Play sounds
+			if (m_bPlayAudio && m_ts.GetCurrFrame() == 0 && m_unPrevFrame != 0)
+			{
+				pAudio->PlayAudio(m_hRunning);
+			}
+
 			// Run left or right
 			if (GetFacingRight())
 			{
@@ -172,6 +211,7 @@ void BullEnemy::Update(float elapsedTime)
 		}
 		case BS_DEATH:
 		{
+
 			// Update animation
 			m_ts.SetCurrAnimation("Bull_Enemy_Death");
 			m_ts.SetPlaying(true);

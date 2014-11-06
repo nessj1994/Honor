@@ -17,6 +17,7 @@ Turret::Turret()
 
 Turret::~Turret()
 {
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 /////////////////////////////////////////////////

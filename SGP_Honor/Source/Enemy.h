@@ -1,9 +1,9 @@
 #pragma once
 #include "Unit.h"
-//#include "Player.h"
+#include "Player.h"
 
 
-class Player;
+
 
 class Enemy :
 	public Unit
@@ -32,7 +32,7 @@ public:
 
 	//////////////////////////////////////////////
 	///////////////////Mutators//////////////////
-	void SetPlayer(Player* player) { m_pPlayer = player; }
+	void SetPlayer(Player* player) { if(m_pPlayer)m_pPlayer->Release(); m_pPlayer = player; if(m_pPlayer)m_pPlayer->AddRef(); }
 	void SetState(unsigned int state) { m_unCurrentState = state; }
 	void SetAggroDistance(float distance) { m_fAggroDistance = distance; }
 	void SetFacingRight(bool _right) { m_bFacingRight = _right; }
