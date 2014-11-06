@@ -41,5 +41,10 @@ private:
 	bool m_bDying = false;
 	bool m_bThrowing = false;
 	bool m_bCanThrow = true;
+	bool m_bPlayAudio = false;
 
+	SGD::HAudio m_hThrow = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hDeath = SGD::INVALID_HANDLE;
+
+	unsigned int m_unPrevFrame = 0;
 };

@@ -57,5 +57,15 @@ private:
 	Emitter * m_eFire2;
 
 	SGD::HAudio m_hVictory = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWalking = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hRunning = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hRoar1 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hRoar2 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hRoar3 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWallHit = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hReadyCharge = SGD::INVALID_HANDLE;
+
+	unsigned int m_unPrevFrame = 0;
+	
 };
 

@@ -28,7 +28,15 @@ Bull::Bull() : Listener(this)
 	SetHitPoints(3);
 	m_eFire1 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect1.xml", "FireEffect1", m_ptPosition);
 	m_eFire2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect2.xml", "FireEffect2", m_ptPosition);
+
 	m_hVictory = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/BossDefeat.wav");
+	m_hWalking = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Walking.wav");
+	m_hRunning = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Running.wav");
+	m_hRoar1 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Roar1.wav");
+	m_hRoar2 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Roar2.wav");
+	m_hRoar3 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Roar3.wav");
+	m_hWallHit = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Anvil.wav");
+	m_hReadyCharge = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Ready_Charge.wav");
 }
 
 ///////////////////////////////////////////////////
@@ -39,6 +47,13 @@ Bull::~Bull()
 	delete m_eFire1;
 	delete m_eFire2;
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hVictory);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hWalking);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hRunning);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hRoar1);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hRoar2);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hRoar3);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hWallHit);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hReadyCharge);
 }
 
 ///////////////////////////////////////////////////
@@ -46,8 +61,9 @@ Bull::~Bull()
 // -Main update loop for the bull
 void Bull::Update(float elapsedTime)
 {
+	m_unPrevFrame = m_ts.GetCurrFrame();
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
-
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 
 	switch (m_bsCurrState)
 	{
@@ -57,6 +73,13 @@ void Bull::Update(float elapsedTime)
 			m_ts.SetCurrAnimation("Bull_Running");
 			m_ts.SetPlaying(true);
 			m_ts.SetSpeed(1.0f);
+
+			// Play sounds
+			if ((m_ts.GetCurrFrame() == 0 && m_unPrevFrame != 0) ||
+				(m_ts.GetCurrFrame() == 4 && m_unPrevFrame != 4))
+			{
+				pAudio->PlayAudio(m_hWalking);
+			}
 
 			// Move in the direction he is facing
 			if (m_bFacingRight)
@@ -107,6 +130,13 @@ void Bull::Update(float elapsedTime)
 			// Update animation
 			m_ts.SetCurrAnimation("Bull_Running");
 			m_ts.SetSpeed(3.0f);
+			
+			// Play sounds
+			if ((m_ts.GetCurrFrame() == 0 && m_unPrevFrame != 0) ||
+				(m_ts.GetCurrFrame() == 4 && m_unPrevFrame != 4))
+			{
+				pAudio->PlayAudio(m_hRunning);
+			}
 
 			// Move in the direction he is facing
 			if (m_bFacingRight)
@@ -121,6 +151,7 @@ void Bull::Update(float elapsedTime)
 			// Change states if a wall is hit
 			if (GetHitWall())
 			{
+				pAudio->PlayAudio(m_hWallHit);
 				m_fStunTimer = 3.0f;
 				m_bsCurrState = BS_STUNNED;
 				SetVelocity({ 0.0f, -500.0f });
@@ -145,6 +176,11 @@ void Bull::Update(float elapsedTime)
 
 			SetVelocity({ 0.0f, 0.0f });
 
+			if (m_ts.GetCurrFrame() == 1 && m_unPrevFrame != 1)
+			{
+				pAudio->PlayAudio(m_hRoar1);
+			}
+
 			// Face the player
 			float playerX = GetPlayer()->GetPosition().x;
 			m_bFacingRight = playerX > m_ptPosition.x + 64;
@@ -165,6 +201,11 @@ void Bull::Update(float elapsedTime)
 			m_ts.SetSpeed(1.0f);
 
 			SetVelocity({ 0.0f, 0.0f });
+
+			if (m_ts.GetCurrFrame() == 8 && m_unPrevFrame != 8)
+			{
+				pAudio->PlayAudio(m_hReadyCharge);
+			}
 
 			// Update timer to change to running
 			m_fChargeTimer -= elapsedTime;
@@ -187,6 +228,13 @@ void Bull::Update(float elapsedTime)
 			// Update animation
 			m_ts.SetCurrAnimation("Bull_Running");
 			m_ts.SetSpeed(2.0f * m_fSlowTimer + 1.0f);
+
+			// Play sounds
+			if (m_ts.GetCurrFrame() == 0 ||
+				m_ts.GetCurrFrame() == 4)
+			{
+				pAudio->PlayAudio(m_hWalking);
+			}
 
 			// Move in the direction he is facing
 			if (m_bFacingRight)
@@ -270,7 +318,7 @@ void Bull::Update(float elapsedTime)
 			if (!m_bAudioPlayed)
 			{
 				m_bAudioPlayed = true;
-				SGD::AudioManager::GetInstance()->PlayAudio(m_hVictory);
+				pAudio->PlayAudio(m_hVictory);
 			}
 			// Update animation
 			if (m_fDeathTimer > 8.0f)
@@ -300,6 +348,12 @@ void Bull::Update(float elapsedTime)
 				m_ts.SetCurrAnimation("Bull_Stunned");
 				m_ts.SetSpeed(1.0f);
 				SetVelocity({ 0.0f, 0.0f });
+
+				// Play sound
+				if (m_ts.GetCurrFrame() == 0 && m_unPrevFrame != 0)
+				{
+					pAudio->PlayAudio(m_hRoar3);
+				}
 
 				// Fire effect
 				m_eFire1->Update(elapsedTime);
@@ -407,6 +461,7 @@ void Bull::HandleCollision(const IEntity* pOther)
 		// Set returning to true and start moving back towards the platform
 		if (m_bsCurrState != BS_RETURNING)
 		{
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hRoar2);
 			m_bsCurrState = BS_RETURNING;
 			SetHitPoints(GetHitPoints() - 1);
 			if (m_bFacingRight)
