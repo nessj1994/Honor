@@ -31,6 +31,8 @@ MutantBat::MutantBat()
 MutantBat::~MutantBat()
 {
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hHurt);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hPoop);
 }
 
 SGD::Rectangle MutantBat::GetRect(void) const
