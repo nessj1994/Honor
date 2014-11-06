@@ -98,6 +98,10 @@ void Laser::HandleCollision(const IEntity* pOther)
 	{
 		m_bFull = true;
 	}
+	if (pOther->GetType() == ENT_LASER)
+	{
+		int x = 0;
+	}
 
 
 }
