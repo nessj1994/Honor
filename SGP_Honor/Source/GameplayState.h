@@ -105,7 +105,7 @@ public:
 	void CreateFreezableLeftRamp(int _x, int _y);
 	void CreateFreezableRightRamp(int _x, int _y);
 	void CreateHintStatue(int _x, int _y, std::string _message);
-	void CreateTeleporter(int _x, int _y, std::string _level);
+	void CreateTeleporter(int _x, int _y, std::string _level, bool _hub);
 	void CreateEnemy(int _x, int _y, int _type);
 	void CreateBoss(int _x, int _y, int _type);
 
@@ -115,6 +115,8 @@ public:
 	void LoadHonorVector();
 	bool GetHonorValue(unsigned int _index);
 	unsigned int GetHonorVectorSize();
+	bool GetLevelUnlocked(std::string _level);
+	void UnlockLevel(std::string _level);
 
 private:
 
@@ -172,6 +174,7 @@ private:
 
 	std::map<std::string, std::string> m_mLevels;
 	std::map<std::string, std::vector<bool>> m_mCollectedHonor;
+	std::map<std::string, bool> m_mUnlockedLevels;
 
 	AnimTimeStamp ts;
 	

@@ -200,7 +200,7 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadHonorVector();
 	
-	LoadLevel("Level3_1");
+	LoadLevel("HubLevel");
 
 	//LoadLevel("Level5_5");
 
@@ -345,7 +345,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if(pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level3_5");
+		LoadLevel("HubLevel");
 	}
 
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
@@ -1118,7 +1118,7 @@ void GameplayState::CreateTurret(int x, int y, int _direction, float _timer)
 	Turret * mTurret = new Turret();
 	mTurret->SetPosition({ (float)x, (float)y });
 	mTurret->SetFireTimer(_timer);
-	mTurret->SetDirection(_direction);
+	mTurret->SetShootDirection(_direction);
 	m_pEntities->AddEntity(mTurret, Entity::ENT_TURRET);
 	mTurret->Release();
 }
@@ -1314,12 +1314,13 @@ void GameplayState::CreateHintStatue(int _x, int _y, std::string _message)
 /////////////////////////
 // CreateTeleporter
 // -Creates a teleporter at the given coordinates
-void GameplayState::CreateTeleporter(int _x, int _y, std::string _level)
+void GameplayState::CreateTeleporter(int _x, int _y, std::string _level, bool _hub)
 {
 	Teleporter * mTeleporter = new Teleporter();
 	mTeleporter->SetPosition({ (float)_x, (float)_y });
 	mTeleporter->SetSize({ 64.0f, 64.0f });
 	mTeleporter->SetLevel(_level);
+	mTeleporter->SetHubTeleporter(_hub);
 	m_pEntities->AddEntity(mTeleporter, Entity::ENT_TELEPORTER);
 	mTeleporter->Release();
 }
@@ -1748,10 +1749,21 @@ void GameplayState::LoadLevelMap()
 		std::string path = pLevel->Attribute("path");
 		m_mLevels[key] = path;
 		m_mCollectedHonor[key];
+		m_mUnlockedLevels[key] = false;
 
 		// Move to the next node
 		pLevel = pLevel->NextSiblingElement();
 	}
+
+	// Unlock certain levels right away
+	m_mUnlockedLevels["HubLevel"] = true;
+	m_mUnlockedLevels["TutorialLevel"] = true;
+	m_mUnlockedLevels["World1Level"] = true;
+	m_mUnlockedLevels["World2Level"] = true;
+	m_mUnlockedLevels["World3Level"] = true;
+	m_mUnlockedLevels["World4Level"] = true;
+	m_mUnlockedLevels["World5Level"] = true;
+	m_mUnlockedLevels["Level1_1"] = true;
 
 }
 
@@ -1825,6 +1837,14 @@ void GameplayState::SaveHonorVector()
 		// Create a node for the current level
 		TiXmlElement* Level = new TiXmlElement("Level");
 		Level->SetAttribute("name", key.c_str());
+		if (m_mUnlockedLevels[key])
+		{
+			Level->SetAttribute("unlocked", "1");
+		}
+		else
+		{
+			Level->SetAttribute("unlocked", "0");
+		}
 		Root->LinkEndChild(Level);
 
 		// Loop through each value in the data
@@ -1879,6 +1899,11 @@ void GameplayState::LoadHonorVector()
 	{
 		// Name of this level, used for the key
 		std::string name = pLevel->Attribute("name");
+		
+		// If this level has been unlocked
+		int unlocked;
+		pLevel->Attribute("unlocked", &unlocked);
+		m_mUnlockedLevels[name] = unlocked ? true : false;
 
 		// Loop through the vector of collected honor
 		TiXmlElement * pVector = pLevel->FirstChildElement();
@@ -1941,4 +1966,20 @@ void GameplayState::RenderMiniMap()
 
 	// Render the entities onto the minimap
 	m_pEntities->RenderMiniMap();
+}
+
+/////////////////////////////////////////////
+// RenderMiniMap
+// -Renders the mini map
+bool GameplayState::GetLevelUnlocked(std::string _level)
+{
+	return m_mUnlockedLevels[_level];
+}
+
+/////////////////////////////////////////////
+// RenderMiniMap
+// -Renders the mini map
+void GameplayState::UnlockLevel(std::string _level)
+{
+	m_mUnlockedLevels[_level] = true;
 }
