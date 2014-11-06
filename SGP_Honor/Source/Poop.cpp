@@ -21,6 +21,7 @@ Poop::Poop(SGD::Point _Pos)
 Poop::~Poop()
 {
 	delete m_eEffect;
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 Poop::Poop(const Poop& _Vomit)
