@@ -4618,6 +4618,7 @@
 	</EventLayer>
 	<Entities numEntities="1">
 		<Entity type="18" x="128" y="864" numArgs="1" name="HubTeleporter">
+			<Argument type="0" name="HubTeleporter" value="1" />
 			<Argument type="3" name="Level" value="HubLevel" />
 		</Entity>
 	</Entities>

@@ -34,6 +34,14 @@ private:
 	float m_fChangeTimer = 0.0f;
 	float m_fDeathTimer = 0.0f;
 	bool m_bDying = false;
+	bool m_bPlayAudio = false;
 	BullState m_bsCurrState;
+
+	SGD::HAudio m_hWalking = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hRunning = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hRoar1 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hRoar2 = SGD::INVALID_HANDLE;
+
+	unsigned int m_unPrevFrame = 0;
 
 };

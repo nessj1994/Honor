@@ -3,17 +3,20 @@
 #include "GameplayState.h"
 #include "ChangeLevelMessage.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 /////////////////////////////////////////////////
 // Ctor/dtor
 Teleporter::Teleporter()
 {
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/Graphics/Teleporter.png");
+	m_hDoorClosed = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Sharp_Fart.wav");
 }
 
 Teleporter::~Teleporter()
 {
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hDoorClosed);
 }
 
 /////////////////////////////////////////////////
@@ -44,14 +47,38 @@ void Teleporter::HandleCollision(const IEntity* pOther)
 	{
 		float leftStickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
 
-
-		//if (leftStickYOff < -0.8)
-		if (SGD::InputManager::GetInstance()->IsButtonPressed(0,3) == true ||
-			SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::W))
+		// Hub Teleporters will only take you to a level if you have unlocked it
+		if (m_bHubTeleporter)
 		{
-			ChangeLevelMessage* pMsg = new ChangeLevelMessage{ this };
-			pMsg->QueueMessage();
-			pMsg = nullptr;
+			//if (leftStickYOff < -0.8)
+			if (SGD::InputManager::GetInstance()->IsButtonPressed(0, 3) == true ||
+				SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::S))
+			{
+				if (GameplayState::GetInstance()->GetLevelUnlocked(m_sLevel))
+				{
+					ChangeLevelMessage* pMsg = new ChangeLevelMessage{ this };
+					pMsg->QueueMessage();
+					pMsg = nullptr;
+				}
+				else
+				{
+					if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hDoorClosed));
+					SGD::AudioManager::GetInstance()->PlayAudio(m_hDoorClosed);
+				}
+			}
 		}
+		else
+		{
+			//if (leftStickYOff < -0.8)
+			if (SGD::InputManager::GetInstance()->IsButtonPressed(0, 3) == true ||
+				SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::S))
+			{
+				GameplayState::GetInstance()->UnlockLevel(m_sLevel);
+				ChangeLevelMessage* pMsg = new ChangeLevelMessage{ this };
+				pMsg->QueueMessage();
+				pMsg = nullptr;
+			}
+		}
+
 	}
 }

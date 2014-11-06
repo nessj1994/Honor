@@ -25856,6 +25856,7 @@
 			<Argument type="1" name="Type" value="9" />
 		</Entity>
 		<Entity type="18" x="4736" y="1248" numArgs="1" name="Teleporter_1">
+			<Argument type="0" name="HubTeleporter" value="0" />
 			<Argument type="3" name="Level" value="Level4_2" />
 		</Entity>
 	</Entities>
