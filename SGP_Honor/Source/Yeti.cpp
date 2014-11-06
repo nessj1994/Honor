@@ -14,6 +14,7 @@
 Yeti::Yeti() : Listener(this)
 {
 	Listener::RegisterForEvent("JUMP_TIME");
+	Listener::RegisterForEvent("LONG_JUMP");
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/YetiAnimations.xml");
 	m_ts.ResetCurrFrame();
@@ -80,9 +81,9 @@ void Yeti::Update(float elapsedTime)
 
 
 						 
-						  if(m_vtVelocity.x < 275)
+						  if(m_vtVelocity.x < 400)
 						  {
-							  m_vtVelocity.x = 275;
+							  m_vtVelocity.x = 400;
 						  }
 						  break;
 	}
@@ -119,7 +120,7 @@ void Yeti::Update(float elapsedTime)
 
 						  }
 						  else
-							  SetVelocity({ GetVelocity().x, -600 });
+							  SetVelocity({ GetVelocity().x, GetVelocity().y });
 
 						  break;
 	}
@@ -204,11 +205,14 @@ void Yeti::BasicCollision(const IEntity* pOther)
 	SGD::Rectangle rOther = pOther->GetRect();
 
 	SGD::Rectangle rIntersect = rMyRect.ComputeIntersection(rOther);
+	
+	SetGravity(-3000);
+
 
 	//Colliding with top or bottom
 	if(rIntersect.ComputeWidth() > rIntersect.ComputeHeight())
 	{
-		if(rMyRect.right == rIntersect.right)
+		if(rMyRect.bottom == rIntersect.bottom)
 		{
 			if(GetVelocity().y != 0)
 			{
@@ -219,9 +223,19 @@ void Yeti::BasicCollision(const IEntity* pOther)
 		}
 	}
 	//Colliding with side
-	else
+	else if(rIntersect.ComputeHeight() > rIntersect.ComputeWidth())
 	{
+		if(rMyRect.right == rIntersect.right)
+		{
+			SetVelocity({ 0, GetVelocity().y });
+			SetPosition({ rOther.left - m_szSize.width, GetPosition().y });
 
+		}
+		else
+		{
+			SetVelocity({ 0, GetVelocity().y });
+			SetPosition({ rOther.right , GetPosition().y });
+		}
 	}
 }
 void Yeti::HandleCollision(const IEntity* pOther)
@@ -294,6 +308,7 @@ void Yeti::HandleCollision(const IEntity* pOther)
 
 		BasicCollision(pOther);
 		SetFriction(0.0f);
+		m_vtVelocity *= 1.004;
 		if(GetVelocity().x > 0 && m_bFacingRight == false)
 		{
 			m_vtVelocity.x -= 50;
@@ -316,8 +331,20 @@ void Yeti::HandleEvent(const SGD::Event* pEvent)
 			if(GetCurrentState() != JUMPING_STATE)
 			{
 				SetCurrentState(JUMPING_STATE);
+				m_vtVelocity = { 400, -700 };
 				m_fJumpTimer = 0.0f;
 			}
+		}
+	}
+	if(pEvent->GetSender() == this)
+	{
+		if(pEvent->GetEventID() == "LONG_JUMP")
+		{
+
+				SetCurrentState(JUMPING_STATE);
+				m_vtVelocity = { 700, -1000 };
+				m_fJumpTimer = 0.0f;
+
 		}
 	}
 	if(pEvent->GetEventID() == "ASSESS_PLAYER_RANGE")

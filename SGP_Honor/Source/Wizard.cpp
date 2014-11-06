@@ -86,7 +86,7 @@ void Wizard::Update(float elapsedTime)
 							}
 
 							clonesCasted = false;
-							hawksCasted == false;
+							hawksCasted = false;
 							break;
 		}
 		case WZ_BULL:
