@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations Character="icebat">
+  <Animation name="icebatfly" spritesheet="Icebat.png" looping="1">
+    <Frame RenderRectLeft="1" RenderRectTop="0" RenderRectRight="56" RenderRectBottom="42" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="28" anchorpointY="37" />
+    <Frame RenderRectLeft="59" RenderRectTop="2" RenderRectRight="104" RenderRectBottom="52" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="20" anchorpointY="35" />
+  </Animation>
+  <Animation name="icebatdie" spritesheet="Icebat.png" looping="0">
+    <Frame RenderRectLeft="4" RenderRectTop="117" RenderRectRight="42" RenderRectBottom="174" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.1" anchorpointX="18" anchorpointY="54" />
+    <Frame RenderRectLeft="44" RenderRectTop="119" RenderRectRight="74" RenderRectBottom="174" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.1" anchorpointX="15" anchorpointY="52" />
+    <Frame RenderRectLeft="79" RenderRectTop="119" RenderRectRight="109" RenderRectBottom="176" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.1" anchorpointX="14" anchorpointY="52" />
+    <Frame RenderRectLeft="112" RenderRectTop="116" RenderRectRight="137" RenderRectBottom="174" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.1" anchorpointX="12" anchorpointY="52" />
+  </Animation>
+</Animations>

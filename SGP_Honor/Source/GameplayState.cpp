@@ -21,6 +21,7 @@
 #include "ChangeLevelMessage.h"
 #include "CreateStalactite.h"
 #include "MovingPlatform.h"
+#include "IceBat.h"
 
 #include "HubWorldOrb.h"
 
@@ -201,9 +202,9 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadHonorVector();
+	LoadGame();
 	
-	LoadLevel("HubLevel");
+	LoadLevel("Level3_1");
 
 	//LoadLevel("Level5_5");
 
@@ -1007,7 +1008,7 @@ Player* GameplayState::CreatePlayer(void)
 	pSword->SetSize(SGD::Size(800, 80));
 	pPlayer->SetSword(pSword);
 	m_pEntities->AddEntity(pSword, Entity::ENT_SWORD);
-
+	
 
 	return pPlayer;
 
@@ -1429,6 +1430,12 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		}
 		case 5: // ice bat
 		{
+					IceBat * pIceBat = new IceBat();
+					pIceBat->SetPosition({ (float)_x, (float)_y });
+					pIceBat->SetPlayer(m_pPlayer);
+					pIceBat->SetDirection(2);
+					m_pEntities->AddEntity(pIceBat, Entity::ENT_ICE_BAT);
+					pIceBat->Release();
 			break;
 		}
 		case 6: // ice turtle
@@ -1437,7 +1444,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 					pIceTurtle->SetPosition({ (float)_x, (float)_y });
 					pIceTurtle->SetPlayer(m_pPlayer);
 					m_pEntities->AddEntity(pIceTurtle, Entity::ENT_ICE_TURTLE);
-					/*pIceTurtle->Release();*/
+					pIceTurtle->Release();
 			break;
 		}
 		case 7: // hermit crab
@@ -1711,7 +1718,20 @@ void GameplayState::SaveGame()
 	SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
 
 	// Create our save file
-	pathtowrite += "\\savefile.xml";
+	pathtowrite += "\\savefile";
+
+	if(Game::GetInstance()->GetSelectedNumber() == 1)
+	{
+		pathtowrite += "1.xml";
+	}
+	else if(Game::GetInstance()->GetSelectedNumber() == 2)
+	{
+		pathtowrite += "2.xml";
+	}
+	else if(Game::GetInstance()->GetSelectedNumber() == 3)
+	{
+		pathtowrite += "3.xml";
+	}
 
 
 
@@ -1722,14 +1742,48 @@ void GameplayState::SaveGame()
 	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
 	doc.LinkEndChild(decl);
 
-	//Create the root element
-	TiXmlElement* rootElement = new TiXmlElement("savefile");
-	doc.LinkEndChild(rootElement);
+	// Create the root node
+	TiXmlElement* Root = new TiXmlElement("Levels");
+	int totalHonor = m_pPlayer->GetHonorCollected();
+	Root->SetAttribute("totalHonor", totalHonor);
+	doc.LinkEndChild(Root);
 
-	TiXmlElement* element = new TiXmlElement("player");
-	rootElement->LinkEndChild(element);
-	element->SetAttribute("x", (int)m_pPlayer->GetPosition().x);
-	element->SetAttribute("y", (int)m_pPlayer->GetPosition().y);
+	// Loop through each level
+	typedef std::map<std::string, std::vector<bool>>::iterator it_type;
+	for(it_type iter = m_mCollectedHonor.begin(); iter != m_mCollectedHonor.end(); iter++)
+	{
+		// Grab the key and value
+		std::string key = iter->first;
+		std::vector<bool> value = iter->second;
+
+		// Create a node for the current level
+		TiXmlElement* Level = new TiXmlElement("Level");
+		Level->SetAttribute("name", key.c_str());
+		if(m_mUnlockedLevels[key])
+		{
+			Level->SetAttribute("unlocked", "1");
+		}
+		else
+		{
+			Level->SetAttribute("unlocked", "0");
+		}
+		Root->LinkEndChild(Level);
+
+		// Loop through each value in the data
+		for(unsigned int i = 0; i < value.size(); ++i)
+		{
+			TiXmlElement* Honor = new TiXmlElement("Honor");
+			if(value[i])
+			{
+				Honor->SetAttribute("collected", "1");
+			}
+			else
+			{
+				Honor->SetAttribute("collected", "0");
+			}
+			Level->LinkEndChild(Honor);
+		}
+	}
 	doc.SaveFile(pathtowrite.c_str());
 }
 
@@ -1759,9 +1813,20 @@ void GameplayState::LoadGame()
 	SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
 
 	// Create our save file
-	pathtowrite += "\\savefile.xml";
+	pathtowrite += "\\savefile";
 
-
+	if(Game::GetInstance()->GetSelectedNumber() == 1)
+	{
+		pathtowrite += "1.xml";
+	}
+	else if(Game::GetInstance()->GetSelectedNumber() == 2)
+	{
+		pathtowrite += "2.xml";
+	}
+	else if(Game::GetInstance()->GetSelectedNumber() == 3)
+	{
+		pathtowrite += "3.xml";
+	}
 
 	//Create the doc
 	TiXmlDocument doc;
@@ -1769,15 +1834,48 @@ void GameplayState::LoadGame()
 	doc.LoadFile(pathtowrite.c_str());
 
 	TiXmlElement* pRoot = doc.RootElement();
+	
+	
+	// Read in total honor collected
+	int totalHonor;
+	pRoot->Attribute("totalHonor", &totalHonor);
+	m_pPlayer->SetHonorCollected(totalHonor);
 
-	TiXmlElement* pPlayer = pRoot->FirstChildElement("player");
+	// Loop through each level
+	TiXmlElement * pLevel = pRoot->FirstChildElement();
+	while(pLevel)
+	{
+		// Name of this level, used for the key
+		std::string name = pLevel->Attribute("name");
 
-	int x;
-	int y;
+		// If this level has been unlocked
+		int unlocked;
+		pLevel->Attribute("unlocked", &unlocked);
+		m_mUnlockedLevels[name] = unlocked ? true : false;
 
-	pPlayer->Attribute("x", &x);
-	pPlayer->Attribute("y", &y);
+		// Loop through the vector of collected honor
+		TiXmlElement * pVector = pLevel->FirstChildElement();
+		while(pVector)
+		{
+			// Read in value
+			int collected;
+			pVector->Attribute("collected", &collected);
+			if(collected == 1)
+			{
+				m_mCollectedHonor[name].push_back(true);
+			}
+			else
+			{
+				m_mCollectedHonor[name].push_back(false);
+			}
 
+			// Go to the next element
+			pVector = pVector->NextSiblingElement();
+		}
+
+		// Go to the next element
+		pLevel = pLevel->NextSiblingElement();
+	}
 	//m_pPlayer->SetPosition(SGD::Point((float)x, (float)y));
 }
 

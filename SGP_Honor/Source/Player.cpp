@@ -86,6 +86,7 @@ Player::~Player()
 	delete m_emHonor;
 	delete m_emFeatherExplosion;
 	delete m_emHawkReturn;
+	delete m_pSword;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHonorParticleHUD);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hIceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBounceEffect);
