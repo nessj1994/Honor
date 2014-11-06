@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Animation.h"
+#include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include <map>
 
 class IEntity;
@@ -18,7 +19,7 @@ public:
 	/////////////////////////Setup, Play, Cleanup///////////////////////////
 	bool Initialize(void);
 	void Update(float elapsedTime, AnimTimeStamp& ts, IEntity* sender);
-	void Render(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale, SGD::Point camerapos, SGD::Vector rotationOffset);
+	void Render(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale, SGD::Point camerapos, SGD::Vector rotationOffset, SGD::Color color);
 	void Terminate(void);
 
 	Animation GetAnimation(std::string anim) { return m_mAnimationMap[anim]; }

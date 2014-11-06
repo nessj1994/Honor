@@ -192,7 +192,7 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("Level4_1");
+	LoadLevel("Level4_5");
 
 	//LoadLevel("HubLevel");
 
@@ -470,7 +470,7 @@ void GameplayState::Update(float elapsedTime)
 // - Render all game entities
 void GameplayState::Render(void)
 {
-	m_pLevel->Render();
+	//m_pLevel->Render();
 	m_pLevel->RenderImageLayer(true);
 
 
@@ -864,7 +864,7 @@ Entity* GameplayState::CreateGravProjectile(Entity* pOwner) const
 Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 {
 	HorizontalBubble* proj = new HorizontalBubble();
-	proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + 80));
+	proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y - 50));
 	proj->SetOwner(pOwner);
 	proj->SetSize({ 40, 40 });
 	return proj;
@@ -873,7 +873,7 @@ Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 Entity* GameplayState::CreateVertBubble(Entity* pOwner) const
 {
 	VerticalBubble* proj = new VerticalBubble();
-	proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + 80));
+	proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y - 50));
 	proj->SetOwner(pOwner);
 	proj->SetSize({ 40, 40 });
 	return proj;
