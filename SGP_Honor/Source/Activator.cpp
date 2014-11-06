@@ -7,8 +7,10 @@
 #include "SwordSwing.h"
 
 
-Activator::Activator(bool isPressure)
+Activator::Activator(bool isPressure) : Listener(this)
 {
+	Listener::RegisterForEvent("ResetRoom");
+
 	m_bPressurePlate = isPressure;
 
 	//m_ptPosition = { 68, 300 };
@@ -255,3 +257,14 @@ void Activator::HandleCollision(const IEntity* pOther)
 
 }
 
+////////////////////////////////////////////////
+////////////// Listener Interface //////////////
+void Activator::HandleEvent(const SGD::Event* pEvent)
+{
+	//which event
+	// Restarting the room
+	if (pEvent->GetEventID() == "ResetRoom")
+	{
+		m_bIsOn = m_bStartOn;
+	}
+}

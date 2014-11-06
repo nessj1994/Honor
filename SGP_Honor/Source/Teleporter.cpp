@@ -62,7 +62,6 @@ void Teleporter::HandleCollision(const IEntity* pOther)
 				}
 				else
 				{
-					if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hDoorClosed));
 					SGD::AudioManager::GetInstance()->PlayAudio(m_hDoorClosed);
 				}
 			}

@@ -9,6 +9,7 @@ Door::Door() : Listener(this)
 	Listener::RegisterForEvent("OPEN_DOOR");
 	Listener::RegisterForEvent("CLOSE_DOOR");
 	Listener::RegisterForEvent("FLIP_DOOR");
+	Listener::RegisterForEvent("ResetRoom");
 
 	m_ptPosition = { 200, 150 };
 	m_szSize = { 100, 200 };
@@ -112,5 +113,9 @@ void Door::HandleEvent(const SGD::Event* pEvent)
 		{
 			m_bOpen = !m_bOpen;
 		}
+	}
+	if (pEvent->GetEventID() == "ResetRoom")
+	{
+		m_bOpen = m_bStartOpen;
 	}
 }

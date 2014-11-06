@@ -1,11 +1,12 @@
 #pragma once
 #include "Entity.h"
 #include "../SGD Wrappers/SGD_Geometry.h"
+#include "../SGD Wrappers/SGD_Listener.h"
 
 class Player;
 
 class Activator :
-	public Entity
+	public Entity, SGD::Listener
 {
 public:
 	Activator(bool isPressure);
@@ -20,6 +21,10 @@ public:
 	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
 
+	////////////////////////////////////////////////
+	////////////// Listener Interface //////////////
+	void HandleEvent(const SGD::Event* pEvent);
+
 	/////////////////////////////////////////////////
 	/////////////////// Accessors //////////////////
 	bool isOn(void) const { return m_bIsOn; }
@@ -29,6 +34,7 @@ public:
 	///////////////////////////////////////////////
 	/////////////////// Mutators /////////////////
 	void SetOn(bool isOn) { m_bIsOn = isOn; }
+	void SetStartOn(bool _on) { m_bStartOn = _on; }
 	void SetKeyID(unsigned int ID) { m_unKeyID = ID; }
 	void SetPlayer(Player* ptr) { m_pPlayer = ptr; }
 
@@ -38,6 +44,7 @@ private:
 
 	bool m_bPressurePlate = false;
 	bool m_bIsOn = false;
+	bool m_bStartOn = false;
 
 	float m_fSwitchTimer = 0.0f;
 	unsigned int m_unKeyID = 0;

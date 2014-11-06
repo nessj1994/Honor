@@ -24,5 +24,7 @@ private:
 	//Sound Effects
 	SGD::HAudio m_hHurt = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hPoop = SGD::INVALID_HANDLE;
-};
+	//Dieing Timer
+	float m_fDieing;
+}; 
 
