@@ -1083,6 +1083,7 @@ void GameplayState::CreateActivator(int _x, int _y, bool _isPressure, bool _curr
 	pActivator->SetOn(_currState);
 	pActivator->SetPlayer(m_pPlayer);
 	pActivator->SetKeyID(_ID);
+	pActivator->SetStartOn(_currState);
 	m_pEntities->AddEntity(pActivator, Entity::ENT_SWITCH);
 	pActivator->Release();
 }
@@ -1126,7 +1127,7 @@ void GameplayState::CreateTurret(int x, int y, int _direction, float _timer)
 /////////////////////////
 // CreateDoor
 // -Creates a door at the given coordinates
-void GameplayState::CreateDoor(int _x, int _y, bool _isHorizontal, int _ID)
+void GameplayState::CreateDoor(int _x, int _y, bool _isHorizontal, int _ID, bool _startOpen)
 {
 	Door * pDoor = new Door();
 	pDoor->SetPosition({ (float)_x, (float)_y });
@@ -1140,6 +1141,8 @@ void GameplayState::CreateDoor(int _x, int _y, bool _isHorizontal, int _ID)
 	}
 	pDoor->SetHorizontal(_isHorizontal);
 	pDoor->SetKeyID(_ID);
+	pDoor->SetStartOpen(_startOpen);
+	pDoor->SetOpen(_startOpen);
 	m_pEntities->AddEntity(pDoor, Entity::ENT_DOOR);
 	pDoor->Release();
 }
@@ -1620,6 +1623,21 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 
 	
 	
+}
+
+
+/////////////////////////
+// CreateTeleporter
+// -Creates a teleporter at the given coordinates
+void GameplayState::CreateBossTeleporter(int _x, int _y, std::string _level, unsigned int _honor)
+{
+	BossDoor * mDoor = new BossDoor();
+	mDoor->SetPosition({ (float)_x, (float)_y });
+	mDoor->SetSize({ 64.0f, 64.0f });
+	mDoor->SetLevel(_level);
+	mDoor->SetRequiredHonor(_honor);
+	m_pEntities->AddEntity(mDoor, Entity::ENT_BOSS_DOOR);
+	mDoor->Release();
 }
 
 #pragma endregion

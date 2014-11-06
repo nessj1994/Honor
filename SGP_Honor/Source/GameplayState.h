@@ -91,7 +91,7 @@ public:
 	void CreateActivator(int x, int y, bool _pressurePlate, bool _active, int _ID);
 	void CreateLaser(int x, int y, SGD::Vector _direction, int _ID, bool _on);
 	void CreateTurret(int x, int y, int _direction, float _timer);
-	void CreateDoor(int _x, int _y, bool _isHorizontal, int _ID);
+	void CreateDoor(int _x, int _y, bool _isHorizontal, int _ID, bool _startOpen);
 	void CreateMovingPlatform(int _x, int _y, bool _vertical, float _turnDistance, float _speed);
 	void CreateGeyser(int _x, int _y, float _speed, float _maxHeight, int _currState);
 	void CreateLava(int _x, int _y, float _speed, float _maxHeight, int _currState);
@@ -108,6 +108,7 @@ public:
 	void CreateTeleporter(int _x, int _y, std::string _level, bool _hub);
 	void CreateEnemy(int _x, int _y, int _type);
 	void CreateBoss(int _x, int _y, int _type);
+	void CreateBossTeleporter(int _x, int _y, std::string _level, unsigned int _honor);
 
 	void LoadLevel(std::string _level);
 	void SetHonorVector(std::vector<bool> _value);

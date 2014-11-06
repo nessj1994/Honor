@@ -4617,30 +4617,6 @@
 		<EventTile event="" />
 	</EventLayer>
 	<Entities numEntities="9">
-		<Entity type="4" x="32" y="576" numArgs="2" name="Door_1">
-			<Argument type="0" name="IsHorizontal" value="1" />
-			<Argument type="1" name="ActivatorIndex" value="0" />
-		</Entity>
-		<Entity type="4" x="160" y="576" numArgs="2" name="Door_2">
-			<Argument type="0" name="IsHorizontal" value="1" />
-			<Argument type="1" name="ActivatorIndex" value="0" />
-		</Entity>
-		<Entity type="4" x="288" y="576" numArgs="2" name="Door_3">
-			<Argument type="0" name="IsHorizontal" value="1" />
-			<Argument type="1" name="ActivatorIndex" value="0" />
-		</Entity>
-		<Entity type="4" x="1632" y="576" numArgs="2" name="Door_4">
-			<Argument type="0" name="IsHorizontal" value="1" />
-			<Argument type="1" name="ActivatorIndex" value="1" />
-		</Entity>
-		<Entity type="4" x="1760" y="576" numArgs="2" name="Door_5">
-			<Argument type="0" name="IsHorizontal" value="1" />
-			<Argument type="1" name="ActivatorIndex" value="1" />
-		</Entity>
-		<Entity type="4" x="1888" y="576" numArgs="2" name="Door_6">
-			<Argument type="0" name="IsHorizontal" value="1" />
-			<Argument type="1" name="ActivatorIndex" value="1" />
-		</Entity>
 		<Entity type="1" x="448" y="544" numArgs="3" name="Activator_1">
 			<Argument type="0" name="IsPressurePlate" value="0" />
 			<Argument type="0" name="Active" value="1" />
@@ -4653,6 +4629,36 @@
 		</Entity>
 		<Entity type="20" x="1024" y="480" numArgs="1" name="Boss_1">
 			<Argument type="1" name="Type" value="0" />
+		</Entity>
+		<Entity type="4" x="32" y="576" numArgs="3" name="Door_1">
+			<Argument type="0" name="IsHorizontal" value="1" />
+			<Argument type="1" name="ActivatorIndex" value="0" />
+			<Argument type="0" name="StartOpen" value="0" />
+		</Entity>
+		<Entity type="4" x="160" y="576" numArgs="3" name="Door_2">
+			<Argument type="0" name="IsHorizontal" value="1" />
+			<Argument type="1" name="ActivatorIndex" value="0" />
+			<Argument type="0" name="StartOpen" value="0" />
+		</Entity>
+		<Entity type="4" x="288" y="576" numArgs="3" name="Door_3">
+			<Argument type="0" name="IsHorizontal" value="1" />
+			<Argument type="1" name="ActivatorIndex" value="0" />
+			<Argument type="0" name="StartOpen" value="0" />
+		</Entity>
+		<Entity type="4" x="1632" y="576" numArgs="3" name="Door_4">
+			<Argument type="0" name="IsHorizontal" value="1" />
+			<Argument type="1" name="ActivatorIndex" value="1" />
+			<Argument type="0" name="StartOpen" value="0" />
+		</Entity>
+		<Entity type="4" x="1760" y="576" numArgs="3" name="Door_5">
+			<Argument type="0" name="IsHorizontal" value="1" />
+			<Argument type="1" name="ActivatorIndex" value="1" />
+			<Argument type="0" name="StartOpen" value="0" />
+		</Entity>
+		<Entity type="4" x="1888" y="576" numArgs="3" name="Door_6">
+			<Argument type="0" name="IsHorizontal" value="1" />
+			<Argument type="1" name="ActivatorIndex" value="1" />
+			<Argument type="0" name="StartOpen" value="0" />
 		</Entity>
 	</Entities>
 </Level>

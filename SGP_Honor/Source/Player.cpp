@@ -323,11 +323,6 @@ void Player::HandleCollision(const IEntity* pOther)
 		JellyfishCollision(pOther);
 	}
 
-	if(pOther->GetType() == ENT_BOSS_DOOR)
-	{
-		BasicCollision(pOther);
-	}
-
 	if(pOther->GetType() == Entity::ENT_HONOR)
 	{
 		const Honor* honor = dynamic_cast<const Honor*>(pOther);
