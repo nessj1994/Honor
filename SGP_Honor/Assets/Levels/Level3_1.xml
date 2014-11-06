@@ -18514,9 +18514,6 @@
 			<Argument type="1" name="Direction" value="1" />
 			<Argument type="2" name="Timer" value="1.4" />
 		</Entity>
-		<Entity type="19" x="2208" y="637" numArgs="1" name="Enemy_1">
-			<Argument type="1" name="Type" value="6" />
-		</Entity>
 		<Entity type="19" x="1376" y="768" numArgs="1" name="Enemy_1">
 			<Argument type="1" name="Type" value="4" />
 		</Entity>
@@ -18526,6 +18523,9 @@
 		</Entity>
 		<Entity type="19" x="1066" y="811" numArgs="1" name="Enemy_1">
 			<Argument type="1" name="Type" value="5" />
+		</Entity>
+		<Entity type="19" x="2144" y="640" numArgs="1" name="Enemy_1">
+			<Argument type="1" name="Type" value="6" />
 		</Entity>
 	</Entities>
 </Level>

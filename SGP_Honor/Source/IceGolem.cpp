@@ -8,6 +8,7 @@
 #include "../SGD Wrappers/SGD_AudioManager.h"
 
 #include "DestroyEntityMessage.h"
+
 IceGolem::IceGolem() : Listener(this)
 {
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
@@ -30,7 +31,7 @@ IceGolem::~IceGolem()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSmashSound);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hHitSound);
 
-	SetPlayer(nullptr);
+	//SetPlayer(nullptr);
 }
 
 /////////////////////////////////////////////////
