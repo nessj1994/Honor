@@ -26,7 +26,7 @@ public:
 	void SetLevel(std::string _level) { m_sLevel = _level; }
 	void SetHubTeleporter(bool _hub) { m_bHubTeleporter = _hub; }
 
-private:
+protected:
 	std::string m_sLevel;
 	bool m_bHubTeleporter = false;
 

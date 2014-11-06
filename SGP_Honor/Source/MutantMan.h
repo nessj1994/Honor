@@ -28,5 +28,7 @@ private:
 	SGD::HAudio m_hHurt = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hGag = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hPunch = SGD::INVALID_HANDLE;
+	//Dieing Timers
+	float m_fDeadTImer;
 };
 

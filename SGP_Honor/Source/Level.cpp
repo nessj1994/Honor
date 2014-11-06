@@ -494,7 +494,10 @@ bool Level::LoadLevel(const char * _path)
 					pArg = pArg->NextSiblingElement();
 					int ID;
 					pArg->Attribute("value", &ID);
-					GameplayState::GetInstance()->CreateDoor(x, y, horizontal ? true : false, ID);
+					pArg = pArg->NextSiblingElement();
+					int startOpen;
+					pArg->Attribute("value", &startOpen);
+					GameplayState::GetInstance()->CreateDoor(x, y, horizontal ? true : false, ID, startOpen ? true : false);
 					break;
 				}
 				case 5: // Moving platforms
@@ -624,6 +627,16 @@ bool Level::LoadLevel(const char * _path)
 					int bossType;
 					pArg->Attribute("value", &bossType);
 					GameplayState::GetInstance()->CreateBoss(x, y, bossType);
+					break;
+				}
+				case 21: // Boss teleporter
+				{
+					TiXmlElement * pArg = pEntity->FirstChildElement();
+					int honorNeeded;
+					pArg->Attribute("value", &honorNeeded);
+					pArg = pArg->NextSiblingElement();
+					std::string level = pArg->Attribute("value");
+					GameplayState::GetInstance()->CreateBossTeleporter(x, y, level, honorNeeded);
 					break;
 				}
 			}

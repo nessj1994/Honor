@@ -19,8 +19,11 @@
 #include "CreateVomitMessage.h"
 #include "CreatePoopMessage.h"
 #include "ChangeLevelMessage.h"
+#include "CreateStalactite.h"
 #include "MovingPlatform.h"
 #include "IceBat.h"
+
+#include "HubWorldOrb.h"
 
 #include "Entity.h"
 #include "Projectile.h"
@@ -215,6 +218,8 @@ void GameplayState::Enter(void) //Load Resources
 	// Temporary
 	//CreateBullBoss(500, 400);
 	//CreateCrabBoss();
+	//Hub World Orb 
+	m_pHubOrb = new HubWorldOrb();
 }
 
 
@@ -346,8 +351,10 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if(pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("HubLevel");
+		LoadLevel("World2Level");
 	}
+
+	
 
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
@@ -420,7 +427,7 @@ void GameplayState::Update(float elapsedTime)
 
 	m_pEntities->CheckCollisions(Entity::ENT_SWITCH, Entity::ENT_SWORD);
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_BULL, Entity::ENT_DOOR);
-
+	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CAVEMAN, Entity::ENT_LASER);
 
 
 
@@ -484,6 +491,12 @@ void GameplayState::Update(float elapsedTime)
 	//Entities WHich SLow the Player
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_VOMIT);
 
+	//Update The Hubworld Orb
+	if (m_strCurrLevel == "HubLevel")
+	{
+		m_pHubOrb->Update(elapsedTime, m_pPlayer->GetHonorCollected(), { (float)GetCurrentLevel()->GetLevelWidth() / 2, (float)GetCurrentLevel()->GetLevelHeight() / 2 });
+	}
+
 	//Process messages and events
 	SGD::EventManager::GetInstance()->Update();
 	SGD::MessageManager::GetInstance()->Update();
@@ -508,6 +521,12 @@ void GameplayState::Render(void)
 		RenderMiniMap();
 	}
 
+	//Render the Hub world Orb
+	if (m_strCurrLevel == "HubLevel")
+	{
+		m_pHubOrb->Render();
+	}
+
 	// Draw a fading rectangle
 	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
 	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { m_cScreenFade, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
@@ -526,6 +545,25 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 	//What type of message is this
 	switch(pMsg->GetMessageID())
 	{
+		case MessageID::MSG_CREATE_STALACTITE:
+		{
+			//Downcast to the real message type
+			const CreateStalactiteMessage* pCreateMsg =
+				dynamic_cast<const CreateStalactiteMessage*>(pMsg);
+
+			//Make sure the message isnt a nullptr
+			assert(pCreateMsg != nullptr
+				&& "GameplayState::MessageProc - MSG_CREATE_STALACTITE is not actually a CreateSTALACTITEMessage");
+			Stalactite* Temp = new Stalactite();
+			Temp->SetPosition(pCreateMsg->GetOwner()->GetPosition());
+			Temp->SetSize({ 64, 64 });
+			Temp->SetFallSpeed(1000);
+			GetInstance()->m_pEntities->AddEntity(Temp, Entity::ENT_STALACTITE);
+
+			Temp->Release();
+			Temp = nullptr;
+			break;
+		}
 		case MessageID::MSG_CREATE_VOMIT:
 		{
 			//Downcast to the real message type
@@ -1084,6 +1122,7 @@ void GameplayState::CreateActivator(int _x, int _y, bool _isPressure, bool _curr
 	pActivator->SetOn(_currState);
 	pActivator->SetPlayer(m_pPlayer);
 	pActivator->SetKeyID(_ID);
+	pActivator->SetStartOn(_currState);
 	m_pEntities->AddEntity(pActivator, Entity::ENT_SWITCH);
 	pActivator->Release();
 }
@@ -1127,7 +1166,7 @@ void GameplayState::CreateTurret(int x, int y, int _direction, float _timer)
 /////////////////////////
 // CreateDoor
 // -Creates a door at the given coordinates
-void GameplayState::CreateDoor(int _x, int _y, bool _isHorizontal, int _ID)
+void GameplayState::CreateDoor(int _x, int _y, bool _isHorizontal, int _ID, bool _startOpen)
 {
 	Door * pDoor = new Door();
 	pDoor->SetPosition({ (float)_x, (float)_y });
@@ -1141,6 +1180,8 @@ void GameplayState::CreateDoor(int _x, int _y, bool _isHorizontal, int _ID)
 	}
 	pDoor->SetHorizontal(_isHorizontal);
 	pDoor->SetKeyID(_ID);
+	pDoor->SetStartOpen(_startOpen);
+	pDoor->SetOpen(_startOpen);
 	m_pEntities->AddEntity(pDoor, Entity::ENT_DOOR);
 	pDoor->Release();
 }
@@ -1520,7 +1561,7 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 					Temp->SetPosition({ (float)_x, (float)_y });
 					Temp->SetStartPosition({ (float)_x, (float)_y });
 					Temp->SetPlayer(m_pPlayer);
-					m_pEntities->AddEntity(Temp, Entity::ENT_BOSS_BULL);
+					m_pEntities->AddEntity(Temp, Entity::ENT_BOSS_CAVEMAN);
 					Temp->Release();
 					break;
 		}
@@ -1627,6 +1668,21 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 
 	
 	
+}
+
+
+/////////////////////////
+// CreateTeleporter
+// -Creates a teleporter at the given coordinates
+void GameplayState::CreateBossTeleporter(int _x, int _y, std::string _level, unsigned int _honor)
+{
+	BossDoor * mDoor = new BossDoor();
+	mDoor->SetPosition({ (float)_x, (float)_y });
+	mDoor->SetSize({ 64.0f, 64.0f });
+	mDoor->SetLevel(_level);
+	mDoor->SetRequiredHonor(_honor);
+	m_pEntities->AddEntity(mDoor, Entity::ENT_BOSS_DOOR);
+	mDoor->Release();
 }
 
 #pragma endregion

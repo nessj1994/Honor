@@ -50,7 +50,7 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("Screen1.5x2");
 	Listener::RegisterForEvent("Screen1.5x3");
 	Listener::RegisterForEvent("FINALBOSS");
-
+	Listener::RegisterForEvent("BossLevel");
 
 
 
@@ -103,6 +103,7 @@ void Player::Update(float elapsedTime)
 	m_emFeatherExplosion->Update(elapsedTime);
 	m_emHawkReturn->Update(elapsedTime);
 	//
+	
 
 	//if (m_pSword != nullptr)
 	//{
@@ -118,7 +119,12 @@ void Player::Update(float elapsedTime)
 		UpdateArmor(elapsedTime);
 		UpdateEmitters(elapsedTime);
 		UpdateTimers(elapsedTime);
-
+		//Snared Factors done do anything if Snared
+		if (m_bSnared)
+		{
+			UpdateSnared(elapsedTime);
+			return;
+		}
 
 		float leftStickXOff = pInput->GetLeftJoystick(0).x;
 		float leftStickYOff = pInput->GetLeftJoystick(0).y;
@@ -322,11 +328,6 @@ void Player::HandleCollision(const IEntity* pOther)
 		m_bSliding = false;
 
 		JellyfishCollision(pOther);
-	}
-
-	if(pOther->GetType() == ENT_BOSS_DOOR)
-	{
-		BasicCollision(pOther);
 	}
 
 	if(pOther->GetType() == Entity::ENT_HONOR)
@@ -1322,6 +1323,10 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		Camera::GetInstance()->SetCameraCap(5);
 
 	}
+	if (pEvent->GetEventID() == "BossLevel")
+	{
+		Camera::GetInstance()->SetCameraCap(2);
+	}
 }
 
 void Player::KillPlayer()
@@ -2275,6 +2280,15 @@ void Player::SetHasBounce(bool bounce)
 	if (bounce == true)
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hGainAbility);
+	}
+}
+
+void Player::UpdateSnared(float elapsedTime)
+{
+	m_fSnareTimer += elapsedTime;
+	if (m_fSnareTimer > 1)
+	{
+		m_bSnared = false;
 	}
 }
 
