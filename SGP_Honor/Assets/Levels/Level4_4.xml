@@ -6495,6 +6495,7 @@
 			<Argument type="0" name="On/Off" value="1" />
 		</Entity>
 		<Entity type="18" x="4160" y="192" numArgs="1" name="Teleporter_1">
+			<Argument type="0" name="HubTeleporter" value="0" />
 			<Argument type="3" name="Level" value="HubLevel" />
 		</Entity>
 	</Entities>

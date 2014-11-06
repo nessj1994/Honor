@@ -7810,6 +7810,7 @@
 	</EventLayer>
 	<Entities numEntities="16">
 		<Entity type="18" x="3072" y="192" numArgs="1" name="Teleporter_1">
+			<Argument type="0" name="HubTeleporter" value="0" />
 			<Argument type="3" name="Level" value="Level4_3" />
 		</Entity>
 		<Entity type="19" x="2976" y="256" numArgs="1" name="Enemy_1">

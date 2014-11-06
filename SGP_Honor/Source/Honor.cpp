@@ -92,8 +92,8 @@ void Honor::HandleEvent(const SGD::Event* pEvent)
 	//which event
 
 	//Turn around
-	if (pEvent->GetEventID() == "ResetRoom")
-	{
-		SetIsCollected(false);
-	}
+	//if (pEvent->GetEventID() == "ResetRoom")
+	//{
+	//	SetIsCollected(false);
+	//}
 }
