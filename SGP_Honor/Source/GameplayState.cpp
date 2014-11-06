@@ -1829,7 +1829,12 @@ void GameplayState::LoadGame()
 	doc.LoadFile(pathtowrite.c_str());
 
 	TiXmlElement* pRoot = doc.RootElement();
-	
+	if(pRoot == nullptr)
+	{
+		m_pPlayer->SetHonorCollected(0);
+		return;
+
+	}
 	
 	// Read in total honor collected
 	int totalHonor;
