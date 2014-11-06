@@ -10,6 +10,7 @@
 #include "InstructionsState.h"
 #include "CreditsState.h"
 #include "OptionsState.h"
+#include "ProfileState.h"
 #include "Font.h"
 #include "BitmapFont.h"
 
@@ -142,7 +143,7 @@ bool MainMenuState::Input(void) //Hanlde user Input
 		m_rSword.top = m_rPlay.top + 10;
 		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
 		{
-			Game::GetInstance()->AddState(GameplayState::GetInstance());
+			Game::GetInstance()->AddState(ProfileState::GetInstance());
 
 		}
 	}
@@ -207,7 +208,7 @@ bool MainMenuState::Input(void) //Hanlde user Input
 		if(m_nCursor == 0)
 		{
 			//Changestate to gameplay state
-			Game::GetInstance()->AddState(GameplayState::GetInstance());
+			Game::GetInstance()->AddState(ProfileState::GetInstance());
 		}
 		else if(m_nCursor == 1)
 		{

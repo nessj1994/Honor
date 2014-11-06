@@ -34,6 +34,9 @@ MutantMan::MutantMan() : Listener(this)
 MutantMan::~MutantMan()
 {
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGag);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hPunch);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hHurt);
 
 }
 
