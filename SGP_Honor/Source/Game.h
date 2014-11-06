@@ -7,7 +7,7 @@
 
 
 #include <vector>
-
+#include "Profile.h"
 ////////////////////////////////////////////////////////
 /////////////Forward Class Declarations////////////////
 //Add class declarations here as needed
@@ -64,6 +64,39 @@ public:
 	////////////////////////// Game Time ////////////////////////////////
 	unsigned long m_ulGameTime = 0;
 
+
+
+
+
+
+
+
+
+	//////////////////////////////////////////////////////////////////
+	///////////////////////// Profiles //////////////////////////////
+	Profile* GetProfile(int number)
+	{
+		if(number == 1)
+		{
+			return m_pProfile1;
+		}
+		else if(number == 2)
+		{
+			return m_pProfile2;
+		}
+		else if(number == 3)
+		{
+			return m_pProfile3;
+		}
+	}
+
+	int GetSelectedNumber() { return m_nSelectedProfile; }
+	void SetSelectedProfile(int number)
+	{
+		m_nSelectedProfile = number;
+	}
+
+
 private:
 	/////////////////////////////////////////////////////////////////////////
 	//////////////////////// Singleton Object //////////////////////////////
@@ -96,5 +129,13 @@ private:
 	///////////////////////////////////////////////////////////////////
 	//////////////////////// Bitmap Font /////////////////////////////
 	BitmapFont* m_pFont;
+
+
+	int m_nSelectedProfile;
+
+	Profile* m_pProfile1 = new Profile(1);
+	Profile* m_pProfile2 = new Profile(2);
+	Profile* m_pProfile3 = new Profile(3);
+
 };
 

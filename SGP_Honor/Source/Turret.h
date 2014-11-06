@@ -5,7 +5,7 @@ class Turret :
 {
 public:
 	Turret();
-	virtual ~Turret();
+	~Turret();
 
 
 	/////////////////////////////////////////////////
@@ -21,7 +21,7 @@ public:
 	/////////////////////////////////////////////////
 	/////////////////Mutators//////////////////////
 	void SetFireTimer(float _timer) { m_fFireTimer = _timer; }
-	void SetDirection(int _direction) { m_nDirection = _direction; }
+	void SetShootDirection(int _dir) { m_nDirection = _dir; }
 
 private:
 

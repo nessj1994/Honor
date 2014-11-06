@@ -1,85 +1,35 @@
 <?xml version="1.0" ?>
-<Levels totalHonor="1102">
-    <Level name="HubLevel" />
-    <Level name="Level1_1" />
-    <Level name="Level1_2" />
-    <Level name="Level1_3" />
-    <Level name="Level1_4" />
-    <Level name="Level1_5" />
-    <Level name="Level2_1" />
-    <Level name="Level2_2" />
-    <Level name="Level2_3" />
-    <Level name="Level2_4" />
-    <Level name="Level2_5" />
-    <Level name="Level3_1" />
-    <Level name="Level3_2" />
-    <Level name="Level3_3" />
-    <Level name="Level3_4" />
-    <Level name="Level3_5" />
-    <Level name="Level4_1">
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-    </Level>
-    <Level name="Level4_2">
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-    </Level>
-    <Level name="Level4_3">
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="0" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="0" />
-    </Level>
-    <Level name="Level4_4" />
-    <Level name="Level4_5" />
-    <Level name="Level5_1" />
-    <Level name="Level5_2" />
-    <Level name="Level5_3" />
-    <Level name="Level5_4" />
-    <Level name="Level5_5" />
-    <Level name="TestLevel" />
-    <Level name="TutorialLevel" />
-    <Level name="World1Level" />
-    <Level name="World2Level" />
-    <Level name="World3Level" />
-    <Level name="World4Level" />
-    <Level name="World5Level" />
+<Levels totalHonor="0">
+    <Level name="HubLevel" unlocked="1" />
+    <Level name="Level1_1" unlocked="1" />
+    <Level name="Level1_2" unlocked="1" />
+    <Level name="Level1_3" unlocked="0" />
+    <Level name="Level1_4" unlocked="0" />
+    <Level name="Level1_5" unlocked="0" />
+    <Level name="Level2_1" unlocked="0" />
+    <Level name="Level2_2" unlocked="0" />
+    <Level name="Level2_3" unlocked="0" />
+    <Level name="Level2_4" unlocked="0" />
+    <Level name="Level2_5" unlocked="0" />
+    <Level name="Level3_1" unlocked="0" />
+    <Level name="Level3_2" unlocked="0" />
+    <Level name="Level3_3" unlocked="0" />
+    <Level name="Level3_4" unlocked="0" />
+    <Level name="Level3_5" unlocked="0" />
+    <Level name="Level4_1" unlocked="0" />
+    <Level name="Level4_2" unlocked="0" />
+    <Level name="Level4_3" unlocked="0" />
+    <Level name="Level4_4" unlocked="0" />
+    <Level name="Level4_5" unlocked="0" />
+    <Level name="Level5_1" unlocked="0" />
+    <Level name="Level5_2" unlocked="0" />
+    <Level name="Level5_3" unlocked="0" />
+    <Level name="Level5_4" unlocked="0" />
+    <Level name="Level5_5" unlocked="0" />
+    <Level name="TutorialLevel" unlocked="1" />
+    <Level name="World1Level" unlocked="1" />
+    <Level name="World2Level" unlocked="1" />
+    <Level name="World3Level" unlocked="1" />
+    <Level name="World4Level" unlocked="1" />
+    <Level name="World5Level" unlocked="1" />
 </Levels>

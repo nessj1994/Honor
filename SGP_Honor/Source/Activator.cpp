@@ -7,8 +7,10 @@
 #include "SwordSwing.h"
 
 
-Activator::Activator(bool isPressure)
+Activator::Activator(bool isPressure) : Listener(this)
 {
+	Listener::RegisterForEvent("ResetRoom");
+
 	m_bPressurePlate = isPressure;
 
 	//m_ptPosition = { 68, 300 };
@@ -52,16 +54,16 @@ void Activator::Update(float elapsedTime)
 	{
 		
 		RECT rSwingRect;
-		rSwingRect.left = m_pPlayer->GetSword()->GetRect().left;
-		rSwingRect.top = m_pPlayer->GetSword()->GetRect().top;
-		rSwingRect.right = m_pPlayer->GetSword()->GetRect().right;
-		rSwingRect.bottom = m_pPlayer->GetSword()->GetRect().bottom;
+		rSwingRect.left = (LONG)m_pPlayer->GetSword()->GetRect().left;
+		rSwingRect.top = (LONG)m_pPlayer->GetSword()->GetRect().top;
+		rSwingRect.right = (LONG)m_pPlayer->GetSword()->GetRect().right;
+		rSwingRect.bottom = (LONG)m_pPlayer->GetSword()->GetRect().bottom;
 
 		RECT rObject;
-		rObject.left = GetRect().left - Camera::GetInstance()->GetCameraPos().x;
-		rObject.top = GetRect().top - Camera::GetInstance()->GetCameraPos().y;
-		rObject.right = GetRect().right - Camera::GetInstance()->GetCameraPos().x;
-		rObject.bottom = GetRect().bottom - Camera::GetInstance()->GetCameraPos().y;
+		rObject.left = (LONG)(GetRect().left - Camera::GetInstance()->GetCameraPos().x);
+		rObject.top = (LONG)(GetRect().top - Camera::GetInstance()->GetCameraPos().y);
+		rObject.right = (LONG)(GetRect().right - Camera::GetInstance()->GetCameraPos().x);
+		rObject.bottom = (LONG)(GetRect().bottom - Camera::GetInstance()->GetCameraPos().y);
 
 		RECT rIntersection = {};
 
@@ -94,7 +96,8 @@ void Activator::Update(float elapsedTime)
 			pATEvent = nullptr;
 			m_fSwitchTimer = 0.25f;
 		}
-		if (nIntersectHeight == nIntersectWidth && nIntersectHeight > 0)
+		if (nIntersectHeight == nIntersectWidth
+			&& nIntersectHeight > 0)
 		{
 			//Open Door
 			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
@@ -205,16 +208,16 @@ void Activator::HandleCollision(const IEntity* pOther)
 	{
 		
 		RECT rSwingRect;
-		rSwingRect.left =	m_pPlayer->GetSwingRect().left;
-		rSwingRect.top =	m_pPlayer->GetSwingRect().top;
-		rSwingRect.right =	m_pPlayer->GetSwingRect().right;
-		rSwingRect.bottom = m_pPlayer->GetSwingRect().bottom;
+		rSwingRect.left = (LONG)m_pPlayer->GetSwingRect().left;
+		rSwingRect.top = (LONG)m_pPlayer->GetSwingRect().top;
+		rSwingRect.right = (LONG)m_pPlayer->GetSwingRect().right;
+		rSwingRect.bottom = (LONG)m_pPlayer->GetSwingRect().bottom;
 
 		RECT rObject;
-		rObject.left = GetRect().left - Camera::GetInstance()->GetCameraPos().x;
-		rObject.top = GetRect().top - Camera::GetInstance()->GetCameraPos().y;
-		rObject.right = GetRect().right - Camera::GetInstance()->GetCameraPos().x;
-		rObject.bottom = GetRect().bottom - Camera::GetInstance()->GetCameraPos().y;
+		rObject.left = (LONG)(GetRect().left - Camera::GetInstance()->GetCameraPos().x);
+		rObject.top = (LONG)(GetRect().top - Camera::GetInstance()->GetCameraPos().y);
+		rObject.right = (LONG)(GetRect().right - Camera::GetInstance()->GetCameraPos().x);
+		rObject.bottom = (LONG)(GetRect().bottom - Camera::GetInstance()->GetCameraPos().y);
 
 		RECT rIntersection = {};
 
@@ -254,3 +257,14 @@ void Activator::HandleCollision(const IEntity* pOther)
 
 }
 
+////////////////////////////////////////////////
+////////////// Listener Interface //////////////
+void Activator::HandleEvent(const SGD::Event* pEvent)
+{
+	//which event
+	// Restarting the room
+	if (pEvent->GetEventID() == "ResetRoom")
+	{
+		m_bIsOn = m_bStartOn;
+	}
+}

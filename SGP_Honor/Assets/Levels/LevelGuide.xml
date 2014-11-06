@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Level key="TestLevel" path="Assets/Levels/TestLevel.xml" />
+
 <Level key="TutorialLevel" path="Assets/Levels/TutorialLevel.xml" />
 <Level key="HubLevel" path="Assets/Levels/HubLevel.xml" />
 

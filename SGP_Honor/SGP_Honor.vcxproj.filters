@@ -258,6 +258,8 @@
     <ClCompile Include="Source\SwordSwing.cpp">
       <Filter>Entities\Spells</Filter>
     </ClCompile>
+    <ClCompile Include="Source\WizardDash.cpp" />
+    <ClCompile Include="Source\WizardHawk.cpp" />
     <ClCompile Include="Source\BullEnemy.cpp">
       <Filter>Entities\Enemies</Filter>
     </ClCompile>
@@ -276,7 +278,18 @@
     <ClCompile Include="Source\Poop.cpp">
       <Filter>Entities\Obstacles</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CreatePoopMessage.cpp" />
+    <ClCompile Include="source\IceBat.cpp" />
+    <ClCompile Include="Source\CreatePoopMessage.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CreateStalactite.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HubWorldOrb.cpp" />
+    <ClCompile Include="source\IceBat.cpp" />
+    <ClCompile Include="source\IceTurtle.cpp" />
+    <ClCompile Include="source\IceGolem.cpp" />
+    <ClCompile Include="source\Profile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -560,6 +573,8 @@
     <ClInclude Include="Source\SwordSwing.h">
       <Filter>Entities\Spells</Filter>
     </ClInclude>
+    <ClInclude Include="Source\WizardDash.h" />
+    <ClInclude Include="Source\WizardHawk.h" />
     <ClInclude Include="Source\BullEnemy.h">
       <Filter>Entities\Enemies</Filter>
     </ClInclude>
@@ -578,7 +593,18 @@
     <ClInclude Include="Source\Poop.h">
       <Filter>Entities\Obstacles</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CreatePoopMessage.h" />
+    <ClInclude Include="source\IceBat.h" />
+    <ClInclude Include="Source\CreatePoopMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CreateStalactite.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HubWorldOrb.h" />
+    <ClInclude Include="source\IceBat.h" />
+    <ClInclude Include="source\IceTurtle.h" />
+    <ClInclude Include="source\IceGolem.h" />
+    <ClInclude Include="source\Profile.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />

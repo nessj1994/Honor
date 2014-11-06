@@ -43,11 +43,6 @@ Particle::Particle(const Particle& _Particle)
 
 Particle& Particle::operator=(const Particle& _other)
 {
-	if (this != &_other)
-	{
-		Particle Temp(_other);
-		return Temp;
-	}	
 	return *this;
 }
 
@@ -217,6 +212,6 @@ void Particle::Reset()
 {
 	m_fCurLifeSpan = 0;
 	m_blDead = false;
-	m_cCurrentColor.alpha = m_fAlphaStart;
+	m_cCurrentColor.alpha = (unsigned char)m_fAlphaStart;
 	m_cCurrentColor = m_cStartColor;
 } 

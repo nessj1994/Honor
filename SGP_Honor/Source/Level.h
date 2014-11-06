@@ -43,8 +43,11 @@ public:
 	// Accessors
 	int GetPlayerX() const { return m_nPlayerX; }
 	int GetPlayerY() const { return m_nPlayerY; }
+	int GetLevelWidth() const { return (m_nWidth * 32); }
+	int GetLevelHeight() const { return (m_nHeight * 32); }
 	int GetWidth() const { return m_nWidth; }
 	int GetHeight() const { return m_nHeight; }
+
 
 	//////////////////////////////
 	// Mutators

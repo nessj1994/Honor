@@ -41,6 +41,7 @@ class Pouncer;
 class Bull;
 class Jellyfish;
 class Crab;
+class HubWorldOrb;
 
 //
 //////////////////////////////////////////////////
@@ -74,10 +75,10 @@ public:
 	/////////////////////// Accessors ////////////////////////
 	Camera* GetCamera(void) const { return m_pCamera; }
 	Level* GetCurrentLevel(void) const { return m_pLevel; }
+	std::string GetLevelString(void) const { return m_strCurrLevel; }
 	float GetBorderSize(void) const { return m_fBorderSize; }
 	float GetMiniMapWidth(void) const { return m_fMiniMapWidth; }
 	float GetMiniMapHeight(void) const { return m_fMiniMapHeight; }
-
 
 	//////////////////////////////////////////////////////////
 	////////////////////// Mutators /////////////////////////
@@ -91,7 +92,7 @@ public:
 	void CreateActivator(int x, int y, bool _pressurePlate, bool _active, int _ID);
 	void CreateLaser(int x, int y, SGD::Vector _direction, int _ID, bool _on);
 	void CreateTurret(int x, int y, int _direction, float _timer);
-	void CreateDoor(int _x, int _y, bool _isHorizontal, int _ID);
+	void CreateDoor(int _x, int _y, bool _isHorizontal, int _ID, bool _startOpen);
 	void CreateMovingPlatform(int _x, int _y, bool _vertical, float _turnDistance, float _speed);
 	void CreateGeyser(int _x, int _y, float _speed, float _maxHeight, int _currState);
 	void CreateLava(int _x, int _y, float _speed, float _maxHeight, int _currState);
@@ -105,9 +106,10 @@ public:
 	void CreateFreezableLeftRamp(int _x, int _y);
 	void CreateFreezableRightRamp(int _x, int _y);
 	void CreateHintStatue(int _x, int _y, std::string _message);
-	void CreateTeleporter(int _x, int _y, std::string _level);
+	void CreateTeleporter(int _x, int _y, std::string _level, bool _hub);
 	void CreateEnemy(int _x, int _y, int _type);
 	void CreateBoss(int _x, int _y, int _type);
+	void CreateBossTeleporter(int _x, int _y, std::string _level, unsigned int _honor);
 
 	void LoadLevel(std::string _level);
 	void SetHonorVector(std::vector<bool> _value);
@@ -115,6 +117,8 @@ public:
 	void LoadHonorVector();
 	bool GetHonorValue(unsigned int _index);
 	unsigned int GetHonorVectorSize();
+	bool GetLevelUnlocked(std::string _level);
+	void UnlockLevel(std::string _level);
 
 private:
 
@@ -172,6 +176,7 @@ private:
 
 	std::map<std::string, std::string> m_mLevels;
 	std::map<std::string, std::vector<bool>> m_mCollectedHonor;
+	std::map<std::string, bool> m_mUnlockedLevels;
 
 	AnimTimeStamp ts;
 	
@@ -203,5 +208,7 @@ private:
 	float m_fMiniMapWidth = 0.0f;
 	float m_fMiniMapHeight = 0.0f;
 
+	//Hub World Orb
+	HubWorldOrb* m_pHubOrb;
 };
 

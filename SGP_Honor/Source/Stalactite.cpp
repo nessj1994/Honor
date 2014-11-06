@@ -1,5 +1,9 @@
 #include "Stalactite.h"
 #include "LevelCollider.h"
+#include "DestroyEntityMessage.h"
+#include "../SGD Wrappers/SGD_GraphicsManager.h"
+#include "../SGD Wrappers/SGD_EventManager.h"
+#include "../SGD Wrappers/SGD_Event.h"
 #include "Camera.h"
 
 Stalactite::Stalactite()
@@ -7,6 +11,7 @@ Stalactite::Stalactite()
 	m_szSize = { 16, 16 };
 	m_ptPosition = { 900, 200 };
 	m_ptStartPosition = { 900, 200 };
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/Fallingspike.png", {});
 }
 
 
@@ -51,6 +56,7 @@ void Stalactite::Render(void)
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
 	Camera::GetInstance()->Draw(rMyRect, { 255, 0, 255, 255 });
+	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1, {}, {});
 }
 
 int Stalactite::GetType(void) const
@@ -71,14 +77,18 @@ void Stalactite::HandleCollision(const IEntity* pOther)
 	{
 		m_bIsFalling = true;
 	}
-				  if(pOther->GetType() == ENT_SOLID_WALL)
-				  {
-				  m_bIsFalling = false;
-				  m_szSize = { 0, 0 };
-				  m_fRespawnTimer = 3.0f;
-				  m_vtVelocity.y = 0;
-				  m_ptPosition = m_ptStartPosition;
-				  }
+	if(pOther->GetType() == ENT_SOLID_WALL)
+	{
+		DestroyEntityMessage* Temp = new DestroyEntityMessage(this);
+		Temp->QueueMessage();
+		Temp = nullptr;
+	}
+	if (pOther->GetType() == ENT_PLAYER)
+	{
+	  //if so move back up but kill the player
+		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+		SGD::EventManager::GetInstance()->SendEventNow(&Event);
+	}
 
 
 }

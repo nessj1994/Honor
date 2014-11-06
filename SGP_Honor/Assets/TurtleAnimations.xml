@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations Character="Turtle">
+  <Animation name="turtleidle" spritesheet="Turtle.png" looping="0">
+    <Frame RenderRectLeft="4" RenderRectTop="5" RenderRectRight="79" RenderRectBottom="45" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.1" anchorpointX="33" anchorpointY="35" />
+  </Animation>
+  <Animation name="turtlefire" spritesheet="Turtle.png" looping="1">
+    <Frame RenderRectLeft="81" RenderRectTop="185" RenderRectRight="151" RenderRectBottom="237" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="37" anchorpointY="47" />
+    <Frame RenderRectLeft="159" RenderRectTop="180" RenderRectRight="224" RenderRectBottom="238" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="33" anchorpointY="52" />
+    <Frame RenderRectLeft="225" RenderRectTop="176" RenderRectRight="322" RenderRectBottom="235" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="56" anchorpointY="56" />
+    <Frame RenderRectLeft="322" RenderRectTop="185" RenderRectRight="397" RenderRectBottom="237" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="37" anchorpointY="47" />
+  </Animation>
+  <Animation name="turtledeath" spritesheet="Turtle.png" looping="0">
+    <Frame RenderRectLeft="6" RenderRectTop="399" RenderRectRight="76" RenderRectBottom="447" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="30" anchorpointY="45" />
+    <Frame RenderRectLeft="83" RenderRectTop="399" RenderRectRight="153" RenderRectBottom="447" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="29" anchorpointY="45" />
+    <Frame RenderRectLeft="159" RenderRectTop="402" RenderRectRight="236" RenderRectBottom="449" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="36" anchorpointY="43" />
+    <Frame RenderRectLeft="237" RenderRectTop="409" RenderRectRight="320" RenderRectBottom="449" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="39" anchorpointY="36" />
+    <Frame RenderRectLeft="318" RenderRectTop="407" RenderRectRight="398" RenderRectBottom="449" CollisionRectLeft="0" CollisionRectTop="0" CollisionRectRight="0" CollisionRectBottom="0" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="39" anchorpointY="39" />
+  </Animation>
+</Animations>

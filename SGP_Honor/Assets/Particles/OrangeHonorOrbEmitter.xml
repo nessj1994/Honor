@@ -1,0 +1,4 @@
+<Emitter Emitter_Shape="1" Spin_Speed="1" Radius="50" Pin_Edges="True" Max_Particles="10" Particle_Image="HonorParticle.png" Looping="True" Particle_Scale_X="1" Particle_Scale_Y="1" Start_Color_A="155" Start_Color_R="255" Start_Color_G="128" Start_Color_B="64" End_Color_A="0" End_Color_R="0" End_Color_G="0" End_Color_B="0" Color_Change_Scale="0" Alpha_Fade="2" Rotation="0" Gravity="0">
+  <Max_Particles Velocity_X="2" Velocity_Y="2" Life_Span="5" />
+  <Min_Particles Velocity_X="-2" Velocity_Y="-2" Life_Span="1" />
+</Emitter>

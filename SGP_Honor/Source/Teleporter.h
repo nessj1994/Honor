@@ -19,13 +19,18 @@ public:
 	/////////////////////////////////////////////////
 	/////////////////Accessors//////////////////////
 	std::string GetLevel(void) const { return m_sLevel; }
+	bool GetHubTeleporter(void) const { return m_bHubTeleporter; }
 
 	/////////////////////////////////////////////////
 	/////////////////Mutators//////////////////////
 	void SetLevel(std::string _level) { m_sLevel = _level; }
+	void SetHubTeleporter(bool _hub) { m_bHubTeleporter = _hub; }
 
-private:
+protected:
 	std::string m_sLevel;
+	bool m_bHubTeleporter = false;
+
+	SGD::HAudio m_hDoorClosed = SGD::INVALID_HANDLE;
 
 };
 

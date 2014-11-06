@@ -38,6 +38,7 @@ public:
 	void SetZoomScale(float _zoom) { m_fScale = _zoom; }
 
 	void SetPlayer(Player* _player) { m_pPlayer = _player; }
+	void SetCameraCap(unsigned int _BossRm) { m_nBossCamera = _BossRm; }
 
 	//Draw
 	void Draw(SGD::Rectangle _rect, SGD::Color _color);
@@ -56,20 +57,29 @@ private:
 	Camera(const Camera&)				= delete;
 	Camera& operator= (const Camera&)	= delete;
 
-	
+	unsigned int m_nBossCamera = 0;
 
 	unsigned int m_nScreenWidth = 0;
 	unsigned int m_nScreenHeight = 0;
 	unsigned int m_nHorizontalBuffer = 0;
 	unsigned int m_nVerticalBuffer = 0;
 
-	Level* m_pCurrentLevel = nullptr;
+	//Level* m_pCurrentLevel = nullptr;
 	Player* m_pPlayer = nullptr;
 
 	SGD::Point m_ptCameraPosition = { 0, 0 };
 
 	//SGD::Size m_szZoomScale = { 0.5f, 0.5f };
 	float m_fScale = 1;
+
+
+	//Pan Values
+	float m_fCurrentPanX = 5.5f;
+	float m_fCurrentPanY = 0.5f ;
+
+	float m_fDesiredPanX = 0;
+	float m_fDesiredPanY = 0;
+
 	
 };
 

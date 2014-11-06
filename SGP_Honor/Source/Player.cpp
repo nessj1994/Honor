@@ -39,6 +39,24 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("KILL_PLAYER");
 	Listener::RegisterForEvent("BOUNCE_VERTICAL");
 	Listener::RegisterForEvent("BOUNCE_HORIZONTAL");
+	Listener::RegisterForEvent("ADD_SPRAY");
+
+	//Screen events
+	Listener::RegisterForEvent("Screen2x2");
+	Listener::RegisterForEvent("Screen2x3");
+	Listener::RegisterForEvent("Screen2x4");
+	Listener::RegisterForEvent("Screen3x3");
+	Listener::RegisterForEvent("Screen2x1.5");
+	Listener::RegisterForEvent("Screen1.5x2");
+	Listener::RegisterForEvent("Screen1.5x3");
+	Listener::RegisterForEvent("FINALBOSS");
+	Listener::RegisterForEvent("BossLevel");
+
+
+
+
+
+
 	SetDirection({ 1, 0 });
 	m_pDash = new Dash();
 	m_pBounce = new Bounce();
@@ -68,6 +86,7 @@ Player::~Player()
 	delete m_emHonor;
 	delete m_emFeatherExplosion;
 	delete m_emHawkReturn;
+	delete m_pSword;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHonorParticleHUD);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hIceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBounceEffect);
@@ -84,6 +103,7 @@ void Player::Update(float elapsedTime)
 	m_emFeatherExplosion->Update(elapsedTime);
 	m_emHawkReturn->Update(elapsedTime);
 	//
+	
 
 	//if (m_pSword != nullptr)
 	//{
@@ -99,7 +119,12 @@ void Player::Update(float elapsedTime)
 		UpdateArmor(elapsedTime);
 		UpdateEmitters(elapsedTime);
 		UpdateTimers(elapsedTime);
-
+		//Snared Factors done do anything if Snared
+		if (m_bSnared)
+		{
+			UpdateSnared(elapsedTime);
+			return;
+		}
 
 		float leftStickXOff = pInput->GetLeftJoystick(0).x;
 		float leftStickYOff = pInput->GetLeftJoystick(0).y;
@@ -305,11 +330,6 @@ void Player::HandleCollision(const IEntity* pOther)
 		JellyfishCollision(pOther);
 	}
 
-	if(pOther->GetType() == ENT_BOSS_DOOR)
-	{
-		BasicCollision(pOther);
-	}
-
 	if(pOther->GetType() == Entity::ENT_HONOR)
 	{
 		const Honor* honor = dynamic_cast<const Honor*>(pOther);
@@ -394,7 +414,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		{
 			m_vtVelocity.x += 400;
 		}
-		SetVelocity(GetVelocity() * 1.2);
+		SetVelocity(GetVelocity() * 1.2f);
 
 
 
@@ -433,7 +453,7 @@ void Player::HandleCollision(const IEntity* pOther)
 			m_vtVelocity.x += 50;
 		}
 		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
-		SetVelocity(GetVelocity() * 1.01 );
+		SetVelocity(GetVelocity() * 1.01f );
 
 	}
 
@@ -507,7 +527,22 @@ void Player::HandleCollision(const IEntity* pOther)
 			ThrowPlayer(bull->GetFacingRight());
 		}
 	}
+	if(pOther->GetType() == Entity::ENT_ICE_GOLEM)
+	{
+		SGD::Event* pATEvent = new SGD::Event("KILL_PLAYER", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
+	}
+
+	if(pOther->GetType() == Entity::ENT_BOSS_YETI)
+	{
+		//SGD::Event* pATEvent = new SGD::Event("KILL_PLAYER", nullptr, this);
+		//SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		//pATEvent = nullptr;
+	}
+
 }
+
 
 void Player::BasicCollision(const IEntity* pOther)
 {
@@ -798,17 +833,20 @@ void Player::LeftRampCollision(const IEntity* pOther)
 		m_ptPosition.y = (float)rObject.bottom - tempVal -  GetSize().height;
 		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
 	}
+	 
 	
 	else if(nIntersectWidth == 31)
 	{
-		//m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
-		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
-		tempVal = 31 / 32;
+		m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
+		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
 
-		m_ptPosition.y = (float)rObject.bottom - GetSize().height - tempVal;
-		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * 1);
 
-		BasicCollision(pOther);
+		//tempVal = 31 / 32;
+		//
+		//m_ptPosition.y = (float)rObject.bottom - GetSize().height - tempVal;
+		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * 1);
+		//
+		//BasicCollision(pOther);
 		
 	
 	}
@@ -818,6 +856,7 @@ void Player::LeftRampCollision(const IEntity* pOther)
 
 		m_ptPosition.x += 1;
 	}
+
 
 
 	//else
@@ -1224,6 +1263,69 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		SetVelocity({ 10000.0f * (*(float*)pEvent->GetData()), -1000 });
 		SetPosition({ GetPosition().x, GetPosition().y - 10 });
 
+	}
+
+	if(pEvent->GetEventID() == "ADD_SPRAY")
+	{
+		m_bHasIce = true;
+	}
+
+	if (pEvent->GetEventID() == "Screen2x2")
+	{
+		m_fPanX = 2;
+		m_fPanY = 2;
+		Camera::GetInstance()->SetCameraCap(0);
+	}
+	if (pEvent->GetEventID() == "Screen2x3")
+	{
+		m_fPanX = 2;
+		m_fPanY = 3;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "Screen2x4")
+	{
+		m_fPanX = 2;
+		m_fPanY = 4;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "Screen3x3")
+	{
+		m_fPanX = 3;
+		m_fPanY = 3;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "Screen2x1.5")
+	{
+		m_fPanX = 2;
+		m_fPanY = 1.5;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "Screen1.5x2")
+	{
+		m_fPanX = 1.5;
+		m_fPanY = 2;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "Screen1.5x3")
+	{
+		m_fPanX = 1.5;
+		m_fPanY = 3;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "FINALBOSS")
+	{
+		Camera::GetInstance()->SetCameraCap(5);
+
+	}
+	if (pEvent->GetEventID() == "BossLevel")
+	{
+		Camera::GetInstance()->SetCameraCap(2);
 	}
 }
 
@@ -1912,19 +2014,19 @@ void Player::UpdateHawk(float elapsedTime)
 			SGD::Vector VEL = { 0, 0 };
 			if(m_ptPosition.x < m_emHawkReturn->GetPosition().x)
 			{
-				VEL.x = -300;
+				VEL.x = -600;
 			}
 			if(m_ptPosition.y < m_emHawkReturn->GetPosition().y)
 			{
-				VEL.y = -300;
+				VEL.y = -600;
 			}
 			if(m_ptPosition.x > m_emHawkReturn->GetPosition().x)
 			{
-				VEL.x = 300;
+				VEL.x = 600;
 			}
 			if(m_ptPosition.y > m_emHawkReturn->GetPosition().y)
 			{
-				VEL.y = 300;
+				VEL.y = 600;
 			}
 			SGD::Point TempPos = m_emHawkReturn->GetPosition();
 			TempPos += VEL * elapsedTime;
@@ -1944,7 +2046,7 @@ void Player::UpdateSpray(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	if(pInput->IsKeyDown(SGD::Key::F) == true
-		/*&& m_fShotTimer > 0.25f*/)
+		/*&& m_fShotTimer > 0.25f*/ && m_bHasIce == true)
 	{
 		if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hIceEffect)))
 		{
@@ -2178,6 +2280,15 @@ void Player::SetHasBounce(bool bounce)
 	if (bounce == true)
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hGainAbility);
+	}
+}
+
+void Player::UpdateSnared(float elapsedTime)
+{
+	m_fSnareTimer += elapsedTime;
+	if (m_fSnareTimer > 1)
+	{
+		m_bSnared = false;
 	}
 }
 

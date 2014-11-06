@@ -1,11 +1,13 @@
 #pragma once
 #include "Entity.h"
 
+#include "../SGD Wrappers/SGD_Listener.h"
+
 // Forward declarations
 class Emitter;
 
 class Honor :
-	public Entity
+	public Entity, SGD::Listener
 {
 public:
 	Honor();
@@ -19,6 +21,7 @@ public:
 	virtual int GetType(void) const override { return ENT_HONOR; }
 	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
+	void HandleEvent(const SGD::Event* pEvent);
 
 	void SetEmitter();
 

@@ -71,27 +71,37 @@ void Hawk::Update(float elapsedTime)
 			SGD::Vector VEL = { 0, 0 };
 			if (m_poTarget.x + 5 < m_ptPosition.x)
 			{
-				VEL.x = -300;
+				VEL.x = -800;
 			}
 			if (m_poTarget.y + 5 < m_ptPosition.y)
 			{
-				VEL.y = -300;
+				VEL.y = -800;
 			}
 			if (m_poTarget.x - 5 > m_ptPosition.x)
 			{
-				VEL.x = 300;
+				VEL.x = 800;
 			}
 			if (m_poTarget.y - 5 > m_ptPosition.y)
 			{
-				VEL.y = 300;
+				VEL.y = 800;
 			}
 
 			SetVelocity(VEL);
 		}
 		else
 		{
-			((Caveman*)m_pOwner)->HawkExplode(m_ptPosition);
-			m_bDead = true;
+			//Go to the second position if not at it.
+			if (m_poTarget == m_pEndPos)
+			{
+				((Caveman*)m_pOwner)->HawkExplode(m_ptPosition);
+				m_bDead = true;
+			}
+			else
+			{
+				((Caveman*)m_pOwner)->ReadyToDrop();
+				m_poTarget = m_pEndPos;
+			}
+			
 		}
 	}
 
@@ -108,7 +118,7 @@ void Hawk::Update(float elapsedTime)
 		};
 
 
-		if (rSelf.IsIntersecting(rScreen) == false)
+		if (rSelf.IsIntersecting(rScreen) == false && m_pOwner->GetType() != ENT_BOSS_CAVEMAN)
 		{
 			//DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
 			//pMsg->QueueMessage();
@@ -129,11 +139,20 @@ void Hawk::Update(float elapsedTime)
 }
 
 
-void Hawk::Attack(SGD::Point _Pos)
+void Hawk::Attack(SGD::Point _Pos,bool PlayerFacing)
 {
 	if (m_pOwner->GetType() == ENT_BOSS_CAVEMAN)
 	{
 		m_poTarget = _Pos;
+		m_pEndPos = _Pos;
+		if (PlayerFacing)
+		{
+			m_pEndPos.x -= 600;
+		}
+		else
+		{
+			m_pEndPos.x += 600;
+		}		
 		m_bDead = false;
 	}
 }
@@ -210,6 +229,20 @@ void Hawk::HandleCollision(const IEntity* pOther)
 
 		SetVelocity({ 0, 0 });
 
+	}
+
+	if(pOther->GetType() == ENT_BOSS_WIZARD &&
+		pOther != GetOwner())
+	{
+		if (GetOwner()->GetType() == ENT_PLAYER)
+		{
+			Player* temp = dynamic_cast<Player*>(GetOwner());
+			temp->HawkExplode(m_ptPosition);
+		}
+
+		SetPosition({ -100, -100 });
+
+		SetVelocity({ 0, 0 });
 	}
 
 	if (pOther->GetType() == ENT_SWITCH &&

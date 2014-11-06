@@ -55,6 +55,7 @@ public:
 	void UpdateConstants(float elapsedTime);
 	void UpdateVelocity(float elapsedTime);
 	void UpdatePlayerSwing(float elapsedTime);
+	void UpdateSnared(float elapsedTime);
 
 	////////////////////////////////////////////////
 	/////////////////////Methods///////////////////
@@ -90,13 +91,17 @@ public:
 	bool GetIsInputStuck(void)const { return is_Stuck; }
 	bool GetDead(void) const { return m_bDead; }
 	bool GetIsSwinging(void) const { return is_Swinging; }
-	bool GetStunned(void) const { return m_bStunned; }
-
+	bool GetSnared(void) const { return m_bSnared; }
+	bool GetStunned(void) const{ return m_bStunned; }
 	//Floats
 	float GetDashTime(void) const { return m_fDashTime; }
 	//float GetJumpCapTime(void) const { return m_fJumpVelCap; }
 	float GetJumpVelCur(void) const { return m_fJumpVelCur; }
 	float GetDeathTimer(void) const { return m_fDeathTimer; }
+
+	//Pan Accessors for Camera
+	float GetPanValueX(void)const { return m_fPanX; }
+	float GetPanValueY(void)const { return m_fPanY; }
 
 	//Abilities
 	Dash* GetDash(void) const { return m_pDash; }
@@ -133,6 +138,10 @@ public:
 
 	//Hawk Explosion function
 	void HawkExplode(SGD::Point _pos);
+
+	//Updateing and changeing Snared factors
+	void SetSnared(bool _Snared) { m_bSnared = _Snared;  m_fSnareTimer = 0; }
+
 private:
 
 
@@ -175,6 +184,11 @@ private:
 	float m_fHawkTimer = 1.0f;
 	float m_fSwingTimer = 0.0f;
 
+	//Screen pan value
+	float m_fPanX = 3;
+	float m_fPanY = 2;
+
+
 	unsigned int m_unCurrentState = 0;
 	unsigned int m_unHonorCollected = 0;
 
@@ -210,6 +224,9 @@ private:
 	//SLowing Down with friction
 	bool m_bSlowed;
 
+	//GEtting Snared
+	bool m_bSnared;
+	float m_fSnareTimer;
 };
 
 
