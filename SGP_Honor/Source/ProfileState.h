@@ -25,5 +25,8 @@ private:
 
 	ProfileState(ProfileState&) = delete;
 	ProfileState& operator= (ProfileState&) = delete;
+
+	unsigned int m_unCursor = 0;
+
 };
 
