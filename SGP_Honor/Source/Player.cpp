@@ -1713,7 +1713,8 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 void Player::UpdateDash(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if(pInput->IsKeyDown(SGD::Key::Tab) == true
+	if(pInput->IsKeyPressed(SGD::Key::Tab) == true
+	//if (pInput->IsKeyDown(SGD::Key::Tab) == true
 		|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
 	{
 		GetDash()->GetEMDash()->Finish(false);
