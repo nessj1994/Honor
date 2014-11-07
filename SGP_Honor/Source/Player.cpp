@@ -463,6 +463,24 @@ void Player::HandleCollision(const IEntity* pOther)
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}
 
+	if (pOther->GetType() == Entity::ENT_WIZARD_DASH)
+	{
+		if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hScream))
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hScream);
+		//Kill the player
+		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+		SGD::EventManager::GetInstance()->SendEventNow(&Event);
+	}
+
+	if (pOther->GetType() == Entity::ENT_WIZARD_HAWK)
+	{
+		if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hScream))
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hScream);
+		//Kill the player
+		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+		SGD::EventManager::GetInstance()->SendEventNow(&Event);
+	}
+
 
 	if(pOther->GetType() == Entity::ENT_ICE)
 	{
@@ -1566,27 +1584,29 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 
 void Player::UpdateBounce(float elapsedTime)
 {
-
-	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-
-	//pInput->GetDPad(0);
-
-	if(pInput->IsKeyDown(SGD::Key::W) == true
-		|| pInput->IsButtonDown(0, 4 /*Left Bumper*/))
+	if (HasBounce() == true)
 	{
-		//if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBounceEffect)))
-		//{
-		//}
-		GetBounce()->GetEMBubbles()->Finish(false);
-		SetIsBouncing(true);
-	}
-	else
-	{
-		GetBounce()->GetEMBubbles()->Finish();
-		if(GetBounce()->GetEMBubbles()->Done())
+		SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+		//pInput->GetDPad(0);
+
+		if (pInput->IsKeyDown(SGD::Key::W) == true
+			|| pInput->IsButtonDown(0, 4 /*Left Bumper*/))
 		{
-			//Reseting particles for the bounce since its false
-			GetBounce()->GetEMBubbles()->KillParticles(m_ptPosition);
+			//if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBounceEffect)))
+			//{
+			//}
+			GetBounce()->GetEMBubbles()->Finish(false);
+			SetIsBouncing(true);
+		}
+		else
+		{
+			GetBounce()->GetEMBubbles()->Finish();
+			if (GetBounce()->GetEMBubbles()->Done())
+			{
+				//Reseting particles for the bounce since its false
+				GetBounce()->GetEMBubbles()->KillParticles(m_ptPosition);
+			}
 		}
 	}
 
@@ -1754,44 +1774,47 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 
 void Player::UpdateDash(float elapsedTime)
 {
-	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if(pInput->IsKeyPressed(SGD::Key::Tab) == true
-	//if (pInput->IsKeyDown(SGD::Key::Tab) == true
-		|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
+	if (HasDash() == true)
 	{
-		GetDash()->GetEMDash()->Finish(false);
-		CastDash();
-		m_ts.SetPlaying(true);
-		m_ts.ResetCurrFrame();
-		if (m_bHasArmor == false)
+		SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+		if (pInput->IsKeyPressed(SGD::Key::Tab) == true
+			//if (pInput->IsKeyDown(SGD::Key::Tab) == true
+			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
 		{
-			m_ts.SetCurrAnimation("dashing");
+			GetDash()->GetEMDash()->Finish(false);
+			CastDash();
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+			if (m_bHasArmor == false)
+			{
+				m_ts.SetCurrAnimation("dashing");
+			}
+			else
+			{
+				m_ts.SetCurrAnimation("Armor Player dashing");
+			}
 		}
 		else
 		{
-			m_ts.SetCurrAnimation("Armor Player dashing");
+			GetDash()->GetEMDash()->Finish();
+			if (GetDash()->GetEMDash()->Done())
+			{
+				//Reset Dash Particles to the players position
+				GetDash()->GetEMDash()->KillParticles(m_ptPosition);
+			}
 		}
-	}
-	else
-	{
-		GetDash()->GetEMDash()->Finish();
-		if(GetDash()->GetEMDash()->Done())
+		if (this->IsDashing() == false && (m_ts.GetCurrAnimation() == "dashing" || m_ts.GetCurrAnimation() == "Armor Player dashing"))
 		{
-			//Reset Dash Particles to the players position
-			GetDash()->GetEMDash()->KillParticles(m_ptPosition);
-		}
-	}
-	if (this->IsDashing() == false && (m_ts.GetCurrAnimation() == "dashing" || m_ts.GetCurrAnimation() == "Armor Player dashing"))
-	{
-		m_ts.SetPlaying(true);
-		m_ts.ResetCurrFrame();
-		if (m_bHasArmor == false)
-		{
-			m_ts.SetCurrAnimation("Idle");
-		}
-		else
-		{
-			m_ts.SetCurrAnimation("Armor Player Idle");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+			if (m_bHasArmor == false)
+			{
+				m_ts.SetCurrAnimation("Idle");
+			}
+			else
+			{
+				m_ts.SetCurrAnimation("Armor Player Idle");
+			}
 		}
 	}
 }
@@ -1885,204 +1908,207 @@ void Player::UpdateJump(float elapsedTime)
 
 void Player::UpdateHawk(float elapsedTime)
 {
-	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if(pInput->IsKeyDown(SGD::Key::R) == true
-		&& m_fShotTimer > 0.25f)
+	if (HasHawk() == true)
 	{
-		m_fShotTimer = 0.0f;
-		CreateProjectileMessage* pMsg = new CreateProjectileMessage(this);
-		pMsg->QueueMessage();
-		pMsg = nullptr;
-	}
-
-	float triggerOff = pInput->GetTrigger(0);
-	//= pInput->GetLeftJoystick(0).x;
-
-
-	if(pInput->IsKeyDown(SGD::Key::D) == true
-		|| triggerOff > 0 /*JOYSTICK_DEADZONE*/)
-	{
-
-		if(m_bHawkCast == false
-			&& m_fHawkTimer > 1.0f)
+		SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+		if (pInput->IsKeyDown(SGD::Key::R) == true
+			&& m_fShotTimer > 0.25f)
 		{
-			//Dont spawn another hawk until particles are done
-			if(!m_bReturningHawk)
-			{
-				m_bHawkCast = true;
-				m_bHawkExplode = false;
-				CreateHawkMessage* pMsg = new CreateHawkMessage(this);
-				pMsg->QueueMessage();
-				pMsg = nullptr;
-			}
-		}
-		else
-		{
-			if(GetHawkPtr() != nullptr)
-			{
-				float rightStickXOff = pInput->GetRightJoystick(0).x;
-				float rightStickYOff = pInput->GetRightJoystick(0).y;
-
-
-				//if (pInput->IsKeyDown(SGD::Key::LeftArrow) == true
-				//	|| rightStickXOff < 0)
-				//{
-				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff ) * elapsedTime, GetVelocity().y));
-				//}
-				//if (pInput->IsKeyDown(SGD::Key::RightArrow) == true
-				//	|| rightStickXOff > 0)
-				//{
-				//	GetHawkPtr()->SetVelocity(SGD::Vector(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetVelocity().y)));
-				//}
-				//
-				//if (pInput->IsKeyDown(SGD::Key::UpArrow) == true
-				//	|| rightStickYOff < 0)
-				//{
-				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff ) * elapsedTime));
-				//}
-				//if (pInput->IsKeyDown(SGD::Key::DownArrow) == true
-				//	|| rightStickYOff > 0)
-				//{
-				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
-				//}
-				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetVelocity().y));
-				//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
-
-				GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
-				// X Friction
-
-				if(rightStickXOff == 0)
-				{
-
-					if(GetHawkPtr()->GetVelocity().x < 0)
-					{
-						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
-
-						if(GetHawkPtr()->GetVelocity().x > 0.01f)
-						{
-							GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
-
-						}
-					}
-					if(GetHawkPtr()->GetVelocity().x > 0)
-					{
-						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
-
-						if(GetHawkPtr()->GetVelocity().x < -0.01f)
-						{
-							GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
-
-						}
-					}
-
-				}
-
-
-				// Y Friction
-
-				if(rightStickYOff == 0)
-				{
-					if(GetHawkPtr()->GetVelocity().y < 0)
-					{
-						//GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + GetHawkPtr()->GetAirFriction()));
-
-						if(GetHawkPtr()->GetVelocity().y > 0.007f)
-						{
-
-						}
-						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
-
-					}
-					if(GetHawkPtr()->GetVelocity().y > 0)
-					{
-						//GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y - GetHawkPtr()->GetAirFriction()));
-
-						if(GetHawkPtr()->GetVelocity().y < -0.007f)
-						{
-
-
-						}
-
-						GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
-
-					}
-
-				}
-
-
-
-			}
-
+			m_fShotTimer = 0.0f;
+			CreateProjectileMessage* pMsg = new CreateProjectileMessage(this);
+			pMsg->QueueMessage();
+			pMsg = nullptr;
 		}
 
-	}
-	if(triggerOff <= 0
-		&& pInput->IsKeyDown(SGD::Key::D) == false)
-	{
-		m_bHawkCast = false;
+		float triggerOff = pInput->GetTrigger(0);
+		//= pInput->GetLeftJoystick(0).x;
 
-		//if HawkPtr != null set to NULL
-		if(GetHawkPtr() != nullptr)
+
+		if (pInput->IsKeyDown(SGD::Key::D) == true
+			|| triggerOff > 0 /*JOYSTICK_DEADZONE*/)
 		{
-			m_fHawkTimer = 0.0f;
 
-			if(!m_bReturningHawk)
+			if (m_bHawkCast == false
+				&& m_fHawkTimer > 1.0f)
 			{
-				//Emitter Stuff
-				m_bHawkExplode = true;
-				m_emFeatherExplosion->Burst(GetHawkPtr()->GetPosition());
-				m_emHawkReturn->Burst(GetHawkPtr()->GetPosition());
-				m_bReturningHawk = true;
+				//Dont spawn another hawk until particles are done
+				if (!m_bReturningHawk)
+				{
+					m_bHawkCast = true;
+					m_bHawkExplode = false;
+					CreateHawkMessage* pMsg = new CreateHawkMessage(this);
+					pMsg->QueueMessage();
+					pMsg = nullptr;
+				}
 			}
 			else
 			{
-				m_bHawkExplode = false;
+				if (GetHawkPtr() != nullptr)
+				{
+					float rightStickXOff = pInput->GetRightJoystick(0).x;
+					float rightStickYOff = pInput->GetRightJoystick(0).y;
+
+
+					//if (pInput->IsKeyDown(SGD::Key::LeftArrow) == true
+					//	|| rightStickXOff < 0)
+					//{
+					//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff ) * elapsedTime, GetVelocity().y));
+					//}
+					//if (pInput->IsKeyDown(SGD::Key::RightArrow) == true
+					//	|| rightStickXOff > 0)
+					//{
+					//	GetHawkPtr()->SetVelocity(SGD::Vector(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetVelocity().y)));
+					//}
+					//
+					//if (pInput->IsKeyDown(SGD::Key::UpArrow) == true
+					//	|| rightStickYOff < 0)
+					//{
+					//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff ) * elapsedTime));
+					//}
+					//if (pInput->IsKeyDown(SGD::Key::DownArrow) == true
+					//	|| rightStickYOff > 0)
+					//{
+					//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
+					//}
+					//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetVelocity().y));
+					//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
+
+					GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
+					// X Friction
+
+					if (rightStickXOff == 0)
+					{
+
+						if (GetHawkPtr()->GetVelocity().x < 0)
+						{
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
+
+							if (GetHawkPtr()->GetVelocity().x > 0.01f)
+							{
+								GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
+
+							}
+						}
+						if (GetHawkPtr()->GetVelocity().x > 0)
+						{
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
+
+							if (GetHawkPtr()->GetVelocity().x < -0.01f)
+							{
+								GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
+
+							}
+						}
+
+					}
+
+
+					// Y Friction
+
+					if (rightStickYOff == 0)
+					{
+						if (GetHawkPtr()->GetVelocity().y < 0)
+						{
+							//GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + GetHawkPtr()->GetAirFriction()));
+
+							if (GetHawkPtr()->GetVelocity().y > 0.007f)
+							{
+
+							}
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
+
+						}
+						if (GetHawkPtr()->GetVelocity().y > 0)
+						{
+							//GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y - GetHawkPtr()->GetAirFriction()));
+
+							if (GetHawkPtr()->GetVelocity().y < -0.007f)
+							{
+
+
+							}
+
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, 0));
+
+						}
+
+					}
+
+
+
+				}
+
 			}
 
+		}
+		if (triggerOff <= 0
+			&& pInput->IsKeyDown(SGD::Key::D) == false)
+		{
+			m_bHawkCast = false;
 
-			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ GetHawkPtr() };
-			pMsg->QueueMessage();
-			pMsg = nullptr;
+			//if HawkPtr != null set to NULL
+			if (GetHawkPtr() != nullptr)
+			{
+				m_fHawkTimer = 0.0f;
 
-			SetHawkPtr(nullptr);
+				if (!m_bReturningHawk)
+				{
+					//Emitter Stuff
+					m_bHawkExplode = true;
+					m_emFeatherExplosion->Burst(GetHawkPtr()->GetPosition());
+					m_emHawkReturn->Burst(GetHawkPtr()->GetPosition());
+					m_bReturningHawk = true;
+				}
+				else
+				{
+					m_bHawkExplode = false;
+				}
+
+
+				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ GetHawkPtr() };
+				pMsg->QueueMessage();
+				pMsg = nullptr;
+
+				SetHawkPtr(nullptr);
+
+			}
 
 		}
 
-	}
 
-
-	//Emitter Hawk Returning changing the position with velocity
-	if(m_bReturningHawk)
-	{
-		SGD::Vector distance = m_ptPosition - m_emHawkReturn->GetPosition();
-		if(distance.ComputeLength() > 10)
+		//Emitter Hawk Returning changing the position with velocity
+		if (m_bReturningHawk)
 		{
-			SGD::Vector VEL = { 0, 0 };
-			if(m_ptPosition.x < m_emHawkReturn->GetPosition().x)
+			SGD::Vector distance = m_ptPosition - m_emHawkReturn->GetPosition();
+			if (distance.ComputeLength() > 10)
 			{
-				VEL.x = -600;
+				SGD::Vector VEL = { 0, 0 };
+				if (m_ptPosition.x < m_emHawkReturn->GetPosition().x)
+				{
+					VEL.x = -600;
+				}
+				if (m_ptPosition.y < m_emHawkReturn->GetPosition().y)
+				{
+					VEL.y = -600;
+				}
+				if (m_ptPosition.x > m_emHawkReturn->GetPosition().x)
+				{
+					VEL.x = 600;
+				}
+				if (m_ptPosition.y > m_emHawkReturn->GetPosition().y)
+				{
+					VEL.y = 600;
+				}
+				SGD::Point TempPos = m_emHawkReturn->GetPosition();
+				TempPos += VEL * elapsedTime;
+				m_emHawkReturn->SetPosition(TempPos);
+				m_emHawkReturn->Finish(false);
 			}
-			if(m_ptPosition.y < m_emHawkReturn->GetPosition().y)
+			else
 			{
-				VEL.y = -600;
+				m_emHawkReturn->Finish();
+				m_bReturningHawk = false;
 			}
-			if(m_ptPosition.x > m_emHawkReturn->GetPosition().x)
-			{
-				VEL.x = 600;
-			}
-			if(m_ptPosition.y > m_emHawkReturn->GetPosition().y)
-			{
-				VEL.y = 600;
-			}
-			SGD::Point TempPos = m_emHawkReturn->GetPosition();
-			TempPos += VEL * elapsedTime;
-			m_emHawkReturn->SetPosition(TempPos);
-			m_emHawkReturn->Finish(false);
-		}
-		else
-		{
-			m_emHawkReturn->Finish();
-			m_bReturningHawk = false;
 		}
 	}
 

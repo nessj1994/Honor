@@ -204,11 +204,11 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadHonorVector();
 	
-	LoadLevel("Level3_5");
+	//LoadLevel("Level5_5");
 
 	//LoadLevel("Level5_5");
 
-	//LoadLevel("HubLevel");
+	LoadLevel("HubLevel");
 
 	//("HubLevel");
 
@@ -423,6 +423,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_DOOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_YETI);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ICE_GOLEM);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_WIZARD_DASH);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_WIZARD_HAWK);
 
 
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
@@ -774,16 +776,14 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
 			}
 
+			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_WIZARD)
+			{
+				  pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+
+			}
+
 			pProj->Release();
 			pProj = nullptr;
-											  if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_WIZARD)
-											  {
-												  pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
-
-											  }
-
-											  pProj->Release();
-											  pProj = nullptr;
 
 
 			break;
@@ -958,11 +958,11 @@ Entity* GameplayState::CreateGravProjectile(Entity* pOwner) const
 
 Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 {
-	HorizontalBubble* proj = new HorizontalBubble();
+	/*HorizontalBubble* proj = new HorizontalBubble();
 	proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y - 50));
 	proj->SetOwner(pOwner);
-	proj->SetSize({ 40, 40 });
-	return proj;
+	proj->SetSize({ 40, 40 });*/
+
 	if (pOwner->GetType() == Entity::ENT_BOSS_WIZARD)
 	{
 
@@ -1006,7 +1006,7 @@ Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 	else
 	{
 		HorizontalBubble* proj = new HorizontalBubble();
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + 80));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y - 50));
 		proj->SetOwner(pOwner);
 		proj->SetSize({ 40, 40 });
 
