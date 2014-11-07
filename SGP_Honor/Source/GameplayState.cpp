@@ -205,7 +205,7 @@ void GameplayState::Enter(void) //Load Resources
 	LoadHonorVector();
 	LoadLevel("Level4_5");
 
-	//LoadLevel("Level3_1");
+	LoadLevel("Level1_1");
 
 	//LoadLevel("Level5_5");
 
