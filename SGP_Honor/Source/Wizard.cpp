@@ -20,8 +20,8 @@ Wizard::Wizard() : Listener(this)
 	m_bsCurrState = WZ_BULL;
 	SetSize({ 160.0f, 96.0f });
 	SetHitPoints(3);
-	AnimationEngine::GetInstance()->LoadAnimation("Assets/Bull_Animation.xml");
-	m_ts.SetCurrAnimation("Bull_Running");
+	AnimationEngine::GetInstance()->LoadAnimation("Assets/animationsWIZARD.xml");
+	m_ts.SetCurrAnimation("Wizard Floating");
 	m_ts.SetPlaying(true);
 	m_hVictory = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/BossDefeat.wav");
 
@@ -56,7 +56,7 @@ void Wizard::Update(float elapsedTime)
 	{
 	case WZ_FLOATING:
 	{
-						m_ts.SetCurrAnimation("Bull_Running");
+						m_ts.SetCurrAnimation("Wizard Floating");
 						m_ts.SetPlaying(true);
 						m_ts.SetSpeed(1.0f);
 
@@ -336,6 +336,8 @@ void Wizard::CastClones()
 		dashPtr4->SetPosition({ 800, 900 });
 		dashPtr4->SetTimer(0.8f);
 
+		
+		
 	}
 
 	if (m_bsCurrState == WZ_HAWK)
@@ -382,7 +384,7 @@ void Wizard::CastClones()
 
 void Wizard::ClonesUpdate(float elapsedTime)
 {
-	m_ts.SetCurrAnimation("Bull_Running");
+	m_ts.SetCurrAnimation("Wizard Floating");
 	m_ts.SetPlaying(true);
 	m_ts.SetSpeed(1.0f);
 
@@ -603,7 +605,7 @@ void Wizard::CastHawks()
 void Wizard::HawkUpdate(float elapsedTime)
 {
 
-	m_ts.SetCurrAnimation("Bull_Running");
+	m_ts.SetCurrAnimation("Wizard Floating");
 	m_ts.SetPlaying(true);
 	m_ts.SetSpeed(1.0f);
 
