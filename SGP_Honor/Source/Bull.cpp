@@ -1,6 +1,7 @@
 #include "Bull.h"
 #include "AnimationEngine.h"
 #include "Camera.h"
+#include "DestroyEntityMessage.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
@@ -25,7 +26,7 @@ Bull::Bull() : Listener(this)
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/Bull_Animation.xml");
 	m_ts.SetCurrAnimation("Bull_Running");
 	m_ts.SetPlaying(true);
-	SetHitPoints(3);
+	SetHitPoints(1);
 	m_eFire1 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect1.xml", "FireEffect1", m_ptPosition);
 	m_eFire2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect2.xml", "FireEffect2", m_ptPosition);
 
@@ -230,8 +231,8 @@ void Bull::Update(float elapsedTime)
 			m_ts.SetSpeed(2.0f * m_fSlowTimer + 1.0f);
 
 			// Play sounds
-			if (m_ts.GetCurrFrame() == 0 ||
-				m_ts.GetCurrFrame() == 4)
+			if ((m_ts.GetCurrFrame() == 0 && m_unPrevFrame != 0) ||
+				(m_ts.GetCurrFrame() == 4 && m_unPrevFrame != 4))
 			{
 				pAudio->PlayAudio(m_hWalking);
 			}
@@ -389,6 +390,11 @@ void Bull::Update(float elapsedTime)
 				// TODO Delete bull, give player dash, update room
 				Player * player = (Player*)(GetPlayer());
 				player->SetHasDash(true);
+				GameplayState::GetInstance()->CreateTeleporter(1000, 512, "Level2_1", false);
+				GameplayState::GetInstance()->CreateHintStatue(700, 480, "You have dash!");
+				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+				pMsg->QueueMessage();
+				pMsg = nullptr;
 			}
 			break;
 		}

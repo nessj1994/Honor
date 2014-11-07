@@ -21,7 +21,6 @@ IceGolem::IceGolem() : Listener(this)
 	m_hSmashSound = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/YetiAttack.wav");
 	m_hDeathSound = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/TurtleDeath.wav");
 	m_hHitSound = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/TurtleHit.wav");
-
 }
 
 
@@ -30,7 +29,6 @@ IceGolem::~IceGolem()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hDeathSound);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSmashSound);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hHitSound);
-
 	//SetPlayer(nullptr);
 }
 

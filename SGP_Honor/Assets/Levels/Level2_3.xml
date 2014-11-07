@@ -120357,7 +120357,7 @@
 			<Argument type="1" name="ActivatorIndex" value="0" />
 			<Argument type="0" name="On" value="1" />
 		</Entity>
-		<Entity type="18" x="4000" y="1408" numArgs="2" name="Teleporter_1">
+		<Entity type="18" x="4000" y="1440" numArgs="2" name="Teleporter_1">
 			<Argument type="0" name="HubTeleporter" value="0" />
 			<Argument type="3" name="Level" value="Level2_4" />
 		</Entity>

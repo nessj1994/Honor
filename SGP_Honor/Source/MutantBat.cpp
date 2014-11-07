@@ -221,12 +221,10 @@ void MutantBat::HandleCollision(const IEntity* pOther)
 		if (rMutant.right == rIntersection.right)
 		{
 			SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
-			SetVelocity({ 0, GetVelocity().y });
 		}
 		if (rMutant.left == rIntersection.left)
 		{
 			SetPosition({ (float)rObject.right, GetPosition().y });
-			SetVelocity({ 0, GetVelocity().y });
 		}
 	}
 
@@ -234,13 +232,11 @@ void MutantBat::HandleCollision(const IEntity* pOther)
 	{
 		if (rMutant.bottom == rIntersection.bottom)
 		{
-			SetVelocity({ GetVelocity().x, 0 });
 			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 /*- nIntersectHeight*/ });
 		}
 		if (rMutant.top == rIntersection.top)
 		{
 			SetPosition({ GetPosition().x, (float)rObject.bottom });
-			SetVelocity({ GetVelocity().x, 0 });
 		}
 	}
 

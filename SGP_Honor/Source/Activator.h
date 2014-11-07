@@ -49,6 +49,8 @@ private:
 	float m_fSwitchTimer = 0.0f;
 	unsigned int m_unKeyID = 0;
 
+	SGD::HAudio m_hEffect = SGD::INVALID_HANDLE;
+
 };
 
 

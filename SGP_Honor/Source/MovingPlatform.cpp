@@ -22,7 +22,7 @@ void MovingPlatform::Update(float elapsedTime)
 		if(m_bReturning)
 		{
 			// Update speed and keep track of how far it has traveled
-			m_fDistanceTraveled += m_fSpeed * elapsedTime;
+			m_fDistanceTraveled += abs(m_fSpeed * elapsedTime);
 			SetVelocity({ 0.0f, -m_fSpeed });
 			// Move each entity
 			for(unsigned int i = 0; i < m_vEntities.size(); ++i)
@@ -34,7 +34,7 @@ void MovingPlatform::Update(float elapsedTime)
 		}
 		else
 		{
-			m_fDistanceTraveled += m_fSpeed * elapsedTime;
+			m_fDistanceTraveled += abs(m_fSpeed * elapsedTime);
 			SetVelocity({ 0.0f, m_fSpeed });
 			// Move each entity
 			for (unsigned int i = 0; i < m_vEntities.size(); ++i)
@@ -50,7 +50,7 @@ void MovingPlatform::Update(float elapsedTime)
 		// Moving backward or forward
 		if(m_bReturning)
 		{
-			m_fDistanceTraveled += m_fSpeed * elapsedTime;
+			m_fDistanceTraveled += abs(m_fSpeed * elapsedTime);
 			SetVelocity({ -m_fSpeed, 0.0f });
 			// Move each entity
 			for (unsigned int i = 0; i < m_vEntities.size(); ++i)
@@ -64,7 +64,7 @@ void MovingPlatform::Update(float elapsedTime)
 		}
 		else
 		{
-			m_fDistanceTraveled += m_fSpeed * elapsedTime;
+			m_fDistanceTraveled += abs(m_fSpeed * elapsedTime);
 			SetVelocity({ m_fSpeed, 0.0f });
 			// Move each entity
 			for (unsigned int i = 0; i < m_vEntities.size(); ++i)
