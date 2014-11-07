@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Levels totalHonor="698">
+<Levels totalHonor="849">
     <Level name="HubLevel" unlocked="1">
         <Honor collected="1" />
         <Honor collected="0" />
@@ -114,8 +114,9 @@
         <Honor collected="1" />
         <Honor collected="1" />
         <Honor collected="1" />
+        <Honor collected="0" />
     </Level>
-    <Level name="Level5_4" unlocked="0" />
+    <Level name="Level5_4" unlocked="1" />
     <Level name="Level5_5" unlocked="1" />
     <Level name="TutorialLevel" unlocked="1" />
     <Level name="World1Level" unlocked="1" />
