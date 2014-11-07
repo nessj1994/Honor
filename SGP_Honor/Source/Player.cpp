@@ -408,7 +408,7 @@ void Player::HandleCollision(const IEntity* pOther)
 
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(1.0f);
+		SetFriction(25.0f);
 	}
 
 	if(pOther->GetType() == Entity::ENT_BLOCK)
@@ -484,7 +484,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		is_Platform = true;
 		GeyserCollision(pOther);
 		//BasicCollision(pOther);
-		SetFriction(1.0f);
+		SetFriction(25.0f);
 
 	}
 
