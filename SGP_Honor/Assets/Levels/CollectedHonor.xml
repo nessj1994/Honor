@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<Levels totalHonor="0">
+<Levels totalHonor="200">
     <Level name="HubLevel" unlocked="1" />
     <Level name="Level1_1" unlocked="1" />
     <Level name="Level1_2" unlocked="1" />

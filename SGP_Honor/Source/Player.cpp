@@ -33,6 +33,7 @@
 
 
 #define JOYSTICK_DEADZONE  0.6f
+#define TEXT_TIME_LENGTH   1.0f
 
 Player::Player() : Listener(this)
 {
@@ -104,6 +105,13 @@ void Player::Update(float elapsedTime)
 	m_emHawkReturn->Update(elapsedTime);
 	//
 	
+	if (HasBounce() == true)
+	{
+		if (m_fTextTimer <= TEXT_TIME_LENGTH)
+		{
+			m_fTextTimer += elapsedTime;
+		}
+	}
 
 	//if (m_pSword != nullptr)
 	//{
@@ -292,6 +300,16 @@ void Player::Render(void)
 	//Draw the title
 
 	font.DrawString(output.str().c_str(), 60, 25, 1, SGD::Color{ 255, 255, 0, 0 });
+
+	if (HasBounce() == true)
+	{
+		if (m_fTextTimer <= TEXT_TIME_LENGTH)
+		{
+			Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+			font.DrawString("YOU GAINED THE BUBBLE ABILITY", m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x,
+				m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y - 100, 1, SGD::Color{ 255, 255, 0, 0 });
+		}
+	}
 
 	if(m_bDead)
 	{
