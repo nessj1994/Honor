@@ -49160,7 +49160,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="68">
+	<Entities numEntities="67">
 		<Entity type="20" x="129" y="65" numArgs="1" name="Boss_1">
 			<Argument type="1" name="Type" value="2" />
 		</Entity>
@@ -49236,10 +49236,6 @@
 			<Argument type="1" name="Direction" value="1" />
 			<Argument type="1" name="ActivatorIndex" value="0" />
 			<Argument type="0" name="On/Off" value="0" />
-		</Entity>
-		<Entity type="4" x="7936" y="1886" numArgs="2" name="Door_1">
-			<Argument type="0" name="IsHorizontal" value="0" />
-			<Argument type="1" name="ActivatorIndex" value="0" />
 		</Entity>
 		<Entity type="1" x="8096" y="1728" numArgs="3" name="Activator_1">
 			<Argument type="0" name="IsPressurePlate" value="0" />

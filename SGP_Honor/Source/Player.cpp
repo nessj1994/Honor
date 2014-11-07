@@ -48,6 +48,7 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("Screen2x4");
 	Listener::RegisterForEvent("Screen3x3");
 	Listener::RegisterForEvent("Screen2x1.5");
+	Listener::RegisterForEvent("Screen3x1.5");
 	Listener::RegisterForEvent("Screen1.5x2");
 	Listener::RegisterForEvent("Screen1.5x3");
 	Listener::RegisterForEvent("FINALBOSS");
@@ -77,6 +78,8 @@ Player::Player() : Listener(this)
 	m_hBounceEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/BounceEffect.wav");
 	m_hJellyfishEffect = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/JellyfishBounce.wav");
 	m_hGainAbility = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/GainAbility.wav");
+	m_hScream = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/PlayerScream.wav");
+
 }
 
 
@@ -93,6 +96,8 @@ Player::~Player()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBounceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hJellyfishEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGainAbility);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hScream);
+
 }
 
 /////////////////////////////////////////////////
@@ -337,7 +342,7 @@ void Player::HandleCollision(const IEntity* pOther)
 	if(pOther->GetType() == ENT_DOOR)
 	{
 		m_bSliding = false;
-
+		SetFriction(25.0f);
 		BasicCollision(pOther);
 	}
 
@@ -424,18 +429,18 @@ void Player::HandleCollision(const IEntity* pOther)
 		is_Platform = true;
 		BasicCollision(pOther);
 		SetFriction(1.0f);
+
+		SetFriction(1.0f);
 		if(GetVelocity().x > 0 && m_bFacingRight == false)
 		{
-			m_vtVelocity.x -= 400;
+			m_vtVelocity.x -= 50;
 		}
 		else if(GetVelocity().x < 0 && m_bFacingRight == true)
 		{
-			m_vtVelocity.x += 400;
+			m_vtVelocity.x += 50;
 		}
-		SetVelocity(GetVelocity() * 1.2f);
-
-
-
+		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
+			SetVelocity(GetVelocity() * 1.01);
 	}
 
 	if(pOther->GetType() == Entity::ENT_NOT_FROZEN)
@@ -451,6 +456,8 @@ void Player::HandleCollision(const IEntity* pOther)
 	{
 		m_bSliding = false;
 
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hScream))
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hScream);
 		//Kill the player
 		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
@@ -1266,7 +1273,9 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		//Kill the player
 		if(!m_bDead && m_fArmorTimer <= 0.0f)
 		{
+
 			KillPlayer();
+
 		}
 	}
 
@@ -1278,7 +1287,16 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 
 	if(pEvent->GetEventID() == "BOUNCE_HORIZONTAL")
 	{
+		m_unCurrentState = JUMPING_STATE;
+		if (*(float*)pEvent->GetData() > -1.0f
+			&& *(float*)pEvent->GetData() < 1.0f)
+		{
+			SetVelocity({ 10000.0f, -1000 });
+		}
+		else
 		SetVelocity({ 10000.0f * (*(float*)pEvent->GetData()), -1000 });
+		//SetVelocity({ 10000.0f, -1000 });
+
 		SetPosition({ GetPosition().x, GetPosition().y - 10 });
 
 	}
@@ -1318,6 +1336,13 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	if (pEvent->GetEventID() == "Screen2x1.5")
 	{
 		m_fPanX = 2;
+		m_fPanY = 1.5;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "Screen3x1.5")
+	{
+		m_fPanX = 3;
 		m_fPanY = 1.5;
 		Camera::GetInstance()->SetCameraCap(0);
 
@@ -1363,6 +1388,8 @@ void Player::KillPlayer()
 		m_bDead = true;
 		m_unJumpCount = 0;
 		
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hScream))
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hScream);
 
 		// TODO Add effects
 		m_bSlowed = false;
@@ -1728,7 +1755,8 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 void Player::UpdateDash(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if(pInput->IsKeyDown(SGD::Key::Tab) == true
+	if(pInput->IsKeyPressed(SGD::Key::Tab) == true
+	//if (pInput->IsKeyDown(SGD::Key::Tab) == true
 		|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
 	{
 		GetDash()->GetEMDash()->Finish(false);

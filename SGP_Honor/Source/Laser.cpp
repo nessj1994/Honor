@@ -1,9 +1,10 @@
 #include "Laser.h"
 #include "Camera.h"
+#include <Windows.h>
 
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
-
+#include "../SGD Wrappers/SGD_AudioManager.h"
 Laser::Laser() : Listener(this)
 {
 	m_szSize = { 32, 32 };
@@ -16,12 +17,14 @@ Laser::Laser() : Listener(this)
 	m_szOrigSize = m_szSize;
 	m_bOn = true;
 
-	}
+	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/Laser.wav");
+}
 
 
 
 Laser::~Laser()
 {
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
 }
 
 /////////////////////////////////////////////////
@@ -29,28 +32,31 @@ Laser::~Laser()
 void Laser::Update(float elapsedTime)
 {
 
-	if (m_bOn == true)
+	if(m_bOn == true)
 	{
-
-		if (m_bFull == false)
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hEffect))
 		{
-			if (m_vtDirection.y == -1)
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
+		}
+		if(m_bFull == false)
+		{
+			if(m_vtDirection.y == -1)
 			{
 				m_ptPosition.y -= 800 * elapsedTime;
 				m_szSize.height += 800 * elapsedTime;
 			}
-			else if (m_vtDirection.y == 1)
+			else if(m_vtDirection.y == 1)
 			{
 				//m_ptPosition.y -= 100 * elapsedTime;
 				m_szSize.height += 800 * elapsedTime;
 			}
 
-			if (m_vtDirection.x == -1)
+			if(m_vtDirection.x == -1)
 			{
 				m_ptPosition.x -= 800 * elapsedTime;
 				m_szSize.width += 800 * elapsedTime;
 			}
-			else if (m_vtDirection.x == 1)
+			else if(m_vtDirection.x == 1)
 			{
 				//m_ptPosition.x -= 100 * elapsedTime;
 				m_szSize.width += 800 * elapsedTime;
@@ -60,12 +66,15 @@ void Laser::Update(float elapsedTime)
 	}
 	else
 	{
+		SGD::AudioManager::GetInstance()->StopAudio(m_hEffect);
 		m_ptPosition.y = m_ptOrigPos.y;
 		m_szSize.height = m_szOrigSize.height;
 
 		m_bFull = false;
 	}
 
+
+	m_bFull = false;
 }
 void Laser::Render(void)
 {
@@ -94,9 +103,53 @@ SGD::Rectangle Laser::GetRect(void) const
 
 void Laser::HandleCollision(const IEntity* pOther)
 {
+	RECT rPlayer;
+	rPlayer.left = (LONG)GetRect().left;
+	rPlayer.top = (LONG)GetRect().top;
+	rPlayer.right = (LONG)GetRect().right;
+	rPlayer.bottom = (LONG)GetRect().bottom;
+
+	//Create a rectangle for the other object
+	RECT rObject;
+	rObject.left = (LONG)pOther->GetRect().left;
+	rObject.top = (LONG)pOther->GetRect().top;
+	rObject.right = (LONG)pOther->GetRect().right;
+	rObject.bottom = (LONG)pOther->GetRect().bottom;
+
+	//Create a rectangle for the intersection
+	RECT rIntersection = {};
+
+
+	IntersectRect(&rIntersection, &rObject, &rPlayer);
+
+	int nIntersectWidth = rIntersection.right - rIntersection.left;
+	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
 	if (pOther->GetType() == ENT_SOLID_WALL)
 	{
 		m_bFull = true;
+	}
+	if (pOther->GetType() == ENT_DOOR)
+	{
+		m_bFull = true;
+		
+		if (nIntersectHeight > 16)
+		{
+			m_ptPosition.y = m_ptOrigPos.y;
+			m_szSize.height = m_szOrigSize.height;
+		}
+
+		//m_vtDirection.x != 0
+
+		if (nIntersectWidth > 16
+			&& m_vtDirection.x != 0)
+		{
+			m_ptPosition.x = m_ptOrigPos.x;
+			m_szSize.width = m_szOrigSize.width;
+		}
+		
+		
+		
 	}
 	if (pOther->GetType() == ENT_LASER)
 	{
@@ -108,21 +161,28 @@ void Laser::HandleCollision(const IEntity* pOther)
 
 void Laser::HandleEvent(const SGD::Event* pEvent)
 {
-	
-	if (pEvent->GetEventID() == "FLIP_LASER")
+
+	if(pEvent->GetEventID() == "FLIP_LASER")
 	{
 		Entity* pEntity = reinterpret_cast<Entity*>(pEvent->GetSender());
-		if (pEntity->GetType() == ENT_SWITCH)
+		if(pEntity->GetType() == ENT_SWITCH)
 		{
 			Activator* pActivator = reinterpret_cast<Activator*>(pEvent->GetSender());
-			if (pActivator->GetKeyID() == m_nFreq)
+			if(pActivator->GetKeyID() == m_nFreq)
 			{
 				m_bOn = !m_bOn;
 			}
 		}
-		if (pEntity->GetType() == ENT_BOSS_CRAB)
+		if(pEntity->GetType() == ENT_BOSS_CRAB)
 		{
 			m_bOn = !m_bOn;
+		}
+		if (pEntity->GetType() == ENT_DOOR)
+		{
+			//m_bOn = !m_bOn;
+			
+			m_ptPosition.y = m_ptOrigPos.y;
+			m_szSize.height = m_szOrigSize.height;
 		}
 	}
 }

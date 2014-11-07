@@ -28,16 +28,16 @@ void HintStatue::Update(float elapsedTime)
 void HintStatue::Render(void)
 {
 	//SGD::GraphicsManager::GetInstance()->DrawTexture(m_hImage, m_ptPosition);
-	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1.0f, {}, {});
+	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 0.5f, {}, {});
 	if (showMessage == true)
 	{
-		Camera::GetInstance()->DrawTexture({ m_ptPosition.x - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).width * 2.5f
-			, m_ptPosition.y - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).height }, 0, m_hSBImage, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ (m_ptPosition.x - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).width * 2.5f) - 40
+			, m_ptPosition.y - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).height }, 0, m_hSBImage, false, 1.3f, {}, {});
 
-		Camera::GetInstance()->DrawString(st_message, { m_ptPosition.x - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).width * 2.5f +
-			SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hSBImage).width * 0.25f,
-			m_ptPosition.y - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).height +
-			SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hSBImage).height * 0.25f });
+		Camera::GetInstance()->DrawString(st_message, { (m_ptPosition.x - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).width * 2.5f +
+			SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hSBImage).width * 0.25f ) -125,
+			(m_ptPosition.y - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).height +
+			SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hSBImage).height * 0.25f) + 50 });
 	}
 }
 
