@@ -360,7 +360,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level5_5");
+		LoadLevel("Level2_5");
 	}
 
 
