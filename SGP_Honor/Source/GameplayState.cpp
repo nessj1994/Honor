@@ -206,7 +206,7 @@ void GameplayState::Enter(void) //Load Resources
 	
 	//LoadLevel("World5Level");
 
-	LoadLevel("Level5_2");
+	LoadLevel("Level1_1");
 
 	//LoadLevel("HubLevel");
 
@@ -358,7 +358,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level2_5");
+		LoadLevel("Level3_1");
 	}
 
 
