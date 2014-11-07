@@ -1,18 +1,20 @@
 #include "FallingBlock.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "Camera.h"
-
+#include "../SGD Wrappers/SGD_AudioManager.h"
 FallingBlock::FallingBlock() : Listener(this)
 {
 	//Listen for the player to be in range
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/Graphics/FallingBlock.png");
+	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/fallingblock.wav");
 }
 
 
 FallingBlock::~FallingBlock()
 {
 	SetTarget(nullptr);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
 }
 
 /////////////////////////////////////////////////
@@ -108,6 +110,9 @@ void FallingBlock::HandleCollision(const IEntity* pOther)
 	//Did the block collide with the player
 	if(pOther->GetType() == ENT_PLAYER)
 	{
+
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hEffect))
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
 		//if so move back up but kill the player
 		m_unCurrentState = RISING_STATE;
 		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
@@ -116,6 +121,8 @@ void FallingBlock::HandleCollision(const IEntity* pOther)
 	}
 	else if(pOther->GetType() == Entity::ENT_SOLID_WALL)
 	{
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hEffect))
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
 		m_unCurrentState = RISING_STATE;
 	}
 

@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include "Player.h"
 #include "SwordSwing.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 
 Activator::Activator(bool isPressure) : Listener(this)
@@ -16,11 +17,14 @@ Activator::Activator(bool isPressure) : Listener(this)
 	//m_ptPosition = { 68, 300 };
 	m_szSize = { 32, 32 };
 
+	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/Switch.wav");
+
 }
 
 
 Activator::~Activator()
 {
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
 }
 
 /////////////////////////////////////////////////
@@ -74,6 +78,11 @@ void Activator::Update(float elapsedTime)
 
 		if (nIntersectHeight < nIntersectWidth)
 		{
+
+			if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hEffect))
+			{
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
+			}
 			//Open Door
 			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
@@ -86,6 +95,12 @@ void Activator::Update(float elapsedTime)
 		}
 		if (nIntersectHeight > nIntersectWidth)
 		{
+
+
+			if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hEffect))
+			{
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
+			}
 			//Open Door
 			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
@@ -99,6 +114,11 @@ void Activator::Update(float elapsedTime)
 		if (nIntersectHeight == nIntersectWidth
 			&& nIntersectHeight > 0)
 		{
+
+			if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hEffect))
+			{
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
+			}
 			//Open Door
 			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
@@ -184,6 +204,10 @@ void Activator::HandleCollision(const IEntity* pOther)
 		if (m_bPressurePlate == false && m_fSwitchTimer == 0.0f)
 		{
 
+			if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hEffect))
+			{
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
+			}
 			//Open Door
 			SGD::Event* pATEvent = new SGD::Event("FLIP_DOOR", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);

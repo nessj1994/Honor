@@ -204,7 +204,7 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadGame();
 	
-	LoadLevel("HubLevel");
+	LoadLevel("Level3_1");
 
 	//LoadLevel("Level5_5");
 

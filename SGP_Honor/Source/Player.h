@@ -220,6 +220,7 @@ private:
 	SGD::HAudio m_hBounceEffect = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hJellyfishEffect = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hGainAbility = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hScream = SGD::INVALID_HANDLE;
 
 	//SLowing Down with friction
 	bool m_bSlowed;

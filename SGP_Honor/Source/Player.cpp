@@ -76,6 +76,8 @@ Player::Player() : Listener(this)
 	m_hBounceEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/BounceEffect.wav");
 	m_hJellyfishEffect = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/JellyfishBounce.wav");
 	m_hGainAbility = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/GainAbility.wav");
+	m_hScream = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/PlayerScream.wav");
+
 }
 
 
@@ -92,6 +94,8 @@ Player::~Player()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBounceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hJellyfishEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGainAbility);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hScream);
+
 }
 
 /////////////////////////////////////////////////
@@ -433,6 +437,8 @@ void Player::HandleCollision(const IEntity* pOther)
 	{
 		m_bSliding = false;
 
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hScream))
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hScream);
 		//Kill the player
 		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
@@ -1248,7 +1254,9 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		//Kill the player
 		if(!m_bDead && m_fArmorTimer <= 0.0f)
 		{
+
 			KillPlayer();
+
 		}
 	}
 
@@ -1345,6 +1353,8 @@ void Player::KillPlayer()
 		m_bDead = true;
 		m_unJumpCount = 0;
 		
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hScream))
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hScream);
 
 		// TODO Add effects
 		m_bSlowed = false;
