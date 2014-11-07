@@ -17,6 +17,7 @@ Laser::Laser() : Listener(this)
 	m_szOrigSize = m_szSize;
 	m_bOn = true;
 
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Laser.png");
 	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/Laser.wav");
 }
 
@@ -24,6 +25,7 @@ Laser::Laser() : Listener(this)
 
 Laser::~Laser()
 {
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
 }
 
@@ -86,6 +88,9 @@ void Laser::Render(void)
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
 		SGD::Color::Color(255, 0, 255, 0));
+
+	Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y },
+		0.0f, m_hImage, true, 0.8f, {}, {});
 }
 
 int Laser::GetType(void) const

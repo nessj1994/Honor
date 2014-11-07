@@ -24,6 +24,8 @@ Hawk::Hawk()
 	SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
 	m_szSize = { 32, 32 };
 	m_bDead = false;
+
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/WizardHawk.png");
 }
 
 
@@ -33,6 +35,7 @@ Hawk::~Hawk()
 	//pMsg->QueueMessage();
 	//pMsg = nullptr;
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 
@@ -135,6 +138,23 @@ void Hawk::Update(float elapsedTime)
 
 		}
 
+
+}
+
+void Hawk::Render(void)
+{
+	SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
+
+	//create a reference to our rectangle
+	SGD::Rectangle rMyRect = GetRect();
+
+	//Offset our rectangle by the camera position for rendering
+	rMyRect.Offset({ -camPos.x, -camPos.y });
+
+	//Render us with the camera
+	Camera::GetInstance()->Draw(rMyRect, SGD::Color::Color(255, 255, 0, 0));
+	Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y },
+		0.0f, m_hImage, true, 0.8f, {}, {});
 
 }
 

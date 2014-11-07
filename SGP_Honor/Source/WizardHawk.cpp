@@ -10,11 +10,13 @@ WizardHawk::WizardHawk()
 	m_ts.SetPlaying(true);
 	m_szSize = { 70, 70 };
 
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/WizardHawk.png");
 }
 
 
 WizardHawk::~WizardHawk()
 {
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 
@@ -103,7 +105,8 @@ void WizardHawk::Render(void)
 
 	//Render us with the camera
 	Camera::GetInstance()->Draw(rMyRect, SGD::Color::Color(255, 255, 0, 0));
-
+	Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y },
+		0.0f, m_hImage, true, 0.8f, {}, {});
 
 }
 

@@ -14,6 +14,7 @@ public:
 	virtual void Update(float elapsedTime);
 	virtual void HandleCollision(const IEntity* pOther) override;
 	int GetType(void) const override { return ENT_HAWK; }
+	virtual void Render(void) override;
 
 
 	float GetCooldown(void) const { return m_fCooldown; }
