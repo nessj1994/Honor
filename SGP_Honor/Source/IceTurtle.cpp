@@ -31,7 +31,7 @@ IceTurtle::~IceTurtle()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hShootSound);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hHitSound);
 
-	SetPlayer(nullptr);
+	//SetPlayer(nullptr);
 
 }
 

@@ -78,7 +78,7 @@ void AnimationEngine::Update(float elapsedTime, AnimTimeStamp& ts, IEntity* send
 	}
 }
 
-void AnimationEngine::Render(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale, SGD::Point camerapos, SGD::Vector rotationOffset)
+void AnimationEngine::Render(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale, SGD::Point camerapos, SGD::Vector rotationOffset, SGD::Color color)
 {
 	float scaleX = scale;
 	if (flipped == false)
@@ -90,7 +90,7 @@ void AnimationEngine::Render(SGD::Point position, float rotation, AnimTimeStamp&
 	SGD::Rectangle frame = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetSourceRect();
 	SGD::Point anchor = m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetAnchor();
 	SGD::GraphicsManager::GetInstance()->DrawTextureSection(m_mAnimationMap[ts.GetCurrAnimation()].GetImage(),
-	{ position.x - (anchor.x * scaleX) /*+ 16*/, position.y - (anchor.y * scale) /*+ 60*/}, frame, rotation, {}, {}, { scaleX, scale });
+	{ position.x - (anchor.x * scaleX) /*+ 16*/, position.y - (anchor.y * scale) /*+ 60*/}, frame, rotation, {}, color, { scaleX, scale });
 }
 
 void AnimationEngine::Terminate(void)
@@ -172,7 +172,7 @@ void AnimationEngine::LoadAnimation(std::string filePath)
 	TiXmlElement* pAnim = pRoot->FirstChildElement("Animation");
 	TiXmlElement* pFrame = pAnim->FirstChildElement("Frame");
 
-	while (pAnim != nullptr)
+	while (pAnim != nullptr && m_mAnimationMap.find(pAnim->Attribute("name")) == m_mAnimationMap.end())
 	{
 		Animation newAnim;
 		SGD::HTexture img = SGD::GraphicsManager::GetInstance()->LoadTexture(((relativePath + pAnim->Attribute("spritesheet")).c_str()));

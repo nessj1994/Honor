@@ -5,7 +5,7 @@ class Turret :
 {
 public:
 	Turret();
-	virtual ~Turret();
+	~Turret();
 
 
 	/////////////////////////////////////////////////

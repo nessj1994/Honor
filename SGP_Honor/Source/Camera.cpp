@@ -35,10 +35,10 @@ void Camera::Draw(SGD::Rectangle _rect, SGD::Color _color)
 
 }
 
-void Camera::DrawAnimation(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale, SGD::Vector rotationOffset)
+void Camera::DrawAnimation(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale, SGD::Vector rotationOffset, SGD::Color color)
 {
 	AnimationEngine::GetInstance()->Render({ position.x , position.y  },
-		rotation, ts, flipped, scale, m_ptCameraPosition, rotationOffset);
+		rotation, ts, flipped, scale, m_ptCameraPosition, rotationOffset, color);
 }
 
 void Camera::DrawString(std::string str, SGD::Point position)

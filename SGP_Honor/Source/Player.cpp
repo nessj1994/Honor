@@ -87,6 +87,7 @@ Player::~Player()
 	delete m_emHonor;
 	delete m_emFeatherExplosion;
 	delete m_emHawkReturn;
+	delete m_pSword;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHonorParticleHUD);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hIceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBounceEffect);
@@ -414,7 +415,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		{
 			m_vtVelocity.x += 400;
 		}
-		SetVelocity(GetVelocity() * 1.2);
+		SetVelocity(GetVelocity() * 1.2f);
 
 
 
@@ -453,7 +454,7 @@ void Player::HandleCollision(const IEntity* pOther)
 			m_vtVelocity.x += 50;
 		}
 		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
-		SetVelocity(GetVelocity() * 1.01 );
+		SetVelocity(GetVelocity() * 1.01f );
 
 	}
 

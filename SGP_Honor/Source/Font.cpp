@@ -35,7 +35,7 @@ void Font::DrawString(std::string text, int x, int y, float scale, SGD::Color co
 	}
 
 	//Store the starting x position for a new line
-	float colStart = x;
+	float colStart = (float)x;
 
 	//loop through the characters in the string
 	for(int i = 0; text[i]; i++)
@@ -46,29 +46,29 @@ void Font::DrawString(std::string text, int x, int y, float scale, SGD::Color co
 		//Check for whitespaces
 		if(ch == ' ')
 		{
-			x += m_mCharacters[text[i - 1]].m_nXAdvance * scale;
+			x += (int)(m_mCharacters[text[i - 1]].m_nXAdvance * scale);
 			continue;
 		}
 		else if(ch == '\n')
 		{
-			y += m_nLineHeight * scale;
-			x = colStart;
+			y += (int)(m_nLineHeight * scale);
+			x = (int)colStart;
 			continue;
 		}
 
 		//Create a source rectangle for the segment of the image to load from
 		SGD::Rectangle source;
-		source.left = m_mCharacters[ch].m_nX;
-		source.top = m_mCharacters[ch].m_nY;
+		source.left = (float)m_mCharacters[ch].m_nX;
+		source.top = (float)m_mCharacters[ch].m_nY;
 		source.right = source.left + m_mCharacters[ch].m_nWidth;
 		source.bottom = source.top + m_mCharacters[ch].m_nHeight;
 
 		//Create proper x and y offsets for lower case letters to print lower
-		int xOff = m_mCharacters[ch].m_nXOffset * scale;
-		int yOff = m_mCharacters[ch].m_nYOffset * scale; 
+		int xOff = (int)(m_mCharacters[ch].m_nXOffset * scale);
+		int yOff = (int)(m_mCharacters[ch].m_nYOffset * scale); 
 
 		//Draw the character
-		SGD::GraphicsManager::GetInstance()->DrawTextureSection(m_hImage, SGD::Point(x + xOff, y + yOff),
+		SGD::GraphicsManager::GetInstance()->DrawTextureSection(m_hImage, SGD::Point(x + xOff + 0.0f, y + yOff + 0.0f),
 			source, 0.0f, {}, color, { scale, scale });
 
 		//Move to the next position
@@ -100,7 +100,7 @@ void Font::DrawString(const wchar_t* text, int x, int y, float scale, SGD::Color
 	}
 
 	//Store the starting x position for a new line
-	float colStart = x;
+	float colStart = (float)x;
 
 	//loop through the characters in the string
 	for(int i = 0; text[i]; i++)
@@ -111,29 +111,29 @@ void Font::DrawString(const wchar_t* text, int x, int y, float scale, SGD::Color
 		//Check for whitespaces
 		if(ch == ' ')
 		{
-			x += m_mCharacters[text[i - 1]].m_nXAdvance * scale;
+			x += (int)(m_mCharacters[(const char)text[i - 1]].m_nXAdvance * scale);
 			continue;
 		}
 		else if(ch == '\n')
 		{
-			y += m_nLineHeight * scale;
-			x = colStart;
+			y += (int)(m_nLineHeight * scale);
+			x = (int)colStart;
 			continue;
 		}
 
 		//Create a source rectangle for the segment of the image to load from
 		SGD::Rectangle source;
-		source.left = m_mCharacters[ch].m_nX;
-		source.top = m_mCharacters[ch].m_nY;
+		source.left = (float)m_mCharacters[ch].m_nX;
+		source.top = (float)m_mCharacters[ch].m_nY;
 		source.right = source.left + m_mCharacters[ch].m_nWidth;
 		source.bottom = source.top + m_mCharacters[ch].m_nHeight;
 
 		//Create proper x and y offsets for lower case letters to print lower
-		int xOff = m_mCharacters[ch].m_nXOffset * scale;
-		int yOff = m_mCharacters[ch].m_nYOffset * scale;
+		int xOff = (int)(m_mCharacters[ch].m_nXOffset * scale);
+		int yOff = (int)(m_mCharacters[ch].m_nYOffset * scale);
 
 		//Draw the character
-		SGD::GraphicsManager::GetInstance()->DrawTextureSection(m_hImage, SGD::Point(x + xOff, y + yOff),
+		SGD::GraphicsManager::GetInstance()->DrawTextureSection(m_hImage, SGD::Point(x + xOff + 0.0f, y + yOff + 0.0f),
 			source, 0.0f, {}, color, { scale, scale });
 
 		//Move to the next position

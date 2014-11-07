@@ -136,6 +136,12 @@ void Game::Terminate(void)
 	m_vGameStates.clear();
 	delete m_pFont;
 
+	delete m_pProfile1;
+	delete m_pProfile2;
+	delete m_pProfile3;
+
+
+
 	//Terminate the core SGD Wrappers
 	SGD::AudioManager::GetInstance()->Terminate();
 	SGD::AudioManager::DeleteInstance();

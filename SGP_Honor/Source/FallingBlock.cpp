@@ -13,6 +13,7 @@ FallingBlock::FallingBlock() : Listener(this)
 FallingBlock::~FallingBlock()
 {
 	SetTarget(nullptr);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 /////////////////////////////////////////////////
