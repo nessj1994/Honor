@@ -19,10 +19,11 @@ Pouncer::Pouncer() : Listener(this)
 	//m_ptPosition = { 800, 600 };
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/HermitCrab.xml");
 	m_ts.SetCurrAnimation("Hermit Crab Hide");
+	m_ts.SetPlaying(true);
 	//m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/hermitcrabPlaceholder.png");
 	//m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage);
 	SetGravity(-800.0f);
-	m_bFacingRight = false;
+	m_bFacingRight = true;
 	m_aPounce = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Pouncer.wav");
 	m_aDeath = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/PouncerDeath.wav");
 }
@@ -77,6 +78,7 @@ void Pouncer::Update(float elapsedTime)
 			{
 				m_ts.SetCurrAnimation("Hermit Crab Hide");
 				m_ts.ResetCurrFrame();
+				m_ts.SetPlaying(true);
 			}
 
 			if (apex >= MaxJumpTime && isPouncing == true)
@@ -141,10 +143,59 @@ void Pouncer::HandleCollision(const IEntity* pOther)
 	{
 		Enemy::HandleCollision(pOther);
 
-		if (pOther->GetType() == Entity::ENT_SOLID_WALL)
+		if (pOther->GetType() == Entity::ENT_SOLID_WALL || pOther->GetType() == Entity::ENT_DOOR)
 		{
-			inAir = false;
-			SetVelocity({ 0, GetVelocity().y });
+			//SetVelocity({ 0, GetVelocity().y });
+			RECT rPouncer;
+			rPouncer.left = (LONG)GetRect().left;
+			rPouncer.top = (LONG)GetRect().top;
+			rPouncer.right = (LONG)GetRect().right;
+			rPouncer.bottom = (LONG)GetRect().bottom;
+
+			//Create a rectangle for the other object
+			RECT rObject;
+			rObject.left = (LONG)pOther->GetRect().left;
+			rObject.top = (LONG)pOther->GetRect().top;
+			rObject.right = (LONG)pOther->GetRect().right;
+			rObject.bottom = (LONG)pOther->GetRect().bottom;
+
+			//Create a rectangle for the intersection
+			RECT rIntersection = {};
+
+			IntersectRect(&rIntersection, &rPouncer, &rObject);
+
+			int nIntersectWidth = rIntersection.right - rIntersection.left;
+			int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+			//Colliding with the side of the object
+			if (nIntersectHeight > nIntersectWidth)
+			{
+				if (rPouncer.right == rIntersection.right)
+				{
+					SetPosition({ (float)rObject.left - nIntersectWidth - 25, GetPosition().y });
+					SetVelocity({ 0, GetVelocity().y });
+				}
+				if (rPouncer.left == rIntersection.left)
+				{
+					SetPosition({ (float)rObject.right + nIntersectWidth + 25, GetPosition().y });
+					SetVelocity({ 0, GetVelocity().y });
+				}
+			}
+
+			if (nIntersectWidth > nIntersectHeight)
+			{
+				if (rPouncer.bottom == rIntersection.bottom)
+				{
+					SetVelocity({ GetVelocity().x, 0 });
+					SetPosition({ GetPosition().x, (float)rObject.top - nIntersectHeight - 1 });
+					inAir = false;
+				}
+				if (rPouncer.top == rIntersection.top)
+				{
+					SetPosition({ GetPosition().x, (float)rObject.bottom + nIntersectHeight + 46 });
+					SetVelocity({ GetVelocity().x, 0 });
+				}
+			}
 		}
 
 		if (pOther->GetType() == Entity::ENT_PLAYER && GetRect().IsIntersecting(pOther->GetRect()) == true)
@@ -152,56 +203,6 @@ void Pouncer::HandleCollision(const IEntity* pOther)
 			//if so move back up but kill the player
 			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 			SGD::EventManager::GetInstance()->SendEventNow(&Event);
-		}
-
-		RECT rPouncer;
-		rPouncer.left = (LONG)GetRect().left;
-		rPouncer.top = (LONG)GetRect().top;
-		rPouncer.right = (LONG)GetRect().right;
-		rPouncer.bottom = (LONG)GetRect().bottom;
-
-		//Create a rectangle for the other object
-		RECT rObject;
-		rObject.left = (LONG)pOther->GetRect().left;
-		rObject.top = (LONG)pOther->GetRect().top;
-		rObject.right = (LONG)pOther->GetRect().right;
-		rObject.bottom = (LONG)pOther->GetRect().bottom;
-
-		//Create a rectangle for the intersection
-		RECT rIntersection = {};
-
-		IntersectRect(&rIntersection, &rPouncer, &rObject);
-
-		int nIntersectWidth = rIntersection.right - rIntersection.left;
-		int nIntersectHeight = rIntersection.bottom - rIntersection.top;
-
-		//Colliding with the side of the object
-		if (nIntersectHeight > nIntersectWidth)
-		{
-			if (rPouncer.right == rIntersection.right)
-			{
-				SetPosition({ (float)rObject.left - GetRect().ComputeWidth() / 2, GetPosition().y });
-				SetVelocity({ 0, GetVelocity().y });
-			}
-			if (rPouncer.left == rIntersection.left)
-			{
-				SetPosition({ (float)rObject.right + GetRect().ComputeWidth() / 2, GetPosition().y });
-				SetVelocity({ 0, GetVelocity().y });
-			}
-		}
-
-		if (nIntersectWidth > nIntersectHeight)
-		{
-			if (rPouncer.bottom == rIntersection.bottom)
-			{
-				SetVelocity({ GetVelocity().x, 0 });
-				SetPosition({ GetPosition().x, (float)rObject.top - nIntersectHeight + 2 /*- nIntersectHeight*/ });
-			}
-			if (rPouncer.top == rIntersection.top)
-			{
-				SetPosition({ GetPosition().x, (float)rObject.bottom });
-				SetVelocity({ GetVelocity().x, 0 });
-			}
 		}
 	}
 }
