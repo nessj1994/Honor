@@ -410,18 +410,18 @@ void Player::HandleCollision(const IEntity* pOther)
 		is_Platform = true;
 		BasicCollision(pOther);
 		SetFriction(1.0f);
+
+		SetFriction(1.0f);
 		if(GetVelocity().x > 0 && m_bFacingRight == false)
 		{
-			m_vtVelocity.x -= 400;
+			m_vtVelocity.x -= 50;
 		}
 		else if(GetVelocity().x < 0 && m_bFacingRight == true)
 		{
-			m_vtVelocity.x += 400;
+			m_vtVelocity.x += 50;
 		}
-		SetVelocity(GetVelocity() * 1.2);
-
-
-
+		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
+			SetVelocity(GetVelocity() * 1.01);
 	}
 
 	if(pOther->GetType() == Entity::ENT_NOT_FROZEN)
