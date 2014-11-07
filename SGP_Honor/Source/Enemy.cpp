@@ -176,6 +176,58 @@ int Enemy::GetType(void) const
 
 void Enemy::HandleCollision(const IEntity* pOther)
 {
+	
+		//RECT rPouncer;
+		//rPouncer.left = (LONG)GetRect().left;
+		//rPouncer.top = (LONG)GetRect().top;
+		//rPouncer.right = (LONG)GetRect().right;
+		//rPouncer.bottom = (LONG)GetRect().bottom;
+
+		////Create a rectangle for the other object
+		//RECT rObject;
+		//rObject.left = (LONG)pOther->GetRect().left;
+		//rObject.top = (LONG)pOther->GetRect().top;
+		//rObject.right = (LONG)pOther->GetRect().right;
+		//rObject.bottom = (LONG)pOther->GetRect().bottom;
+
+		////Create a rectangle for the intersection
+		//RECT rIntersection = {};
+
+		//IntersectRect(&rIntersection, &rPouncer, &rObject);
+
+		//int nIntersectWidth = rIntersection.right - rIntersection.left;
+		//int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+		////Colliding with the side of the object
+		//if (nIntersectHeight > nIntersectWidth)
+		//{
+		//	if (rPouncer.right == rIntersection.right)
+		//	{
+		//		SetPosition({ (float)rObject.left - GetRect().ComputeWidth() / 2, GetPosition().y });
+		//		SetVelocity({ 0, GetVelocity().y });
+		//	}
+		//	if (rPouncer.left == rIntersection.left)
+		//	{
+		//		SetPosition({ (float)rObject.right + GetRect().ComputeWidth() / 2, GetPosition().y });
+		//		SetVelocity({ 0, GetVelocity().y });
+		//	}
+		//}
+
+		//if (nIntersectWidth > nIntersectHeight)
+		//{
+		//	if (rPouncer.bottom == rIntersection.bottom)
+		//	{
+		//		SetVelocity({ GetVelocity().x, 0 });
+		//		SetPosition({ GetPosition().x, (float)rObject.top - nIntersectHeight});
+		//	}
+		//	if (rPouncer.top == rIntersection.top)
+		//	{
+		//		SetPosition({ GetPosition().x, (float)rObject.bottom });
+		//		SetVelocity({ GetVelocity().x, 0 });
+		//	}
+		//}
+	
+
 	Unit::HandleCollision(pOther);
 }
 

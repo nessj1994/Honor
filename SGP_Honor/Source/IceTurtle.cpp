@@ -9,7 +9,6 @@
 
 IceTurtle::IceTurtle()
 {
-
 	m_szSize = { 32, 32 };
 	m_fFireTimer = 0.0f;
 
@@ -21,7 +20,6 @@ IceTurtle::IceTurtle()
 	m_hShootSound = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/ShootSound.wav");
 	m_hDeathSound = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/TurtleDeath.wav");
 	m_hHitSound = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/TurtleHit.wav");
-
 }
 
 

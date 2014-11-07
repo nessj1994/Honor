@@ -49277,5 +49277,10 @@
 			<Argument type="0" name="HubTeleporter" value="0" />
 			<Argument type="3" name="Level" value="Level4_1" />
 		</Entity>
+		<Entity type="4" x="7936" y="1856" numArgs="3" name="Door_1">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ActivatorIndex" value="0" />
+			<Argument type="0" name="StartOpen" value="0" />
+		</Entity>
 	</Entities>
 </Level>

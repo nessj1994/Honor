@@ -1,10 +1,13 @@
 #include "Wizard.h"
 #include "AnimationEngine.h"
+#include "BitmapFont.h"
+#include "Font.h"
 #include "Camera.h"
 #include "GameplayState.h"
 #include "Projectile.h"
 #include "WizardDash.h"
 #include "WizardHawk.h"
+#include "Game.h"
 
 #include "CreateHorizontalBubble.h"
 #include "CreateVerticalBubble.h"
@@ -40,6 +43,11 @@ void Wizard::Update(float elapsedTime)
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 
 	m_fCurStateTimer += elapsedTime;
+
+	if (m_nDamage >= 3)
+	{
+		m_bsCurrState = WZ_DEATH;
+	}
 
 	GetPlayer()->SetSlowed(false);
 	GetPlayer()->SetFriction(25);
@@ -270,7 +278,12 @@ void Wizard::Update(float elapsedTime)
 	}
 	case WZ_DEATH:
 	{
+		SetVelocity({ 0, 0 });
+		//Local refernce to the font
+		Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
 
+		//Draw the title
+		font.DrawString("VICTORY", m_ptPosition.x-200, m_ptPosition.y-100, 3, SGD::Color{ 255, 255, 0, 0 });
 	}
 
 	}
