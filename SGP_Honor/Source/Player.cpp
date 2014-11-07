@@ -1983,27 +1983,24 @@ void Player::UpdateHawk(float elapsedTime)
 					float rightStickYOff = pInput->GetRightJoystick(0).y;
 
 
-					//if (pInput->IsKeyDown(SGD::Key::LeftArrow) == true
-					//	|| rightStickXOff < 0)
-					//{
-					//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff ) * elapsedTime, GetVelocity().y));
-					//}
-					//if (pInput->IsKeyDown(SGD::Key::RightArrow) == true
-					//	|| rightStickXOff > 0)
-					//{
-					//	GetHawkPtr()->SetVelocity(SGD::Vector(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetVelocity().y)));
-					//}
-					//
-					//if (pInput->IsKeyDown(SGD::Key::UpArrow) == true
-					//	|| rightStickYOff < 0)
-					//{
-					//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff ) * elapsedTime));
-					//}
-					//if (pInput->IsKeyDown(SGD::Key::DownArrow) == true
-					//	|| rightStickYOff > 0)
-					//{
-					//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
-					//}
+					if (pInput->IsKeyDown(SGD::Key::LeftArrow) == true)
+					{
+						GetHawkPtr()->SetVelocity({-400, GetHawkPtr()->GetVelocity().y});
+					}
+					if (pInput->IsKeyDown(SGD::Key::RightArrow) == true)
+					{
+						GetHawkPtr()->SetVelocity({ 400, GetHawkPtr()->GetVelocity().y });
+
+					}
+					
+					if (pInput->IsKeyDown(SGD::Key::UpArrow) == true)
+					{
+						GetHawkPtr()->SetVelocity({ GetHawkPtr()->GetVelocity().x, -300 });
+					}
+					if (pInput->IsKeyDown(SGD::Key::DownArrow) == true)
+					{
+						GetHawkPtr()->SetVelocity({ GetHawkPtr()->GetVelocity().x, 300 });
+					}
 					//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetVelocity().y));
 					//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
 
@@ -2151,8 +2148,10 @@ void Player::UpdateHawk(float elapsedTime)
 void Player::UpdateSpray(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if(pInput->IsKeyDown(SGD::Key::F) == true
-		/*&& m_fShotTimer > 0.25f*/ && m_bHasIce == true)
+	float triggerOff = pInput->GetTrigger(0);
+
+	if((pInput->IsKeyDown(SGD::Key::F) == true
+		/*&& m_fShotTimer > 0.25f*/ || triggerOff < 0) && m_bHasIce == true)
 	{
 		if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hIceEffect)))
 		{

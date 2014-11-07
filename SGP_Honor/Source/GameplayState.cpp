@@ -202,7 +202,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadHonorVector();
+	LoadGame();
 	
 	//LoadLevel("Level4_1");
 	m_pPlayer->SetHasBounce(true);
@@ -210,7 +210,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-	LoadLevel("Level5_3");
+	LoadLevel("HubLevel");
 
 	//LoadLevel("HubLevel");
 
