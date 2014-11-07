@@ -9,7 +9,7 @@ public:
 	enum BossStates { CHASING_STATE, MELEE_STATE, RANGED_STATE, JUMPING_STATE, SPRAYING_STATE, BLIZZARD_STATE, DEAD_STATE };
 
 	Yeti();
-	virtual ~Yeti();
+	~Yeti();
 
 	/////////////////////////////////////////////////
 	/////////////////Interface//////////////////////

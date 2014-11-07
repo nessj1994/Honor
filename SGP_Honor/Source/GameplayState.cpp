@@ -206,7 +206,7 @@ void GameplayState::Enter(void) //Load Resources
 	
 	LoadLevel("HubLevel");
 
-	//LoadLevel("Level5_5");
+	//LoadLevel("Level5_2");
 
 	//LoadLevel("HubLevel");
 
@@ -259,6 +259,7 @@ void GameplayState::Exit(void)
 	if (m_pPlayer != nullptr)
 	{
 		m_pPlayer->Release();
+
 	}
 
 	if (m_pHubOrb != nullptr)
@@ -362,7 +363,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 
 
 
-	if (pInput->IsKeyPressed(SGD::Key::Escape)
+	if (pInput->IsKeyPressed(SGD::Key::Escape) 
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
@@ -370,6 +371,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	}
 
 	return true;
+
 }
 
 //////////////////////////////////////////////
@@ -423,6 +425,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_DOOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_YETI);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ICE_GOLEM);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_WIZARD_DASH);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_WIZARD_HAWK);
 
 
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
@@ -449,7 +453,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_GEYSER);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_BOSS_WIZARD);
-
+	m_pEntities->CheckCollisions(Entity::ENT_MUTANT_BIRD, Entity::ENT_MUTANT_BIRD);
 
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_LASER);
 	m_pEntities->CheckCollisions(Entity::ENT_DOOR, Entity::ENT_LASER);
@@ -774,16 +778,14 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
 			}
 
+			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_WIZARD)
+			{
+				  pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+
+			}
+
 			pProj->Release();
 			pProj = nullptr;
-											  if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_WIZARD)
-											  {
-												  pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
-
-											  }
-
-											  pProj->Release();
-											  pProj = nullptr;
 
 
 			break;
@@ -958,11 +960,11 @@ Entity* GameplayState::CreateGravProjectile(Entity* pOwner) const
 
 Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 {
-	HorizontalBubble* proj = new HorizontalBubble();
+	/*HorizontalBubble* proj = new HorizontalBubble();
 	proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y - 50));
 	proj->SetOwner(pOwner);
-	proj->SetSize({ 40, 40 });
-	return proj;
+	proj->SetSize({ 40, 40 });*/
+
 	if (pOwner->GetType() == Entity::ENT_BOSS_WIZARD)
 	{
 
@@ -1006,7 +1008,7 @@ Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 	else
 	{
 		HorizontalBubble* proj = new HorizontalBubble();
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + 80));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y - 50));
 		proj->SetOwner(pOwner);
 		proj->SetSize({ 40, 40 });
 
@@ -1284,6 +1286,7 @@ void GameplayState::CreateMovingPlatform(int _x, int _y, bool _vertical, float _
 
 	//mPlatform->SetTurnDistance(_turnDistance);
 	mPlatform->SetSpeed(_speed);
+	mPlatform->SetTurnDistance(_turnDistance);
 	m_pEntities->AddEntity(mPlatform, Entity::ENT_MOVING_PLATFORM);
 	mPlatform->Release();
 }
@@ -1525,6 +1528,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 			pIceTurtle->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pIceTurtle, Entity::ENT_ICE_TURTLE);
 			pIceTurtle->Release();
+			pIceTurtle = nullptr;
 			break;
 		}
 		case 7: // hermit crab

@@ -13,6 +13,7 @@ FallingBlock::FallingBlock() : Listener(this)
 
 FallingBlock::~FallingBlock()
 {
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 	SetTarget(nullptr);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
