@@ -335,6 +335,7 @@ void Crab::HandleCollision(const IEntity* pOther)
 		{
 			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 			SGD::EventManager::GetInstance()->SendEventNow(&Event);
+			SetHitPoints(4);
 		}
 	}
 }

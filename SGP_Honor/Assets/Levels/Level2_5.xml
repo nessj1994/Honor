@@ -12110,7 +12110,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="5">
+	<Entities numEntities="6">
 		<Entity type="20" x="1086" y="540" numArgs="1" name="Boss_1">
 			<Argument type="1" name="Type" value="1" />
 		</Entity>
@@ -12133,6 +12133,10 @@
 			<Argument type="1" name="Direction" value="3" />
 			<Argument type="1" name="ActivatorIndex" value="1" />
 			<Argument type="0" name="On" value="0" />
+		</Entity>
+		<Entity type="18" x="2528" y="576" numArgs="2" name="Teleporter_1">
+			<Argument type="0" name="HubTeleporter" value="0" />
+			<Argument type="3" name="Level" value="Level3_1" />
 		</Entity>
 	</Entities>
 </Level>
