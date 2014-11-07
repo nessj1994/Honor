@@ -19,6 +19,10 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
+	if (m_pPlayer)
+	{
+		m_pPlayer->Release();
+	}
 }
 
 

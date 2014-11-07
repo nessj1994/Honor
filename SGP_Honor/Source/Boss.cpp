@@ -11,6 +11,10 @@ Boss::Boss()
 
 Boss::~Boss()
 {
+	if (m_pPlayer)
+	{
+		m_pPlayer->Release();
+	}
 }
 
 

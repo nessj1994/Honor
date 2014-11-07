@@ -8,10 +8,13 @@
 VerticalBubble::VerticalBubble()
 {
 	SetSpeed(5000);
-	if (rand() % 2 == 1)
-		SetDirection({ 1, 0 });
-	else
-		SetDirection({ -1, 0 });
+
+	//if (rand() % 2 == 1)
+	//	SetDirection({ 1, 0 });
+	//else
+	//	SetDirection({ -1, 0 });
+
+
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/VerticalBubble.png");
 	m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage);
 }

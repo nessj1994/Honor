@@ -285,7 +285,7 @@ void MainMenuState::Render(void)
 
 
 
-		font.DrawString("Play", (fWidth - (4 * 19)) / 2, 250, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Play", (int)((fWidth - (4 * 19)) / 2), 250, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
 	else
@@ -295,7 +295,7 @@ void MainMenuState::Render(void)
 
 		//pGraphics->DrawTexture(m_hSword, { m_rPlay.left - 50, m_rPlay.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
 
-		font.DrawString("Play", (fWidth - (4 * 19)) / 2, 250, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Play", (int)((fWidth - (4 * 19)) / 2), 250, 1, SGD::Color{ 255, 255, 165, 0 });
 	}
 
 
@@ -305,14 +305,14 @@ void MainMenuState::Render(void)
 		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rOptions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 310 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Options", (fWidth - (7 * 15)) /2 , 320, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Options", (int)((fWidth - (7 * 15)) /2) , 320, 1, SGD::Color{ 255, 255, 165, 0 });
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rOptions, { 255, 255, 255, 30 }, {}, {});
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 310 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Options", (fWidth - (7 * 15)) / 2, 320, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Options", (int)((fWidth - (7 * 15)) / 2), 320, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
 
@@ -323,14 +323,14 @@ void MainMenuState::Render(void)
 		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Instructions", (fWidth - (12 * 14)) / 2, 390, 1, SGD::Color{ 255, 255,165, 0 });
+		font.DrawString("Instructions", (int)((fWidth - (12 * 14)) / 2), 390, 1, SGD::Color{ 255, 255,165, 0 });
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 30 }, {}, {});
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Instructions", (fWidth - (12 * 14)) / 2, 390, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Instructions", (int)((fWidth - (12 * 14)) / 2), 390, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
 
@@ -341,14 +341,14 @@ void MainMenuState::Render(void)
 		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rCredits.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 450 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Credits", (fWidth - (7 * 14)) /2, 460, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Credits", (int)((fWidth - (7 * 14)) /2), 460, 1, SGD::Color{ 255, 255, 165, 0 });
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rCredits, { 255, 255, 255, 30 }, {}, {});
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 450 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Credits", (fWidth - (7 * 14)) / 2, 460, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Credits", (int)((fWidth - (7 * 14)) / 2), 460, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
 
@@ -359,14 +359,14 @@ void MainMenuState::Render(void)
 		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rExit.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 520 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Exit", (fWidth - (4 * 18)) / 2 , 530, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Exit", (int)((fWidth - (4 * 18)) / 2) , 530, 1, SGD::Color{ 255, 255, 165, 0 });
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rExit, { 255, 255, 255, 30 }, {}, {});
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 520 }, 0.0f, {}, { 255, 255, 255, 255 });
 		
-		font.DrawString("Exit", (fWidth - (4 * 18)) / 2, 530, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Exit", (int)((fWidth - (4 * 18)) / 2), 530, 1, SGD::Color{ 255, 255, 165, 0 });
 
 		//font.DrawString("Exit", 450, 450, 1, SGD::Color{ 255, 0, 0, 255 });
 	}

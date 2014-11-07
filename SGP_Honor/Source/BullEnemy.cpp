@@ -269,6 +269,14 @@ void BullEnemy::HandleCollision(const IEntity * pOther)
 	{
 		BasicCollision(pOther);
 	}
+	if (pOther->GetType() == ENT_LASER)
+	{
+		m_bDying = true;
+		m_fDeathTimer = 0.5f;
+		m_bsCurrState = BS_DEATH;
+		m_ts.ResetCurrFrame();
+		
+	}
 }
 
 ////////////////////////////////////////////////

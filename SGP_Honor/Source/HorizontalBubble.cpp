@@ -7,11 +7,30 @@
 
 HorizontalBubble::HorizontalBubble()
 {
+
+//	if (GetOwner()->GetType() == ENT_BOSS_WIZARD)
+//	{
+//		if (rand() % 2 == 1)
+//			SetDirection({ 1, 0 });
+//		else
+//			SetDirection({ -1, 0 });
+//
+//	}
+//	else
+//	{
+//		if (rand() % 2 == 1)
+//			SetDirection({ 1, 0 });
+//		else
+//			SetDirection({ -1, 0 });
+//	}
+
+	//if (rand() % 2 == 1)
+	//	SetDirection({ 1, 0 });
+	//else
+	//	SetDirection({ -1, 0 });
+
 	SetSpeed(5000);
-	if (rand() % 2 == 1)
-		SetDirection({ 1, 0 });
-	else
-		SetDirection({ -1, 0 });
+	
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/HorizontalBubble.png");
 	m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage);
 }
@@ -24,23 +43,40 @@ HorizontalBubble::~HorizontalBubble()
 
 void HorizontalBubble::Update(float elapsedTime)
 {
-	//moving right
-	if (GetDirection().x == 1)
+	////moving right
+	//if (GetDirection().x == 1)
+	//{
+	//	SetVelocity({ GetVelocity().x + GetSpeed() * elapsedTime, GetVelocity().y });
+	//	if (GetVelocity().x > 550)
+	//	{
+	//		SetVelocity({ 550, GetVelocity().y });
+	//	}
+	//}
+	////Moving Left
+	//else
+	//{
+	//	SetVelocity({ GetVelocity().x - GetSpeed() * elapsedTime, GetVelocity().y });
+	//	if (GetVelocity().x < -550)
+	//	{
+	//		SetVelocity({ -550, GetVelocity().y });
+	//	}
+	//}
+	if (GetOwner()->GetType() == ENT_BOSS_WIZARD)
 	{
-		SetVelocity({ GetVelocity().x + GetSpeed() * elapsedTime, GetVelocity().y });
-		if (GetVelocity().x > 550)
-		{
-			SetVelocity({ 550, GetVelocity().y });
-		}
+		SetSpeed(500);
 	}
-	//Moving Left
-	else
+
+
+	SetVelocity({ GetVelocity().x + (GetSpeed() * GetDirection().x)* elapsedTime, GetVelocity().y + (GetSpeed() * GetDirection().y)* elapsedTime });
+
+	if (GetVelocity().x > 550)
 	{
-		SetVelocity({ GetVelocity().x - GetSpeed() * elapsedTime, GetVelocity().y });
-		if (GetVelocity().x < -550)
-		{
-			SetVelocity({ -550, GetVelocity().y });
-		}
+		SetVelocity({ 550, GetVelocity().y });
+	}
+
+	if (GetVelocity().x < -550)
+	{
+		SetVelocity({ -550, GetVelocity().y });
 	}
 
 	Entity::Update(elapsedTime);

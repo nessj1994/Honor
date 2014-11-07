@@ -33,6 +33,7 @@
 
 
 #define JOYSTICK_DEADZONE  0.6f
+#define TEXT_TIME_LENGTH   1.0f
 
 Player::Player() : Listener(this)
 {
@@ -47,6 +48,7 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("Screen2x4");
 	Listener::RegisterForEvent("Screen3x3");
 	Listener::RegisterForEvent("Screen2x1.5");
+	Listener::RegisterForEvent("Screen3x1.5");
 	Listener::RegisterForEvent("Screen1.5x2");
 	Listener::RegisterForEvent("Screen1.5x3");
 	Listener::RegisterForEvent("FINALBOSS");
@@ -108,6 +110,13 @@ void Player::Update(float elapsedTime)
 	m_emHawkReturn->Update(elapsedTime);
 	//
 	
+	if (HasBounce() == true)
+	{
+		if (m_fTextTimer <= TEXT_TIME_LENGTH)
+		{
+			m_fTextTimer += elapsedTime;
+		}
+	}
 
 	//if (m_pSword != nullptr)
 	//{
@@ -297,6 +306,16 @@ void Player::Render(void)
 
 	font.DrawString(output.str().c_str(), 60, 25, 1, SGD::Color{ 255, 255, 0, 0 });
 
+	if (HasBounce() == true)
+	{
+		if (m_fTextTimer <= TEXT_TIME_LENGTH)
+		{
+			Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+			font.DrawString("YOU GAINED THE BUBBLE ABILITY", m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x,
+				m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y - 100, 1, SGD::Color{ 255, 255, 0, 0 });
+		}
+	}
+
 	if(m_bDead)
 	{
 		// Draw a fading rectangle
@@ -323,7 +342,7 @@ void Player::HandleCollision(const IEntity* pOther)
 	if(pOther->GetType() == ENT_DOOR)
 	{
 		m_bSliding = false;
-
+		SetFriction(25.0f);
 		BasicCollision(pOther);
 	}
 
@@ -459,7 +478,7 @@ void Player::HandleCollision(const IEntity* pOther)
 			m_vtVelocity.x += 50;
 		}
 		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
-		SetVelocity(GetVelocity() * 1.01 );
+		SetVelocity(GetVelocity() * 1.01f );
 
 	}
 
@@ -1268,7 +1287,16 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 
 	if(pEvent->GetEventID() == "BOUNCE_HORIZONTAL")
 	{
+		m_unCurrentState = JUMPING_STATE;
+		if (*(float*)pEvent->GetData() > -1.0f
+			&& *(float*)pEvent->GetData() < 1.0f)
+		{
+			SetVelocity({ 10000.0f, -1000 });
+		}
+		else
 		SetVelocity({ 10000.0f * (*(float*)pEvent->GetData()), -1000 });
+		//SetVelocity({ 10000.0f, -1000 });
+
 		SetPosition({ GetPosition().x, GetPosition().y - 10 });
 
 	}
@@ -1308,6 +1336,13 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	if (pEvent->GetEventID() == "Screen2x1.5")
 	{
 		m_fPanX = 2;
+		m_fPanY = 1.5;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "Screen3x1.5")
+	{
+		m_fPanX = 3;
 		m_fPanY = 1.5;
 		Camera::GetInstance()->SetCameraCap(0);
 
@@ -1720,7 +1755,8 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 void Player::UpdateDash(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if(pInput->IsKeyDown(SGD::Key::Tab) == true
+	if(pInput->IsKeyPressed(SGD::Key::Tab) == true
+	//if (pInput->IsKeyDown(SGD::Key::Tab) == true
 		|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
 	{
 		GetDash()->GetEMDash()->Finish(false);

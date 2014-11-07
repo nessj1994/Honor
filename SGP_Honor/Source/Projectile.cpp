@@ -17,6 +17,10 @@ Projectile::Projectile()
 
 Projectile::~Projectile()
 {
+	if (m_pOwner)
+	{
+		m_pOwner->Release();
+	}
 }
 
 
@@ -91,7 +95,7 @@ SGD::Rectangle Projectile::GetRect(void) const
 }
 void Projectile::HandleCollision(const IEntity* pOther)
 {
-	if (pOther->GetType() == ENT_SOLID_WALL &&
+	if ((pOther->GetType() == ENT_SOLID_WALL || pOther->GetType() == ENT_DOOR) &&
 		pOther != GetOwner())
 	{
 		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
