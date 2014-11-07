@@ -203,13 +203,13 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	LoadLevel("Level4_5");
+	//LoadLevel("Level4_5");
 
-	LoadLevel("Level1_1");
+	//LoadLevel("Level1_5");
 
 	//LoadLevel("Level5_5");
 
-	//LoadLevel("HubLevel");
+	LoadLevel("Level3_5");
 
 	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
@@ -515,7 +515,7 @@ void GameplayState::Update(float elapsedTime)
 // - Render all game entities
 void GameplayState::Render(void)
 {
-	//m_pLevel->Render();
+	m_pLevel->Render();
 	m_pLevel->RenderImageLayer(true);
 
 
@@ -1207,6 +1207,7 @@ void GameplayState::CreateMovingPlatform(int _x, int _y, bool _vertical, float _
 
 	//mPlatform->SetTurnDistance(_turnDistance);
 	mPlatform->SetSpeed(_speed);
+	mPlatform->SetTurnDistance(_turnDistance);
 	m_pEntities->AddEntity(mPlatform, Entity::ENT_MOVING_PLATFORM);
 	mPlatform->Release();
 }
