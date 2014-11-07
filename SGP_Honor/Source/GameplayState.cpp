@@ -261,6 +261,7 @@ void GameplayState::Exit(void)
 	if (m_pPlayer != nullptr)
 	{
 		m_pPlayer->Release();
+
 	}
 
 	if (m_pHubOrb != nullptr)
@@ -359,12 +360,12 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level2_5");
+		LoadLevel("Level5_5");
 	}
 
 
 
-	if (pInput->IsKeyPressed(SGD::Key::Escape)
+	if (pInput->IsKeyPressed(SGD::Key::Escape) 
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
@@ -372,6 +373,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	}
 
 	return true;
+
 }
 
 //////////////////////////////////////////////
@@ -451,7 +453,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_GEYSER);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_BOSS_WIZARD);
-
+	m_pEntities->CheckCollisions(Entity::ENT_MUTANT_BIRD, Entity::ENT_MUTANT_BIRD);
 
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_LASER);
 	m_pEntities->CheckCollisions(Entity::ENT_DOOR, Entity::ENT_LASER);
@@ -1528,6 +1530,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 			pIceTurtle->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pIceTurtle, Entity::ENT_ICE_TURTLE);
 			pIceTurtle->Release();
+			pIceTurtle = nullptr;
 			break;
 		}
 		case 7: // hermit crab
