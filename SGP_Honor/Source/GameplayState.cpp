@@ -208,7 +208,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	//LoadLevel("Level5_5");
 
-	LoadLevel("Level2_4");
+	//LoadLevel("Level2_4");
 
 	//("HubLevel");
 
@@ -519,7 +519,7 @@ void GameplayState::Update(float elapsedTime)
 // - Render all game entities
 void GameplayState::Render(void)
 {
-	//m_pLevel->Render();
+	m_pLevel->Render();
 	m_pLevel->RenderImageLayer(true);
 
 
