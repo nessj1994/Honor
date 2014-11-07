@@ -1,6 +1,8 @@
 #include "Caveman.h"
 #include "Hawk.h"
 #include "CreateStalactite.h"
+#include "GameplayState.h"
+#include "DestroyEntityMessage.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "ParticleEngine.h"
 #include "AnimationEngine.h"
@@ -235,6 +237,7 @@ void Caveman::Update(float elapsedTime)
 			m_ts.SetPlaying(true);
 		}
 		SetVelocity({ 0, 0 });	
+		
 		break;
 	default:
 		break;
@@ -244,6 +247,13 @@ void Caveman::Update(float elapsedTime)
 		SGD::Event* pATEvent = new SGD::Event("GainedHawk", nullptr, this);
 		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 		pATEvent = nullptr;
+		GameplayState::GetInstance()->SetScreenFadeout(0);
+		// TODO Delete bull, give player dash, update room
+		GameplayState::GetInstance()->CreateTeleporter(1000, 512, "Level3_1", false);
+		GameplayState::GetInstance()->CreateHintStatue(700, 480, "You have The Hawk!");
+		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+		pMsg->QueueMessage();
+		pMsg = nullptr;
 	}
 	Boss::Update(elapsedTime);
 }

@@ -7,6 +7,7 @@
 #include "Projectile.h"
 #include "WizardDash.h"
 #include "WizardHawk.h"
+#include "Game.h"
 
 #include "CreateHorizontalBubble.h"
 #include "CreateVerticalBubble.h"
@@ -45,9 +46,7 @@ void Wizard::Update(float elapsedTime)
 
 	if (m_nDamage >= 3)
 	{
-		SetVelocity({ 0, 0 });
-		
-		return;
+		m_bsCurrState = WZ_DEATH;
 	}
 
 	GetPlayer()->SetSlowed(false);
@@ -279,7 +278,12 @@ void Wizard::Update(float elapsedTime)
 	}
 	case WZ_DEATH:
 	{
+		SetVelocity({ 0, 0 });
+		//Local refernce to the font
+		Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
 
+		//Draw the title
+		font.DrawString("VICTORY", m_ptPosition.x-200, m_ptPosition.y-100, 3, SGD::Color{ 255, 255, 0, 0 });
 	}
 
 	}
