@@ -202,9 +202,10 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadGame();
+	LoadHonorVector();
+	LoadLevel("Level4_5");
 
-	LoadLevel("Level3_1");
+	//LoadLevel("Level3_1");
 
 	//LoadLevel("Level5_5");
 
@@ -455,6 +456,9 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_YETI, Entity::ENT_PLAYER);
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_YETI, Entity::ENT_PERM_FREEZE);
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_YETI, Entity::ENT_TEMP_FREEZE);
+	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_DOOR);
+	m_pEntities->CheckCollisions(Entity::ENT_PROJ, Entity::ENT_DOOR);
+	
 
 
 
@@ -512,7 +516,7 @@ void GameplayState::Update(float elapsedTime)
 // - Render all game entities
 void GameplayState::Render(void)
 {
-	m_pLevel->Render();
+	//m_pLevel->Render();
 	m_pLevel->RenderImageLayer(true);
 
 
@@ -939,7 +943,7 @@ Entity* GameplayState::CreateGravProjectile(Entity* pOwner) const
 Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 {
 	HorizontalBubble* proj = new HorizontalBubble();
-	proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + 80));
+	proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y - 50));
 	proj->SetOwner(pOwner);
 	proj->SetSize({ 40, 40 });
 	return proj;
@@ -948,7 +952,7 @@ Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 Entity* GameplayState::CreateVertBubble(Entity* pOwner) const
 {
 	VerticalBubble* proj = new VerticalBubble();
-	proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + 80));
+	proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y - 50));
 	proj->SetOwner(pOwner);
 	proj->SetSize({ 40, 40 });
 	return proj;

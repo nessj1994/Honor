@@ -14,21 +14,19 @@
 #define BubbleCastLength 2.0f
 #define BubbleSpawnRate 0.2f
 #define BubbleCooldown 3.0f
-#define SlamTime 1.3f
-#define SwipeTime 1.3f
+#define SlamTime 2.2f
+#define SwipeTime 3.2f
 #define SwipeCooldown 1.5f
 #define HitCooldown 0.5f
 
 Crab::Crab() : Listener(this)
 {
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
-	//SetCurrentState(idle);
 	SetCurrentState(idle);
 
-	AnimationEngine::GetInstance()->LoadAnimation("Assets/testBoss.xml");
-	m_ts.SetCurrAnimation("Boss Idle");
+	AnimationEngine::GetInstance()->LoadAnimation("Assets/KingClang.xml");
+	m_ts.SetCurrAnimation("Clang Idle");
 	SetHitPoints(4);
-	//m_ptPosition = SGD::Point(350, 120);
 }
 
 
@@ -50,7 +48,7 @@ void Crab::Update(float elapsedTime)
 					leftSlamTimer = 0;
 					LeftSlamOnCD = true;
 					m_ts.ResetCurrFrame();
-					m_ts.SetCurrAnimation("Boss Idle");
+					m_ts.SetCurrAnimation("Clang Idle");
 					m_ts.SetPlaying(true);
 					SetCurrentState(idle);
 				}
@@ -63,7 +61,7 @@ void Crab::Update(float elapsedTime)
 					rightSlamTimer = 0;
 					RightSlamOnCD = true;
 					m_ts.ResetCurrFrame();
-					m_ts.SetCurrAnimation("Boss Idle");
+					m_ts.SetCurrAnimation("Clang Idle");
 					m_ts.SetPlaying(true);
 					SetCurrentState(idle);
 				}
@@ -76,7 +74,7 @@ void Crab::Update(float elapsedTime)
 					swipeTimer = 0;
 					SwipeOnCD = true;
 					m_ts.ResetCurrFrame();
-					m_ts.SetCurrAnimation("Boss Idle");
+					m_ts.SetCurrAnimation("Clang Idle");
 					m_ts.SetPlaying(true);
 					SetCurrentState(idle);
 				}
@@ -88,6 +86,9 @@ void Crab::Update(float elapsedTime)
 				{
 					wasHitCD = 0.0f;
 					wasHit = false;
+					SetCurrentState(idle);
+					m_ts.SetCurrAnimation("Clang Idle");
+					m_ts.SetPlaying(true);
 				}
 			}
 
@@ -153,14 +154,14 @@ void Crab::Update(float elapsedTime)
 							 if (GetPlayer()->GetPosition().x < rect.left && castedLeftSlam == false && castedRightSlam == false)
 							 {
 								 m_ts.ResetCurrFrame();
-								 m_ts.SetCurrAnimation("Boss Left Slam");
+								 m_ts.SetCurrAnimation("Clang Left Slam");
 								 m_ts.SetPlaying(true);
 								 castedLeftSlam = true;
 							 }
 							 if (GetPlayer()->GetPosition().x > rect.right && castedLeftSlam == false && castedRightSlam == false)
 							 {
 								 m_ts.ResetCurrFrame();
-								 m_ts.SetCurrAnimation("Boss Right Slam");
+								 m_ts.SetCurrAnimation("Clang Right Slam");
 								 m_ts.SetPlaying(true);
 								 castedRightSlam = true;
 							 }
@@ -171,7 +172,7 @@ void Crab::Update(float elapsedTime)
 							 if (castedSwipe == false && castedLeftSlam == false && castedRightSlam == false)
 							 {
 								 m_ts.ResetCurrFrame();
-								 m_ts.SetCurrAnimation("Boss Swipe");
+								 m_ts.SetCurrAnimation("Clang Swipe");
 								 m_ts.SetPlaying(true);
 								 castedSwipe = true;
 							 }
@@ -212,12 +213,16 @@ void Crab::Update(float elapsedTime)
 			}
 			case hurt:
 			{
-						 SetHitPoints(GetHitPoints() - 1);
-						 SGD::Event* pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
-						 SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-						 pATEvent = nullptr;
-						 wasHit = true;
-						 SetCurrentState(idle);
+						 if (m_ts.GetCurrAnimation() != "Clang Hurt")
+						 {
+							 SetHitPoints(GetHitPoints() - 1);
+							 SGD::Event* pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
+							 SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+							 pATEvent = nullptr;
+							 wasHit = true;
+							 m_ts.SetCurrAnimation("Clang Hurt");
+							 m_ts.SetPlaying(true);
+						 }
 						 break;
 			}
 			default:
@@ -250,7 +255,8 @@ void Crab::Render(void)
 	//Camera::GetInstance()->Draw(rMyRect,
 	//	SGD::Color::Color(255, 255, 0, 0));
 
-	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, IsFacingRight(),1.0f);
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, IsFacingRight(), 1.0f, {}, 
+		SGD::Color(255, 255 - ((4 - GetHitPoints()) * 60), 255 - ((4 - GetHitPoints()) * 60), 255 - ((4 - GetHitPoints()) * 60)));
 }
 
 SGD::Rectangle Crab::GetRect(void) const
@@ -306,7 +312,10 @@ void Crab::HandleCollision(const IEntity* pOther)
 		{
 			/*if (rBoss.bottom == rIntersection.bottom)
 			{
-				SetCurrentState(hurt);
+				if (wasHit == false)
+				{
+					SetCurrentState(hurt);
+				}
 			}*/
 			if (rBoss.top == rIntersection.top)
 			{
