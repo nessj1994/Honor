@@ -470,7 +470,7 @@ void Player::HandleCollision(const IEntity* pOther)
 			m_vtVelocity.x += 50;
 		}
 		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
-			SetVelocity(GetVelocity() * 1.01);
+			SetVelocity(GetVelocity() * 5.51);
 	}
 
 	if(pOther->GetType() == Entity::ENT_NOT_FROZEN)
@@ -526,7 +526,7 @@ void Player::HandleCollision(const IEntity* pOther)
 			m_vtVelocity.x += 50;
 		}
 		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
-		SetVelocity(GetVelocity() * 1.01f );
+		SetVelocity(GetVelocity() * 5.51f );
 
 	}
 

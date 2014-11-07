@@ -110,9 +110,7 @@
         <Honor collected="1" />
         <Honor collected="1" />
     </Level>
-    <Level name="Level5_3" unlocked="1">
-        <Honor collected="1" />
-    </Level>
+    <Level name="Level5_3" unlocked="1" />
     <Level name="Level5_4" unlocked="0" />
     <Level name="Level5_5" unlocked="1" />
     <Level name="TutorialLevel" unlocked="1" />

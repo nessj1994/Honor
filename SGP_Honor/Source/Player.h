@@ -121,6 +121,8 @@ public:
 	void SetStunnded(bool _stun) { m_bStunned = _stun; }
 	void SetHasArmor(bool armor) { m_bHasArmor = armor; }
 	void SetHasDash(bool dash) { m_bHasDash = dash; }
+	void SetHasHawk(bool hawk) { m_bHasHawk = hawk; }
+
 	void SetHasIce(bool ice) { m_bHasIce = ice; }
 	void SetHasBounce(bool bounce);
 	void SetDashTimer(float timer) { m_fDashTime = timer; }
