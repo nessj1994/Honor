@@ -32,7 +32,11 @@ public:
 	void HawkUpdate(float elapsedTime);
 	void ResetHawks();
 
+	void CastBubble();
+	void BubbleUpdate(float elapsedTime);
 
+	void CastIce();
+	
 
 	//DashPtrs
 	void SetDash1(WizardDash* _ptr) { dashPtr1 = _ptr; }
@@ -59,11 +63,12 @@ private:
 	float m_fDashStateTimer = 3.5f;
 	float m_fHawkStateTimer = 13.5f;
 	float m_fVunerableTimer = 6.0f;
-	
+	float m_fBubbleSpawner = 1.0f;
 
 	bool floatingLeft = true;
 	bool clonesCasted = false;
 	bool hawksCasted = false;
+	bool bubbleCasted = false;
 
 	unsigned int m_nDamage = 0;
 	unsigned int m_nBullCount = 0;

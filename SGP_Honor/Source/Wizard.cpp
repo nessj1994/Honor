@@ -8,6 +8,10 @@
 #include "WizardDash.h"
 #include "WizardHawk.h"
 
+#include "CreateHorizontalBubble.h"
+#include "CreateVerticalBubble.h"
+#include "DestroyEntityMessage.h"
+
 Wizard::Wizard() : Listener(this)
 {
 
@@ -22,6 +26,8 @@ Wizard::Wizard() : Listener(this)
 
 	m_fOrigStateTimer = 0.0f;
 	m_fCurStateTimer = m_fOrigStateTimer;
+
+	//m_nDamage = 1;
 
 }
 
@@ -44,15 +50,18 @@ void Wizard::Update(float elapsedTime)
 		return;
 	}
 
+	GetPlayer()->SetSlowed(false);
+	GetPlayer()->SetFriction(25);
+
 	switch (m_bsCurrState)
 	{
-		case WZ_FLOATING:
-		{
-							m_ts.SetCurrAnimation("Bull_Running");
-							m_ts.SetPlaying(true);
-							m_ts.SetSpeed(1.0f);
+	case WZ_FLOATING:
+	{
+						m_ts.SetCurrAnimation("Bull_Running");
+						m_ts.SetPlaying(true);
+						m_ts.SetSpeed(1.0f);
 
-							//Floating velocity update
+						//Floating velocity update
 						//	if (floatingLeft == true)
 						//	{
 						//		SetVelocity({ GetVelocity().x - 50 * elapsedTime, GetVelocity().y - 50 * elapsedTime });
@@ -74,103 +83,204 @@ void Wizard::Update(float elapsedTime)
 						//
 						//	}
 
-							if (m_nDamage == 0)
+						if (m_nDamage == 0)
+						{
+							if ((m_fCurStateTimer - m_fOrigStateTimer) > 1.0f)
 							{
-								if ( (m_fCurStateTimer - m_fOrigStateTimer) > 1.0f )
+
+								if (m_nBullCount < 2)
 								{
 
-									if (m_nBullCount < 2)
-									{
-
-										m_bsCurrState = WZ_BULL;
-										m_fOrigStateTimer = m_fCurStateTimer;
-										m_nBullCount++;
-									}
-									else
-									{
-										m_bsCurrState = WZ_HAWK;
-										m_fOrigStateTimer = m_fCurStateTimer;
-									}
+									m_bsCurrState = WZ_BULL;
+									m_fOrigStateTimer = m_fCurStateTimer;
+									m_nBullCount++;
+								}
+								else
+								{
+									m_bsCurrState = WZ_HAWK;
+									m_fOrigStateTimer = m_fCurStateTimer;
 								}
 							}
-
-							clonesCasted = false;
-							hawksCasted = false;
-							break;
-		}
-		case WZ_BULL:
-		{	
-
-						if ((m_fCurStateTimer - m_fOrigStateTimer) > 3.0f)
-						{
-
-							ClonesUpdate(elapsedTime);
-
-							if (clonesCasted == false)
-								CastClones();
 						}
-						if ((m_fCurStateTimer - m_fOrigStateTimer) > 5.0f)
+						if (m_nDamage == 1)
 						{
-							
-								m_bsCurrState = WZ_FLOATING;
-							
+							if ((m_fCurStateTimer - m_fOrigStateTimer) > 1.0f)
+							{
+
+								
+									m_bsCurrState = WZ_BUBBLE;
+									m_fOrigStateTimer = m_fCurStateTimer;
+								
+							}
+						}
+						if (m_nDamage == 2)
+						{
+							if ((m_fCurStateTimer - m_fOrigStateTimer) > 1.0f)
+							{
+
+								//if (m_nBullCount < 2)
+								//{
+								//
+								//	m_bsCurrState = WZ_BUBBLE;
+								//	m_fOrigStateTimer = m_fCurStateTimer;
+								//	m_nBullCount++;
+								//}
+								//else
+								//{
+								m_bsCurrState = WZ_ICE;
 								m_fOrigStateTimer = m_fCurStateTimer;
+								//	}
+							}
+						}
+						if (m_nDamage == 3)
+						{
 
 						}
 
+						clonesCasted = false;
+						hawksCasted = false;
 						break;
+	}
+	case WZ_BULL:
+	{
 
-		}
-		case WZ_HAWK:
-		{
+					if ((m_fCurStateTimer - m_fOrigStateTimer) > 3.0f)
+					{
 
-						HawkUpdate(elapsedTime);
 						ClonesUpdate(elapsedTime);
 
+						if (clonesCasted == false)
+							CastClones();
+					}
+					if ((m_fCurStateTimer - m_fOrigStateTimer) > 5.0f)
+					{
 
-						if ((m_fCurStateTimer - m_fOrigStateTimer) > 1.0f)
+						m_bsCurrState = WZ_FLOATING;
+
+						m_fOrigStateTimer = m_fCurStateTimer;
+
+					}
+
+					break;
+
+	}
+	case WZ_HAWK:
+	{
+
+					HawkUpdate(elapsedTime);
+					ClonesUpdate(elapsedTime);
+
+
+					if ((m_fCurStateTimer - m_fOrigStateTimer) > 1.0f)
+					{
+
+
+						if (hawksCasted == false)
 						{
-
-
-							if (hawksCasted == false)
-							{
-								m_fHawkStateTimer = 5.5f;
-								CastHawks();
-							}
-
-							if (clonesCasted == false)
-								CastClones();
-
+							m_fHawkStateTimer = 5.5f;
+							CastHawks();
 						}
 
-						if ((m_fCurStateTimer - m_fOrigStateTimer) > 4.0f)
-						{
+						if (clonesCasted == false)
+							CastClones();
 
-							m_bsCurrState = WZ_FLOATING;
+					}
 
+					if ((m_fCurStateTimer - m_fOrigStateTimer) > 4.0f)
+					{
 
-						}
-				
-						break;
-		}
-		case WZ_ICE:
-		{
+						m_bsCurrState = WZ_FLOATING;
 
 
-		}
-		case WZ_BUBBLE:
-		{
+					}
+
+					break;
+	}
+	case WZ_ICE:
+	{
+
+				   m_fBubbleSpawner -= elapsedTime;
+
+				   if ((m_fCurStateTimer - m_fOrigStateTimer) > 1.0f)
+				   {
+
+					   if (hawksCasted == false)
+					   {
+						   m_fHawkStateTimer = 5.5f;
+						   CastHawks();
+					   }
 
 
-		}
-		case WZ_DAMAGED:
-		{
 
-						   
 
-		
+					   if (m_fBubbleSpawner <= 0)
+					   {
+						   CastBubble();
+						   m_fBubbleSpawner = 1.0f;
+					   }
+				   }
+				   CastIce();
 
-		}
+				   break;
+
+	}
+	case WZ_BUBBLE:
+	{
+					  HawkUpdate(elapsedTime);
+					  ClonesUpdate(elapsedTime);
+
+					  m_fBubbleSpawner -= elapsedTime;
+
+
+					  if ((m_fCurStateTimer - m_fOrigStateTimer) > 1.0f)
+					  {
+
+
+						  if (hawksCasted == false)
+						  {
+							  m_fHawkStateTimer = 5.5f;
+							  CastHawks();
+						  }
+
+						  if (clonesCasted == false)
+							  CastClones();
+
+						  //if (bubbleCasted == false)
+						  //{
+
+						  if (m_fBubbleSpawner <= 0)
+						  {
+							  CastBubble();
+							  m_fBubbleSpawner = 1.0f;
+						  }
+
+						  // }
+
+					  }
+
+					  if ((m_fCurStateTimer - m_fOrigStateTimer) > 4.0f)
+					  {
+
+						  m_bsCurrState = WZ_FLOATING;
+
+
+					  }
+
+					  break;
+
+	}
+	case WZ_DAMAGED:
+	{
+
+
+
+
+
+	}
+	case WZ_DEATH:
+	{
+
+	}
 
 	}
 
@@ -193,16 +303,19 @@ void Wizard::HandleCollision(const IEntity* pOther)
 	if (pOther->GetType() == ENT_HAWK
 		&& m_bsCurrState == WZ_VUNERABLE)
 	{
-		m_nDamage += 1;
 		m_bsCurrState = WZ_DAMAGED;
+		//m_nDamage += 1;
 
 	}
+
+	m_nDamage += 1;
+
 }
 
 
 void Wizard::CastClones()
 {
-	
+
 	if (m_bsCurrState == WZ_BULL)
 	{
 
@@ -271,7 +384,7 @@ void Wizard::ClonesUpdate(float elapsedTime)
 
 	m_fDashStateTimer -= elapsedTime;
 
-	
+
 
 	if (m_fDashStateTimer < 0)
 	{
@@ -334,13 +447,13 @@ void Wizard::CastHawks()
 	if (m_bsCurrState == WZ_HAWK)
 	{
 
-		hawkPtr1->SetPosition({150, m_ptPosition.y });
+		hawkPtr1->SetPosition({ 150, m_ptPosition.y });
 		hawkPtr1->SetTimer(0.1f);
 
 		hawkPtr2->SetPosition({ 350, m_ptPosition.y });
 		hawkPtr2->SetTimer(0.2f);
 
-		hawkPtr3->SetPosition({450, m_ptPosition.y });
+		hawkPtr3->SetPosition({ 450, m_ptPosition.y });
 		hawkPtr3->SetTimer(0.3f);
 
 		hawkPtr4->SetPosition({ 650, m_ptPosition.y });
@@ -363,9 +476,120 @@ void Wizard::CastHawks()
 
 	if (m_bsCurrState == WZ_ICE)
 	{
+		if (rand() % 2 == 1)
+		{
 
+			hawkPtr1->SetPosition({ 250, m_ptPosition.y });
+			hawkPtr1->SetTimer(0.1f);
+
+			hawkPtr2->SetPosition({ 450, m_ptPosition.y });
+			hawkPtr2->SetTimer(0.2f);
+
+			hawkPtr3->SetPosition({ 550, m_ptPosition.y });
+			hawkPtr3->SetTimer(0.3f);
+
+			hawkPtr4->SetPosition({ 750, m_ptPosition.y });
+			hawkPtr4->SetTimer(0.4f);
+
+
+			hawkPtr1->SetDestPos({ 200, 600 });
+			hawkPtr2->SetDestPos({ 400, 600 });
+			hawkPtr3->SetDestPos({ 600, 600 });
+			hawkPtr4->SetDestPos({ 800, 600 });
+		}
+		else
+		{
+
+
+			hawkPtr1->SetPosition({ 150, m_ptPosition.y });
+			hawkPtr1->SetTimer(0.1f);
+
+			hawkPtr2->SetPosition({ 350, m_ptPosition.y });
+			hawkPtr2->SetTimer(0.2f);
+
+			hawkPtr3->SetPosition({ 450, m_ptPosition.y });
+			hawkPtr3->SetTimer(0.3f);
+
+			hawkPtr4->SetPosition({ 650, m_ptPosition.y });
+			hawkPtr4->SetTimer(0.4f);
+
+			hawkPtr1->SetDestPos({ 100, 600 });
+			hawkPtr2->SetDestPos({ 300, 600 });
+			hawkPtr3->SetDestPos({ 500, 600 });
+			hawkPtr4->SetDestPos({ 700, 600 });
+		}
+
+
+		hawkPtr1->SetDestSize({ 70, 70 });
+		hawkPtr2->SetDestSize({ 70, 70 });
+		hawkPtr3->SetDestSize({ 70, 70 });
+		hawkPtr4->SetDestSize({ 70, 70 });
 	}
 
+
+	if (m_bsCurrState == WZ_BUBBLE)
+	{
+	//	hawkPtr1->SetPosition({ 150, m_ptPosition.y });
+	//	hawkPtr1->SetTimer(0.1f);
+	//
+	//	hawkPtr2->SetPosition({ 350, m_ptPosition.y });
+	//	hawkPtr2->SetTimer(0.2f);
+	//
+	//	hawkPtr3->SetPosition({ 450, m_ptPosition.y });
+	//	hawkPtr3->SetTimer(0.3f);
+	//
+	//	hawkPtr4->SetPosition({ 650, m_ptPosition.y });
+	//	hawkPtr4->SetTimer(0.4f);
+
+		if (rand() % 2 == 1)
+		{
+
+			hawkPtr1->SetPosition({ 250, m_ptPosition.y });
+			hawkPtr1->SetTimer(0.1f);
+
+			hawkPtr2->SetPosition({ 450, m_ptPosition.y });
+			hawkPtr2->SetTimer(0.2f);
+
+			hawkPtr3->SetPosition({ 550, m_ptPosition.y });
+			hawkPtr3->SetTimer(0.3f);
+
+			hawkPtr4->SetPosition({ 750, m_ptPosition.y });
+			hawkPtr4->SetTimer(0.4f);
+
+
+			hawkPtr1->SetDestPos({ 200, 600 });
+			hawkPtr2->SetDestPos({ 400, 600 });
+			hawkPtr3->SetDestPos({ 600, 600 });
+			hawkPtr4->SetDestPos({ 800, 600 });
+		}
+		else
+		{
+
+
+			hawkPtr1->SetPosition({ 150, m_ptPosition.y });
+			hawkPtr1->SetTimer(0.1f);
+
+			hawkPtr2->SetPosition({ 350, m_ptPosition.y });
+			hawkPtr2->SetTimer(0.2f);
+
+			hawkPtr3->SetPosition({ 450, m_ptPosition.y });
+			hawkPtr3->SetTimer(0.3f);
+
+			hawkPtr4->SetPosition({ 650, m_ptPosition.y });
+			hawkPtr4->SetTimer(0.4f);
+
+			hawkPtr1->SetDestPos({ 100, 600 });
+			hawkPtr2->SetDestPos({ 300, 600 });
+			hawkPtr3->SetDestPos({ 500, 600 });
+			hawkPtr4->SetDestPos({ 700, 600 });
+		}
+
+
+		hawkPtr1->SetDestSize({ 70, 70 });
+		hawkPtr2->SetDestSize({ 70, 70 });
+		hawkPtr3->SetDestSize({ 70, 70 });
+		hawkPtr4->SetDestSize({ 70, 70 });
+	}
 
 
 	hawksCasted = true;
@@ -412,13 +636,14 @@ void Wizard::HawkUpdate(float elapsedTime)
 	{
 		if (hawkPtr1->GetPosition().y < 950)
 		{
-			
+
 			hawkPtr1->SetVelocity({ hawkPtr1->GetVelocity().x, hawkPtr1->GetVelocity().y + 1000 * elapsedTime });
 
 		}
 		else
 		{
 			hawkPtr1->SetDestPos({ -300, -300 });
+
 
 		}
 	}
@@ -435,6 +660,7 @@ void Wizard::HawkUpdate(float elapsedTime)
 		{
 			hawkPtr2->SetDestPos({ -300, -300 });
 
+
 		}
 	}
 
@@ -450,6 +676,7 @@ void Wizard::HawkUpdate(float elapsedTime)
 		{
 			hawkPtr3->SetDestPos({ -300, -300 });
 
+
 		}
 	}
 
@@ -463,7 +690,7 @@ void Wizard::HawkUpdate(float elapsedTime)
 		}
 		else
 		{
-			hawkPtr4->SetDestPos({ -300, -300 });
+			ResetHawks();
 
 		}
 	}
@@ -482,7 +709,7 @@ void Wizard::HawkUpdate(float elapsedTime)
 	if (m_fHawkStateTimer < 0)
 	{
 		m_fHawkStateTimer = 0.0f;
-	//	m_bsCurrState = WZ_FLOATING;
+		//	m_bsCurrState = WZ_FLOATING;
 
 		ResetHawks();
 
@@ -507,11 +734,44 @@ void Wizard::ResetHawks()
 	hawkPtr1->SetVelocity({ 0, 0 });
 	hawkPtr2->SetVelocity({ 0, 0 });
 	hawkPtr3->SetVelocity({ 0, 0 });
-	hawkPtr4->SetVelocity({ 0,0 });
+	hawkPtr4->SetVelocity({ 0, 0 });
 
 
 
 	hawksCasted = false;
 
+
+}
+
+void Wizard::CastBubble()
+{
+	//if (rand() % 2 == 0)
+	//{
+	//	CreateHorizontalBubble* pMsg = new CreateHorizontalBubble(this);
+	//	pMsg->QueueMessage();
+	//	pMsg = nullptr;
+	//}
+	//else
+	//{
+	//	CreateVerticalBubble* pMsg = new CreateVerticalBubble(this);
+	//	pMsg->QueueMessage();
+	//	pMsg = nullptr;
+	//}
+
+
+
+	CreateHorizontalBubble* pMsg = new CreateHorizontalBubble(this);
+	pMsg->QueueMessage();
+	pMsg = nullptr;
+}
+
+void Wizard::CastIce()
+{
+	GetPlayer()->SetSlowed(true);
+	GetPlayer()->SetFriction(40);
+}
+
+void Wizard::BubbleUpdate(float elapsedTime)
+{
 
 }

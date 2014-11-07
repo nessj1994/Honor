@@ -114,6 +114,7 @@ public:
 
 	//Slowed
 	bool Slowed() { return m_bSlowed; }
+	void SetSlowed(bool _logic) { m_bSlowed = _logic; }
 
 	////////////////////////////////////////////
 	/////////////////Mutators//////////////////
@@ -183,6 +184,7 @@ private:
 	float m_fInputTimer = 0.0f;
 	float m_fHawkTimer = 1.0f;
 	float m_fSwingTimer = 0.0f;
+	float m_fTextTimer = 0.0f;
 
 	//Screen pan value
 	float m_fPanX = 3;
@@ -220,6 +222,7 @@ private:
 	SGD::HAudio m_hBounceEffect = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hJellyfishEffect = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hGainAbility = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hScream = SGD::INVALID_HANDLE;
 
 	//SLowing Down with friction
 	bool m_bSlowed;
