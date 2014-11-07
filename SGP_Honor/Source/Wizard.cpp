@@ -1,5 +1,7 @@
 #include "Wizard.h"
 #include "AnimationEngine.h"
+#include "BitmapFont.h"
+#include "Font.h"
 #include "Camera.h"
 #include "GameplayState.h"
 #include "Projectile.h"
@@ -34,6 +36,13 @@ void Wizard::Update(float elapsedTime)
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 
 	m_fCurStateTimer += elapsedTime;
+
+	if (m_nDamage >= 3)
+	{
+		SetVelocity({ 0, 0 });
+		
+		return;
+	}
 
 	switch (m_bsCurrState)
 	{

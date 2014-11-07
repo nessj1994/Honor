@@ -357,12 +357,12 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level2_1");
+		LoadLevel("Level5_5");
 	}
 
 
 
-	if (pInput->IsKeyPressed(SGD::Key::Escape)
+	if (pInput->IsKeyPressed(SGD::Key::Escape) 
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
@@ -370,6 +370,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	}
 
 	return true;
+
 }
 
 //////////////////////////////////////////////

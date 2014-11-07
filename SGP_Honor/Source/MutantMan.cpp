@@ -100,14 +100,6 @@ void MutantMan::Update(float _elapsedTime)
 			SetFacingRight(true);
 			m_vtVelocity.x = -300;
 		}
-		if (m_ptPosition.x < m_pPatrolPoint.x)
-		{
-			m_vtVelocity.y = 300;
-		}
-		if (m_ptPosition.y > m_pPatrolPoint.y)
-		{
-			m_vtVelocity.y = -100;
-		}
 		////Patrol if no target
 		//if (m_pPatrolPoint == m_ptPosition && m_bFacingRight)
 		//{
@@ -123,14 +115,15 @@ void MutantMan::Update(float _elapsedTime)
 		//}
 		if (distance.ComputeLength() < 60)
 		{
-			//Attack the player
-			if (m_ts.GetCurrAnimation() != "Mutant_Attacking")
+			SetVelocity({ 0, 0 });
+			////Attack the player
+			if (m_ts.GetCurrAnimation() != "Mutant_Idle")
 			{
 				m_ts.ResetCurrFrame();
-				m_ts.SetCurrAnimation("Mutant_Attacking");
+				m_ts.SetCurrAnimation("Mutant_Idle");
 				m_ts.SetPlaying(true);				
 			}
-			if (m_ts.GetCurrFrame() == 1)
+			/*if (m_ts.GetCurrFrame() == 1)
 			{
 				if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hPunch))
 				{
@@ -138,7 +131,7 @@ void MutantMan::Update(float _elapsedTime)
 				}
 				m_bPlayerAttacked = true;
 			}
-			m_vtVelocity.x = 0;
+			m_vtVelocity.x = 0;*/
 		}
 		else 
 		//if Mutant is going towards player change to walking animation if he doesnt need to vomit
@@ -265,12 +258,10 @@ void MutantMan::HandleCollision(const IEntity* pOther)
 		if (rMutant.right == rIntersection.right)
 		{
 			SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
-			SetVelocity({ 0, GetVelocity().y });
 		}
 		if (rMutant.left == rIntersection.left)
 		{
 			SetPosition({ (float)rObject.right, GetPosition().y });
-			SetVelocity({ 0, GetVelocity().y });
 		}
 	}
 
@@ -278,13 +269,11 @@ void MutantMan::HandleCollision(const IEntity* pOther)
 	{
 		if (rMutant.bottom == rIntersection.bottom)
 		{
-			SetVelocity({ GetVelocity().x, 0 });
 			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 /*- nIntersectHeight*/ });
 		}
 		if (rMutant.top == rIntersection.top)
 		{
 			SetPosition({ GetPosition().x, (float)rObject.bottom });
-			SetVelocity({ GetVelocity().x, 0 });
 		}
 	}
 
