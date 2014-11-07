@@ -47,6 +47,7 @@ private:
 	SGD::Size m_szOrigSize = { 0, 0 };
 
 
+	SGD::HAudio m_hEffect = SGD::INVALID_HANDLE;
 
 };
 

@@ -3,6 +3,7 @@
 #include "../SGD Wrappers/SGD_MessageManager.h"
 #include "AnimationEngine.h"
 #include "Camera.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 Turret::Turret()
 {
 	m_ptPosition = { 800, 150 };
@@ -12,12 +13,14 @@ Turret::Turret()
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/Graphics/Turret.png");
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/TurretAnimations.xml");
 	m_ts.SetCurrAnimation("turretidle");
+	m_hShootSound = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/ShootSound.wav");
 }
 
 
 Turret::~Turret()
 {
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hShootSound);
 }
 
 /////////////////////////////////////////////////
@@ -30,6 +33,7 @@ void Turret::Update(float elapsedTime)
 	}
 	if(m_fFireTimer <= 0.0f)
 	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hShootSound);
 		m_fFireTimer = 0.0f;
 		m_ts.SetCurrAnimation("turretfire");
 		m_ts.SetPlaying(true);

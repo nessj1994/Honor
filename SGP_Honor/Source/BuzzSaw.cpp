@@ -4,6 +4,7 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 #define rotationSpeed 60.0f
 
@@ -14,12 +15,14 @@ BuzzSaw::BuzzSaw()
 	m_szSize = { 32, 32 };
 	m_bMovingRight = false;
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/Graphics/Buzzsaw.png");
+	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/Buzzsaw.wav");
 }
 
 
 BuzzSaw::~BuzzSaw()
 {
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage); 
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
 }
 
 
@@ -27,6 +30,12 @@ BuzzSaw::~BuzzSaw()
 /////////////////Interface//////////////////////
 void BuzzSaw::Update(float elapsedTime)
 {
+
+	if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hEffect))
+	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
+		m_bEffectPlay = true;
+	}
 	if(m_bMovingRight == true)
 	{
 		m_vtVelocity.x = 40;

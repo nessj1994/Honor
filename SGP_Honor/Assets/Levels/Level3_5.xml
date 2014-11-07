@@ -49160,7 +49160,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="68">
+	<Entities numEntities="67">
 		<Entity type="20" x="129" y="65" numArgs="1" name="Boss_1">
 			<Argument type="1" name="Type" value="2" />
 		</Entity>

@@ -55,6 +55,8 @@ private:
 	float m_fFallSpeed = 100.0f;
 	float m_fRiseSpeed = 100.0f;
 
+	SGD::HAudio m_hEffect = SGD::INVALID_HANDLE;
+
 
 };
 

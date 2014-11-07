@@ -37,6 +37,8 @@ private:
 	SGD::Point m_ptStartPosition;	//Position to store for movement
 	unsigned int m_unDistance = 0; //Pixels moved from the start postion on either side
 	float rotation = 0.0f;
+	SGD::HAudio m_hEffect = SGD::INVALID_HANDLE;
+	bool m_bEffectPlay;
 
 };
 

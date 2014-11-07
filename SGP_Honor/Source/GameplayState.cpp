@@ -203,13 +203,16 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadHonorVector();
-	//LoadLevel("Level4_5");
+	
+	LoadLevel("Level3_5");
 
 	//LoadLevel("Level1_5");
 
 	//LoadLevel("Level5_5");
 
 	LoadLevel("Level3_5");
+
+	//("HubLevel");
 
 	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
 	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
@@ -356,7 +359,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("World2Level");
+		LoadLevel("Level2_5");
 	}
 
 
@@ -419,9 +422,9 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MUTANT_MAN);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_POOP);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STALACTITE);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_DOOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_YETI);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ICE_GOLEM);
-
 
 
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_SWORD);
@@ -451,6 +454,9 @@ void GameplayState::Update(float elapsedTime)
 
 
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_LASER);
+	m_pEntities->CheckCollisions(Entity::ENT_DOOR, Entity::ENT_LASER);
+	m_pEntities->CheckCollisions(Entity::ENT_BULL_ENEMY, Entity::ENT_LASER);
+
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_PLAYER);
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_YETI, Entity::ENT_PLAYER);
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_YETI, Entity::ENT_PERM_FREEZE);
@@ -734,6 +740,11 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 			{
 				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
 			}
+											 // if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_WIZARD)
+											 // {
+											//	   pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+											 //
+											 // }
 
 			pProj->Release();
 			pProj = nullptr;
@@ -767,6 +778,14 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 
 			pProj->Release();
 			pProj = nullptr;
+											  if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_WIZARD)
+											  {
+												  pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+
+											  }
+
+											  pProj->Release();
+											  pProj = nullptr;
 
 
 			break;
@@ -946,6 +965,60 @@ Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 	proj->SetOwner(pOwner);
 	proj->SetSize({ 40, 40 });
 	return proj;
+	if (pOwner->GetType() == Entity::ENT_BOSS_WIZARD)
+	{
+
+		GameplayState* pSelf = GameplayState::GetInstance();
+
+		HorizontalBubble* proj_1 = new HorizontalBubble();
+		proj_1->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + 100));
+		proj_1->SetOwner(pOwner);
+		proj_1->SetSize({ 40, 40 });
+		proj_1->SetDirection({ -1, 1 });
+		pSelf->m_pEntities->AddEntity(proj_1, Entity::ENT_PROJ);
+	
+			
+
+
+		HorizontalBubble* proj_2 = new HorizontalBubble();
+		proj_2->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + 100));
+		proj_2->SetOwner(pOwner);
+		proj_2->SetSize({ 40, 40 });
+		proj_2->SetDirection({ 0, 1});
+		pSelf->m_pEntities->AddEntity(proj_2, Entity::ENT_PROJ);
+
+
+
+		HorizontalBubble* proj = new HorizontalBubble();
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + 100));
+		proj->SetOwner(pOwner);
+		proj->SetSize({ 40, 40 });
+		proj->SetDirection({ 1, 1 });
+		pSelf->m_pEntities->AddEntity(proj, Entity::ENT_PROJ);
+
+
+			//proj->SetDirection({ -1, 1 });
+
+		
+		return proj;
+
+
+
+	}
+	else
+	{
+		HorizontalBubble* proj = new HorizontalBubble();
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + 80));
+		proj->SetOwner(pOwner);
+		proj->SetSize({ 40, 40 });
+
+		if (rand() % 2 == 1)
+			proj->SetDirection({ 1, 0 });
+		else
+			proj->SetDirection({ -1, 0 });
+
+		return proj;
+	}
 }
 
 Entity* GameplayState::CreateVertBubble(Entity* pOwner) const
@@ -954,6 +1027,12 @@ Entity* GameplayState::CreateVertBubble(Entity* pOwner) const
 	proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y - 50));
 	proj->SetOwner(pOwner);
 	proj->SetSize({ 40, 40 });
+
+	if (rand() % 2 == 1)
+		proj->SetDirection({ 1, 0 });
+	else
+		proj->SetDirection({ -1, 0 });
+
 	return proj;
 }
 

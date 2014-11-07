@@ -1,6 +1,7 @@
 #include "Geyser.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "Camera.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 
 Geyser::Geyser()
@@ -13,11 +14,13 @@ Geyser::Geyser()
 
 	m_bSPRAYED = true;
 	
+	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/Geyser.wav");
 }
 
 
 Geyser::~Geyser()
 {
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
 }
 
 /////////////////////////////////////////////////
@@ -134,6 +137,7 @@ void Geyser::ChangePillar(int _height, float _delta)
 
 	if (m_bSPRAYED == true)
 	{
+
 		m_ptPosition.y = m_ptOrigPos.y - _height;
 		m_szSize.height = m_szOrigSize.height + _height;
 
@@ -147,6 +151,16 @@ void Geyser::ChangePillar(int _height, float _delta)
 		}
 
 	}
+
+	if(m_bResting == false)
+	{
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hEffect))
+		{
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
+		}
+	}
+	else
+		SGD::AudioManager::GetInstance()->StopAudio(m_hEffect);
 
 
 }

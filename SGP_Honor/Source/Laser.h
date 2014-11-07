@@ -55,5 +55,7 @@ private:
 
 	//SGD::Point m_ptDirection = { 0, 0 };
 
+	SGD::HAudio m_hEffect = SGD::INVALID_HANDLE;
+
 };
 
