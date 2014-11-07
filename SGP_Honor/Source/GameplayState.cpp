@@ -203,9 +203,9 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadHonorVector();
 	
-	//LoadLevel("Level0_1");
+	//LoadLevel("Level5_5");
 
-	LoadLevel("Level2_2");
+	LoadLevel("Level2_4");
 
 	//("HubLevel");
 
@@ -445,6 +445,9 @@ void GameplayState::Update(float elapsedTime)
 
 
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_LASER);
+	m_pEntities->CheckCollisions(Entity::ENT_DOOR, Entity::ENT_LASER);
+	m_pEntities->CheckCollisions(Entity::ENT_BULL_ENEMY, Entity::ENT_LASER);
+
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_PLAYER);
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_YETI, Entity::ENT_PLAYER);
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_YETI, Entity::ENT_PERM_FREEZE);

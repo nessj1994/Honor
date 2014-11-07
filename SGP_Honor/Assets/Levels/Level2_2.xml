@@ -42321,7 +42321,7 @@
 		<Entity type="4" x="544" y="384" numArgs="3" name="Door_1">
 			<Argument type="0" name="IsHorizontal" value="0" />
 			<Argument type="1" name="ActivatorIndex" value="1" />
-			<Argument type="0" name="StartOpen" value="1" />
+			<Argument type="0" name="StartOpen" value="0" />
 		</Entity>
 		<Entity type="4" x="544" y="576" numArgs="3" name="Door_2">
 			<Argument type="0" name="IsHorizontal" value="0" />

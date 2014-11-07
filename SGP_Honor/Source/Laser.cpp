@@ -1,5 +1,6 @@
 #include "Laser.h"
 #include "Camera.h"
+#include <Windows.h>
 
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
@@ -66,6 +67,8 @@ void Laser::Update(float elapsedTime)
 		m_bFull = false;
 	}
 
+
+	m_bFull = false;
 }
 void Laser::Render(void)
 {
@@ -94,9 +97,53 @@ SGD::Rectangle Laser::GetRect(void) const
 
 void Laser::HandleCollision(const IEntity* pOther)
 {
+	RECT rPlayer;
+	rPlayer.left = (LONG)GetRect().left;
+	rPlayer.top = (LONG)GetRect().top;
+	rPlayer.right = (LONG)GetRect().right;
+	rPlayer.bottom = (LONG)GetRect().bottom;
+
+	//Create a rectangle for the other object
+	RECT rObject;
+	rObject.left = (LONG)pOther->GetRect().left;
+	rObject.top = (LONG)pOther->GetRect().top;
+	rObject.right = (LONG)pOther->GetRect().right;
+	rObject.bottom = (LONG)pOther->GetRect().bottom;
+
+	//Create a rectangle for the intersection
+	RECT rIntersection = {};
+
+
+	IntersectRect(&rIntersection, &rObject, &rPlayer);
+
+	int nIntersectWidth = rIntersection.right - rIntersection.left;
+	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
 	if (pOther->GetType() == ENT_SOLID_WALL)
 	{
 		m_bFull = true;
+	}
+	if (pOther->GetType() == ENT_DOOR)
+	{
+		m_bFull = true;
+		
+		if (nIntersectHeight > 16)
+		{
+			m_ptPosition.y = m_ptOrigPos.y;
+			m_szSize.height = m_szOrigSize.height;
+		}
+
+		//m_vtDirection.x != 0
+
+		if (nIntersectWidth > 16
+			&& m_vtDirection.x != 0)
+		{
+			m_ptPosition.x = m_ptOrigPos.x;
+			m_szSize.width = m_szOrigSize.width;
+		}
+		
+		
+		
 	}
 	if (pOther->GetType() == ENT_LASER)
 	{
@@ -123,6 +170,13 @@ void Laser::HandleEvent(const SGD::Event* pEvent)
 		if (pEntity->GetType() == ENT_BOSS_CRAB)
 		{
 			m_bOn = !m_bOn;
+		}
+		if (pEntity->GetType() == ENT_DOOR)
+		{
+			//m_bOn = !m_bOn;
+			
+			m_ptPosition.y = m_ptOrigPos.y;
+			m_szSize.height = m_szOrigSize.height;
 		}
 	}
 }
