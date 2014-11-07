@@ -34,6 +34,6 @@ private:
 	
 	unsigned int m_unMusicVol = 100;
 	unsigned int m_unEffectsVol = 100;
-	
+	bool m_bFullScreen;
 };
 
