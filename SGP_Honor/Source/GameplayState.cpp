@@ -257,7 +257,7 @@ void GameplayState::Exit(void)
 	if (m_pPlayer != nullptr)
 	{
 		m_pPlayer->Release();
-		delete m_pPlayer;
+
 	}
 
 	if (m_pHubOrb != nullptr)
