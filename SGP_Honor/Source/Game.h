@@ -88,6 +88,7 @@ public:
 		{
 			return m_pProfile3;
 		}
+		return nullptr;
 	}
 
 	int GetSelectedNumber() { return m_nSelectedProfile; }

@@ -252,13 +252,13 @@ void ProfileState::Render(void)
 
 
 
-		font.DrawString("Profile 1", (fWidth - (4 * 19)) / 3.65, 250, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Profile 1", (int)((fWidth - (4 * 19)) / 3.65f), 250, 1, SGD::Color{ 255, 255, 165, 0 });
 
 		std::ostringstream stringstream;
 		stringstream << Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCollectedHonor();
 
-		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), m_rProfile1.left + 300, 220, 1, { 255, 255, 0, 0 });
-		font.DrawString("Collected Honor: " + stringstream.str(), m_rProfile1.left + 300, 252, 1, { 255, 255, 0, 0 });
+		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300), 220, 1, { 255, 255, 0, 0 });
+		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300), 252, 1, { 255, 255, 0, 0 });
 
 		//font.DrawString(Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel().c_str(), m_rProfile1.left + 400, 220, 1, { 255, 255, 0, 0 });
 
@@ -272,7 +272,7 @@ void ProfileState::Render(void)
 
 		//pGraphics->DrawTexture(m_hSword, { m_rPlay.left - 50, m_rPlay.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
 
-		font.DrawString("Profile 1", (fWidth - (4 * 19)) / 3.65, 250, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Profile 1", (int)((fWidth - (4 * 19)) / 3.65f), 250, 1, SGD::Color{ 255, 255, 165, 0 });
 	}
 
 
@@ -282,20 +282,20 @@ void ProfileState::Render(void)
 		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rOptions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, 310 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Profile 2", (fWidth - (4 * 19)) / 3.65, 320, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Profile 2", (int)((fWidth - (4 * 19)) / 3.65f), 320, 1, SGD::Color{ 255, 255, 165, 0 });
 
 
 		std::ostringstream stringstream;
 		stringstream << Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCollectedHonor();
-		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), m_rProfile1.left + 300, 220, 1, { 255, 255, 0, 0 });
-		font.DrawString("Collected Honor: " + stringstream.str(), m_rProfile1.left + 300, 252, 1, { 255, 255, 0, 0 });
+		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300), 220, 1, { 255, 255, 0, 0 });
+		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300), 252, 1, { 255, 255, 0, 0 });
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rProfile2, { 255, 255, 255, 30 }, {}, {});
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, 310 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Profile 2", (fWidth - (4 * 19)) / 3.65, 320, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Profile 2", (int)((fWidth - (4 * 19)) / 3.65f), 320, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
 
@@ -306,19 +306,19 @@ void ProfileState::Render(void)
 		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Profile 3", (fWidth - (4 * 19)) / 3.65, 390, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Profile 3", (int)((fWidth - (4 * 19)) / 3.65f), 390, 1, SGD::Color{ 255, 255, 165, 0 });
 
 		std::ostringstream stringstream;
 		stringstream << Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCollectedHonor();
-		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), m_rProfile1.left + 300, 220, 1, { 255, 255, 0, 0 });
-		font.DrawString("Collected Honor: " + stringstream.str(), m_rProfile1.left + 300, 252, 1, { 255, 255, 0, 0 });
+		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300), 220, 1, { 255, 255, 0, 0 });
+		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300), 252, 1, { 255, 255, 0, 0 });
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rProfile3, { 255, 255, 255, 30 }, {}, {});
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Profile 3", (fWidth - (4 * 19)) / 3.65, 390, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Profile 3", (int)((fWidth - (4 * 19)) / 3.65f), 390, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
 }
@@ -401,7 +401,7 @@ void ProfileState::LoadProfile(Profile* profile)
 		pLevel->Attribute("unlocked", &unlocked);
 		
 
-		if(unlocked == true)
+		if(unlocked ? true : false)
 		{
 			profile->SetCurrentLevel(name);
 		}
