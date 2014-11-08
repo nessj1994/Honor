@@ -70,6 +70,8 @@ private:
 	//Laser are on or off
 	bool m_bLaserOn;
 	float m_fSwitchJumpTimer;
+	float m_fJumpAgainTimer;
+	bool m_bReadyToSwitch;
 
 	//Subtracting Hit points Timer
 	float m_fHitTimer;
