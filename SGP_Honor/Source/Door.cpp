@@ -14,11 +14,17 @@ Door::Door() : Listener(this)
 	m_ptPosition = { 200, 150 };
 	m_szSize = { 100, 200 };
 
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/DoorObstacle.png");
+	m_hOpenImage = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/DoorOpen.png");
+
 }
 
 
 Door::~Door()
 {
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hOpenImage);
+
 }
 
 /////////////////////////////////////////////////
@@ -65,6 +71,25 @@ void Door::Render(void)
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
 	Camera::GetInstance()->Draw(rMyRect, { 255, 0, 0, 255 });
+
+	if(m_bOpen == false && m_bHorizontal == false)
+		Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y }, 0.0f, m_hImage, false, 1.0f, {}, {});
+	else if(m_bOpen == true && m_bHorizontal == false)
+	{
+		Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y }, 0.0f, m_hOpenImage, false, 1.0f, {}, {});
+
+	}
+	else if(m_bOpen == false && m_bHorizontal == true)
+	{
+		Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width - 50, m_ptPosition.y }, 1.57f, m_hImage, false, 1.0f, {}, {});
+
+	}
+	else if(m_bOpen == true && m_bHorizontal == true)
+	{
+		Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y }, 1.57f, m_hOpenImage, false, 1.0f, {}, {});
+
+	}
+
 }
 
 int Door::GetType(void) const

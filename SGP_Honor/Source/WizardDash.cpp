@@ -6,7 +6,7 @@
 WizardDash::WizardDash()
 {
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/Bull_Animation.xml");
-	m_ts.SetCurrAnimation("Bull_Running");
+	m_ts.SetCurrAnimation("Wizard Dash");
 	m_ts.SetPlaying(true);
 	m_szSize = { 70, 70 };
 
@@ -58,6 +58,8 @@ void WizardDash::Update(float elapsedTime)
 	}
 
 	Entity::Update(elapsedTime);
+	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
+
 }
 void WizardDash::Render(void)
 {
@@ -72,6 +74,10 @@ void WizardDash::Render(void)
 	//Render us with the camera
 	Camera::GetInstance()->Draw(rMyRect, SGD::Color::Color(255, 255, 0, 0));
 
+	if(m_bFacingRight == true)
+		Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + 64, m_ptPosition.y + m_szSize.height }, 0.0f, m_ts, false, 1.0f, {});
+	else
+		Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + 64, m_ptPosition.y + m_szSize.height }, 0.0f, m_ts, true, 1.0, {});
 
 
 }

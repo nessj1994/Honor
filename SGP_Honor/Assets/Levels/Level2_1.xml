@@ -10092,7 +10092,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="19">
+	<Entities numEntities="25">
 		<Entity type="11" x="512" y="448" numArgs="2" name="Buzzsaw_1">
 			<Argument type="0" name="IsHorizontal" value="0" />
 			<Argument type="1" name="ReturnDistance" value="0" />
@@ -10169,9 +10169,27 @@
 			<Argument type="1" name="ActivatorIndex" value="0" />
 			<Argument type="0" name="On" value="1" />
 		</Entity>
-		<Entity type="18" x="2560" y="672" numArgs="2" name="Teleporter_1">
+		<Entity type="18" x="2559" y="672" numArgs="2" name="Teleporter_1">
 			<Argument type="0" name="HubTeleporter" value="0" />
 			<Argument type="3" name="Level" value="Level2_2" />
+		</Entity>
+		<Entity type="0" x="499" y="645" numArgs="1" name="Honor_1">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="89" y="440" numArgs="1" name="Honor_2">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="995" y="630" numArgs="1" name="Honor_3">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="2451" y="283" numArgs="1" name="Honor_4">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="2443" y="451" numArgs="1" name="Honor_5">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="1668" y="443" numArgs="1" name="Honor_6">
+			<Argument type="1" name="Amount" value="1" />
 		</Entity>
 	</Entities>
 </Level>

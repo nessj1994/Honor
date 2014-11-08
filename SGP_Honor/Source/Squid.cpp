@@ -10,7 +10,7 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "DestroyEntityMessage.h"
 
-#define ShootSpeed 1.2f
+#define ShootSpeed 1.6f
 
 Squid::Squid() : Listener(this)
 {

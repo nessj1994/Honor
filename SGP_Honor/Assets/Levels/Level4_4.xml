@@ -19310,7 +19310,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="24">
+	<Entities numEntities="31">
 		<Entity type="19" x="640" y="704" numArgs="1" name="Enemy_1">
 			<Argument type="1" name="Type" value="9" />
 		</Entity>
@@ -19371,6 +19371,27 @@
 		<Entity type="21" x="4160" y="192" numArgs="2" name="BossTeleporter_1">
 			<Argument type="1" name="HonorNeeded" value="200" />
 			<Argument type="3" name="Level" value="Level4_5" />
+		</Entity>
+		<Entity type="0" x="968" y="54" numArgs="1" name="Honor_1">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="1068" y="323" numArgs="1" name="Honor_2">
+			<Argument type="1" name="Amount" value="20" />
+		</Entity>
+		<Entity type="0" x="1549" y="541" numArgs="1" name="Honor_3">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="3083" y="182" numArgs="1" name="Honor_4">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="3238" y="159" numArgs="1" name="Honor_5">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="3423" y="174" numArgs="1" name="Honor_6">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="3660" y="191" numArgs="1" name="Honor_7">
+			<Argument type="1" name="Amount" value="1" />
 		</Entity>
 	</Entities>
 </Level>

@@ -42254,7 +42254,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="33">
+	<Entities numEntities="37">
 		<Entity type="1" x="416" y="736" numArgs="3" name="Activator_1">
 			<Argument type="0" name="IsPressurePlate" value="0" />
 			<Argument type="0" name="Active" value="0" />
@@ -42375,6 +42375,18 @@
 			<Argument type="0" name="IsHorizontal" value="0" />
 			<Argument type="1" name="ActivatorIndex" value="2" />
 			<Argument type="0" name="StartOpen" value="0" />
+		</Entity>
+		<Entity type="0" x="3201" y="614" numArgs="1" name="Honor_1">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="3301" y="621" numArgs="1" name="Honor_2">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="3394" y="619" numArgs="1" name="Honor_3">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="5321" y="705" numArgs="1" name="Honor_4">
+			<Argument type="1" name="Amount" value="1" />
 		</Entity>
 	</Entities>
 </Level>

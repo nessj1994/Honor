@@ -45,6 +45,7 @@ void OptionsState::Enter(void) //Load Resources
 
 	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/HonorBGM.xwm");
 
+	m_bFullScreen = !Game::GetInstance()->GetWindowed();
 	pAudio->PlayAudio(m_hBGM);
 }
 
@@ -74,11 +75,11 @@ void OptionsState::Exit(void)
 	TiXmlElement* element = new TiXmlElement("option");
 	rootElement->LinkEndChild(element);
 	element->SetAttribute("music_volume", nMusicVol);
-	
+
 	TiXmlElement* element2 = new TiXmlElement("option");
 	rootElement->LinkEndChild(element2);
 	element2->SetAttribute("sfx_volume", nEffectsVol);
-	
+
 	doc.SaveFile("Assets/Options.xml");
 
 
@@ -117,9 +118,9 @@ bool OptionsState::Input(void) //Hanlde user Input
 	{
 		m_unCursor += 1;
 
-		if(m_unCursor > 1)
+		if(m_unCursor > 2)
 		{
-			m_unCursor = 1;
+			m_unCursor = 2;
 		}
 
 	}
@@ -183,6 +184,14 @@ bool OptionsState::Input(void) //Hanlde user Input
 
 	}
 
+	if(m_unCursor == 2 && (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::Enter) || SGD::InputManager::GetInstance()->IsButtonPressed(0, 0)))
+	{
+		m_bFullScreen = !m_bFullScreen;
+
+		SGD::GraphicsManager::GetInstance()->Resize({ Game::GetInstance()->GetScreenWidth(),
+			Game::GetInstance()->GetScreenHeight() }, !m_bFullScreen);
+		Game::GetInstance()->SetWindowed(m_bFullScreen);
+	}
 
 
 
@@ -205,7 +214,7 @@ void OptionsState::Update(float elapsedTime)
 void OptionsState::Render(void)
 {
 	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
-	
+
 	int nMusicVol = SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::Music);
 	int nEffectsVol = SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects);
 
@@ -216,11 +225,50 @@ void OptionsState::Render(void)
 	ossMus << nMusicVol;
 	ossSFX << nEffectsVol;
 
-	
-	
-	font.DrawString("Music Volume:", 450, 250, 1, SGD::Color{ 255, 255, 0, 0 });
-	font.DrawString(ossMus.str().c_str(), 700, 250, 1, { 255, 255, 0, 0 });
-	font.DrawString("Effects Volume:", 450, 282, 1, SGD::Color{ 255, 255, 0, 0 });
-	font.DrawString(ossSFX.str().c_str(), 700, 282, 1, { 255, 255, 0, 0 });
+
+
+
+	if(m_unCursor == 0)
+	{
+		font.DrawString("Music Volume:", 450, 250, 1, SGD::Color{ 255, 255, 0, 0 });
+		font.DrawString(ossMus.str().c_str(), 700, 250, 1, { 255, 255, 0, 0 });
+	}
+	else
+	{
+		font.DrawString("Music Volume:", 450, 250, 1, SGD::Color{ 255, 0, 255, 0 });
+		font.DrawString(ossMus.str().c_str(), 700, 250, 1, { 255, 0, 255, 0 });
+	}
+
+	if(m_unCursor == 1)
+	{
+		font.DrawString("Effects Volume:", 450, 282, 1, SGD::Color{ 255, 255, 0, 0 });
+		font.DrawString(ossSFX.str().c_str(), 700, 282, 1, { 255, 255, 0, 0 });
+	}
+	else
+	{
+		font.DrawString("Effects Volume:", 450, 282, 1, SGD::Color{ 255, 0, 255, 0 });
+		font.DrawString(ossSFX.str().c_str(), 700, 282, 1, { 255, 0, 255, 0 });
+	}
+
+	if(m_unCursor == 2 && m_bFullScreen)
+	{
+		font.DrawString("Full Screen:", 450, 314, 1, SGD::Color{ 255, 255, 0, 0 });
+		font.DrawString(("ON"), 700, 314, 1, SGD::Color{ 255, 255, 0, 0 });
+	}
+	else if(m_unCursor != 2 && m_bFullScreen)
+	{
+		font.DrawString("Full Screen:", 450, 314, 1, SGD::Color{ 255, 0, 255, 0 });
+		font.DrawString(("ON"), 700, 314, 1, SGD::Color{ 255, 0, 255, 0 });
+	}
+	else if(m_unCursor == 2 && !m_bFullScreen)
+	{
+		font.DrawString("Full Screen:", 450, 314, 1, SGD::Color{ 255, 255, 0, 0 });
+		font.DrawString(("OFF"), 700, 314, 1, SGD::Color{ 255, 255, 0, 0 });
+	}
+	else if(m_unCursor != 2 && !m_bFullScreen)
+	{
+		font.DrawString("Full Screen:", 450, 314, 1, SGD::Color{ 255, 0, 255, 0 });
+		font.DrawString(("OFF"), 700, 314, 1, SGD::Color{ 255, 0, 255, 0 });
+	}
 
 }
