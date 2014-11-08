@@ -7,6 +7,7 @@
 #include "ParticleEngine.h"
 #include "AnimationEngine.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "Camera.h"
 #include <random>
 
@@ -37,11 +38,25 @@ Caveman::Caveman() : SGD::Listener(this)
 	m_ts.SetPlaying(true);
 	m_bLaserOn = false;
 
+	// Sound
+	m_hGrunt1 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Grunt1.wav");
+	m_hGrunt2 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Grunt2.wav");
+	m_hGrunt3 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Grunt3.wav");
+	m_hJump = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Jump.wav");
+	m_hLand = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Land.wav");
+	m_hKick = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Kick.wav");
+
 }
 
 
 Caveman::~Caveman()
 {
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGrunt1);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGrunt2);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGrunt3);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hJump);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hLand);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hKick);
 }
 
 void Caveman::Update(float elapsedTime)

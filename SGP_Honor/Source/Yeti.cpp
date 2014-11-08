@@ -7,6 +7,7 @@
 #include "CreateSprayMessage.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include <cmath>
 #include "Player.h"
 
@@ -28,11 +29,22 @@ Yeti::Yeti() : Listener(this)
 	SetStartPosition(m_ptPosition);
 	SetCurrentState(CHASING_STATE);
 
+	// Sound
+	m_hGrunt1 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Grunt4.wav");
+	m_hGrunt2 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Grunt5.wav");
+	m_hGrunt3 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Grunt6.wav");
+	m_hJump = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Jump.wav");
+	m_hLand = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Land.wav");
 }
 
 
 Yeti::~Yeti()
 {
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGrunt1);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGrunt2);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGrunt3);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hJump);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hLand);
 }
 
 /////////////////////////////////////////////////
