@@ -167,11 +167,11 @@ void Hawk::Attack(SGD::Point _Pos,bool PlayerFacing)
 		m_pEndPos = _Pos;
 		if (PlayerFacing)
 		{
-			m_pEndPos.x -= 600;
+			m_pEndPos.x -= 800;
 		}
 		else
 		{
-			m_pEndPos.x += 600;
+			m_pEndPos.x += 800;
 		}		
 		m_bDead = false;
 	}
