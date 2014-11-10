@@ -365,6 +365,30 @@ void Player::HandleCollision(const IEntity* pOther)
 	if(pOther->GetType() == Entity::ENT_ARMOR)
 	{
 		m_bHasArmor = true;
+		if (m_ts.GetCurrAnimation() == "Idle")
+		{
+			m_ts.SetCurrAnimation("Armor Player Idle");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
+		else if (m_ts.GetCurrAnimation() == "Jump")
+		{
+			m_ts.SetCurrAnimation("Armor Player Jump");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
+		else if (m_ts.GetCurrAnimation() == "Walking")
+		{
+			m_ts.SetCurrAnimation("Armor Player Walking");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
+		else if (m_ts.GetCurrAnimation() == "dashing")
+		{
+			m_ts.SetCurrAnimation("Armor Player dashing");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
 	}
 
 
@@ -1321,9 +1345,7 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		//Kill the player
 		if(!m_bDead && m_fArmorTimer <= 0.0f)
 		{
-
 			KillPlayer();
-
 		}
 	}
 
@@ -1431,8 +1453,33 @@ void Player::KillPlayer()
 		// Jump and remove armor
 		m_bHasArmor = false;
 		m_fArmorTimer = 2.0f;
-		m_vtVelocity.y -= 2500;
+		SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
+		SetVelocity({ m_vtVelocity.x, m_vtVelocity.y - 2500 });
 		m_unJumpCount = 0;
+		if (m_ts.GetCurrAnimation() == "Armor Player Idle")
+		{
+			m_ts.SetCurrAnimation("Idle");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
+		else if (m_ts.GetCurrAnimation() == "Armor Player Jump")
+		{
+			m_ts.SetCurrAnimation("Jump");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
+		else if (m_ts.GetCurrAnimation() == "Armor Player Walking")
+		{
+			m_ts.SetCurrAnimation("Walking");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
+		else if (m_ts.GetCurrAnimation() == "Armor Player dashing")
+		{
+			m_ts.SetCurrAnimation("dashing");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
 	}
 	else
 	{
@@ -1689,7 +1736,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 			m_ts.SetPlaying(true);
 		}
 	}
-	else if(leftClamped == true && m_unCurrentState == RESTING_STATE)
+	else if(leftClamped == true && m_unCurrentState == RESTING_STATE && is_Swinging == false)
 	{
 		m_ts.SetPlaying(false);
 		m_ts.ResetCurrFrame();
@@ -1808,13 +1855,18 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 
 void Player::UpdateDash(float elapsedTime)
 {
+	if (m_fDashCoolTimer > 0.0f)
+	{
+		m_fDashCoolTimer -= elapsedTime;
+	}
 	if (HasDash() == true)
 	{
 		SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-		if (pInput->IsKeyPressed(SGD::Key::Tab) == true
+		if (m_fDashCoolTimer <= 0.0f && (pInput->IsKeyPressed(SGD::Key::Tab) == true
 			//if (pInput->IsKeyDown(SGD::Key::Tab) == true
-			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
+			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/)))
 		{
+			m_fDashCoolTimer = 1.0f;
 			GetDash()->GetEMDash()->Finish(false);
 			CastDash();
 			m_ts.SetPlaying(true);
@@ -2323,8 +2375,11 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 	{
 		if(m_fSwingTimer <= 0.0f)
 		{
-			m_fSwingTimer = 0.2f;
+			m_fSwingTimer = 0.75f;
 			is_Swinging = true;
+			m_ts.SetCurrAnimation("Swing Attack");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
 		}
 
 

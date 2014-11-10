@@ -214,8 +214,6 @@ void GameplayState::Enter(void) //Load Resources
 
 	//LoadLevel("HubLevel");
 
-	//LoadLevel("HubLevel");
-
 	//("HubLevel");
 
 	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
@@ -471,7 +469,9 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_YETI, Entity::ENT_TEMP_FREEZE);
 	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_DOOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PROJ, Entity::ENT_DOOR);
-	
+	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_LEFT_RAMP);
+	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_RIGHT_RAMP);
+	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_DEATH);
 	//FLocking Collisions
 	m_pEntities->CheckCollisions(Entity::ENT_MUTANT_BIRD, Entity::ENT_MUTANT_BIRD);
 	m_pEntities->CheckCollisions(Entity::ENT_MUTANT_MAN, Entity::ENT_MUTANT_MAN);
@@ -1307,7 +1307,9 @@ void GameplayState::CreateGeyser(int _x, int _y, float _speed, float _maxHeight,
 	Geyser* m_pGeyser = new Geyser;
 	m_pGeyser->SetPosition({ (float)_x, (float)_y });
 	m_pGeyser->SetOrigPosition({ (float)_x, (float)_y });
-
+	m_pGeyser->SetSpeed(_speed);
+	m_pGeyser->SetMaxHeight(_maxHeight);
+	m_pGeyser->SetState(_currState);
 	m_pEntities->AddEntity(m_pGeyser, Entity::ENT_GEYSER);
 
 	m_pGeyser->Release();

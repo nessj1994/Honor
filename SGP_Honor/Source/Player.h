@@ -172,6 +172,7 @@ private:
 	bool m_bStunned = false;
 
 	float m_fDashTime = 0.0f;
+	float m_fDashCoolTimer = 0.0f;
 	float m_fIceTimer = 0.0f;
 	//float m_fJumpVelCap = 250;
 	float m_fJumpVelCur = 0;

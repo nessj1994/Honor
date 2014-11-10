@@ -1,6 +1,7 @@
 #include "Crab.h"
 #include "Camera.h"
 #include "../SGD Wrappers/SGD_MessageManager.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "CreateHorizontalBubble.h"
@@ -27,11 +28,23 @@ Crab::Crab() : Listener(this)
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/KingClang.xml");
 	m_ts.SetCurrAnimation("Clang Idle");
 	SetHitPoints(4);
+
+	// Sound
+	m_hRoar = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/CrabRoar.wav");
+	m_hBubble = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bubble.wav");
+	m_hSlam1 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam1.wav");
+	m_hSlam2 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam2.wav");
+	m_hSlam3 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam3.wav");
 }
 
 
 Crab::~Crab()
 {
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hRoar);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBubble);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam1);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam1);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam1);
 }
 
 void Crab::Update(float elapsedTime)
@@ -256,7 +269,7 @@ void Crab::Render(void)
 	//	SGD::Color::Color(255, 255, 0, 0));
 
 	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, IsFacingRight(), 1.0f, {}, 
-		SGD::Color(255, 255 - ((4 - GetHitPoints()) * 60), 255 - ((4 - GetHitPoints()) * 60), 255 - ((4 - GetHitPoints()) * 60)));
+		SGD::Color(255, 255, 255 - ((4 - GetHitPoints()) * 60), 255 - ((4 - GetHitPoints()) * 60)));
 }
 
 SGD::Rectangle Crab::GetRect(void) const
