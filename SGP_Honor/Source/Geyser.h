@@ -16,16 +16,22 @@ public:
 	virtual void Render(void) override;
 
 	virtual int GetType(void) const override;
-	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
 
 	//SGD::Rectangle GetPillar(void) const { return m_rPillar; }
 
-	void ChangePillar(int _height, float _delta);
+	void ChangePillar(float _height, float _delta);
+	void SetState(int _state);
 
+	/////////////////////////////////////////////////
+	/////////////////Accessors//////////////////////
 	SGD::Point	GetOrigPosition(void) const { return m_ptOrigPos; }
-	void		SetOrigPosition(SGD::Point pos)		{ m_ptOrigPos = pos; }
 
+	/////////////////////////////////////////////////
+	/////////////////Mutators//////////////////////
+	void		SetOrigPosition(SGD::Point pos)		{ m_ptOrigPos = pos; }
+	void		SetSpeed(float _speed)	{ m_fSpeed = _speed; }
+	void		SetMaxHeight(float _height)	{ m_fMaxHeight = _height; }
 
 private:
 
@@ -41,6 +47,9 @@ private:
 
 	float m_fApexTimer = 2.0f;
 	float m_fSprayTimer = 4.0f;
+
+	float m_fSpeed = 0.0f;
+	float m_fMaxHeight = 0.0f;
 
 
 	SGD::Point m_ptOrigPos = { 0, 0 };

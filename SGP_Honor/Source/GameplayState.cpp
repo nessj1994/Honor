@@ -1307,7 +1307,9 @@ void GameplayState::CreateGeyser(int _x, int _y, float _speed, float _maxHeight,
 	Geyser* m_pGeyser = new Geyser;
 	m_pGeyser->SetPosition({ (float)_x, (float)_y });
 	m_pGeyser->SetOrigPosition({ (float)_x, (float)_y });
-
+	m_pGeyser->SetSpeed(_speed);
+	m_pGeyser->SetMaxHeight(_maxHeight);
+	m_pGeyser->SetState(_currState);
 	m_pEntities->AddEntity(m_pGeyser, Entity::ENT_GEYSER);
 
 	m_pGeyser->Release();
