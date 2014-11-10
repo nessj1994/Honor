@@ -35,6 +35,7 @@ Yeti::Yeti() : Listener(this)
 	m_hGrunt3 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Grunt6.wav");
 	m_hJump = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Jump.wav");
 	m_hLand = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Land.wav");
+	m_hSlam = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam1.wav");
 }
 
 
@@ -45,6 +46,7 @@ Yeti::~Yeti()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGrunt3);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hJump);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hLand);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam);
 }
 
 /////////////////////////////////////////////////
