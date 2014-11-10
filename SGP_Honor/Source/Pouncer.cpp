@@ -143,7 +143,8 @@ void Pouncer::HandleCollision(const IEntity* pOther)
 	{
 		Enemy::HandleCollision(pOther);
 
-		if (pOther->GetType() == Entity::ENT_SOLID_WALL || pOther->GetType() == Entity::ENT_DOOR)
+		if (pOther->GetType() == Entity::ENT_SOLID_WALL || pOther->GetType() == Entity::ENT_DOOR || pOther->GetType() == Entity::ENT_LEFT_RAMP
+			|| pOther->GetType() == Entity::ENT_RIGHT_RAMP)
 		{
 			//SetVelocity({ 0, GetVelocity().y });
 			RECT rPouncer;
@@ -172,12 +173,12 @@ void Pouncer::HandleCollision(const IEntity* pOther)
 			{
 				if (rPouncer.right == rIntersection.right)
 				{
-					SetPosition({ (float)rObject.left - nIntersectWidth - 25, GetPosition().y });
+					SetPosition({ (float)rObject.left - nIntersectWidth - 30, GetPosition().y });
 					SetVelocity({ 0, GetVelocity().y });
 				}
 				if (rPouncer.left == rIntersection.left)
 				{
-					SetPosition({ (float)rObject.right + nIntersectWidth + 25, GetPosition().y });
+					SetPosition({ (float)rObject.right + nIntersectWidth + 26, GetPosition().y });
 					SetVelocity({ 0, GetVelocity().y });
 				}
 			}
@@ -192,7 +193,7 @@ void Pouncer::HandleCollision(const IEntity* pOther)
 				}
 				if (rPouncer.top == rIntersection.top)
 				{
-					SetPosition({ GetPosition().x, (float)rObject.bottom + nIntersectHeight + 46 });
+					SetPosition({ GetPosition().x, (float)rObject.bottom + nIntersectHeight + 50 });
 					SetVelocity({ GetVelocity().x, 0 });
 				}
 			}
@@ -203,6 +204,10 @@ void Pouncer::HandleCollision(const IEntity* pOther)
 			//if so move back up but kill the player
 			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 			SGD::EventManager::GetInstance()->SendEventNow(&Event);
+		}
+		if (pOther->GetType() == ENT_DEATH)
+		{
+			SetAlive(false);
 		}
 	}
 }

@@ -210,9 +210,9 @@ void GameplayState::Enter(void) //Load Resources
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-	LoadLevel("HubLevel");
+	//LoadLevel("Level4_5");
 
-	//LoadLevel("HubLevel");
+	LoadLevel("HubLevel");
 
 	//LoadLevel("HubLevel");
 
@@ -471,7 +471,9 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_YETI, Entity::ENT_TEMP_FREEZE);
 	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_DOOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PROJ, Entity::ENT_DOOR);
-	
+	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_LEFT_RAMP);
+	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_RIGHT_RAMP);
+	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_DEATH);
 
 
 

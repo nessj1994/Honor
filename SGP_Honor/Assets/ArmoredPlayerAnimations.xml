@@ -17,4 +17,14 @@
   <Animation name="Armor Player dashing" spritesheet="CharArmor_beard.png" looping="0">
     <Frame RenderRectLeft="248" RenderRectTop="2" RenderRectRight="336" RenderRectBottom="68" CollisionRectLeft="260" CollisionRectTop="2" CollisionRectRight="299" CollisionRectBottom="68" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="35" anchorpointY="65" />
   </Animation>
+  <Animation name="Armor Player Swing" spritesheet="CharArmor_beard.png" looping="0">
+    <Frame RenderRectLeft="267" RenderRectTop="80" RenderRectRight="338" RenderRectBottom="171" CollisionRectLeft="285" CollisionRectTop="112" CollisionRectRight="306" CollisionRectBottom="169" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.3" anchorpointX="32" anchorpointY="88" />
+    <Frame RenderRectLeft="339" RenderRectTop="75" RenderRectRight="445" RenderRectBottom="155" CollisionRectLeft="410" CollisionRectTop="91" CollisionRectRight="424" CollisionRectBottom="149" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.15" anchorpointX="87" anchorpointY="73" />
+    <Frame RenderRectLeft="2" RenderRectTop="193" RenderRectRight="90" RenderRectBottom="263" CollisionRectLeft="16" CollisionRectTop="202" CollisionRectRight="32" CollisionRectBottom="260" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.3" anchorpointX="34" anchorpointY="65" />
+  </Animation>
+  <Animation name="Armor Player Swipe" spritesheet="CharArmor_beard.png" looping="0">
+    <Frame RenderRectLeft="99" RenderRectTop="81" RenderRectRight="160" RenderRectBottom="164" CollisionRectLeft="120" CollisionRectTop="97" CollisionRectRight="137" CollisionRectBottom="162" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.3" anchorpointX="25" anchorpointY="80" />
+    <Frame RenderRectLeft="163" RenderRectTop="84" RenderRectRight="208" RenderRectBottom="170" CollisionRectLeft="178" CollisionRectTop="108" CollisionRectRight="192" CollisionRectBottom="170" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.15" anchorpointX="22" anchorpointY="84" />
+    <Frame RenderRectLeft="209" RenderRectTop="79" RenderRectRight="265" RenderRectBottom="191" CollisionRectLeft="224" CollisionRectTop="92" CollisionRectRight="240" CollisionRectBottom="148" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.3" anchorpointX="22" anchorpointY="67" />
+  </Animation>
 </Animations>
