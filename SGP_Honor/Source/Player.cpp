@@ -51,6 +51,11 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("Screen3x1.5");
 	Listener::RegisterForEvent("Screen1.5x2");
 	Listener::RegisterForEvent("Screen1.5x3");
+	Listener::RegisterForEvent("Screen3x1");
+	Listener::RegisterForEvent("Screen3x1.5");
+
+
+
 	Listener::RegisterForEvent("FINALBOSS");
 	Listener::RegisterForEvent("BossLevel");
 	Listener::RegisterForEvent("GainedHawk");
@@ -311,8 +316,8 @@ void Player::Render(void)
 		if (m_fTextTimer <= TEXT_TIME_LENGTH)
 		{
 			Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
-			font.DrawString("YOU GAINED THE BUBBLE ABILITY", m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x,
-				m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y - 100, 1, SGD::Color{ 255, 255, 0, 0 });
+			font.DrawString("YOU GAINED THE BUBBLE ABILITY", (int)(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
+				(int)(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y - 100), 1, SGD::Color{ 255, 255, 0, 0 });
 		}
 	}
 
@@ -470,7 +475,7 @@ void Player::HandleCollision(const IEntity* pOther)
 			m_vtVelocity.x += 50;
 		}
 		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
-			SetVelocity(GetVelocity() * 1.51);
+			SetVelocity(GetVelocity() * 1.51f);
 	}
 
 	if(pOther->GetType() == Entity::ENT_NOT_FROZEN)
@@ -1378,6 +1383,23 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		Camera::GetInstance()->SetCameraCap(0);
 
 	}
+
+	if (pEvent->GetEventID() == "Screen3x1")
+	{
+		m_fPanX = 3;
+		m_fPanY = 1.3f;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+
+	if (pEvent->GetEventID() == "Screen3x1.5")
+	{
+		m_fPanX = 3;
+		m_fPanY = 1.5f;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+
 	if (pEvent->GetEventID() == "Screen3x3")
 	{
 		m_fPanX = 3;
@@ -1415,7 +1437,9 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	}
 	if (pEvent->GetEventID() == "FINALBOSS")
 	{
-		Camera::GetInstance()->SetCameraCap(5);
+		Camera::GetInstance()->SetCameraCap(0);
+		//Camera::GetInstance()->SetCameraCap(5);
+
 
 	}
 	if (pEvent->GetEventID() == "BossLevel")
