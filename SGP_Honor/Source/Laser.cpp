@@ -50,18 +50,18 @@ void Laser::Update(float elapsedTime)
 			else if(m_vtDirection.y == 1)
 			{
 				//m_ptPosition.y -= 100 * elapsedTime;
-				m_szSize.height += 800 * elapsedTime;
+				m_szSize.height += 1800 * elapsedTime;
 			}
 
 			if(m_vtDirection.x == -1)
 			{
-				m_ptPosition.x -= 800 * elapsedTime;
-				m_szSize.width += 800 * elapsedTime;
+				m_ptPosition.x -= 1800 * elapsedTime;
+				m_szSize.width += 1800 * elapsedTime;
 			}
 			else if(m_vtDirection.x == 1)
 			{
 				//m_ptPosition.x -= 100 * elapsedTime;
-				m_szSize.width += 800 * elapsedTime;
+				m_szSize.width += 1800 * elapsedTime;
 			}
 		}
 

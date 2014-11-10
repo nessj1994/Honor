@@ -1,5 +1,6 @@
 #pragma once
 #include "IGameState.h"
+#include "Game.h"
 #include "../SGD Wrappers/SGD_Geometry.h"
 #include "../SGD Wrappers/SGD_Handle.h"
 
@@ -36,12 +37,12 @@ private:
 	
 
 	//SGD::Rectangle m_rPlay = SGD::Rectangle (100.0f, 400.0f, 520.0f, 600.0f );
-	SGD::Rectangle m_rPlay = SGD::Rectangle(SGD::Point(384, 240.0f), SGD::Point(640.0f, 304.0f));
-	SGD::Rectangle m_rOptions = SGD::Rectangle(SGD::Point(384, 310.0f), SGD::Point(640, 374.0f));
-	SGD::Rectangle m_rInstructions = SGD::Rectangle(SGD::Point(384, 380.0f), SGD::Point(640, 444.0f));
-	SGD::Rectangle m_rCredits = SGD::Rectangle(SGD::Point(384, 450.0f), SGD::Point(640, 514.0f));
-	SGD::Rectangle m_rExit = SGD::Rectangle(SGD::Point(384, 520.0f), SGD::Point(640, 584.0f));
-	SGD::Rectangle m_rSword = SGD::Rectangle(SGD::Point(216, 250 ), SGD::Point(344, 272));
+	SGD::Rectangle m_rPlay = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 130, Game::GetInstance()->GetScreenHeight() / 2 - 60}, SGD::Size{ 260, 65 });
+	SGD::Rectangle m_rOptions = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 130, Game::GetInstance()->GetScreenHeight() / 2 + 10 }, SGD::Size{ 260, 65 });
+	SGD::Rectangle m_rInstructions = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 130, Game::GetInstance()->GetScreenHeight() / 2 + 80 }, SGD::Size{ 260, 65 });
+	SGD::Rectangle m_rCredits = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 130, Game::GetInstance()->GetScreenHeight() / 2 + 150 }, SGD::Size{ 260, 65 });
+	SGD::Rectangle m_rExit = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 130, Game::GetInstance()->GetScreenHeight() / 2 + 220 }, SGD::Size{ 260, 65 });
+	SGD::Rectangle m_rSword = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 300, Game::GetInstance()->GetScreenHeight() / 2 - 60 }, SGD::Size{ 260, 65 });
 
 
 	SGD::HTexture m_hBackground = SGD::INVALID_HANDLE;

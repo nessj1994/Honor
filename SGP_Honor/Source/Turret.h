@@ -20,12 +20,13 @@ public:
 
 	/////////////////////////////////////////////////
 	/////////////////Mutators//////////////////////
-	void SetFireTimer(float _timer) { m_fFireTimer = _timer; }
+	void SetFireTimer(float _timer) { m_fFireTimer = _timer; m_fShootTimer = _timer; }
 	void SetShootDirection(int _dir) { m_nDirection = _dir; }
 
 private:
 
-	float m_fFireTimer = 1.65f;
+	float m_fFireTimer = 0.0f;
+	float m_fShootTimer = 0.0f;
 	int m_nDirection = 0;
 	float m_fRotation = 0.0f;
 

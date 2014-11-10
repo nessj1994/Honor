@@ -27,27 +27,20 @@ Turret::~Turret()
 /////////////////Interface//////////////////////
 void Turret::Update(float elapsedTime)
 {
-	if(m_fFireTimer > 0.0f)
+	if (m_fShootTimer > 0.0f)
 	{
-		m_fFireTimer -= elapsedTime;
+		m_fShootTimer -= elapsedTime;
 	}
-	if(m_fFireTimer <= 0.0f)
+
+	if (m_fShootTimer <= 0.0f)
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hShootSound);
-		m_fFireTimer = 0.0f;
 		m_ts.SetCurrAnimation("turretfire");
 		m_ts.SetPlaying(true);
-	}
-
-	if(m_fFireTimer == 0.0f)
-	{
-
-		m_fFireTimer = 1.65f;
+		m_fShootTimer = m_fFireTimer;
 		CreateProjectileMessage* pMsg = new CreateProjectileMessage(this);
 		pMsg->QueueMessage();
 		pMsg = nullptr;
-
-	
 	}
 
 	//Right
@@ -75,6 +68,7 @@ void Turret::Update(float elapsedTime)
 	else if(m_nDirection == 3)
 	{
 		m_vtDirection = { 0, 1 };
+		SetDirection({ 0, 1 });
 		m_bFacingRight = false;
 		m_fRotation = 30.0f;
 		

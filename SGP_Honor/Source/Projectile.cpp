@@ -39,12 +39,30 @@ void Projectile::Update(float elapsedTime)
 		}
 	}
 	//Moving Left
-	else
+	else if (GetDirection().x == -1)
 	{
 		SetVelocity({ GetVelocity().x - GetSpeed() * elapsedTime, GetVelocity().y });
 		if (GetVelocity().x < -550)
 		{
 			SetVelocity({ -550, GetVelocity().y });
+		}
+	}
+	// Moving up
+	else if (GetDirection().y == -1)
+	{
+		SetVelocity({ GetVelocity().x, GetVelocity().y - GetSpeed() * elapsedTime });
+		if (GetVelocity().y < -550)
+		{
+			SetVelocity({ GetVelocity().x, -550 });
+		}
+	}
+	// Moving down
+	else if (GetDirection().y == 1)
+	{
+		SetVelocity({ GetVelocity().x, GetVelocity().y + GetSpeed() * elapsedTime });
+		if (GetVelocity().y > 550)
+		{
+			SetVelocity({ GetVelocity().x, 550 });
 		}
 	}
 

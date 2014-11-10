@@ -277,6 +277,7 @@ void BullEnemy::HandleCollision(const IEntity * pOther)
 		m_ts.ResetCurrFrame();
 		
 	}
+	Enemy::HandleCollision(pOther);
 }
 
 ////////////////////////////////////////////////

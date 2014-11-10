@@ -87,7 +87,7 @@ void MutantBat::Update(float _elapsedTime)
 
 	//Find Distance to point
 	distance = m_ptPosition - m_pPatrolPoint;
-	if (distance.ComputeLength() < 500)
+	if (distance.ComputeLength() < 150)
 	{		
 		//Move to patrol point
 		if (m_ptPosition.x < m_pPatrolPoint.x - 5 || m_ptPosition.x > m_pPatrolPoint.x + 5)
@@ -123,19 +123,6 @@ void MutantBat::Update(float _elapsedTime)
 			m_vtVelocity.y = 0;
 		}		
 		
-		////Patrol if no target
-		//if (m_pPatrolPoint == m_ptPosition && m_bFacingRight)
-		//{
-		//	m_bFacingRight = false;
-		//	m_pPatrolPoint = m_ptPosition;
-		//	m_pPatrolPoint.x -= 50;
-		//}
-		//else if (m_pPatrolPoint == m_ptPosition && !m_bFacingRight)
-		//{
-		//	m_bFacingRight = true;
-		//	m_pPatrolPoint = m_ptPosition;
-		//	m_pPatrolPoint.x += 50;
-		//}
 		if (distance.ComputeLength() < 20 && m_fPoopTimer > .5f)
 		{
 			//Attack the player

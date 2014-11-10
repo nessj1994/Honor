@@ -54,6 +54,13 @@ private:
 	bool m_bInRange = false;
 	bool m_bSpraying = false;
 
+	// Sounds
+	SGD::HAudio m_hGrunt1 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hGrunt2 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hGrunt3 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hSlam = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hJump = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hLand = SGD::INVALID_HANDLE;
 
 };
 
