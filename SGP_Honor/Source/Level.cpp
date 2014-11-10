@@ -158,8 +158,8 @@ void Level::RenderImageLayer(bool background)
 			// Variables to help with culling
 			int startX = (int)(Camera::GetInstance()->GetCameraPos().x / 32 * layer->GetScrollSpeed()) - 1;
 			int startY = (int)(Camera::GetInstance()->GetCameraPos().y / 32 * layer->GetScrollSpeed()) - 1;
-			int mapWidth = (int)((Game::GetInstance()->GetScreenWidth() / 32.0f)	/ Camera::GetInstance()->GetZoomScale());
-			int mapHeight = (int)((Game::GetInstance()->GetScreenHeight() / 32.0f) / Camera::GetInstance()->GetZoomScale());
+			int mapWidth = (int)(((Game::GetInstance()->GetScreenWidth() / 32.0f)	/ Camera::GetInstance()->GetZoomScale()) +100);
+			int mapHeight = (int)(((Game::GetInstance()->GetScreenHeight() / 32.0f) / Camera::GetInstance()->GetZoomScale()) + 100);
 
 			// TODO fix culling
 
