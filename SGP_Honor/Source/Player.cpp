@@ -1345,9 +1345,7 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		//Kill the player
 		if(!m_bDead && m_fArmorTimer <= 0.0f)
 		{
-
 			KillPlayer();
-
 		}
 	}
 
@@ -1455,7 +1453,8 @@ void Player::KillPlayer()
 		// Jump and remove armor
 		m_bHasArmor = false;
 		m_fArmorTimer = 2.0f;
-		m_vtVelocity.y -= 2500;
+		SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
+		SetVelocity({ m_vtVelocity.x, m_vtVelocity.y - 2500 });
 		m_unJumpCount = 0;
 		if (m_ts.GetCurrAnimation() == "Armor Player Idle")
 		{
@@ -1856,13 +1855,18 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 
 void Player::UpdateDash(float elapsedTime)
 {
+	if (m_fDashCoolTimer > 0.0f)
+	{
+		m_fDashCoolTimer -= elapsedTime;
+	}
 	if (HasDash() == true)
 	{
 		SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-		if (pInput->IsKeyPressed(SGD::Key::Tab) == true
+		if (m_fDashCoolTimer <= 0.0f && (pInput->IsKeyPressed(SGD::Key::Tab) == true
 			//if (pInput->IsKeyDown(SGD::Key::Tab) == true
-			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
+			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/)))
 		{
+			m_fDashCoolTimer = 1.0f;
 			GetDash()->GetEMDash()->Finish(false);
 			CastDash();
 			m_ts.SetPlaying(true);
