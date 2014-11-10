@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Animations Character="King Clang">
   <Animation name="Clang Idle" spritesheet="KingClang.png" looping="0">
-    <Frame RenderRectLeft="93" RenderRectTop="83" RenderRectRight="1149" RenderRectBottom="963" CollisionRectLeft="352" CollisionRectTop="378" CollisionRectRight="845" CollisionRectBottom="902" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="476" anchorpointY="788" />
+    <Frame RenderRectLeft="93" RenderRectTop="83" RenderRectRight="1149" RenderRectBottom="963" CollisionRectLeft="352" CollisionRectTop="654" CollisionRectRight="845" CollisionRectBottom="963" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="476" anchorpointY="788" />
   </Animation>
   <Animation name="Clang Left Slam" spritesheet="KingClang.png" looping="0">
     <Frame RenderRectLeft="55" RenderRectTop="6309" RenderRectRight="1079" RenderRectBottom="7195" CollisionRectLeft="55" CollisionRectTop="6309" CollisionRectRight="1079" CollisionRectBottom="7195" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="486" anchorpointY="782" />
@@ -48,6 +48,6 @@
     <Frame RenderRectLeft="3441" RenderRectTop="3156" RenderRectRight="4237" RenderRectBottom="4053" CollisionRectLeft="3441" CollisionRectTop="3156" CollisionRectRight="4237" CollisionRectBottom="4053" ActiveRectLeft="3615" ActiveRectTop="3856" ActiveRectRight="4060" ActiveRectBottom="3997" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="382" anchorpointY="781" />
   </Animation>
   <Animation name="Clang Hurt" spritesheet="KingClang.png" looping="0">
-    <Frame RenderRectLeft="1411" RenderRectTop="93" RenderRectRight="2566" RenderRectBottom="977" CollisionRectLeft="1706" CollisionRectTop="419" CollisionRectRight="2292" CollisionRectBottom="903" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="564" anchorpointY="783" />
+    <Frame RenderRectLeft="1411" RenderRectTop="93" RenderRectRight="2566" RenderRectBottom="977" CollisionRectLeft="1706" CollisionRectTop="659" CollisionRectRight="2292" CollisionRectBottom="977" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0" anchorpointX="564" anchorpointY="783" />
   </Animation>
 </Animations>

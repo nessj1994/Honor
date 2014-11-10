@@ -202,7 +202,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadHonorVector();
+	LoadGame();
 	
 	//LoadLevel("Level4_1");
 	m_pPlayer->SetHasBounce(true);
@@ -471,7 +471,9 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_YETI, Entity::ENT_TEMP_FREEZE);
 	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_DOOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PROJ, Entity::ENT_DOOR);
-	
+	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_LEFT_RAMP);
+	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_RIGHT_RAMP);
+	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_DEATH);
 
 
 
