@@ -897,7 +897,7 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 
 			// Reference to the teleporter entity
 			Teleporter * teleporter = dynamic_cast<Teleporter*>(pCreateMsg->GetOwner());
-
+			GameplayState::GetInstance()->SaveGame();
 			pSelf->LoadLevel(teleporter->GetLevel());
 
 		}

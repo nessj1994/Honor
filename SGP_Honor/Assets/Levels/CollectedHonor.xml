@@ -1,17 +1,9 @@
 <?xml version="1.0" ?>
-<Levels totalHonor="53">
+<Levels totalHonor="3350">
     <Level name="HubLevel" unlocked="1" />
     <Level name="Level0_1" unlocked="0" />
     <Level name="Level1_1" unlocked="1" />
-    <Level name="Level1_2" unlocked="1">
-        <Honor collected="0" />
-        <Honor collected="0" />
-        <Honor collected="0" />
-        <Honor collected="0" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-        <Honor collected="1" />
-    </Level>
+    <Level name="Level1_2" unlocked="1" />
     <Level name="Level1_3" unlocked="0" />
     <Level name="Level1_4" unlocked="0" />
     <Level name="Level1_5" unlocked="0" />
