@@ -246,17 +246,17 @@ void Player::Update(float elapsedTime)
 void Player::Render(void)
 {
 	//Emitter Renders
-	if(IsBouncing() || !GetBounce()->GetEMBubbles()->Done())
+	if((IsBouncing() || !GetBounce()->GetEMBubbles()->Done()) && HasBounce())
 	{
 		GetBounce()->GetEMBubbles()->SetPosition(m_ptPosition);
 		GetBounce()->GetEMBubbles()->Render();
 	}
-	if(IsDashing() || !GetDash()->GetEMDash()->Done())
+	if((IsDashing() || !GetDash()->GetEMDash()->Done()) && HasDash())
 	{
 		GetDash()->GetEMDash()->SetPosition(m_ptPosition);
 		GetDash()->GetEMDash()->Render();
 	}
-	if(m_bHawkExplode || !m_emFeatherExplosion->Done())
+	if((m_bHawkExplode || !m_emFeatherExplosion->Done()) && HasHawk())
 	{
 		m_emFeatherExplosion->Render();
 	}

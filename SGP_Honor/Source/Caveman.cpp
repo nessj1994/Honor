@@ -18,6 +18,7 @@ Caveman::Caveman() : SGD::Listener(this)
 	Listener::RegisterForEvent("CaveMan_Jump_Left");
 	Listener::RegisterForEvent("CaveMan_Stop");
 	Listener::RegisterForEvent("FLIP_LASER");
+	Listener::RegisterForEvent("KILL_PLAYER");
 	SetSize({ 64.0f, 96.0f });
 	m_szSize = { 64, 96 };
 	m_bFacingRight = false;
@@ -88,7 +89,7 @@ void Caveman::Update(float elapsedTime)
 		SGD::Vector distance = m_ptPosition - GetPlayer()->GetPosition();
 		if (distance.ComputeLength() < 50)
 		{
-			m_bsCurrState = CM_SLASHING;
+			//m_bsCurrState = CM_SLASHING;
 		}
 			
 	}
@@ -144,15 +145,15 @@ void Caveman::Update(float elapsedTime)
 			m_ts.SetCurrAnimation("CaveManJumping");
 			m_ts.SetPlaying(true);
 		}
-		if (m_fInTheAir < 1)
+		if (m_fInTheAir < .5f)
 		{
 			if (m_bFacingRight)
 			{
-				SetVelocity({ 350, -200 });
+				SetVelocity({ 200, -200 });
 			}
 			else
 			{
-				SetVelocity({ -350, -200 });
+				SetVelocity({ -200, -200 });
 			}
 		}
 		else
@@ -172,13 +173,13 @@ void Caveman::Update(float elapsedTime)
 			switch (Door)
 			{
 			case 1:
-				SetPosition({ 303, 545 });
+				SetPosition({ 227, 500 });
 				break;
 			case 2:
-				SetPosition({ 1071, 545 });
+				SetPosition({ 510, 500 });
 				break;
 			case 3:
-				SetPosition({ 1839, 545 });
+				SetPosition({ 798, 500 });
 				break;
 			default:
 				break;
@@ -202,11 +203,11 @@ void Caveman::Update(float elapsedTime)
 		}
 		if (GetPlayer()->IsFacingRight())
 		{
-			m_pHawk->Attack({ GetPlayer()->GetPosition().x + 300, 33 },GetPlayer()->IsFacingRight());
+			m_pHawk->Attack({ GetPlayer()->GetPosition().x + 300, 40 },GetPlayer()->IsFacingRight());
 		}
 		else
 		{
-			m_pHawk->Attack({ GetPlayer()->GetPosition().x - 300, 33 }, GetPlayer()->IsFacingRight());
+			m_pHawk->Attack({ GetPlayer()->GetPosition().x - 300, 40 }, GetPlayer()->IsFacingRight());
 		}		
 		m_fStalacTimer = 0;
 		SetVelocity({ 0, 0 });
@@ -218,7 +219,7 @@ void Caveman::Update(float elapsedTime)
 		break;
 	case Caveman::CM_THINKING:
 		SetVelocity({ 0, 0 });
-		if (m_fThinkingTimer > .4f)
+		if (m_fThinkingTimer > .2f)
 		{
 			m_bsCurrState = CM_RUNING;
 		}
@@ -288,7 +289,7 @@ void Caveman::HawkExplode(SGD::Point _Pos)
 
 void Caveman::DropStalactites()
 {
-	if (m_fStalacTimer > .1f && m_bDrop)
+	if (m_fStalacTimer > .18f && m_bDrop)
 	{
 		m_fStalacTimer = 0;
 		//make a stalactite
@@ -326,10 +327,14 @@ void Caveman::HandleCollision(const IEntity* pOther)
 	}
 	if (pOther->GetType() == ENT_LASER && m_fHitTimer > 1)
 	{
-		m_fHitTimer = 0;
-		m_bsCurrState = CM_STUNNED;
-		m_fStunnedTimer = 0;
-		SetHitPoints(GetHitPoints() - 1);
+		if (m_bsCurrState == CM_JUMPING || m_bsCurrState == CM_FALLING)
+		{
+			m_fHitTimer = 0;
+			m_bsCurrState = CM_STUNNED;
+			m_fStunnedTimer = 0;
+			m_iDoorSkip = 0;
+			SetHitPoints(GetHitPoints() - 1);
+		}
 	}
 	Boss::HandleCollision(pOther);
 }
@@ -343,6 +348,11 @@ void Caveman::HandleEvent(const SGD::Event* pEvent)
 		m_bLaserOn ? m_bLaserOn = false : m_bLaserOn = true;
 	}
 
+	if (pEvent->GetEventID() == "KILL_PLAYER")
+	{
+		SetHitPoints(3);
+	}
+
 	if (pEvent->GetSender() != this)
 	{
 		return;
@@ -353,6 +363,10 @@ void Caveman::HandleEvent(const SGD::Event* pEvent)
 	if (pEvent->GetEventID() == "CaveMan_Door" &&
 		pEvent->GetSender() == this)
 	{
+		if (m_bsCurrState == CM_FALLING || m_bsCurrState == CM_STUNNED)
+		{
+			return;
+		}
 		//Check if your abel to do door event
 		if (m_fDoorTimer > 1 && m_bsCurrState != CM_ATTACKING)
 		{
@@ -381,7 +395,7 @@ void Caveman::HandleEvent(const SGD::Event* pEvent)
 	else if (pEvent->GetEventID() == "CaveMan_Jump_Right" &&
 		pEvent->GetSender() == this)
 	{
- 		if (m_bLaserOn && m_bsCurrState != CM_JUMPING && m_fSwitchJumpTimer > 1)
+ 		if (m_bLaserOn && m_bsCurrState != CM_JUMPING && m_fSwitchJumpTimer > .5f)
 		{
 			m_fSwitchJumpTimer = 0;
 			m_bsCurrState = CM_RUNING;
@@ -399,7 +413,7 @@ void Caveman::HandleEvent(const SGD::Event* pEvent)
 	else if (pEvent->GetEventID() == "CaveMan_Jump_Left" &&
 		pEvent->GetSender() == this )
 	{
-		if (m_bLaserOn && m_bsCurrState != CM_JUMPING && m_fSwitchJumpTimer > 1)
+		if (m_bLaserOn && m_bsCurrState != CM_JUMPING && m_fSwitchJumpTimer > .5)
 		{
 			m_fSwitchJumpTimer = 0;
 			m_bsCurrState = CM_RUNING;
