@@ -159,6 +159,7 @@ void Player::Update(float elapsedTime)
 		}
 
 		SetIsBouncing(false);
+		UpdatePlayerSwing(elapsedTime);
 
 		//////// NEED TO UPDATE WITH CONTROLLER ( JORDAN )
 		//if (GetIsInputStuck() == false)
@@ -191,7 +192,7 @@ void Player::Update(float elapsedTime)
 
 
 			UpdateBounce(elapsedTime);
-			UpdatePlayerSwing(elapsedTime);
+			
 
 			/////////////////////////////////////////////////
 			/////////////////Movement////////////////////////
@@ -788,18 +789,10 @@ void Player::BasicCollision(const IEntity* pOther)
 					m_fLandTimer = 0.001f;
 					m_unCurrentState = LANDING_STATE;
 				}
-				//if (m_fLandTimer <= 0)
-				//	m_unCurrentState = RESTING_STATE;,
 
 			}
 
-			//	if (m_unCurrentState == JUMPING_STATE)
-			//	{
-			//		m_ts.ResetCurrFrame();
-			//		m_ts.SetCurrAnimation("Idle");
-			//		m_ts.SetPlaying(true);
-			//
-			//	}
+			
 
 			SetJumpVelCur(0);
 			SetIsInputStuck(false);
@@ -828,41 +821,6 @@ void Player::BasicCollision(const IEntity* pOther)
 void Player::SwingCollision(const IEntity* pOther)
 {
 
-	//	RECT rTempSwing;
-	//	rTempSwing.left = swingRect.left;
-	//	rTempSwing.top = swingRect.top;
-	//	rTempSwing.right = swingRect.right;
-	//	rTempSwing.bottom = swingRect.bottom;
-
-
-	//RECT rObject;
-	//rObject.left = (LONG)pOther->GetRect().left;
-	//rObject.top = (LONG)pOther->GetRect().top;
-	//rObject.right = (LONG)pOther->GetRect().right;
-	//rObject.bottom = (LONG)pOther->GetRect().bottom;
-
-	//RECT rIntersection = {};
-
-	//IntersectRect(&rIntersection, &rObject, &rTempSwing);
-
-	//int nIntersectWidth = rIntersection.right - rIntersection.left;
-	//int nIntersectHeight = rIntersection.bottom - rIntersection.top;
-
-	//if (nIntersectHeight > nIntersectWidth)
-	//{
-	//	//if switch, activate switch
-	//	//if evenmy call event to kill enemy
-	//	SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
-
-	//}
-
-	//if (nIntersectHeight < nIntersectWidth)
-	//{
-	//	//if switch, activate switch
-	//	//if evenmy call event to kill enemy
-	//	SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
-
-	//}
 }
 
 
@@ -907,28 +865,6 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	int nIntersectWidth = rIntersection.right - rIntersection.left;
 	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
-
-	//SGD::Rectangle rPlayer = GetRect();
-	//SGD::Rectangle rOther = pOther->GetRect();
-	//SGD::Rectangle rIntersecting = rPlayer.ComputeIntersection(rObject);
-
-	//float rIntersectWidth = rIntersecting.ComputeWidth();
-	//float rIntersectHeight = rIntersecting.ComputeHeight();
-
-
-	//float tempInt = (/*(rObject.right - rObject.left) +*/ nIntersectWidth)* tempVal;
-
-	//	if (is_Platform == false
-	//		&& rPlayer.bottom < rObject.top)
-	//	{
-
-	//SetVelocity({ GetVelocity().x + 1000, GetVelocity().y - 1000 });
-
-
-
-
-
-
 	if(/*nIntersectWidth*/ /*nIntersectWidth > 1  &&*/ nIntersectWidth < 31)
 	{
 		//SetPosition({ GetPosition().x, (float)rObject.bottom - tempVal - GetSize().height });
@@ -939,18 +875,15 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	
 	else if(nIntersectWidth == 31)
 	{
-		m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
-		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+		//m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
+		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+
+		//m_ptPosition.y = (float)rObject.top ;
+		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+
+		BasicCollision(pOther);
 
 
-		//tempVal = 31 / 32;
-		//
-		//m_ptPosition.y = (float)rObject.bottom - GetSize().height - tempVal;
-		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * 1);
-		//
-		//BasicCollision(pOther);
-		
-	
 	}
 	else if(nIntersectWidth == 32)
 	{
@@ -959,23 +892,8 @@ void Player::LeftRampCollision(const IEntity* pOther)
 		m_ptPosition.x += 1;
 	}
 
-
-
-	//else
-	//{
-	//	SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 });
-	//	m_ptPosition.y -= nIntersectHeight;
-	//}
-
-
-
-	//	}
-
 	if(m_ptPosition.x + m_szSize.width > rObject.right)
 	SetVelocity({ m_vtVelocity.x , 1000 });
-
-
-
 
 }
 
@@ -984,7 +902,6 @@ void Player::RightRampCollision(const IEntity* pOther)
 	///////for RIGHT ramp LEFT side of player
 
 	float tempVal = 32.0f / 32.0f;
-	
 	
 	SetGravity(GetGravity() * 4);
 	SetVelocity({ GetVelocity().x, 0 });
@@ -1941,6 +1858,30 @@ void Player::UpdateJump(float elapsedTime)
 	{
 		int tempx = 0;
 	}
+
+	///////Check if on ramp first
+	//RECT rObject;
+	//rObject.left = (LONG)pOther->GetRect().left;
+	//rObject.top = (LONG)pOther->GetRect().top;
+	//rObject.right = (LONG)pOther->GetRect().right;
+	//rObject.bottom = (LONG)pOther->GetRect().bottom;
+	//
+	////Create a rectangle for the intersection
+	//RECT rIntersection = {};
+	//
+	//RECT rPlayerWall;
+	//rPlayerWall.left = (LONG)GetRect().left - 1;
+	//rPlayerWall.top = (LONG)GetRect().top;
+	//rPlayerWall.right = (LONG)GetRect().right + 1;
+	//rPlayerWall.bottom = (LONG)GetRect().bottom;
+	//
+	//IntersectRect(&rIntersection, &rObject, &rPlayerWall);
+	//
+	//int nIntersectWidth = rIntersection.right - rIntersection.left;
+	//int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+
+
 
 
 

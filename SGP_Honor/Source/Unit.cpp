@@ -62,7 +62,7 @@ void Unit::HandleCollision(const IEntity* pOther)
 	}
 	else
 	{
-		SetFriction(1.0f);
+		SetFriction(25.0f);
 	}
 }
 

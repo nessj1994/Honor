@@ -62,7 +62,7 @@ bool Game::Initialize(float width, float height)
 
 	//Initialize the wrappers
 	if(SGD::AudioManager::GetInstance()->Initialize() == false
-		|| SGD::GraphicsManager::GetInstance()->Initialize(true) == false
+		|| SGD::GraphicsManager::GetInstance()->Initialize(false) == false
 		|| SGD::InputManager::GetInstance()->Initialize() == false)
 	{
 		return false;
