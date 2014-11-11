@@ -176,7 +176,7 @@ int Enemy::GetType(void) const
 
 void Enemy::HandleCollision(const IEntity* pOther)
 {	
-	if (pOther->GetType() != Entity::ENT_SOLID_WALL)
+	if (pOther->GetType() == Entity::ENT_SOLID_WALL)
 	{
 		RECT rMutant;
 		rMutant.left = (LONG)GetRect().left;
@@ -201,7 +201,7 @@ void Enemy::HandleCollision(const IEntity* pOther)
 		{
 			if (rMutant.right == rIntersection.right)
 			{
-				SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
+      				SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
 			}
 			if (rMutant.left == rIntersection.left)
 			{
@@ -223,6 +223,7 @@ void Enemy::HandleCollision(const IEntity* pOther)
 			SetVelocity({ GetVelocity().x, 0 });
 		}
 	}
+	
 	
 		
 

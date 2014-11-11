@@ -42,6 +42,7 @@ class Bull;
 class Jellyfish;
 class Crab;
 class HubWorldOrb;
+class Emitter;
 
 //
 //////////////////////////////////////////////////

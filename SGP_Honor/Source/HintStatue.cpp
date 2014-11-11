@@ -31,34 +31,30 @@ void HintStatue::Render(void)
 	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 0.5f, {}, {});
 	if (showMessage == true)
 	{
-		
+		//if (GetPosition().y < 200)
+		//{
 
+		//	Camera::GetInstance()->DrawTexture({ (m_ptPosition.x - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).width * 2.5f) + 50
+		//		, 200 - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).height }, 0, m_hSBImage, false, 0.8f, {}, {});
 
+		//	Camera::GetInstance()->DrawString(st_message, { (m_ptPosition.x - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).width * 2.5f +
+		//		SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hSBImage).width * 0.25f) - 125,
+		//		(200 - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).height +
+		//		SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hSBImage).height * 0.25f) + 50 });
+		//}
+		//else
+		//{
 
-		if (GetPosition().y < 200)
-		{
-
-			Camera::GetInstance()->DrawTexture({ (m_ptPosition.x - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).width * 2.5f) - 40
-				, 200 - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).height }, 0, m_hSBImage, false, 1.3f, {}, {});
-
-			Camera::GetInstance()->DrawString(st_message, { (m_ptPosition.x - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).width * 2.5f +
-				SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hSBImage).width * 0.25f) - 125,
-				(200 - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).height +
-				SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hSBImage).height * 0.25f) + 50 });
-		}
-		else
-		{
-
-			Camera::GetInstance()->DrawTexture({ (m_ptPosition.x - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).width * 2.5f) - 40
-				, m_ptPosition.y - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).height }, 0, m_hSBImage, false, 1.3f, {}, {});
+			Camera::GetInstance()->DrawTexture({ (m_ptPosition.x - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).width * 2.5f) + 50
+				, m_ptPosition.y - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).height + 50 }, 0, m_hSBImage, false, 0.8f, {}, {});
 
 
 			Camera::GetInstance()->DrawString(st_message, { (m_ptPosition.x - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).width * 2.5f +
-				SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hSBImage).width * 0.25f) - 125,
+				SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hSBImage).width * 0.25f) - 50,
 				(m_ptPosition.y - SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage).height +
 				SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hSBImage).height * 0.25f) + 50 });
 
-		}
+		//}
 	}
 }
 

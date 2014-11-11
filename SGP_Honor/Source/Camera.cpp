@@ -169,24 +169,42 @@ void Camera::Update(float _elapsedTime)
 
 
 		break;
-
 	case 2:
 		//FINAL BOSS CAMERA
 		if (m_pPlayer->GetPosition().x < 300)
 		{
-			m_ptCameraPosition.x = (300 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
-			m_ptCameraPosition.y = (m_pPlayer->GetPosition().y - Game::GetInstance()->GetScreenHeight() / m_fCurrentPanY);// Divide by Scale
+			m_ptCameraPosition.x = (300 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX) - 50; // Divide by Scale
 		}
 		else if (m_pPlayer->GetPosition().x > GameplayState::GetInstance()->GetCurrentLevel()->GetLevelWidth() - 300)
 		{
-			m_ptCameraPosition.x = (GameplayState::GetInstance()->GetCurrentLevel()->GetLevelWidth() - 300 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
-			m_ptCameraPosition.y = (m_pPlayer->GetPosition().y - Game::GetInstance()->GetScreenHeight() / m_fCurrentPanY);// Divide by Scale
+			m_ptCameraPosition.x = (GameplayState::GetInstance()->GetCurrentLevel()->GetLevelWidth() - 300 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX) - 50; // Divide by Scale
+		}
+		else
+		{
+			m_ptCameraPosition.x = (m_pPlayer->GetPosition().x - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX) - 50; // Divide by Scale
+		}
+		m_ptCameraPosition.y = ((GameplayState::GetInstance()->GetCurrentLevel()->GetLevelHeight() / m_fCurrentPanY) - 250);// Divide by Scale
+		break;
+
+	case 4:
+		//FOURTH BOSS CAMERA
+		if (m_pPlayer->GetPosition().x < 250)
+		{
+			m_ptCameraPosition.x = (250 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
+
+		}
+		else if (m_pPlayer->GetPosition().x > GameplayState::GetInstance()->GetCurrentLevel()->GetLevelWidth() - 500)
+		{
+			m_ptCameraPosition.x = (GameplayState::GetInstance()->GetCurrentLevel()->GetLevelWidth() - 500 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
+
 		}
 		else
 		{
 			m_ptCameraPosition.x = (m_pPlayer->GetPosition().x - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
-			m_ptCameraPosition.y = (m_pPlayer->GetPosition().y - Game::GetInstance()->GetScreenHeight() / m_fCurrentPanY);// Divide by Scale
 		}
+
+		m_ptCameraPosition.y = ((GameplayState::GetInstance()->GetCurrentLevel()->GetLevelHeight() / m_fCurrentPanY) - 250);// Divide by Scale
+
 		break;
 
 	case 5:
@@ -195,7 +213,6 @@ void Camera::Update(float _elapsedTime)
 		m_ptCameraPosition.y = ((GameplayState::GetInstance()->GetCurrentLevel()->GetLevelHeight() / m_fCurrentPanY) - 90);// Divide by Scale
 
 		break;
-
 	}
 
 

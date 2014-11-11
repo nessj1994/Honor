@@ -57,6 +57,7 @@ Player::Player() : Listener(this)
 
 
 	Listener::RegisterForEvent("FINALBOSS");
+	Listener::RegisterForEvent("FOURTHBOSS");
 	Listener::RegisterForEvent("BossLevel");
 	Listener::RegisterForEvent("GainedHawk");
 
@@ -112,7 +113,7 @@ void Player::Update(float elapsedTime)
 	//Emitter Updates
 	m_emHonor->Update(elapsedTime);
 	m_emFeatherExplosion->Update(elapsedTime);
-	m_emHawkReturn->Update(elapsedTime);
+	m_emHawkReturn->Update(elapsedTime);            
 	//
 
 	if(HasBounce() == true)
@@ -430,7 +431,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		//	m_vtVelocity.x += 50;
 		//}
 		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
-			SetVelocity(GetVelocity() * 1.51f);
+			SetVelocity(GetVelocity() * 1.06f);
 
 
 
@@ -459,7 +460,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		//	m_vtVelocity.x += 50;
 		//}
 		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
-			SetVelocity(GetVelocity() * 1.51f);
+			SetVelocity(GetVelocity() * 1.06f);
 
 
 	}
@@ -488,19 +489,18 @@ void Player::HandleCollision(const IEntity* pOther)
 	{
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(1.0f);
-
-		SetFriction(1.0f);
+		SetFriction(0.1f);
 		if(GetVelocity().x > 0 && m_bFacingRight == false)
 		{
-			m_vtVelocity.x -= 50;
+			m_vtVelocity.x -= 37;
 		}
 		else if(GetVelocity().x < 0 && m_bFacingRight == true)
 		{
-			m_vtVelocity.x += 50;
+			m_vtVelocity.x += 37;
 		}
 		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
-			SetVelocity(GetVelocity() * 1.51f);
+			SetVelocity(GetVelocity() * 1.06f);
+
 	}
 
 	if(pOther->GetType() == Entity::ENT_NOT_FROZEN)
@@ -549,14 +549,14 @@ void Player::HandleCollision(const IEntity* pOther)
 		SetFriction(0.0f);
 		if(GetVelocity().x > 0 && m_bFacingRight == false)
 		{
-			m_vtVelocity.x -= 50;
+			m_vtVelocity.x -= 37;
 		}
 		else if(GetVelocity().x < 0 && m_bFacingRight == true)
 		{
-			m_vtVelocity.x += 50;
+			m_vtVelocity.x += 37;
 		}
 		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
-			SetVelocity(GetVelocity() * 1.51f);
+			SetVelocity(GetVelocity() * 1.06f);
 
 	}
 
@@ -1400,7 +1400,12 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 
 
 	}
-	if(pEvent->GetEventID() == "BossLevel")
+	if (pEvent->GetEventID() == "FOURTHBOSS")
+	{
+		Camera::GetInstance()->SetCameraCap(4);
+
+	}
+	if (pEvent->GetEventID() == "BossLevel")
 	{
 		Camera::GetInstance()->SetCameraCap(2);
 	}
@@ -1827,7 +1832,7 @@ void Player::UpdateDash(float elapsedTime)
 			//if (pInput->IsKeyDown(SGD::Key::Tab) == true
 			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/)))
 		{
-			m_fDashCoolTimer = 1.0f;
+			m_fDashCoolTimer = .5f;
 			GetDash()->GetEMDash()->Finish(false);
 			CastDash();
 			m_ts.SetPlaying(true);
@@ -2200,7 +2205,7 @@ void Player::UpdateSpray(float elapsedTime)
 
 			m_fIceTimer = 0;
 			CreateSprayMessage* pMsg = new CreateSprayMessage(this);
-			pMsg->QueueMessage();
+			pMsg->SendMessageNow();
 			pMsg = nullptr;
 		}
 	}
@@ -2360,11 +2365,20 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 	{
 		if(m_fSwingTimer <= 0.0f)
 		{
-			m_fSwingTimer = 0.75f;
+			m_fSwingTimer = 0.35f;
 			is_Swinging = true;
-			m_ts.SetCurrAnimation("Swing Attack");
-			m_ts.SetPlaying(true);
-			m_ts.ResetCurrFrame();
+			if (rand() % 2 == 0)
+			{
+				m_ts.SetCurrAnimation("Swing Attack");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+			}
+			else
+			{
+				m_ts.SetCurrAnimation("Slash Attack");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+			}
 		}
 
 
