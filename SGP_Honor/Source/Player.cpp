@@ -246,17 +246,17 @@ void Player::Update(float elapsedTime)
 void Player::Render(void)
 {
 	//Emitter Renders
-	if(IsBouncing() || !GetBounce()->GetEMBubbles()->Done())
+	if((IsBouncing() || !GetBounce()->GetEMBubbles()->Done()) && HasBounce())
 	{
 		GetBounce()->GetEMBubbles()->SetPosition(m_ptPosition);
 		GetBounce()->GetEMBubbles()->Render();
 	}
-	if(IsDashing() || !GetDash()->GetEMDash()->Done())
+	if((IsDashing() || !GetDash()->GetEMDash()->Done()) && HasDash())
 	{
 		GetDash()->GetEMDash()->SetPosition(m_ptPosition);
 		GetDash()->GetEMDash()->Render();
 	}
-	if(m_bHawkExplode || !m_emFeatherExplosion->Done())
+	if((m_bHawkExplode || !m_emFeatherExplosion->Done()) && HasHawk())
 	{
 		m_emFeatherExplosion->Render();
 	}
@@ -365,6 +365,30 @@ void Player::HandleCollision(const IEntity* pOther)
 	if(pOther->GetType() == Entity::ENT_ARMOR)
 	{
 		m_bHasArmor = true;
+		if (m_ts.GetCurrAnimation() == "Idle")
+		{
+			m_ts.SetCurrAnimation("Armor Player Idle");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
+		else if (m_ts.GetCurrAnimation() == "Jump")
+		{
+			m_ts.SetCurrAnimation("Armor Player Jump");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
+		else if (m_ts.GetCurrAnimation() == "Walking")
+		{
+			m_ts.SetCurrAnimation("Armor Player Walking");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
+		else if (m_ts.GetCurrAnimation() == "dashing")
+		{
+			m_ts.SetCurrAnimation("Armor Player dashing");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
 	}
 
 
@@ -844,8 +868,8 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	float tempVal = 32.0f / 32.0f;
 
 
-	SetGravity(GetGravity() * 4);
-	SetVelocity({ GetVelocity().x, 0 });
+	SetGravity(GetGravity() * 5);
+	SetVelocity({ GetVelocity().x, 1000 });
 	if(GetVelocity().x > 300)
 	{
 		m_vtVelocity.x = 300;
@@ -1433,6 +1457,30 @@ void Player::KillPlayer()
 		m_fArmorTimer = 2.0f;
 		m_vtVelocity.y -= 2500;
 		m_unJumpCount = 0;
+		if (m_ts.GetCurrAnimation() == "Armor Player Idle")
+		{
+			m_ts.SetCurrAnimation("Idle");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
+		else if (m_ts.GetCurrAnimation() == "Armor Player Jump")
+		{
+			m_ts.SetCurrAnimation("Jump");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
+		else if (m_ts.GetCurrAnimation() == "Armor Player Walking")
+		{
+			m_ts.SetCurrAnimation("Walking");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
+		else if (m_ts.GetCurrAnimation() == "Armor Player dashing")
+		{
+			m_ts.SetCurrAnimation("dashing");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+		}
 	}
 	else
 	{
@@ -1689,7 +1737,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 			m_ts.SetPlaying(true);
 		}
 	}
-	else if(leftClamped == true && m_unCurrentState == RESTING_STATE)
+	else if(leftClamped == true && m_unCurrentState == RESTING_STATE && is_Swinging == false)
 	{
 		m_ts.SetPlaying(false);
 		m_ts.ResetCurrFrame();
@@ -2323,8 +2371,11 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 	{
 		if(m_fSwingTimer <= 0.0f)
 		{
-			m_fSwingTimer = 0.2f;
+			m_fSwingTimer = 0.75f;
 			is_Swinging = true;
+			m_ts.SetCurrAnimation("Swing Attack");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
 		}
 
 
