@@ -210,7 +210,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-	LoadLevel("Level4_1");
+	LoadLevel("HubLevel");
 
 	
 	//LoadLevel("HubLevel");
@@ -227,6 +227,11 @@ void GameplayState::Enter(void) //Load Resources
 	//CreateCrabBoss();
 	//Hub World Orb 
 	m_pHubOrb = new HubWorldOrb();
+	//Turorial Images
+	m_hOAttack = pGraphics->LoadTexture("Assets/graphics/HonorO.png");
+	m_hXJUMP = pGraphics->LoadTexture("Assets/graphics/HonorX.png");
+	//m_hXWallJump = pGraphics->LoadTexture("Assetes/graphics/HonorXWAll.png");
+	//m_hTriOpenDoor = pGraphics->LoadTexture("Assetes/graphics/HonorTriangle.png");
 }
 
 
@@ -363,7 +368,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level2_5");
+		LoadLevel("Level0_1");
 	}
 
 
@@ -556,6 +561,15 @@ void GameplayState::Render(void)
 	{
 		m_pHubOrb->Render();
 	}
+	//Render Images for tutorial 
+	if (m_strCurrLevel == "Level0_1")
+	{
+		Camera::GetInstance()->DrawTexture({}, 0, m_hXJUMP, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({}, 0, m_hXWallJump, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({}, 0, m_hOAttack, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({}, 0, m_hTriOpenDoor, false, 1, {}, {});
+	}
+
 
 	// Draw a fading rectangle
 	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
