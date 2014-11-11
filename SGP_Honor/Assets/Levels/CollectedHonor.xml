@@ -9752,7 +9752,24 @@
         <Honor collected="1" />
         <Honor collected="1" />
     </Level>
-    <Level name="Level4_1" unlocked="1" />
+    <Level name="Level4_1" unlocked="1">
+        <Honor collected="0" />
+        <Honor collected="0" />
+        <Honor collected="0" />
+        <Honor collected="0" />
+        <Honor collected="0" />
+        <Honor collected="0" />
+        <Honor collected="0" />
+        <Honor collected="0" />
+        <Honor collected="0" />
+        <Honor collected="0" />
+        <Honor collected="0" />
+        <Honor collected="0" />
+        <Honor collected="0" />
+        <Honor collected="0" />
+        <Honor collected="0" />
+        <Honor collected="0" />
+    </Level>
     <Level name="Level4_2" unlocked="1" />
     <Level name="Level4_3" unlocked="1" />
     <Level name="Level4_4" unlocked="1" />
