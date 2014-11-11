@@ -21,6 +21,7 @@
 #define SwipeCooldown 1.5f
 #define HitCooldown 0.5f
 #define Death 2.0f
+#define RoarWait 20.0f
 
 Crab::Crab() : Listener(this)
 {
@@ -38,6 +39,7 @@ Crab::Crab() : Listener(this)
 	m_hSlam1 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam1.wav");
 	m_hSlam2 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam2.wav");
 	m_hSlam3 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam3.wav");
+	m_hHurt = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/ClangHurt.wav");
 }
 
 
@@ -46,8 +48,9 @@ Crab::~Crab()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hRoar);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBubble);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam1);
-	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam1);
-	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam1);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam2);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam3);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hHurt);
 }
 
 void Crab::Update(float elapsedTime)
@@ -61,6 +64,10 @@ void Crab::Update(float elapsedTime)
 				if (castedLeftSlam == true && castedRightSlam == false && castedSwipe == false && LeftSlamOnCD == false)
 				{
 					leftSlamTimer += elapsedTime;
+					if ((leftSlamTimer >= 1.2f && leftSlamTimer < 1.4f) && !(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hSlam2)))
+					{
+						SGD::AudioManager::GetInstance()->PlayAudio(m_hSlam2);
+					}
 					if (leftSlamTimer >= SlamTime)
 					{
 						leftSlamTimer = 0.0f;
@@ -74,6 +81,10 @@ void Crab::Update(float elapsedTime)
 				if (castedRightSlam == true && castedLeftSlam == false && castedSwipe == false && RightSlamOnCD == false)
 				{
 					rightSlamTimer += elapsedTime;
+					if ((rightSlamTimer >= 1.2f && rightSlamTimer < 1.4f) && !(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hSlam2)))
+					{
+						SGD::AudioManager::GetInstance()->PlayAudio(m_hSlam2);
+					}
 					if (rightSlamTimer >= SlamTime)
 					{
 						rightSlamTimer = 0.0f;
@@ -124,7 +135,10 @@ void Crab::Update(float elapsedTime)
 								 GetPlayer()->GetPosition().y < m_ptPosition.y && castedSwipe == false && castedLeftSlam == false && castedRightSlam == false && SwipeOnCD == false)
 								 SetCurrentState(swipping);
 							 else if (castedBubbles == false/* && castedSwipe == true && ( castedLeftSlam == true || castedRightSlam == true)*/)
+							 {
+								 SGD::AudioManager::GetInstance()->PlayAudio(m_hBubble);
 								 SetCurrentState(bubbles);
+							 }
 
 							 if (castedBubbles == true)
 							 {
@@ -227,7 +241,6 @@ void Crab::Update(float elapsedTime)
 										SetCurrentState(idle);
 									}
 								}
-
 								break;
 				}
 				case hurt:
@@ -242,6 +255,7 @@ void Crab::Update(float elapsedTime)
 								 m_ts.SetCurrAnimation("Clang Hurt");
 								 m_ts.SetPlaying(true);
 								 m_ts.ResetCurrFrame();
+								 SGD::AudioManager::GetInstance()->PlayAudio(m_hHurt);
 							 }
 							 break;
 				}
@@ -269,7 +283,17 @@ void Crab::Update(float elapsedTime)
 		}
 	}
 	else
+	{
 		StartWaitTime += elapsedTime;
+	}
+
+	if (GetHitPoints() > 0 && roarTimer >= RoarWait)
+	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hRoar);
+		roarTimer = 0.0f;
+	}
+	else if (GetHitPoints() > 0 && roarTimer < RoarWait)
+		roarTimer += elapsedTime;
 }
 
 void Crab::Render(void)
@@ -401,6 +425,11 @@ void Crab::HandleEvent(const SGD::Event* pEvent)
 			rightSlamCD = 0.0f;
 			bubbleCD = 0.0f;
 			swipeCD = 0.0f;
+			roarTimer = 60.0f;
+			SGD::AudioManager::GetInstance()->StopAudio(m_hSlam2);
+			SGD::AudioManager::GetInstance()->StopAudio(m_hBubble);
+			SGD::AudioManager::GetInstance()->StopAudio(m_hRoar);
+			SGD::AudioManager::GetInstance()->StopAudio(m_hHurt);
 		}
 	}
 }
