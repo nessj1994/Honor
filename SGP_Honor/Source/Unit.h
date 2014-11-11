@@ -76,7 +76,7 @@ private:
 
 
 	float m_fGravity = -500.0f;
-	float m_fDashTimer = 0.5f;
+	float m_fDashTimer = 0.15f;
 	float m_fHawkTimer = 0.0f;
 
 protected:

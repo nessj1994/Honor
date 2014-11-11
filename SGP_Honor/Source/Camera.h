@@ -74,7 +74,7 @@ private:
 
 
 	//Pan Values
-	float m_fCurrentPanX = 5.5f;
+	float m_fCurrentPanX = 1.5f;
 	float m_fCurrentPanY = 0.5f ;
 
 	float m_fDesiredPanX = 0;

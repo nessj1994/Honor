@@ -204,14 +204,15 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadGame();
 	
-	//LoadLevel("Level4_1");
+	//LoadLevel("Level5_5");
 	m_pPlayer->SetHasBounce(true);
 	m_pPlayer->SetHasDash(true);
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-	LoadLevel("HubLevel");
+	LoadLevel("Level4_1");
 
+	
 	//LoadLevel("HubLevel");
 
 	//("HubLevel");
@@ -369,6 +370,12 @@ bool GameplayState::Input(void) //Hanlde user Input
 
 	if (pInput->IsKeyPressed(SGD::Key::Escape) 
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
+	{
+		Game::GetInstance()->AddState(PauseState::GetInstance());
+		pAudio->StopAudio(m_hBGM);
+	}
+
+	if (pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyPressed(SGD::Key::Tab))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
 		pAudio->StopAudio(m_hBGM);
@@ -553,7 +560,6 @@ void GameplayState::Render(void)
 	// Draw a fading rectangle
 	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
 	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { m_cScreenFade, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
-
 
 }
 
@@ -1048,9 +1054,9 @@ Entity* GameplayState::CreateSpray(Entity* pOwner) const
 {
 	Ice* proj = new Ice;
 	if (pOwner->GetDirection().x == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + 20, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + 30, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	else
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width - 30, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
 	proj->SetSize({ 4, 4 });
 	proj->SetDirection({ pOwner->GetDirection().x, -1 });

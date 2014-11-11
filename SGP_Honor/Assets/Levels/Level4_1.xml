@@ -52815,8 +52815,8 @@
 		<EventTile event="" />
 	</EventLayer>
 	<Entities numEntities="40">
-		<Entity type="17" x="384" y="512" numArgs="1" name="HintStatue_1">
-			<Argument type="3" name="Message" value="Hello" />
+		<Entity type="17" x="384" y="448" numArgs="1" name="HintStatue_1">
+			<Argument type="3" name="Message" value="These rocks look wet." />
 		</Entity>
 		<Entity type="14" x="512" y="576" numArgs="0" name="FreezableGround_6" />
 		<Entity type="14" x="544" y="576" numArgs="0" name="FreezableGround_7" />
@@ -52865,7 +52865,7 @@
 			<Argument type="0" name="HubTeleporter" value="0" />
 			<Argument type="3" name="Level" value="Level4_2" />
 		</Entity>
-		<Entity type="17" x="2112" y="544" numArgs="1" name="HintStatue_1">
+		<Entity type="17" x="2112" y="448" numArgs="1" name="HintStatue_1">
 			<Argument type="3" name="Message" value="Shells are not your friends." />
 		</Entity>
 		<Entity type="19" x="2432" y="544" numArgs="1" name="Enemy_1">
@@ -52878,11 +52878,11 @@
 		</Entity>
 		<Entity type="10" x="3136" y="512" numArgs="0" name="Pendulum_1" />
 		<Entity type="10" x="3680" y="512" numArgs="0" name="Pendulum_2" />
-		<Entity type="17" x="3488" y="704" numArgs="1" name="HintStatue_2">
-			<Argument type="3" name="Message" value="Do you hear something spitting?" />
+		<Entity type="17" x="3488" y="608" numArgs="1" name="HintStatue_2">
+			<Argument type="3" name="Message" value="Do you hear spitting?" />
 		</Entity>
-		<Entity type="17" x="5856" y="672" numArgs="1" name="HintStatue_3">
-			<Argument type="3" name="Message" value="Looks like I can jump on that jellyfish." />
+		<Entity type="17" x="5856" y="576" numArgs="1" name="HintStatue_3">
+			<Argument type="3" name="Message" value="Bouncy looking jellyfish?" />
 		</Entity>
 		<Entity type="0" x="1184" y="448" numArgs="1" name="Honor_1">
 			<Argument type="1" name="Amount" value="1" />

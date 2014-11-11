@@ -59,7 +59,9 @@ void Squid::Update(float elapsedTime)
 			CreateGravProjectileMessage* pMsg = new CreateGravProjectileMessage(this);
 			pMsg->QueueMessage();
 			pMsg = nullptr;
-			SGD::AudioManager::GetInstance()->PlayAudio(spit);
+			SGD::Vector distance = target->GetPosition() - m_ptPosition;
+			if (distance.ComputeLength() < 1500)
+				SGD::AudioManager::GetInstance()->PlayAudio(spit);
 		}
 
 		if (shotTimer >= ShootSpeed)
