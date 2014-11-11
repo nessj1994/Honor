@@ -27662,7 +27662,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="27">
+	<Entities numEntities="25">
 		<Entity type="1" x="640" y="640" numArgs="3" name="Activator_1">
 			<Argument type="0" name="IsPressurePlate" value="0" />
 			<Argument type="0" name="Active" value="0" />
@@ -27747,14 +27747,8 @@
 		<Entity type="19" x="2144" y="640" numArgs="1" name="Enemy_1">
 			<Argument type="1" name="Type" value="6" />
 		</Entity>
-		<Entity type="0" x="419" y="439" numArgs="1" name="Honor_1">
-			<Argument type="1" name="Amount" value="10" />
-		</Entity>
-		<Entity type="0" x="2781" y="784" numArgs="1" name="Honor_2">
-			<Argument type="1" name="Amount" value="10" />
-		</Entity>
-		<Entity type="0" x="2792" y="307" numArgs="1" name="Honor_3">
-			<Argument type="1" name="Amount" value="20" />
+		<Entity type="0" x="576" y="416" numArgs="1" name="Honor_1">
+			<Argument type="1" name="Amount" value="1" />
 		</Entity>
 	</Entities>
 </Level>

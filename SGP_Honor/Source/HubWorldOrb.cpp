@@ -85,12 +85,15 @@ void HubWorldOrb::Update(float elapsedTime, int HonorCollected, SGD::Point _Pos)
 
 void HubWorldOrb::Render()
 {
-	m_emEffect->Render();
-	m_emEffect2->Render();
-	m_emEffect3->Render();
-	m_emEffect4->Render();
-	m_emEffect5->Render();
-	m_emEffect6->Render();
-	m_emEffect7->Render();
-	Camera::GetInstance()->DrawTexture({ m_ptPosition.x - m_szSize.width / 2, m_ptPosition.y - m_szSize.height / 2 }, {}, m_hGlassOrb, false, 1, {}, {});
+	if (m_emEffect != nullptr)
+	{
+		m_emEffect->Render();
+		m_emEffect2->Render();
+		m_emEffect3->Render();
+		m_emEffect4->Render();
+		m_emEffect5->Render();
+		m_emEffect6->Render();
+		m_emEffect7->Render();
+		Camera::GetInstance()->DrawTexture({ m_ptPosition.x - m_szSize.width / 2, m_ptPosition.y - m_szSize.height / 2 }, {}, m_hGlassOrb, false, 1, {}, {});
+	}
 }

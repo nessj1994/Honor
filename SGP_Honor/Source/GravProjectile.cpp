@@ -5,7 +5,7 @@
 GravProjectile::GravProjectile()
 {
 	SetSpeed(5000);
-	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/SquidProjectile.png");
+	//m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/SquidProjectile.png");
 	m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage);
 }
 

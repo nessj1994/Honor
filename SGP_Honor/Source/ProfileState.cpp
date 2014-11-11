@@ -3,6 +3,7 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
 #include "../SGD Wrappers/SGD_Color.h"
+#include "CutSceneState.h"
 #include <map>
 #include <ShlObj.h>
 #include "../TinyXML/tinyxml.h"
@@ -197,6 +198,9 @@ bool ProfileState::Input(void) //Hanlde user Input
 			//Changestate to gameplay state
 			Game::GetInstance()->SetSelectedProfile(1);
 			//Game::GetInstance()->AddState(GameplayState::GetInstance());
+
+			// Go into the opening cutscene if it is a new profile
+	
 		}
 		else if(m_nCursor == 1)
 		{
@@ -224,8 +228,10 @@ bool ProfileState::Input(void) //Hanlde user Input
 		if(m_nOptionCursor == 0)
 		{
 			Game::GetInstance()->SetSelectedProfile(m_nCursor + 1);
-
 			Game::GetInstance()->AddState(GameplayState::GetInstance());
+			CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
+			Game::GetInstance()->AddState(CutSceneState::GetInstance());
+
 		}
 		else if(m_nOptionCursor == 1)
 		{
