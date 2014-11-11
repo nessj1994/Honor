@@ -290,6 +290,12 @@
     <ClCompile Include="source\IceTurtle.cpp" />
     <ClCompile Include="source\IceGolem.cpp" />
     <ClCompile Include="source\Profile.cpp" />
+    <ClCompile Include="Source\CutScene.cpp">
+      <Filter>Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CutSceneState.cpp">
+      <Filter>Game States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AnchorPointAnimation.h">
@@ -605,6 +611,12 @@
     <ClInclude Include="source\IceTurtle.h" />
     <ClInclude Include="source\IceGolem.h" />
     <ClInclude Include="source\Profile.h" />
+    <ClInclude Include="Source\CutScene.h">
+      <Filter>Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CutSceneState.h">
+      <Filter>Game States</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Source\Test.xml" />
