@@ -33,6 +33,8 @@ private:
 	float StartWaitTime = 0.0f;
 	float deathTime = 0.0f;
 
+	float roarTimer = 60.0f;
+
 	bool castedBubbles = false;
 	bool castedLeftSlam = false;
 	bool castedRightSlam = false;
@@ -50,5 +52,6 @@ private:
 	SGD::HAudio m_hSlam1 = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hSlam2 = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hSlam3 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hHurt = SGD::INVALID_HANDLE;
 };
 

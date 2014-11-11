@@ -17,6 +17,7 @@ Ice::Ice()
 Ice::~Ice()
 {
 	delete m_pEmitter;
+	m_pOwner->Release();
 }
 
 void Ice::Update(float elapsedTime) 

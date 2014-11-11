@@ -242,13 +242,12 @@ void GameplayState::Enter(void) //Load Resources
 void GameplayState::Exit(void)
 {
 
-	//Save the game
-	SaveGame();
-
 	// Save collected honor
 	m_pLevel->Exit();
-	SaveHonorVector();
+	//SaveHonorVector();
 
+	//Save the game
+	SaveGame();
 
 	if (m_pEntities != nullptr)
 	{
@@ -1961,6 +1960,7 @@ void GameplayState::LoadGame()
 	// Read in total honor collected
 	int totalHonor;
 	pRoot->Attribute("totalHonor", &totalHonor);
+	m_pPlayer->SetHonorCollected(totalHonor);
 
 	// Loop through each level
 	TiXmlElement * pLevel = pRoot->FirstChildElement();
@@ -1998,6 +1998,8 @@ void GameplayState::LoadGame()
 		pLevel = pLevel->NextSiblingElement();
 	}
 	//m_pPlayer->SetPosition(SGD::Point((float)x, (float)y));
+	int temp = 0;
+	temp++;
 }
 
 /////////////////////////////////////////////
@@ -2037,7 +2039,7 @@ void GameplayState::LoadLevelMap()
 
 	// Unlock certain levels right away
 	m_mUnlockedLevels["HubLevel"] = true;
-	m_mUnlockedLevels["TutorialLevel"] = true;
+	m_mUnlockedLevels["Level0_1"] = true;
 	m_mUnlockedLevels["World1Level"] = true;
 	m_mUnlockedLevels["World2Level"] = true;
 	m_mUnlockedLevels["World3Level"] = true;
@@ -2052,8 +2054,6 @@ void GameplayState::LoadLevelMap()
 // - Loads the level at the path for the given key
 void GameplayState::LoadLevel(std::string _level)
 {
-	// Save the string
-	m_strCurrLevel = _level;
 
 	// Clear the old entities
 	m_pEntities->RemoveAll();
@@ -2069,6 +2069,8 @@ void GameplayState::LoadLevel(std::string _level)
 		m_pLevel = nullptr;
 	}
 
+	// Save the string
+	m_strCurrLevel = _level;
 
 	// Create a new level and load the correct file
 	m_pLevel = new Level();
@@ -2220,7 +2222,7 @@ bool GameplayState::GetHonorValue(unsigned int _index)
 }
 
 /////////////////////////////////////////////
-// LoadHonorVector
+// GetHonorVectorSize
 // -Loads the data in the honor vector file
 unsigned int GameplayState::GetHonorVectorSize()
 {

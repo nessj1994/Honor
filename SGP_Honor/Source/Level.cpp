@@ -415,7 +415,6 @@ bool Level::LoadLevel(const char * _path)
 					TiXmlElement * pArg = pEntity->FirstChildElement();
 					int amount;
 					pArg->Attribute("value", &amount);
-					GameplayState::GetInstance()->CreateHonor(x, y, amount, honorIndex);
 					unsigned int vectorSize = GameplayState::GetInstance()->GetHonorVectorSize();
 					// If there is a value in collected honor for this
 					if (honorIndex < vectorSize)
@@ -428,6 +427,7 @@ bool Level::LoadLevel(const char * _path)
 						// it could not have been collected
 						m_vCollectedHonor.push_back(false);
 					}
+					GameplayState::GetInstance()->CreateHonor(x, y, amount, honorIndex);
 					++honorIndex;
 					break;
 				}
