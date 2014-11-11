@@ -85,7 +85,7 @@ void MutantMan::Update(float _elapsedTime)
 
 	//Find Distance to point
 	distance = m_ptPosition - m_pPatrolPoint;
-	if (distance.ComputeLength() < 255)
+	if (distance.ComputeLength() < 100)
 	{
 		
 		
@@ -100,38 +100,17 @@ void MutantMan::Update(float _elapsedTime)
 			SetFacingRight(true);
 			m_vtVelocity.x = -300;
 		}
-		////Patrol if no target
-		//if (m_pPatrolPoint == m_ptPosition && m_bFacingRight)
-		//{
-		//	m_bFacingRight = false;
-		//	m_pPatrolPoint = m_ptPosition;
-		//	m_pPatrolPoint.x -= 50;
-		//}
-		//else if (m_pPatrolPoint == m_ptPosition && !m_bFacingRight)
-		//{
-		//	m_bFacingRight = true;
-		//	m_pPatrolPoint = m_ptPosition;
-		//	m_pPatrolPoint.x += 50;
-		//}
+
 		if (distance.ComputeLength() < 60)
 		{
 			SetVelocity({ 0, 0 });
-			////Attack the player
+			////Run Away
 			if (m_ts.GetCurrAnimation() != "Mutant_Idle")
 			{
 				m_ts.ResetCurrFrame();
 				m_ts.SetCurrAnimation("Mutant_Idle");
 				m_ts.SetPlaying(true);				
 			}
-			/*if (m_ts.GetCurrFrame() == 1)
-			{
-				if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hPunch))
-				{
-					SGD::AudioManager::GetInstance()->PlayAudio(m_hPunch);
-				}
-				m_bPlayerAttacked = true;
-			}
-			m_vtVelocity.x = 0;*/
 		}
 		else 
 		//if Mutant is going towards player change to walking animation if he doesnt need to vomit

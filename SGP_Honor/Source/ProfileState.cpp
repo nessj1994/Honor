@@ -235,7 +235,7 @@ void ProfileState::Render(void)
 	pGraphics->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 2.0f, 1.5f });
 
 	//Draw the title
-	font.DrawString("HONOR", 320, 100, 3, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("HONOR", 220, 100, 3, SGD::Color{ 255, 255, 0, 0 });
 
 
 	pGraphics->DrawTexture(m_hSword, { m_rSword.left, m_rSword.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
@@ -257,8 +257,8 @@ void ProfileState::Render(void)
 		std::ostringstream stringstream;
 		stringstream << Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCollectedHonor();
 
-		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300), 220, 1, { 255, 255, 0, 0 });
-		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300), 252, 1, { 255, 255, 0, 0 });
+		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300) - 30, 220, 1, { 255, 255, 0, 0 });
+		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300) - 30, 252, 1, { 255, 255, 0, 0 });
 
 		//font.DrawString(Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel().c_str(), m_rProfile1.left + 400, 220, 1, { 255, 255, 0, 0 });
 
@@ -287,8 +287,8 @@ void ProfileState::Render(void)
 
 		std::ostringstream stringstream;
 		stringstream << Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCollectedHonor();
-		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300), 220, 1, { 255, 255, 0, 0 });
-		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300), 252, 1, { 255, 255, 0, 0 });
+		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300) - 30, 220, 1, { 255, 255, 0, 0 });
+		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300) - 30, 252, 1, { 255, 255, 0, 0 });
 	}
 	else
 	{
@@ -310,8 +310,8 @@ void ProfileState::Render(void)
 
 		std::ostringstream stringstream;
 		stringstream << Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCollectedHonor();
-		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300), 220, 1, { 255, 255, 0, 0 });
-		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300), 252, 1, { 255, 255, 0, 0 });
+		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300) - 30, 220, 1, { 255, 255, 0, 0 });
+		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300) - 30, 252, 1, { 255, 255, 0, 0 });
 	}
 	else
 	{

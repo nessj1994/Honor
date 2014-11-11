@@ -18,17 +18,16 @@ Camera* Camera::GetInstance(void)
 
 void Camera::Draw(SGD::Rectangle _rect, SGD::Color _color)
 {
-	
+
 	//_rect.SetTopLeft({ _rect.GetTopLeft().x / m_fScale, _rect.GetTopLeft().y / m_fScale });
 	//_rect.SetBottomRight({ _rect.GetBottomRight().x / m_fScale, _rect.GetBottomRight().y / m_fScale });
 
-		/////CHANGE FROM RECT TO ENTITY to control the ZOOM scale
+	/////CHANGE FROM RECT TO ENTITY to control the ZOOM scale
 
 
 
 	//SGD::GraphicsManager::GetInstance()->DrawRectangle(SGD::Rectangle(_rect.left / m_szZoomScale.width, _rect.top / m_szZoomScale.height, _rect.right / m_szZoomScale.width, _rect.bottom / m_szZoomScale.height),
 	//	_color);
-
 	SGD::GraphicsManager::GetInstance()->DrawRectangle(_rect, _color);
 
 
@@ -37,7 +36,7 @@ void Camera::Draw(SGD::Rectangle _rect, SGD::Color _color)
 
 void Camera::DrawAnimation(SGD::Point position, float rotation, AnimTimeStamp& ts, bool flipped, float scale, SGD::Vector rotationOffset, SGD::Color color)
 {
-	AnimationEngine::GetInstance()->Render({ position.x , position.y  },
+	AnimationEngine::GetInstance()->Render({ position.x, position.y },
 		rotation, ts, flipped, scale, m_ptCameraPosition, rotationOffset, color);
 }
 
@@ -69,9 +68,9 @@ void Camera::DrawTextureSection(SGD::HTexture handle, SGD::Point position, SGD::
 
 
 	SGD::GraphicsManager::GetInstance()->DrawTextureSection(handle,
-	{	(position.x /** m_szZoomScale.width*/)	/*- Camera::GetInstance()->GetCameraPos().x*/, 
-		(position.y /** m_szZoomScale.height*/) /*- Camera::GetInstance()->GetCameraPos().y*/ },
-		section, rotation, rotationOffset, color, { m_fScale, m_fScale });
+	{ (position.x /** m_szZoomScale.width*/)	/*- Camera::GetInstance()->GetCameraPos().x*/,
+	(position.y /** m_szZoomScale.height*/) /*- Camera::GetInstance()->GetCameraPos().y*/ },
+	section, rotation, rotationOffset, color, { m_fScale, m_fScale });
 }
 
 
@@ -82,7 +81,7 @@ void Camera::Update(float _elapsedTime)
 
 	if (m_fCurrentPanX < m_fDesiredPanX)
 	{
-		m_fCurrentPanX += _elapsedTime *5;
+		m_fCurrentPanX += _elapsedTime * 5;
 		if (m_fCurrentPanX > m_fDesiredPanX)
 		{
 			m_fCurrentPanX = m_fDesiredPanX;
@@ -91,7 +90,7 @@ void Camera::Update(float _elapsedTime)
 
 	if (m_fCurrentPanX > m_fDesiredPanX)
 	{
-		m_fCurrentPanX -= _elapsedTime *5;
+		m_fCurrentPanX -= _elapsedTime * 5;
 		if (m_fCurrentPanX < m_fDesiredPanX)
 		{
 			m_fCurrentPanX = m_fDesiredPanX;
@@ -101,7 +100,7 @@ void Camera::Update(float _elapsedTime)
 
 	if (m_fCurrentPanY < m_fDesiredPanY)
 	{
-		m_fCurrentPanY += _elapsedTime *4;
+		m_fCurrentPanY += _elapsedTime * 4;
 		if (m_fCurrentPanY > m_fDesiredPanY)
 		{
 			m_fCurrentPanY = m_fDesiredPanY;
@@ -110,7 +109,7 @@ void Camera::Update(float _elapsedTime)
 
 	if (m_fCurrentPanY > m_fDesiredPanY)
 	{
-		m_fCurrentPanY -= _elapsedTime *4;
+		m_fCurrentPanY -= _elapsedTime * 4;
 		if (m_fCurrentPanY < m_fDesiredPanY)
 		{
 			m_fCurrentPanY = m_fDesiredPanY;
@@ -127,6 +126,52 @@ void Camera::Update(float _elapsedTime)
 	case 0:
 		//DYNAMIC PAN CAMERA WITH EVENTS
 
+
+
+
+		// X position
+		if (m_pPlayer->GetPosition().x < 250)
+		{
+			m_ptCameraPosition.x = (250 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
+			
+		}
+		else if (m_pPlayer->GetPosition().x > GameplayState::GetInstance()->GetCurrentLevel()->GetLevelWidth() - 500)
+		{
+			m_ptCameraPosition.x = (GameplayState::GetInstance()->GetCurrentLevel()->GetLevelWidth() - 500 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
+			
+		}
+		else
+		{
+			m_ptCameraPosition.x = (m_pPlayer->GetPosition().x - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
+		}
+
+		// Y position
+		if (m_pPlayer->GetPosition().y < 520)
+		{
+			m_ptCameraPosition.y = (520 - Game::GetInstance()->GetScreenHeight() / m_fCurrentPanY);// Divide by Scale
+
+
+		}
+		else if (m_pPlayer->GetPosition().y > GameplayState::GetInstance()->GetCurrentLevel()->GetLevelHeight() - 300)
+		{
+			m_ptCameraPosition.y = (GameplayState::GetInstance()->GetCurrentLevel()->GetLevelHeight() - 300 - Game::GetInstance()->GetScreenHeight() / m_fCurrentPanY);// Divide by Scale
+
+		}
+		else
+		{
+			m_ptCameraPosition.y = (m_pPlayer->GetPosition().y - Game::GetInstance()->GetScreenHeight() / m_fCurrentPanY);// Divide by Scale
+
+		}
+
+		break;
+
+	case 1:
+
+
+		break;
+
+	case 2:
+		//FINAL BOSS CAMERA
 		if (m_pPlayer->GetPosition().x < 300)
 		{
 			m_ptCameraPosition.x = (300 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
@@ -139,27 +184,28 @@ void Camera::Update(float _elapsedTime)
 		}
 		else
 		{
-		m_ptCameraPosition.x = (m_pPlayer->GetPosition().x  - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX) ; // Divide by Scale
-		m_ptCameraPosition.y = (m_pPlayer->GetPosition().y - Game::GetInstance()->GetScreenHeight() / m_fCurrentPanY) ;// Divide by Scale
+			m_ptCameraPosition.x = (m_pPlayer->GetPosition().x - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
+			m_ptCameraPosition.y = (m_pPlayer->GetPosition().y - Game::GetInstance()->GetScreenHeight() / m_fCurrentPanY);// Divide by Scale
 		}
-
-		break;
-
-	case 1:
-
-
-		break;
-
-	case 2:
-		//FINAL BOSS CAMERA
-		m_ptCameraPosition.x = ((GameplayState::GetInstance()->GetCurrentLevel()->GetLevelWidth() / 2) - 175 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
-		m_ptCameraPosition.y = ((GameplayState::GetInstance()->GetCurrentLevel()->GetLevelHeight() / m_fCurrentPanY) - 380);// Divide by Scale
-
 		break;
 
 	case 4:
 		//FOURTH BOSS CAMERA
-		m_ptCameraPosition.x = ((GameplayState::GetInstance()->GetCurrentLevel()->GetLevelWidth() / 2) - 175 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
+		if (m_pPlayer->GetPosition().x < 250)
+		{
+			m_ptCameraPosition.x = (250 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
+
+		}
+		else if (m_pPlayer->GetPosition().x > GameplayState::GetInstance()->GetCurrentLevel()->GetLevelWidth() - 500)
+		{
+			m_ptCameraPosition.x = (GameplayState::GetInstance()->GetCurrentLevel()->GetLevelWidth() - 500 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
+
+		}
+		else
+		{
+			m_ptCameraPosition.x = (m_pPlayer->GetPosition().x - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
+		}
+
 		m_ptCameraPosition.y = ((GameplayState::GetInstance()->GetCurrentLevel()->GetLevelHeight() / m_fCurrentPanY) - 250);// Divide by Scale
 
 		break;
@@ -167,19 +213,19 @@ void Camera::Update(float _elapsedTime)
 	case 5:
 		//FINAL BOSS CAMERA
 		m_ptCameraPosition.x = ((GameplayState::GetInstance()->GetCurrentLevel()->GetLevelWidth() / 2) - 175 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
-		m_ptCameraPosition.y = ((GameplayState::GetInstance()->GetCurrentLevel()->GetLevelHeight() / m_fCurrentPanY) - 250);// Divide by Scale
+		m_ptCameraPosition.y = ((GameplayState::GetInstance()->GetCurrentLevel()->GetLevelHeight() / m_fCurrentPanY) - 90);// Divide by Scale
 
 		break;
 
 	}
-	
+
 
 	//m_ptCameraPosition.y = ((m_pPlayer->GetPosition().y - Game::GetInstance()->GetScreenHeight() / m_fCurrentPanY) - 250);// Divide by Scale
 
-//if (GameplayState::GetInstance()->GetCurrentLevel()-> == "Level5_5")
-//{
-//
-//}
+	//if (GameplayState::GetInstance()->GetCurrentLevel()-> == "Level5_5")
+	//{
+	//
+	//}
 	//level.GetWidth() for the soft lock on camera player
 }
 

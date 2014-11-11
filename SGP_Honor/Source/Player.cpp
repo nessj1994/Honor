@@ -51,6 +51,11 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("Screen3x1.5");
 	Listener::RegisterForEvent("Screen1.5x2");
 	Listener::RegisterForEvent("Screen1.5x3");
+	Listener::RegisterForEvent("Screen3x1");
+	Listener::RegisterForEvent("Screen3x1.5");
+
+
+
 	Listener::RegisterForEvent("FINALBOSS");
 	Listener::RegisterForEvent("FOURTHBOSS");
 	Listener::RegisterForEvent("BossLevel");
@@ -155,6 +160,7 @@ void Player::Update(float elapsedTime)
 		}
 
 		SetIsBouncing(false);
+		UpdatePlayerSwing(elapsedTime);
 
 		//////// NEED TO UPDATE WITH CONTROLLER ( JORDAN )
 		//if (GetIsInputStuck() == false)
@@ -187,7 +193,7 @@ void Player::Update(float elapsedTime)
 
 
 			UpdateBounce(elapsedTime);
-			UpdatePlayerSwing(elapsedTime);
+			
 
 			/////////////////////////////////////////////////
 			/////////////////Movement////////////////////////
@@ -312,8 +318,8 @@ void Player::Render(void)
 		if (m_fTextTimer <= TEXT_TIME_LENGTH)
 		{
 			Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
-			font.DrawString("YOU GAINED THE BUBBLE ABILITY", m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x,
-				m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y - 100, 1, SGD::Color{ 255, 255, 0, 0 });
+			font.DrawString("YOU GAINED THE BUBBLE ABILITY", (int)(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
+				(int)(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y - 100), 1, SGD::Color{ 255, 255, 0, 0 });
 		}
 	}
 
@@ -495,7 +501,7 @@ void Player::HandleCollision(const IEntity* pOther)
 			m_vtVelocity.x += 50;
 		}
 		if(SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
-			SetVelocity(GetVelocity() * 1.51);
+			SetVelocity(GetVelocity() * 1.51f);
 	}
 
 	if(pOther->GetType() == Entity::ENT_NOT_FROZEN)
@@ -784,18 +790,10 @@ void Player::BasicCollision(const IEntity* pOther)
 					m_fLandTimer = 0.001f;
 					m_unCurrentState = LANDING_STATE;
 				}
-				//if (m_fLandTimer <= 0)
-				//	m_unCurrentState = RESTING_STATE;,
 
 			}
 
-			//	if (m_unCurrentState == JUMPING_STATE)
-			//	{
-			//		m_ts.ResetCurrFrame();
-			//		m_ts.SetCurrAnimation("Idle");
-			//		m_ts.SetPlaying(true);
-			//
-			//	}
+			
 
 			SetJumpVelCur(0);
 			SetIsInputStuck(false);
@@ -824,41 +822,6 @@ void Player::BasicCollision(const IEntity* pOther)
 void Player::SwingCollision(const IEntity* pOther)
 {
 
-	//	RECT rTempSwing;
-	//	rTempSwing.left = swingRect.left;
-	//	rTempSwing.top = swingRect.top;
-	//	rTempSwing.right = swingRect.right;
-	//	rTempSwing.bottom = swingRect.bottom;
-
-
-	//RECT rObject;
-	//rObject.left = (LONG)pOther->GetRect().left;
-	//rObject.top = (LONG)pOther->GetRect().top;
-	//rObject.right = (LONG)pOther->GetRect().right;
-	//rObject.bottom = (LONG)pOther->GetRect().bottom;
-
-	//RECT rIntersection = {};
-
-	//IntersectRect(&rIntersection, &rObject, &rTempSwing);
-
-	//int nIntersectWidth = rIntersection.right - rIntersection.left;
-	//int nIntersectHeight = rIntersection.bottom - rIntersection.top;
-
-	//if (nIntersectHeight > nIntersectWidth)
-	//{
-	//	//if switch, activate switch
-	//	//if evenmy call event to kill enemy
-	//	SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
-
-	//}
-
-	//if (nIntersectHeight < nIntersectWidth)
-	//{
-	//	//if switch, activate switch
-	//	//if evenmy call event to kill enemy
-	//	SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
-
-	//}
 }
 
 
@@ -903,28 +866,6 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	int nIntersectWidth = rIntersection.right - rIntersection.left;
 	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
-
-	//SGD::Rectangle rPlayer = GetRect();
-	//SGD::Rectangle rOther = pOther->GetRect();
-	//SGD::Rectangle rIntersecting = rPlayer.ComputeIntersection(rObject);
-
-	//float rIntersectWidth = rIntersecting.ComputeWidth();
-	//float rIntersectHeight = rIntersecting.ComputeHeight();
-
-
-	//float tempInt = (/*(rObject.right - rObject.left) +*/ nIntersectWidth)* tempVal;
-
-	//	if (is_Platform == false
-	//		&& rPlayer.bottom < rObject.top)
-	//	{
-
-	//SetVelocity({ GetVelocity().x + 1000, GetVelocity().y - 1000 });
-
-
-
-
-
-
 	if(/*nIntersectWidth*/ /*nIntersectWidth > 1  &&*/ nIntersectWidth < 31)
 	{
 		//SetPosition({ GetPosition().x, (float)rObject.bottom - tempVal - GetSize().height });
@@ -935,18 +876,15 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	
 	else if(nIntersectWidth == 31)
 	{
-		m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
-		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+		//m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
+		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+
+		//m_ptPosition.y = (float)rObject.top ;
+		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+
+		BasicCollision(pOther);
 
 
-		//tempVal = 31 / 32;
-		//
-		//m_ptPosition.y = (float)rObject.bottom - GetSize().height - tempVal;
-		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * 1);
-		//
-		//BasicCollision(pOther);
-		
-	
 	}
 	else if(nIntersectWidth == 32)
 	{
@@ -955,23 +893,8 @@ void Player::LeftRampCollision(const IEntity* pOther)
 		m_ptPosition.x += 1;
 	}
 
-
-
-	//else
-	//{
-	//	SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 });
-	//	m_ptPosition.y -= nIntersectHeight;
-	//}
-
-
-
-	//	}
-
 	if(m_ptPosition.x + m_szSize.width > rObject.right)
 	SetVelocity({ m_vtVelocity.x , 1000 });
-
-
-
 
 }
 
@@ -980,7 +903,6 @@ void Player::RightRampCollision(const IEntity* pOther)
 	///////for RIGHT ramp LEFT side of player
 
 	float tempVal = 32.0f / 32.0f;
-	
 	
 	SetGravity(GetGravity() * 4);
 	SetVelocity({ GetVelocity().x, 0 });
@@ -1346,9 +1268,7 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		//Kill the player
 		if(!m_bDead && m_fArmorTimer <= 0.0f)
 		{
-
 			KillPlayer();
-
 		}
 	}
 
@@ -1403,6 +1323,23 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		Camera::GetInstance()->SetCameraCap(0);
 
 	}
+
+	if (pEvent->GetEventID() == "Screen3x1")
+	{
+		m_fPanX = 3;
+		m_fPanY = 1.3f;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+
+	if (pEvent->GetEventID() == "Screen3x1.5")
+	{
+		m_fPanX = 3;
+		m_fPanY = 1.5f;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+
 	if (pEvent->GetEventID() == "Screen3x3")
 	{
 		m_fPanX = 3;
@@ -1440,7 +1377,9 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	}
 	if (pEvent->GetEventID() == "FINALBOSS")
 	{
-		Camera::GetInstance()->SetCameraCap(5);
+		Camera::GetInstance()->SetCameraCap(0);
+		//Camera::GetInstance()->SetCameraCap(5);
+
 
 	}
 	if (pEvent->GetEventID() == "FOURTHBOSS")
@@ -1461,7 +1400,9 @@ void Player::KillPlayer()
 		// Jump and remove armor
 		m_bHasArmor = false;
 		m_fArmorTimer = 2.0f;
-		m_vtVelocity.y -= 2500;
+		SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
+		SetVelocity({ m_vtVelocity.x, 0 });
+		SetVelocity({ m_vtVelocity.x, m_vtVelocity.y - 1200 });
 		m_unJumpCount = 0;
 		if (m_ts.GetCurrAnimation() == "Armor Player Idle")
 		{
@@ -1862,13 +1803,18 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 
 void Player::UpdateDash(float elapsedTime)
 {
+	if (m_fDashCoolTimer > 0.0f)
+	{
+		m_fDashCoolTimer -= elapsedTime;
+	}
 	if (HasDash() == true)
 	{
 		SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-		if (pInput->IsKeyPressed(SGD::Key::Tab) == true
+		if (m_fDashCoolTimer <= 0.0f && (pInput->IsKeyPressed(SGD::Key::Tab) == true
 			//if (pInput->IsKeyDown(SGD::Key::Tab) == true
-			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/))
+			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/)))
 		{
+			m_fDashCoolTimer = 1.0f;
 			GetDash()->GetEMDash()->Finish(false);
 			CastDash();
 			m_ts.SetPlaying(true);
@@ -1919,6 +1865,30 @@ void Player::UpdateJump(float elapsedTime)
 	{
 		int tempx = 0;
 	}
+
+	///////Check if on ramp first
+	//RECT rObject;
+	//rObject.left = (LONG)pOther->GetRect().left;
+	//rObject.top = (LONG)pOther->GetRect().top;
+	//rObject.right = (LONG)pOther->GetRect().right;
+	//rObject.bottom = (LONG)pOther->GetRect().bottom;
+	//
+	////Create a rectangle for the intersection
+	//RECT rIntersection = {};
+	//
+	//RECT rPlayerWall;
+	//rPlayerWall.left = (LONG)GetRect().left - 1;
+	//rPlayerWall.top = (LONG)GetRect().top;
+	//rPlayerWall.right = (LONG)GetRect().right + 1;
+	//rPlayerWall.bottom = (LONG)GetRect().bottom;
+	//
+	//IntersectRect(&rIntersection, &rObject, &rPlayerWall);
+	//
+	//int nIntersectWidth = rIntersection.right - rIntersection.left;
+	//int nIntersectHeight = rIntersection.bottom - rIntersection.top;
+
+
+
 
 
 
@@ -2377,11 +2347,20 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 	{
 		if(m_fSwingTimer <= 0.0f)
 		{
-			m_fSwingTimer = 0.75f;
+			m_fSwingTimer = 0.35f;
 			is_Swinging = true;
-			m_ts.SetCurrAnimation("Swing Attack");
-			m_ts.SetPlaying(true);
-			m_ts.ResetCurrFrame();
+			if (rand() % 2 == 0)
+			{
+				m_ts.SetCurrAnimation("Swing Attack");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+			}
+			else
+			{
+				m_ts.SetCurrAnimation("Slash Attack");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+			}
 		}
 
 
