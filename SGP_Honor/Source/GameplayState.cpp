@@ -374,6 +374,12 @@ bool GameplayState::Input(void) //Hanlde user Input
 		pAudio->StopAudio(m_hBGM);
 	}
 
+	if (pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyPressed(SGD::Key::Tab))
+	{
+		Game::GetInstance()->AddState(PauseState::GetInstance());
+		pAudio->StopAudio(m_hBGM);
+	}
+
 	return true;
 
 }
@@ -423,7 +429,6 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_POUNCER);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BULL_ENEMY);
-	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MUTANT_MAN);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_POOP);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STALACTITE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_DOOR);
@@ -554,7 +559,6 @@ void GameplayState::Render(void)
 	// Draw a fading rectangle
 	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
 	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { m_cScreenFade, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
-
 
 }
 
@@ -1049,9 +1053,9 @@ Entity* GameplayState::CreateSpray(Entity* pOwner) const
 {
 	Ice* proj = new Ice;
 	if (pOwner->GetDirection().x == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + 20, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + 30, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	else
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width - 30, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
 	proj->SetSize({ 4, 4 });
 	proj->SetDirection({ pOwner->GetDirection().x, -1 });

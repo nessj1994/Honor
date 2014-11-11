@@ -1,11 +1,14 @@
 #pragma once
 #include "Entity.h"
+#include "Font.h"
+#include "BitmapFont.h"
 #include <map>
-
+#include "Game.h"
 #include "Animation.h"
 #include "AnimTimeStamp.h"
 
 class Hawk;
+
 
 class Unit :
 	public Entity
@@ -78,6 +81,8 @@ private:
 
 protected:
 	AnimTimeStamp m_ts;
+	//Local refernce to the font
+	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
 	bool m_bFacingRight = true;
 };
 

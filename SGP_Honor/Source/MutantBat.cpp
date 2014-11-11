@@ -20,7 +20,7 @@ MutantBat::MutantBat()
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/MutantBat.xml");
 	m_ts.SetCurrAnimation("Flying");
 	m_ts.SetPlaying(true);
-	m_szSize = { 50, 70 };
+	m_szSize = { 30, 40 };
 	SetGravity(-1000.0f);
 	m_fPoopTimer = 0;
 	m_hHurt = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/BatHurt.wav");
@@ -123,7 +123,7 @@ void MutantBat::Update(float _elapsedTime)
 			m_vtVelocity.y = 0;
 		}		
 		
-		if (distance.ComputeLength() < 20 && m_fPoopTimer > .5f)
+		if (distance.ComputeLength() < 40 && m_fPoopTimer > .5f)
 		{
 			//Attack the player
 			if (m_ts.GetCurrAnimation() != "Pooping")

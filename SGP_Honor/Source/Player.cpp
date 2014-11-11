@@ -57,6 +57,7 @@ Player::Player() : Listener(this)
 
 
 	Listener::RegisterForEvent("FINALBOSS");
+	Listener::RegisterForEvent("FOURTHBOSS");
 	Listener::RegisterForEvent("BossLevel");
 	Listener::RegisterForEvent("GainedHawk");
 
@@ -112,7 +113,7 @@ void Player::Update(float elapsedTime)
 	//Emitter Updates
 	m_emHonor->Update(elapsedTime);
 	m_emFeatherExplosion->Update(elapsedTime);
-	m_emHawkReturn->Update(elapsedTime);
+	m_emHawkReturn->Update(elapsedTime);            
 	//
 	
 	if (HasBounce() == true)
@@ -1381,6 +1382,11 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 
 
 	}
+	if (pEvent->GetEventID() == "FOURTHBOSS")
+	{
+		Camera::GetInstance()->SetCameraCap(4);
+
+	}
 	if (pEvent->GetEventID() == "BossLevel")
 	{
 		Camera::GetInstance()->SetCameraCap(2);
@@ -1808,7 +1814,7 @@ void Player::UpdateDash(float elapsedTime)
 			//if (pInput->IsKeyDown(SGD::Key::Tab) == true
 			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/)))
 		{
-			m_fDashCoolTimer = 1.0f;
+			m_fDashCoolTimer = .5f;
 			GetDash()->GetEMDash()->Finish(false);
 			CastDash();
 			m_ts.SetPlaying(true);
@@ -2341,11 +2347,20 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 	{
 		if(m_fSwingTimer <= 0.0f)
 		{
-			m_fSwingTimer = 0.75f;
+			m_fSwingTimer = 0.35f;
 			is_Swinging = true;
-			m_ts.SetCurrAnimation("Swing Attack");
-			m_ts.SetPlaying(true);
-			m_ts.ResetCurrFrame();
+			if (rand() % 2 == 0)
+			{
+				m_ts.SetCurrAnimation("Swing Attack");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+			}
+			else
+			{
+				m_ts.SetCurrAnimation("Slash Attack");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+			}
 		}
 
 
