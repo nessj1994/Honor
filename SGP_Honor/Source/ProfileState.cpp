@@ -179,6 +179,8 @@ bool ProfileState::Input(void) //Hanlde user Input
 			//Changestate to gameplay state
 			Game::GetInstance()->SetSelectedProfile(1);
 			Game::GetInstance()->AddState(GameplayState::GetInstance());
+
+			// Go into the opening cutscene if it is a new profile
 			CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
 			Game::GetInstance()->AddState(CutSceneState::GetInstance());
 		}
