@@ -228,8 +228,8 @@ void GameplayState::Enter(void) //Load Resources
 	//Hub World Orb 
 	m_pHubOrb = new HubWorldOrb();
 	//Turorial Images
-	m_hOAttack = pGraphics->LoadTexture("Assets/graphics/HonorO.png");
-	m_hXJUMP = pGraphics->LoadTexture("Assets/graphics/HonorX.png");
+	//m_hOAttack = pGraphics->LoadTexture("Assets/graphics/HonorO.png");
+	//m_hXJUMP = pGraphics->LoadTexture("Assets/graphics/HonorX.png");
 	//m_hXWallJump = pGraphics->LoadTexture("Assetes/graphics/HonorXWAll.png");
 	//m_hTriOpenDoor = pGraphics->LoadTexture("Assetes/graphics/HonorTriangle.png");
 }
@@ -564,10 +564,10 @@ void GameplayState::Render(void)
 	//Render Images for tutorial 
 	if (m_strCurrLevel == "Level0_1")
 	{
-		Camera::GetInstance()->DrawTexture({}, 0, m_hXJUMP, false, 1, {}, {});
+		/*Camera::GetInstance()->DrawTexture({}, 0, m_hXJUMP, false, 1, {}, {});
 		Camera::GetInstance()->DrawTexture({}, 0, m_hXWallJump, false, 1, {}, {});
 		Camera::GetInstance()->DrawTexture({}, 0, m_hOAttack, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({}, 0, m_hTriOpenDoor, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({}, 0, m_hTriOpenDoor, false, 1, {}, {});*/
 	}
 
 
