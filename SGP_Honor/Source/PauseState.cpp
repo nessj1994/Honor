@@ -139,7 +139,7 @@ bool PauseState::Input(void)
 		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
 		{
 			Game::GetInstance()->ClearStates();
-
+			return true;
 
 		}
 	}

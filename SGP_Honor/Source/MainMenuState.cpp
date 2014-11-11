@@ -264,7 +264,7 @@ void MainMenuState::Render(void)
 	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
 
 	//Draw the background
-	pGraphics->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 2.0f, 1.5f });
+	pGraphics->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 1.6f, 1.2f });
 
 	//Draw the title
 	font.DrawString("HONOR", 220, 100, 3, SGD::Color{ 255, 255, 0, 0 });

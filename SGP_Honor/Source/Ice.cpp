@@ -17,6 +17,7 @@ Ice::Ice()
 Ice::~Ice()
 {
 	delete m_pEmitter;
+	m_pOwner->Release();
 }
 
 void Ice::Update(float elapsedTime) 
@@ -47,7 +48,7 @@ void Ice::Update(float elapsedTime)
 	//	}
 	//}
 
-	SetVelocity({ GetVelocity().x, (GetVelocity().y - (-500) * elapsedTime) });
+	SetVelocity({ GetVelocity().x, (GetVelocity().y - (-4000) * elapsedTime) });
 
 	if (m_fTimer >= .4f)
 	{
