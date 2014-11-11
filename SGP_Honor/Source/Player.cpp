@@ -52,6 +52,7 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("Screen1.5x2");
 	Listener::RegisterForEvent("Screen1.5x3");
 	Listener::RegisterForEvent("FINALBOSS");
+	Listener::RegisterForEvent("FOURTHBOSS");
 	Listener::RegisterForEvent("BossLevel");
 	Listener::RegisterForEvent("GainedHawk");
 
@@ -1440,6 +1441,11 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	if (pEvent->GetEventID() == "FINALBOSS")
 	{
 		Camera::GetInstance()->SetCameraCap(5);
+
+	}
+	if (pEvent->GetEventID() == "FOURTHBOSS")
+	{
+		Camera::GetInstance()->SetCameraCap(4);
 
 	}
 	if (pEvent->GetEventID() == "BossLevel")
