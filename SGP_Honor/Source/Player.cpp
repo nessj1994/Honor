@@ -1395,7 +1395,8 @@ void Player::KillPlayer()
 		m_bHasArmor = false;
 		m_fArmorTimer = 2.0f;
 		SetPosition({ m_ptPosition.x, m_ptPosition.y - 1 });
-		SetVelocity({ m_vtVelocity.x, m_vtVelocity.y - 2500 });
+		SetVelocity({ m_vtVelocity.x, 0 });
+		SetVelocity({ m_vtVelocity.x, m_vtVelocity.y - 1200 });
 		m_unJumpCount = 0;
 		if (m_ts.GetCurrAnimation() == "Armor Player Idle")
 		{
