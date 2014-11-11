@@ -204,13 +204,13 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadGame();
 	
-	//LoadLevel("Level4_1");
+	//LoadLevel("Level5_5");
 	m_pPlayer->SetHasBounce(true);
 	m_pPlayer->SetHasDash(true);
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-	//LoadLevel("Level4_5");
+
 
 	LoadLevel("Level3_5");
 
@@ -459,7 +459,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_GEYSER);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_BOSS_WIZARD);
-	m_pEntities->CheckCollisions(Entity::ENT_MUTANT_BIRD, Entity::ENT_MUTANT_BIRD);
+
 
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_LASER);
 	m_pEntities->CheckCollisions(Entity::ENT_DOOR, Entity::ENT_LASER);
@@ -474,8 +474,10 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_LEFT_RAMP);
 	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_RIGHT_RAMP);
 	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_DEATH);
-
-
+	//FLocking Collisions
+	m_pEntities->CheckCollisions(Entity::ENT_MUTANT_BIRD, Entity::ENT_MUTANT_BIRD);
+	m_pEntities->CheckCollisions(Entity::ENT_MUTANT_MAN, Entity::ENT_MUTANT_MAN);
+	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_ENEMY);
 
 
 
@@ -1307,7 +1309,9 @@ void GameplayState::CreateGeyser(int _x, int _y, float _speed, float _maxHeight,
 	Geyser* m_pGeyser = new Geyser;
 	m_pGeyser->SetPosition({ (float)_x, (float)_y });
 	m_pGeyser->SetOrigPosition({ (float)_x, (float)_y });
-
+	m_pGeyser->SetSpeed(_speed);
+	m_pGeyser->SetMaxHeight(_maxHeight);
+	m_pGeyser->SetState(_currState);
 	m_pEntities->AddEntity(m_pGeyser, Entity::ENT_GEYSER);
 
 	m_pGeyser->Release();

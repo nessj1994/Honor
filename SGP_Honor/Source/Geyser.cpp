@@ -11,8 +11,6 @@ Geyser::Geyser()
 	m_bRising = true;
 	m_ptOrigPos = m_ptPosition;
 	m_szOrigSize = m_szSize;
-
-	m_bSPRAYED = true;
 	
 	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/Geyser.wav");
 }
@@ -27,11 +25,7 @@ Geyser::~Geyser()
 /////////////////Interface//////////////////////
 void Geyser::Update(float elapsedTime)
 {
-	ChangePillar(100, elapsedTime);
-
-
-
-
+	ChangePillar(m_fMaxHeight, elapsedTime);
 }
 void Geyser::Render(void)
 {
@@ -47,13 +41,6 @@ void Geyser::Render(void)
 
 }
 
-SGD::Rectangle Geyser::GetRect(void) const
-{
-	return SGD::Rectangle{ m_ptPosition, m_szSize };
-
-
-}
-
 void Geyser::HandleCollision(const IEntity* pOther)
 {
 	if (pOther->GetType() == ENT_SPRAY)
@@ -66,28 +53,25 @@ void Geyser::HandleCollision(const IEntity* pOther)
 
 }
 
-void Geyser::ChangePillar(int _height, float _delta)
+void Geyser::ChangePillar(float _height, float _delta)
 {
 
 	if (m_bSPRAYED == false)
 	{
-
-
-
 		if ((m_ptPosition.y + m_szSize.height) < (m_ptOrigPos.y + m_szOrigSize.height) + _height
 			&& m_bRising == true)
 		{
-			m_ptPosition.y -= 100 * _delta;
-			m_szSize.height += 100 * _delta;
-
-
+			m_ptPosition.y -= m_fSpeed * _delta;
+			m_szSize.height += m_fSpeed * _delta;
 		}
+
 		if ((m_ptPosition.y) <= m_ptOrigPos.y - _height
 			&& m_bRising == true)
 		{
 			m_bRising = false;
 			m_bApex = true;
 		}
+
 		if (m_bApex == true)
 		{
 			if (m_fApexTimer > 0)
@@ -101,13 +85,13 @@ void Geyser::ChangePillar(int _height, float _delta)
 				m_bFalling = true;
 			}
 		}
+
 		if (m_ptPosition.y <
 			(m_ptOrigPos.y)
 			&& m_bFalling == true)
 		{
-			m_ptPosition.y += 100 * _delta;
-			m_szSize.height -= 100 * _delta;
-
+			m_ptPosition.y += m_fSpeed * _delta;
+			m_szSize.height -= m_fSpeed * _delta;
 		}
 
 		if ((m_ptPosition.y) >= (m_ptOrigPos.y)
@@ -128,11 +112,8 @@ void Geyser::ChangePillar(int _height, float _delta)
 				m_fApexTimer = 2.0f;
 				m_bResting = false;
 				m_bRising = true;
-
 			}
 		}
-
-
 	}
 
 	if (m_bSPRAYED == true)
@@ -140,7 +121,6 @@ void Geyser::ChangePillar(int _height, float _delta)
 
 		m_ptPosition.y = m_ptOrigPos.y - _height;
 		m_szSize.height = m_szOrigSize.height + _height;
-
 		m_fSprayTimer -= _delta;
 
 		if (m_fSprayTimer <= 0)
@@ -149,7 +129,6 @@ void Geyser::ChangePillar(int _height, float _delta)
 			m_fSprayTimer = 4.0f;
 			m_bFalling = true;
 		}
-
 	}
 
 	if(m_bResting == false)
@@ -173,4 +152,22 @@ int Geyser::GetType(void) const
 		return ENT_SOLID_WALL;
 
 	
+}
+
+void Geyser::SetState(int _state)
+{
+	if (_state == 0)
+	{
+		m_bRising = true;
+		m_bApex = false;
+		m_bFalling = false;
+		m_bResting = false;
+	}
+	else if (_state == 1)
+	{
+		m_bRising = false;
+		m_bApex = true;
+		m_bFalling = false;
+		m_bResting = false;
+	}
 }

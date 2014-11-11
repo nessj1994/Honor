@@ -283,7 +283,7 @@ void Wizard::Update(float elapsedTime)
 		Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
 
 		//Draw the title
-		font.DrawString("VICTORY", m_ptPosition.x-200, m_ptPosition.y-100, 3, SGD::Color{ 255, 255, 0, 0 });
+		font.DrawString("VICTORY", (int)(m_ptPosition.x-200), (int)(m_ptPosition.y-100), 3, SGD::Color{ 255, 255, 0, 0 });
 	}
 
 	}
