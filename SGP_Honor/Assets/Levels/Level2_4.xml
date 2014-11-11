@@ -90008,7 +90008,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="45">
+	<Entities numEntities="46">
 		<Entity type="2" x="928" y="576" numArgs="3" name="Laser_1">
 			<Argument type="1" name="Direction" value="3" />
 			<Argument type="1" name="ActivatorIndex" value="0" />
@@ -90217,6 +90217,9 @@
 		</Entity>
 		<Entity type="0" x="4691" y="2587" numArgs="1" name="Honor_4">
 			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="17" x="5184" y="4384" numArgs="1" name="HintStatue_1">
+			<Argument type="3" name="Message" value="Cave Man Allways Jumps Into Lasers!" />
 		</Entity>
 	</Entities>
 </Level>

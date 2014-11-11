@@ -107,7 +107,7 @@ void Player::Update(float elapsedTime)
 	//Emitter Updates
 	m_emHonor->Update(elapsedTime);
 	m_emFeatherExplosion->Update(elapsedTime);
-	m_emHawkReturn->Update(elapsedTime);
+	m_emHawkReturn->Update(elapsedTime);            
 	//
 	
 	if (HasBounce() == true)
@@ -1866,7 +1866,7 @@ void Player::UpdateDash(float elapsedTime)
 			//if (pInput->IsKeyDown(SGD::Key::Tab) == true
 			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/)))
 		{
-			m_fDashCoolTimer = 1.0f;
+			m_fDashCoolTimer = .5f;
 			GetDash()->GetEMDash()->Finish(false);
 			CastDash();
 			m_ts.SetPlaying(true);
