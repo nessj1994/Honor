@@ -53,6 +53,7 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("Screen1.5x3");
 	Listener::RegisterForEvent("Screen3x1");
 	Listener::RegisterForEvent("Screen3x1.5");
+	Listener::RegisterForEvent("Screen3x2");
 
 
 
@@ -1314,6 +1315,7 @@ void Player::CastDash()
 {
 	m_pDash->CastDash(this);
 
+	m_unCurrentState = FALLING_STATE;
 }
 
 void Player::CastHawk()
@@ -1436,6 +1438,14 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	{
 		m_fPanX = 3;
 		m_fPanY = 1.5;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+
+	if (pEvent->GetEventID() == "Screen3x2")
+	{
+		m_fPanX = 3;
+		m_fPanY = 2;
 		Camera::GetInstance()->SetCameraCap(0);
 
 	}
