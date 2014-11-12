@@ -53,7 +53,8 @@ private:
 	SGD::HTexture m_hBackground = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hSword = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hButton = SGD::INVALID_HANDLE;
-
+	SGD::HTexture m_hEsc = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hCircle = SGD::INVALID_HANDLE;
 
 };
 

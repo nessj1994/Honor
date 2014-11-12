@@ -138,66 +138,17 @@ void GameplayState::Enter(void) //Load Resources
 
 	//Load Audio
 	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/HonorBGM.xwm");
-	//pAudio->PlayAudio(m_hBGM, true);
 
-	//These are only for testing and will be removed later
-	//m_pDoor = new Door();
-	//m_pBDoor = new BossDoor();
-	//m_pFBlock = new FallingBlock();
-	//m_pSwitch = new Activator(false);
-	//m_pPressurePlate = new Activator(true);
-	//m_pStalactite = new Stalactite();
-	//m_pBuzzSaw = new BuzzSaw();
-	//m_pTurret = new Turret();
-
-	//m_pArmor = new Armor();
-	//m_pHonor = new Honor();
-	//m_pPendulum = new Pendulum();
-	//m_pStatue = new HintStatue();
-	//m_pStatue->SetMessageString("This is a test string");
-
-	//m_pSquid = new Squid();
-	//m_pPouncer = new Pouncer();
-	//m_pJellyfish = new Jellyfish();
-	//m_pJellyfish2 = new Jellyfish();
-	//m_pJellyfish2->SetPosition({900, 700});
 
 	//Create player with factory method
 	m_pPlayer = CreatePlayer();
 
 	Camera::GetInstance()->SetPlayer(m_pPlayer);
 
-	//Add factory methods to put entities in the manager
-	/*CreateBlocks();
-	CreatePermFrozenTiles();
-	CreateTempFrozenTiles();
-	CreateGeyser(1000, 700);
-	CreateLaser(1500, 500, { 1, 1 }, 1500, 700);
-	CreateLava(50, 700);*/
 
-	//CreateMovingPlatform(1000, 500, false, 200, 100);
-
-	// Add Entities to the entity manager
 
 	m_pEntities->AddEntity(m_pPlayer, Entity::ENT_PLAYER);
-	//CreateEnemy(100, 100, 7);
 
-	//Remove this test code later
-	/*m_pEntities->AddEntity(m_pFBlock, Entity::ENT_FALLING_BLOCK);
-	m_pEntities->AddEntity(m_pDoor, Entity::ENT_DOOR);
-	m_pEntities->AddEntity(m_pBDoor, Entity::ENT_BOSS_DOOR);
-	m_pEntities->AddEntity(m_pSwitch, Entity::ENT_SWITCH);
-	m_pEntities->AddEntity(m_pStalactite, Entity::ENT_STALACTITE);
-	m_pEntities->AddEntity(m_pBuzzSaw, Entity::ENT_BUZZSAW);
-	m_pEntities->AddEntity(m_pTurret, Entity::ENT_TURRET);
-	m_pEntities->AddEntity(m_pStalactite, Entity::ENT_STALACTITE);
-
-
-	m_pEntities->AddEntity(m_pArmor, Entity::ENT_ARMOR);
-	m_pEntities->AddEntity(m_pHonor, Entity::ENT_HONOR);
-	m_pEntities->AddEntity(m_pPendulum, Entity::ENT_PENDULUM);
-	m_pEntities->AddEntity(m_pStatue, Entity::ENT_STATUE);
-	m_pDoor->SetActivator(m_pSwitch);*/
 
 
 	// Load in map for the levels and start the first level
@@ -210,24 +161,23 @@ void GameplayState::Enter(void) //Load Resources
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-
-
 	LoadLevel("Level3_1");
+
+	
+
+	//LoadLevel("Level3_1");
 
 	//LoadLevel("HubLevel");
 
 	//("HubLevel");
 
-	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
-	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
-	//	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
-	//	m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
 
-	// Temporary
-	//CreateBullBoss(500, 400);
-	//CreateCrabBoss();
-	//Hub World Orb 
 	m_pHubOrb = new HubWorldOrb();
+	//Turorial Images
+	m_hOAttack = pGraphics->LoadTexture("Assets/graphics/HonorO.png");
+	m_hXJUMP = pGraphics->LoadTexture("Assets/graphics/HonorX.png");
+	m_hXWallJump = pGraphics->LoadTexture("Assets/graphics/HonorWall.png");
+	m_hTriOpenDoor = pGraphics->LoadTexture("Assets/graphics/HonorTriangle.png");
 }
 
 
@@ -363,7 +313,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level2_5");
+		LoadLevel("Level3_1");
 	}
 
 
@@ -375,11 +325,11 @@ bool GameplayState::Input(void) //Hanlde user Input
 		pAudio->StopAudio(m_hBGM);
 	}
 
-	if (pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyPressed(SGD::Key::Tab))
+	/*if (pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyPressed(SGD::Key::Tab))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
 		pAudio->StopAudio(m_hBGM);
-	}
+	}*/
 
 	return true;
 
@@ -409,6 +359,10 @@ void GameplayState::Update(float elapsedTime)
 
 	m_pEntities->UpdateAll(elapsedTime);
 	Camera::GetInstance()->Update(elapsedTime);
+
+	m_pEntities->CheckWorldCollision(Entity::ENT_PLAYER);
+
+
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BLOCK);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PERM_FREEZE);
@@ -491,7 +445,6 @@ void GameplayState::Update(float elapsedTime)
 	//if (m_pHonor != nullptr)
 	//m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
 
-	m_pEntities->CheckWorldCollision(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_FALLING_BLOCK);
 	m_pEntities->CheckWorldCollision(Entity::ENT_PROJ);
 	m_pEntities->CheckWorldCollision(Entity::ENT_HAWK);
@@ -537,6 +490,17 @@ void GameplayState::Update(float elapsedTime)
 // - Render all game entities
 void GameplayState::Render(void)
 {
+	//Render Images for tutorial 
+	if (m_strCurrLevel == "Level0_1")
+	{
+		Camera::GetInstance()->DrawTexture({ 600, 50 }, 0, m_hXJUMP, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ 1759, 50 }, 0, m_hXJUMP, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ 2736, 200 }, 0, m_hXWallJump, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ 3803, 10 }, 0, m_hOAttack, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ 4304, 200 }, 0, m_hTriOpenDoor, false, 1, {}, {});
+	}
+	//\
+
 	m_pLevel->Render();
 	m_pLevel->RenderImageLayer(true);
 
@@ -556,6 +520,8 @@ void GameplayState::Render(void)
 	{
 		m_pHubOrb->Render();
 	}
+	
+
 
 	// Draw a fading rectangle
 	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
@@ -1222,6 +1188,7 @@ void GameplayState::CreateHonor(int _x, int _y, int _amount, unsigned int _index
 	if (_index < GetHonorVectorSize())
 	{
 		mHonor->SetIsCollected(m_mCollectedHonor[m_strCurrLevel][_index]);
+		mHonor->SetStartedCollected(m_mCollectedHonor[m_strCurrLevel][_index]);
 	}
 	m_pEntities->AddEntity(mHonor, Entity::ENT_HONOR);
 	mHonor->Release();
@@ -1497,6 +1464,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			BullEnemy * pBull = new BullEnemy();
 			pBull->SetPosition({ (float)_x, (float)_y });
+			pBull->SetOriginalPosition({ (float)_x, (float)_y });
 			pBull->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pBull, Entity::ENT_BULL_ENEMY);
 			pBull->Release();
@@ -1506,6 +1474,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Skeleton * pSkeleton = new Skeleton();
 			pSkeleton->SetPosition({ (float)_x, (float)_y });
+			pSkeleton->SetOriginalPosition({ (float)_x, (float)_y });
 			pSkeleton->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pSkeleton, Entity::ENT_SKELETON);
 			pSkeleton->Release();
@@ -1515,6 +1484,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			MutantMan * pMutant = new MutantMan();
 			pMutant->SetPosition({ (float)_x, (float)_y });
+			pMutant->SetOriginalPosition({ (float)_x, (float)_y });
 			pMutant->Begin({ (float)_x, (float)_y });
 			pMutant->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_MAN);
@@ -1525,6 +1495,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			MutantBat * pMutant = new MutantBat();
 			pMutant->SetPosition({ (float)_x, (float)_y });
+			pMutant->SetOriginalPosition({ (float)_x, (float)_y });
 			pMutant->Begin({ (float)_x, (float)_y });
 			pMutant->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_BIRD);
@@ -1536,6 +1507,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 
 			IceGolem * pIceGolem = new IceGolem();
 			pIceGolem->SetPosition({ (float)_x, (float)_y });
+			pIceGolem->SetOriginalPosition({ (float)_x, (float)_y });
 			pIceGolem->SetPlayer(m_pPlayer);
 			pIceGolem->SetDirection(2);
 			m_pEntities->AddEntity(pIceGolem, Entity::ENT_ICE_GOLEM);
@@ -1546,6 +1518,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			IceBat * pIceBat = new IceBat();
 			pIceBat->SetPosition({ (float)_x, (float)_y });
+			pIceBat->SetOriginalPosition({ (float)_x, (float)_y });
 			pIceBat->SetPlayer(m_pPlayer);
 			pIceBat->SetDirection(2);
 			m_pEntities->AddEntity(pIceBat, Entity::ENT_ICE_BAT);
@@ -1556,6 +1529,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			IceTurtle * pIceTurtle = new IceTurtle();
 			pIceTurtle->SetPosition({ (float)_x, (float)_y });
+			pIceTurtle->SetOriginalPosition({ (float)_x, (float)_y });
 			pIceTurtle->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pIceTurtle, Entity::ENT_ICE_TURTLE);
 			pIceTurtle->Release();
@@ -1566,6 +1540,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Pouncer * pPouncer = new Pouncer();
 			pPouncer->SetPosition({ (float)_x, (float)_y });
+			pPouncer->SetOriginalPosition({ (float)_x, (float)_y });
 			pPouncer->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pPouncer, Entity::ENT_POUNCER);
 			pPouncer->Release();
@@ -1575,6 +1550,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Squid * pSquid = new Squid();
 			pSquid->SetPosition({ (float)_x, (float)_y });
+			pSquid->SetOriginalPosition({ (float)_x, (float)_y });
 			pSquid->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pSquid, Entity::ENT_ENEMY);
 			pSquid->Release();
@@ -1584,6 +1560,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Jellyfish * pJelly = new Jellyfish();
 			pJelly->SetPosition({ (float)_x, (float)_y });
+			pJelly->SetOriginalPosition({ (float)_x, (float)_y });
 			pJelly->SetPlayer(m_pPlayer);
 			pJelly->SetPatrol();
 			m_pEntities->AddEntity(pJelly, Entity::ENT_ENEMY);
@@ -2074,6 +2051,7 @@ void GameplayState::LoadLevel(std::string _level)
 	// Create a new level and load the correct file
 	m_pLevel = new Level();
 	m_pLevel->LoadLevel(m_mLevels[_level].c_str());
+	m_pLevel->Startup();
 
 	// Set the players position
 	m_pPlayer->SetPosition({ (float)m_pLevel->GetPlayerX(), (float)m_pLevel->GetPlayerY() });
@@ -2263,4 +2241,22 @@ bool GameplayState::GetLevelUnlocked(std::string _level)
 void GameplayState::UnlockLevel(std::string _level)
 {
 	m_mUnlockedLevels[_level] = true;
+}
+
+/////////////////////////////////////////////
+// ResetHonorInRoom
+// -When the player dies, reset how much honor he collected
+void GameplayState::ResetHonorInRoom()
+{
+	unsigned int dif = m_pPlayer->GetHonorCollected() - m_pLevel->GetHonorBeforeDeath();
+	m_pPlayer->SetHonorCollected(dif);
+	m_pLevel->SetHonorBeforeDeath(0);
+}
+
+/////////////////////////////////////////////
+// IncreaseHonorBeforeDeath
+// -Add the given amount to honor before death
+void GameplayState::IncreaseHonorBeforeDeath(unsigned int _value)
+{
+	m_pLevel->SetHonorBeforeDeath(m_pLevel->GetHonorBeforeDeath() + _value);
 }

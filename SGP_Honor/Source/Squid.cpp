@@ -15,6 +15,7 @@
 Squid::Squid() : Listener(this)
 {
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
+	Listener::RegisterForEvent("ResetRoom");
 	//m_ptPosition = { 800, 200 };
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/Squid.xml");
 	m_ts.SetCurrAnimation("Squid Idle");
@@ -76,10 +77,12 @@ void Squid::Update(float elapsedTime)
 	else
 	{
 		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_aDeath) == false)
-		{
-			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+		{			
+			//Reseting Enemys
+			SetAlive(false);
+			/*DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
 			pMsg->QueueMessage();
-			pMsg = nullptr;
+			pMsg = nullptr;*/
 		}
 	}
 }
@@ -121,6 +124,11 @@ void Squid::HandleEvent(const SGD::Event* pEvent)
 	if (pEvent->GetEventID() == "ASSESS_PLAYER_RANGE" && target == nullptr)
 	{
 		SetTarget((Player*)pEvent->GetSender());
+	}
+	if (pEvent->GetEventID() == "ResetRoom")
+	{
+		SetAlive(true);
+		SetPosition(GetOriginalPos());
 	}
 }
 

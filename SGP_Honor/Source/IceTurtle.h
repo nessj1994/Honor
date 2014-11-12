@@ -1,7 +1,8 @@
 #pragma once
 #include "Enemy.h"
+
 class IceTurtle :
-	public Enemy
+	public Enemy, SGD::Listener
 {
 public:
 	IceTurtle();
@@ -16,7 +17,7 @@ public:
 	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
 
-
+	void HandleEvent(const SGD::Event* pEvent);
 	/////////////////////////////////////////////////
 	/////////////////Mutators//////////////////////
 	void SetFireTimer(float _timer) { m_fFireTimer = _timer; }

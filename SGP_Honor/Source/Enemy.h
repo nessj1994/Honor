@@ -29,6 +29,7 @@ public:
 	bool GetFacingRight(void) const { return m_bFacingRight; }
 	unsigned int GetCurrentState(void) const { return m_unCurrentState; }
 	float GetAggroDistance(void) const { return m_fAggroDistance; }
+	SGD::Point GetOriginalPos() { return m_ptOriginalPos; }
 
 	//////////////////////////////////////////////
 	///////////////////Mutators//////////////////
@@ -36,6 +37,7 @@ public:
 	void SetState(unsigned int state) { m_unCurrentState = state; }
 	void SetAggroDistance(float distance) { m_fAggroDistance = distance; }
 	void SetFacingRight(bool _right) { m_bFacingRight = _right; }
+	void SetOriginalPosition(SGD::Point _Pos) { m_ptOriginalPos = _Pos; }
 
 private:
 
@@ -43,5 +45,6 @@ private:
 	//bool m_bFacingRight = false;
 	unsigned int m_unCurrentState;
 	float m_fAggroDistance = 0.0f;
+	SGD::Point m_ptOriginalPos;
 };
 

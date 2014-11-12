@@ -19,7 +19,7 @@ public:
 	void SetPatrol();
 
 private:
-	int numOfBounces = 0;
+	int numOfBounces = 1;
 	float bouncetimer = 0.0f;
 	bool bouncecounting = false;
 	SGD::Vector patrolDistance = SGD::Vector(100.0f, 0.0f);

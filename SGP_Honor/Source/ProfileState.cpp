@@ -395,6 +395,9 @@ void ProfileState::Render(void)
 		font.DrawString("Delete", (int)(Game::GetInstance()->GetScreenWidth() / 2 + 135), (int)Game::GetInstance()->GetScreenHeight() / 2 + 170, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
+
+	pGraphics->DrawTexture(m_hEsc, { 30, Game::GetInstance()->GetScreenHeight() - 30 }, 0.0f, {}, {}, { 1.0f, 1.0f });
+
 }
 
 

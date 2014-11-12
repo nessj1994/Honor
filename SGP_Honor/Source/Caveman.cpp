@@ -273,7 +273,7 @@ void Caveman::Update(float elapsedTime)
 			SGD::Event* pATEvent = new SGD::Event("GainedHawk", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
-			GameplayState::GetInstance()->SetScreenFadeout(0);
+			GameplayState::GetInstance()->SetScreenFadeout(9);
 			// TODO Delete bull, give player dash, update room
 			GameplayState::GetInstance()->CreateTeleporter(510, 578, "Level3_1", false);
 			GameplayState::GetInstance()->CreateHintStatue(440, 513, "You have The Hawk!(Press D or Right Trigger)");
@@ -332,7 +332,7 @@ void Caveman::Render(void)
 	if (m_bsCurrState == CM_DEATH)
 	{
 		m_emVictoryEffect->Render({ 470, 220 });
-		font.DrawString("VICTORY!", 400 - Camera::GetInstance()->GetCameraPos().x, 200 - Camera::GetInstance()->GetCameraPos().y, 3, SGD::Color{ 255, 255, 0, 0 });
+		font.DrawString("VICTORY!", (int)(400 - Camera::GetInstance()->GetCameraPos().x), (int)(200 - Camera::GetInstance()->GetCameraPos().y), 3, SGD::Color{ 255, 255, 0, 0 });
 	}
 }
 

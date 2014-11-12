@@ -16,7 +16,7 @@
 
 MutantMan::MutantMan() : Listener(this)
 {
-	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
+	Listener::RegisterForEvent("ResetRoom");
 	m_ptPosition = { 96, 672 };
 	m_pPatrolPoint = m_ptPosition;
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/MutantManAnim.xml");
@@ -65,9 +65,11 @@ void MutantMan::Update(float _elapsedTime)
 		}
 		if (m_fDeadTImer > 1)
 		{
-			DestroyEntityMessage* Temp = new DestroyEntityMessage(this);
+			//Reseting Enemys
+			SetAlive(false);
+			/*DestroyEntityMessage* Temp = new DestroyEntityMessage(this);
 			Temp->QueueMessage();
-			Temp = nullptr;
+			Temp = nullptr;*/
 		}
 
 		return;
@@ -191,17 +193,6 @@ SGD::Rectangle MutantMan::GetRect(void) const
 void MutantMan::HandleCollision(const IEntity* pOther) 
 {
 
-
-	if (pOther->GetType() == Entity::ENT_PLAYER && GetRect().IsIntersecting(pOther->GetRect()) == true)
-	{
-		if (m_bPlayerAttacked)
-		{
-			//if so move back up but kill the player
-			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
-			SGD::EventManager::GetInstance()->SendEventNow(&Event);
-		}
-	}
-
 	RECT rMutant;
 	rMutant.left = (LONG)GetRect().left;
 	rMutant.top = (LONG)GetRect().top;
@@ -253,9 +244,9 @@ void MutantMan::HandleCollision(const IEntity* pOther)
 
 void MutantMan::HandleEvent(const SGD::Event* pEvent)
 {
-	if (pEvent->GetEventID() == "ASSESS_PLAYER_RANGE" && GetPlayer() == nullptr)
+	if (pEvent->GetEventID() == "ResetRoom")
 	{
-		
+		SetAlive(true);
+		SetPosition(GetOriginalPos());
 	}
-
 }
