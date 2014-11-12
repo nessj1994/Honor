@@ -41,8 +41,12 @@ void IceTurtle::Update(float elapsedTime)
 {
 	if (GetAlive() == false)
 	{
+		if (!m_bPlayedAudio)
+		{
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hHitSound);
+			m_bPlayedAudio = true;
+		}
 
-		SGD::AudioManager::GetInstance()->PlayAudio(m_hHitSound);
 		SetAlive(false);
 		/*SGD::AudioManager::GetInstance()->PlayAudio(m_hDeathSound);
 		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
