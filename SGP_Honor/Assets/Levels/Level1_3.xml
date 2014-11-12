@@ -19599,39 +19599,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
+		<EventTile event="TurnMarker" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -20207,6 +20175,38 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="TurnMarker" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -20558,25 +20558,25 @@
 		<Entity type="0" x="3968" y="672" numArgs="1" name="Honor_7">
 			<Argument type="1" name="Amount" value="1" />
 		</Entity>
-		<Entity type="0" x="992" y="640" numArgs="1" name="Honor_8">
+		<Entity type="0" x="992" y="576" numArgs="1" name="Honor_8">
 			<Argument type="1" name="Amount" value="5" />
 		</Entity>
-		<Entity type="0" x="1312" y="672" numArgs="1" name="Honor_9">
+		<Entity type="0" x="1312" y="608" numArgs="1" name="Honor_9">
 			<Argument type="1" name="Amount" value="5" />
 		</Entity>
-		<Entity type="0" x="1664" y="608" numArgs="1" name="Honor_10">
+		<Entity type="0" x="1664" y="544" numArgs="1" name="Honor_10">
 			<Argument type="1" name="Amount" value="5" />
 		</Entity>
-		<Entity type="0" x="2048" y="608" numArgs="1" name="Honor_11">
+		<Entity type="0" x="2048" y="544" numArgs="1" name="Honor_11">
 			<Argument type="1" name="Amount" value="5" />
 		</Entity>
-		<Entity type="0" x="2400" y="672" numArgs="1" name="Honor_12">
+		<Entity type="0" x="2400" y="608" numArgs="1" name="Honor_12">
 			<Argument type="1" name="Amount" value="5" />
 		</Entity>
-		<Entity type="0" x="2720" y="672" numArgs="1" name="Honor_13">
+		<Entity type="0" x="2720" y="608" numArgs="1" name="Honor_13">
 			<Argument type="1" name="Amount" value="5" />
 		</Entity>
-		<Entity type="0" x="3072" y="704" numArgs="1" name="Honor_14">
+		<Entity type="0" x="3072" y="640" numArgs="1" name="Honor_14">
 			<Argument type="1" name="Amount" value="5" />
 		</Entity>
 	</Entities>
