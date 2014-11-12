@@ -70,6 +70,7 @@ Player::Player() : Listener(this)
 	m_pBounce = new Bounce();
 	//HUD
 	m_hHonorParticleHUD = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/HonorPiece.png");
+	m_hBubbleCircle = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/bubble.png");
 	//Emitters
 	m_emHonor = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/SilverHonor.xml", "SilverHonor", { (32), (32) });
 	m_emFeatherExplosion = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FeatherExplosion.xml", "FeatherExplosion", { -1000, -1000 });
@@ -328,6 +329,10 @@ void Player::Render(void)
 		// Draw a fading rectangle
 		unsigned char alpha = (char)(((0.5f - m_fDeathTimer) / 0.5f) * 255.0f);
 		GameplayState::GetInstance()->SetScreenFadeout(alpha);
+	}
+	if (IsBouncing())
+	{
+		Camera::GetInstance()->DrawTexture({ m_ptPosition.x-70, m_ptPosition.y-50 }, 0, m_hBubbleCircle, false, 5, {}, {});
 	}
 }
 

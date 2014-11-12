@@ -208,7 +208,8 @@ private:
 	SGD::HTexture m_hImage = SGD::INVALID_HANDLE;
 	//Honor Particle Image for the HUD
 	SGD::HTexture m_hHonorParticleHUD = SGD::INVALID_HANDLE;
-
+	//Bubble Circle
+	SGD::HTexture m_hBubbleCircle = SGD::INVALID_HANDLE;
 	//Emitters
 	//Honor emitter for HUD
 	Emitter* m_emHonor;
