@@ -16,6 +16,7 @@
 Pouncer::Pouncer() : Listener(this)
 {
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
+	Listener::RegisterForEvent("ResetRoom");
 	//m_ptPosition = { 800, 600 };
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/HermitCrab.xml");
 	m_ts.SetCurrAnimation("Hermit Crab Hide");
@@ -101,9 +102,11 @@ void Pouncer::Update(float elapsedTime)
 	{
 		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_aDeath) == false)
 		{
-			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+			//Reseting Enemys
+			SetAlive(false);
+			/*DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
 			pMsg->QueueMessage();
-			pMsg = nullptr;
+			pMsg = nullptr;*/
 		}
 	}
 }
@@ -214,6 +217,11 @@ void Pouncer::HandleCollision(const IEntity* pOther)
 
 void Pouncer::HandleEvent(const SGD::Event* pEvent)
 {
+	if (pEvent->GetEventID() == "ResetRoom")
+	{
+		SetAlive(true);
+		SetPosition(GetOriginalPos());
+	}
 	if (pEvent->GetEventID() == "ASSESS_PLAYER_RANGE" && target == nullptr)
 	{
 		SetTarget((Player*)pEvent->GetSender());

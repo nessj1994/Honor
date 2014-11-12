@@ -17,6 +17,8 @@
 #include <vld.h>			// Visual Leak Detector!!!
 #include "Game.h"			// Our Game class
 #include "../resource.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
+#include "PauseState.h"
 
 //*********************************************************************//
 // Preprocessor Constants
@@ -236,6 +238,8 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		else									//	losing focus (pause)
 		{
+			Game::GetInstance()->AddState(PauseState::GetInstance());
+			//SGD::AudioManager::GetInstance()->StopAudio(m_hBGM);
 		}
 		break;
 
