@@ -34,6 +34,7 @@ Caveman::Caveman() : SGD::Listener(this)
 	m_pHawk->SetOwner(this);
 	m_hHawkExplode = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FeatherExplosion.xml", "FeatherExplosion", m_ptPosition);
 	m_emEYES = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/EYEEffect.xml", "RedEyes", m_ptPosition);
+	m_emVictoryEffect = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/VictoryEmitter.xml", "VictoryEffect", m_ptPosition);
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/CaveManAnim.xml");
 	m_ts.SetCurrAnimation("CaveManWalking");
 	m_ts.SetPlaying(true);
@@ -58,6 +59,9 @@ Caveman::~Caveman()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hJump);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hLand);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hKick);
+	delete m_emEYES;
+	delete m_emVictoryEffect;
+	delete m_hHawkExplode;
 }
 
 void Caveman::Update(float elapsedTime)
@@ -203,11 +207,11 @@ void Caveman::Update(float elapsedTime)
 		}
 		if (GetPlayer()->IsFacingRight())
 		{
-			m_pHawk->Attack({ GetPlayer()->GetPosition().x + 300, 40 },GetPlayer()->IsFacingRight());
+			m_pHawk->Attack({ GetPlayer()->GetPosition().x + 300, 160 },GetPlayer()->IsFacingRight());
 		}
 		else
 		{
-			m_pHawk->Attack({ GetPlayer()->GetPosition().x - 300, 40 }, GetPlayer()->IsFacingRight());
+			m_pHawk->Attack({ GetPlayer()->GetPosition().x - 300, 160 }, GetPlayer()->IsFacingRight());
 		}		
 		m_fStalacTimer = 0;
 		SetVelocity({ 0, 0 });
@@ -260,16 +264,27 @@ void Caveman::Update(float elapsedTime)
 	}
 	if (m_bsCurrState == CM_DEATH)
 	{
-		SGD::Event* pATEvent = new SGD::Event("GainedHawk", nullptr, this);
-		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		pATEvent = nullptr;
-		GameplayState::GetInstance()->SetScreenFadeout(0);
-		// TODO Delete bull, give player dash, update room
-		GameplayState::GetInstance()->CreateTeleporter(1000, 512, "Level3_1", false);
-		GameplayState::GetInstance()->CreateHintStatue(700, 480, "You have The Hawk!");
-		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-		pMsg->QueueMessage();
-		pMsg = nullptr;
+		//Update the Timer and Emitter
+		m_fVictoryTimer += elapsedTime;
+		m_emVictoryEffect->Update(elapsedTime);
+		//
+		if (!m_bWon)
+		{
+			SGD::Event* pATEvent = new SGD::Event("GainedHawk", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+			GameplayState::GetInstance()->SetScreenFadeout(9);
+			// TODO Delete bull, give player dash, update room
+			GameplayState::GetInstance()->CreateTeleporter(510, 578, "Level3_1", false);
+			GameplayState::GetInstance()->CreateHintStatue(440, 513, "You have The Hawk!(Press D or Right Trigger)");
+			m_bWon = true;
+		}
+		if (m_fVictoryTimer > 50)
+		{
+			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+			pMsg->QueueMessage();
+			pMsg = nullptr;
+		}
 	}
 	Boss::Update(elapsedTime);
 }
@@ -314,6 +329,11 @@ void Caveman::Render(void)
 	//Animation Render
 	Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height / 2 }, 0, m_ts, m_bFacingRight, 1);
 
+	if (m_bsCurrState == CM_DEATH)
+	{
+		m_emVictoryEffect->Render({ 470, 220 });
+		font.DrawString("VICTORY!", (int)(400 - Camera::GetInstance()->GetCameraPos().x), (int)(200 - Camera::GetInstance()->GetCameraPos().y), 3, SGD::Color{ 255, 255, 0, 0 });
+	}
 }
 
 void Caveman::HandleCollision(const IEntity* pOther)
@@ -350,7 +370,10 @@ void Caveman::HandleEvent(const SGD::Event* pEvent)
 
 	if (pEvent->GetEventID() == "KILL_PLAYER")
 	{
-		SetHitPoints(3);
+		if (m_bsCurrState != CM_DEATH)
+		{
+			SetHitPoints(3);
+		}		
 	}
 
 	if (pEvent->GetSender() != this)

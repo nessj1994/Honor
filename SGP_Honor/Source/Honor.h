@@ -31,6 +31,7 @@ public:
 	void SetHonorAmount(unsigned int amount) { m_HonorAmount = amount; }
 	void SetVectorID(unsigned int _ID) { m_unVectorID = _ID; }
 	void SetIsCollected(bool _collected) { m_bIsCollected = _collected; }
+	void SetStartedCollected(bool _collected) { m_bStartedCollected = _collected; }
 
 	/////////////////////////////////////////////////
 	/////////////////Mutators//////////////////////
@@ -41,6 +42,7 @@ public:
 
 private:
 	bool m_bIsCollected = false;
+	bool m_bStartedCollected = false;
 	unsigned int m_HonorAmount = 50;
 	unsigned int m_unVectorID = 0;
 	Emitter * m_eEffect;

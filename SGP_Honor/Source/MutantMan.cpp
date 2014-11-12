@@ -16,7 +16,7 @@
 
 MutantMan::MutantMan() : Listener(this)
 {
-	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
+	Listener::RegisterForEvent("ResetRoom");
 	m_ptPosition = { 96, 672 };
 	m_pPatrolPoint = m_ptPosition;
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/MutantManAnim.xml");
@@ -85,32 +85,23 @@ void MutantMan::Update(float _elapsedTime)
 
 	//Find Distance to point
 	distance = m_ptPosition - m_pPatrolPoint;
-	if (distance.ComputeLength() < 100)
-	{
-		
-		
+	if (distance.ComputeLength() < 600)
+	{	
 		//Move to patrol point
 		if (m_ptPosition.x < m_pPatrolPoint.x)
-		{
-			SetFacingRight(false);
-			m_vtVelocity.x = 300;
-		}
-		if (m_ptPosition.x > m_pPatrolPoint.x)
 		{
 			SetFacingRight(true);
 			m_vtVelocity.x = -300;
 		}
+		if (m_ptPosition.x > m_pPatrolPoint.x)
+		{
+			SetFacingRight(false);
+			m_vtVelocity.x = 300;
+		}
 
 		if (distance.ComputeLength() < 60)
 		{
-			SetVelocity({ 0, 0 });
-			////Run Away
-			if (m_ts.GetCurrAnimation() != "Mutant_Idle")
-			{
-				m_ts.ResetCurrFrame();
-				m_ts.SetCurrAnimation("Mutant_Idle");
-				m_ts.SetPlaying(true);				
-			}
+			//No Longer implemented in the Mutant Mane
 		}
 		else 
 		//if Mutant is going towards player change to walking animation if he doesnt need to vomit
@@ -180,7 +171,7 @@ void MutantMan::Update(float _elapsedTime)
 				m_fVomitTimer = (float)(rand() % 6);
 			}
 		}
-		m_vtVelocity = { m_vtVelocity.x != 0 ? m_vtVelocity.x -= GetGravity() * _elapsedTime : m_vtVelocity.x = 0, 300 };
+		m_vtVelocity = { 0, 300 };
 	}
 
 
@@ -189,7 +180,7 @@ void MutantMan::Update(float _elapsedTime)
 void MutantMan::Render()
 {
 	SGD::GraphicsManager::GetInstance()->DrawRectangle({{ m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x,m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y}, m_szSize}, { 255, 255, 255, 255 });
-	Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height/2 }, 0, m_ts, GetFacingRight(), 1);
+	Camera::GetInstance()->DrawAnimation({ (m_ptPosition.x + m_szSize.width / 2), (m_ptPosition.y + m_szSize.height/2)+33 }, 0, m_ts, GetFacingRight(), 1);
 }
 
 SGD::Rectangle MutantMan::GetRect(void) const 
@@ -262,7 +253,7 @@ void MutantMan::HandleCollision(const IEntity* pOther)
 
 void MutantMan::HandleEvent(const SGD::Event* pEvent)
 {
-	if (pEvent->GetEventID() == "ASSESS_PLAYER_RANGE" && GetPlayer() == nullptr)
+	if (pEvent->GetEventID() == "ResetRoom")
 	{
 		
 	}

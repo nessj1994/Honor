@@ -233,7 +233,7 @@ void Emitter::Render(SGD::Point _Pos)
 	}
 	//if (m_iEmitterShape)
 	//{
-	//	SGD::GraphicsManager::GetInstance()->DrawLine({ m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, { m_EndPoint.x - Camera::GetInstance()->GetCameraPos().x, m_EndPoint.y - Camera::GetInstance()->GetCameraPos().y });	
+	//	//SGD::GraphicsManager::GetInstance()->DrawLine({ m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, { m_EndPoint.x - Camera::GetInstance()->GetCameraPos().x, m_EndPoint.y - Camera::GetInstance()->GetCameraPos().y });	
 	//}
 	//else
 	//{

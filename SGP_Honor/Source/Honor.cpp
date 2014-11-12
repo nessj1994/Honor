@@ -1,5 +1,7 @@
 #include "Honor.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
+#include "../SGD Wrappers/SGD_Event.h"
+#include "../SGD Wrappers/SGD_EventManager.h"
 #include "Camera.h"
 #include "ParticleEngine.h"
 #include "Player.h"
@@ -13,7 +15,7 @@ Honor::Honor() : Listener(this)
 	m_ptPosition = SGD::Point(200, 300);
 	SetSize(SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage));
 	SGD::Point midPoint = SGD::Point(m_ptPosition.x + m_szSize.width / 4, m_ptPosition.y + m_szSize.height / 4);
-	m_eEffect = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/GreenHonor.xml", "GreenHonor", midPoint);
+	//m_eEffect = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/GreenHonor.xml", "GreenHonor", midPoint);
 }
 
 
@@ -79,6 +81,7 @@ void Honor::HandleCollision(const IEntity* pOther)
 	{
 		if (GetRect().IsIntersecting(pOther->GetRect()) == true)
 		{
+			GameplayState::GetInstance()->IncreaseHonorBeforeDeath(m_HonorAmount);
 			m_bIsCollected = true;
 			GameplayState::GetInstance()->GetCurrentLevel()->UpdateHonorVector(m_unVectorID, m_bIsCollected);
 		}
@@ -91,9 +94,10 @@ void Honor::HandleEvent(const SGD::Event* pEvent)
 {
 	//which event
 
-	//Turn around
-	//if (pEvent->GetEventID() == "ResetRoom")
-	//{
-	//	SetIsCollected(false);
-	//}
+	// Reset honor
+	if (pEvent->GetEventID() == "ResetRoom" && !m_bStartedCollected)
+	{
+		SetIsCollected(false);
+		GameplayState::GetInstance()->GetCurrentLevel()->UpdateHonorVector(m_unVectorID, m_bIsCollected);
+	}
 }

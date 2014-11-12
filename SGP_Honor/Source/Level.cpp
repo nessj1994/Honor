@@ -214,21 +214,8 @@ void Level::RenderImageLayer(bool background)
 // - Called when a level is first opened
 void Level::Startup()
 {
-	// Test hard code
-	//m_nWidth = 5;
-	//m_iHeight = 5;
-	//Layer * layer = new Layer;
-	//int ** info = new int*[5]; 
-	//for (int i = 0; i < 5; ++i)
-	//{
-	//	info[i] = new int[5];
-	//	for (int j = 0; j < 5; ++j)
-	//	{
-	//		info[i][j] = rand() % 2;
-	//	}
-	//}
-	//layer->SetImageLayer(info);
-	//m_vlLayers.push_back(layer);
+	// Reset how much honor you collected this level
+	m_unHonorBeforeDeath = 0;
 }
 
 //////////////////////////////
@@ -415,7 +402,6 @@ bool Level::LoadLevel(const char * _path)
 					TiXmlElement * pArg = pEntity->FirstChildElement();
 					int amount;
 					pArg->Attribute("value", &amount);
-					GameplayState::GetInstance()->CreateHonor(x, y, amount, honorIndex);
 					unsigned int vectorSize = GameplayState::GetInstance()->GetHonorVectorSize();
 					// If there is a value in collected honor for this
 					if (honorIndex < vectorSize)
@@ -428,6 +414,7 @@ bool Level::LoadLevel(const char * _path)
 						// it could not have been collected
 						m_vCollectedHonor.push_back(false);
 					}
+					GameplayState::GetInstance()->CreateHonor(x, y, amount, honorIndex);
 					++honorIndex;
 					break;
 				}

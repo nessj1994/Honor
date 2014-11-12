@@ -30,6 +30,10 @@ private:
 	float swipeTimer = 0.0f;
 	float swipeCD = 0.0f;
 	float wasHitCD = 0.0f;
+	float StartWaitTime = 0.0f;
+	float deathTime = 0.0f;
+
+	float roarTimer = 60.0f;
 
 	bool castedBubbles = false;
 	bool castedLeftSlam = false;
@@ -40,11 +44,12 @@ private:
 	bool SwipeOnCD = false;
 	bool wasHit = false;
 
+	unsigned char alpha = 255;
+
 	// Sounds
 	SGD::HAudio m_hRoar = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hBubble = SGD::INVALID_HANDLE;
-	SGD::HAudio m_hSlam1 = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hSlam2 = SGD::INVALID_HANDLE;
-	SGD::HAudio m_hSlam3 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hHurt = SGD::INVALID_HANDLE;
 };
 

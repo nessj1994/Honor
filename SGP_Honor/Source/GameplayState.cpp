@@ -213,6 +213,9 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevel("Level2_1");
 
 	
+
+	//LoadLevel("Level3_1");
+
 	//LoadLevel("HubLevel");
 
 	//("HubLevel");
@@ -227,6 +230,11 @@ void GameplayState::Enter(void) //Load Resources
 	//CreateCrabBoss();
 	//Hub World Orb 
 	m_pHubOrb = new HubWorldOrb();
+	//Turorial Images
+	m_hOAttack = pGraphics->LoadTexture("Assets/graphics/HonorO.png");
+	m_hXJUMP = pGraphics->LoadTexture("Assets/graphics/HonorX.png");
+	m_hXWallJump = pGraphics->LoadTexture("Assets/graphics/HonorWall.png");
+	m_hTriOpenDoor = pGraphics->LoadTexture("Assets/graphics/HonorTriangle.png");
 }
 
 
@@ -237,13 +245,12 @@ void GameplayState::Enter(void) //Load Resources
 void GameplayState::Exit(void)
 {
 
-	//Save the game
-	SaveGame();
-
 	// Save collected honor
 	m_pLevel->Exit();
-	SaveHonorVector();
+	//SaveHonorVector();
 
+	//Save the game
+	SaveGame();
 
 	if (m_pEntities != nullptr)
 	{
@@ -363,13 +370,19 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level2_5");
+		LoadLevel("Level0_1");
 	}
 
 
 
 	if (pInput->IsKeyPressed(SGD::Key::Escape) 
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
+	{
+		Game::GetInstance()->AddState(PauseState::GetInstance());
+		pAudio->StopAudio(m_hBGM);
+	}
+
+	if (pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyPressed(SGD::Key::Tab))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
 		pAudio->StopAudio(m_hBGM);
@@ -428,7 +441,6 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PENDULUM);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_POUNCER);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BULL_ENEMY);
-	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_MUTANT_MAN);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_POOP);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_STALACTITE);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_DOOR);
@@ -535,6 +547,17 @@ void GameplayState::Update(float elapsedTime)
 // - Render all game entities
 void GameplayState::Render(void)
 {
+	//Render Images for tutorial 
+	if (m_strCurrLevel == "Level0_1")
+	{
+		Camera::GetInstance()->DrawTexture({ 600, 50 }, 0, m_hXJUMP, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ 1759, 50 }, 0, m_hXJUMP, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ 2736, 200 }, 0, m_hXWallJump, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ 3803, 10 }, 0, m_hOAttack, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ 4304, 200 }, 0, m_hTriOpenDoor, false, 1, {}, {});
+	}
+	//\
+
 	m_pLevel->Render();
 	m_pLevel->RenderImageLayer(true);
 
@@ -554,11 +577,12 @@ void GameplayState::Render(void)
 	{
 		m_pHubOrb->Render();
 	}
+	
+
 
 	// Draw a fading rectangle
 	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
 	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { m_cScreenFade, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
-
 
 }
 
@@ -903,7 +927,7 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 
 			// Reference to the teleporter entity
 			Teleporter * teleporter = dynamic_cast<Teleporter*>(pCreateMsg->GetOwner());
-
+			GameplayState::GetInstance()->SaveGame();
 			pSelf->LoadLevel(teleporter->GetLevel());
 
 		}
@@ -1053,9 +1077,9 @@ Entity* GameplayState::CreateSpray(Entity* pOwner) const
 {
 	Ice* proj = new Ice;
 	if (pOwner->GetDirection().x == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + 20, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + 40, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	else
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width - 40, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
 	proj->SetSize({ 4, 4 });
 	proj->SetDirection({ pOwner->GetDirection().x, -1 });
@@ -1205,6 +1229,7 @@ void GameplayState::CreateHonor(int _x, int _y, int _amount, unsigned int _index
 	if (_index < GetHonorVectorSize())
 	{
 		mHonor->SetIsCollected(m_mCollectedHonor[m_strCurrLevel][_index]);
+		mHonor->SetStartedCollected(m_mCollectedHonor[m_strCurrLevel][_index]);
 	}
 	m_pEntities->AddEntity(mHonor, Entity::ENT_HONOR);
 	mHonor->Release();
@@ -1480,6 +1505,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			BullEnemy * pBull = new BullEnemy();
 			pBull->SetPosition({ (float)_x, (float)_y });
+			pBull->SetOriginalPosition({ (float)_x, (float)_y });
 			pBull->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pBull, Entity::ENT_BULL_ENEMY);
 			pBull->Release();
@@ -1489,6 +1515,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Skeleton * pSkeleton = new Skeleton();
 			pSkeleton->SetPosition({ (float)_x, (float)_y });
+			pSkeleton->SetOriginalPosition({ (float)_x, (float)_y });
 			pSkeleton->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pSkeleton, Entity::ENT_SKELETON);
 			pSkeleton->Release();
@@ -1498,6 +1525,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			MutantMan * pMutant = new MutantMan();
 			pMutant->SetPosition({ (float)_x, (float)_y });
+			pMutant->SetOriginalPosition({ (float)_x, (float)_y });
 			pMutant->Begin({ (float)_x, (float)_y });
 			pMutant->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_MAN);
@@ -1508,6 +1536,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			MutantBat * pMutant = new MutantBat();
 			pMutant->SetPosition({ (float)_x, (float)_y });
+			pMutant->SetOriginalPosition({ (float)_x, (float)_y });
 			pMutant->Begin({ (float)_x, (float)_y });
 			pMutant->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_BIRD);
@@ -1519,6 +1548,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 
 			IceGolem * pIceGolem = new IceGolem();
 			pIceGolem->SetPosition({ (float)_x, (float)_y });
+			pIceGolem->SetOriginalPosition({ (float)_x, (float)_y });
 			pIceGolem->SetPlayer(m_pPlayer);
 			pIceGolem->SetDirection(2);
 			m_pEntities->AddEntity(pIceGolem, Entity::ENT_ICE_GOLEM);
@@ -1529,6 +1559,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			IceBat * pIceBat = new IceBat();
 			pIceBat->SetPosition({ (float)_x, (float)_y });
+			pIceBat->SetOriginalPosition({ (float)_x, (float)_y });
 			pIceBat->SetPlayer(m_pPlayer);
 			pIceBat->SetDirection(2);
 			m_pEntities->AddEntity(pIceBat, Entity::ENT_ICE_BAT);
@@ -1539,6 +1570,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			IceTurtle * pIceTurtle = new IceTurtle();
 			pIceTurtle->SetPosition({ (float)_x, (float)_y });
+			pIceTurtle->SetOriginalPosition({ (float)_x, (float)_y });
 			pIceTurtle->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pIceTurtle, Entity::ENT_ICE_TURTLE);
 			pIceTurtle->Release();
@@ -1549,6 +1581,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Pouncer * pPouncer = new Pouncer();
 			pPouncer->SetPosition({ (float)_x, (float)_y });
+			pPouncer->SetOriginalPosition({ (float)_x, (float)_y });
 			pPouncer->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pPouncer, Entity::ENT_POUNCER);
 			pPouncer->Release();
@@ -1558,6 +1591,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Squid * pSquid = new Squid();
 			pSquid->SetPosition({ (float)_x, (float)_y });
+			pSquid->SetOriginalPosition({ (float)_x, (float)_y });
 			pSquid->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pSquid, Entity::ENT_ENEMY);
 			pSquid->Release();
@@ -1567,6 +1601,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Jellyfish * pJelly = new Jellyfish();
 			pJelly->SetPosition({ (float)_x, (float)_y });
+			pJelly->SetOriginalPosition({ (float)_x, (float)_y });
 			pJelly->SetPlayer(m_pPlayer);
 			pJelly->SetPatrol();
 			m_pEntities->AddEntity(pJelly, Entity::ENT_ENEMY);
@@ -1942,6 +1977,7 @@ void GameplayState::LoadGame()
 	// Read in total honor collected
 	int totalHonor;
 	pRoot->Attribute("totalHonor", &totalHonor);
+	m_pPlayer->SetHonorCollected(totalHonor);
 
 	// Loop through each level
 	TiXmlElement * pLevel = pRoot->FirstChildElement();
@@ -1979,6 +2015,8 @@ void GameplayState::LoadGame()
 		pLevel = pLevel->NextSiblingElement();
 	}
 	//m_pPlayer->SetPosition(SGD::Point((float)x, (float)y));
+	int temp = 0;
+	temp++;
 }
 
 /////////////////////////////////////////////
@@ -2018,7 +2056,7 @@ void GameplayState::LoadLevelMap()
 
 	// Unlock certain levels right away
 	m_mUnlockedLevels["HubLevel"] = true;
-	m_mUnlockedLevels["TutorialLevel"] = true;
+	m_mUnlockedLevels["Level0_1"] = true;
 	m_mUnlockedLevels["World1Level"] = true;
 	m_mUnlockedLevels["World2Level"] = true;
 	m_mUnlockedLevels["World3Level"] = true;
@@ -2033,8 +2071,6 @@ void GameplayState::LoadLevelMap()
 // - Loads the level at the path for the given key
 void GameplayState::LoadLevel(std::string _level)
 {
-	// Save the string
-	m_strCurrLevel = _level;
 
 	// Clear the old entities
 	m_pEntities->RemoveAll();
@@ -2050,10 +2086,13 @@ void GameplayState::LoadLevel(std::string _level)
 		m_pLevel = nullptr;
 	}
 
+	// Save the string
+	m_strCurrLevel = _level;
 
 	// Create a new level and load the correct file
 	m_pLevel = new Level();
 	m_pLevel->LoadLevel(m_mLevels[_level].c_str());
+	m_pLevel->Startup();
 
 	// Set the players position
 	m_pPlayer->SetPosition({ (float)m_pLevel->GetPlayerX(), (float)m_pLevel->GetPlayerY() });
@@ -2201,7 +2240,7 @@ bool GameplayState::GetHonorValue(unsigned int _index)
 }
 
 /////////////////////////////////////////////
-// LoadHonorVector
+// GetHonorVectorSize
 // -Loads the data in the honor vector file
 unsigned int GameplayState::GetHonorVectorSize()
 {
@@ -2243,4 +2282,22 @@ bool GameplayState::GetLevelUnlocked(std::string _level)
 void GameplayState::UnlockLevel(std::string _level)
 {
 	m_mUnlockedLevels[_level] = true;
+}
+
+/////////////////////////////////////////////
+// ResetHonorInRoom
+// -When the player dies, reset how much honor he collected
+void GameplayState::ResetHonorInRoom()
+{
+	unsigned int dif = m_pPlayer->GetHonorCollected() - m_pLevel->GetHonorBeforeDeath();
+	m_pPlayer->SetHonorCollected(dif);
+	m_pLevel->SetHonorBeforeDeath(0);
+}
+
+/////////////////////////////////////////////
+// IncreaseHonorBeforeDeath
+// -Add the given amount to honor before death
+void GameplayState::IncreaseHonorBeforeDeath(unsigned int _value)
+{
+	m_pLevel->SetHonorBeforeDeath(m_pLevel->GetHonorBeforeDeath() + _value);
 }

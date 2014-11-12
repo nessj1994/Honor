@@ -10,6 +10,7 @@
 #include "DestroyEntityMessage.h"
 #include <Windows.h>
 #include "Player.h"
+#include "GameplayState.h"
 
 #define SlamCooldown 1.5f
 #define BubbleCastLength 2.0f
@@ -19,10 +20,13 @@
 #define SwipeTime 3.2f
 #define SwipeCooldown 1.5f
 #define HitCooldown 0.5f
+#define Death 2.0f
+#define RoarWait 20.0f
 
 Crab::Crab() : Listener(this)
 {
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
+	Listener::RegisterForEvent("KILL_PLAYER");
 	SetCurrentState(idle);
 
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/KingClang.xml");
@@ -32,9 +36,8 @@ Crab::Crab() : Listener(this)
 	// Sound
 	m_hRoar = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/CrabRoar.wav");
 	m_hBubble = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bubble.wav");
-	m_hSlam1 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam1.wav");
 	m_hSlam2 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam2.wav");
-	m_hSlam3 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam3.wav");
+	m_hHurt = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/ClangHurt.wav");
 }
 
 
@@ -42,215 +45,251 @@ Crab::~Crab()
 {
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hRoar);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBubble);
-	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam1);
-	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam1);
-	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam1);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam2);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hHurt);
 }
 
 void Crab::Update(float elapsedTime)
 {
-	if (GetHitPoints() > 0)
+	if (StartWaitTime >= 2.0f)
 	{
-		if (GetPlayer() != nullptr)
+		if (GetHitPoints() > 0)
 		{
-			if (castedLeftSlam == true)
+			if (GetPlayer() != nullptr)
 			{
-				leftSlamTimer += elapsedTime;
-				if (leftSlamTimer >= SlamTime)
+				if (castedLeftSlam == true && castedRightSlam == false && castedSwipe == false && LeftSlamOnCD == false)
 				{
-					leftSlamTimer = 0;
-					LeftSlamOnCD = true;
-					m_ts.ResetCurrFrame();
-					m_ts.SetCurrAnimation("Clang Idle");
-					m_ts.SetPlaying(true);
-					SetCurrentState(idle);
+					leftSlamTimer += elapsedTime;
+					if ((leftSlamTimer >= 1.2f && leftSlamTimer < 1.4f) && !(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hSlam2)))
+					{
+						SGD::AudioManager::GetInstance()->PlayAudio(m_hSlam2);
+					}
+					if (leftSlamTimer >= SlamTime)
+					{
+						leftSlamTimer = 0.0f;
+						LeftSlamOnCD = true;
+						m_ts.ResetCurrFrame();
+						m_ts.SetCurrAnimation("Clang Idle");
+						m_ts.SetPlaying(true);
+						SetCurrentState(idle);
+					}
 				}
-			}
-			if (castedRightSlam == true)
-			{
-				rightSlamTimer += elapsedTime;
-				if (rightSlamTimer >= SlamTime)
+				if (castedRightSlam == true && castedLeftSlam == false && castedSwipe == false && RightSlamOnCD == false)
 				{
-					rightSlamTimer = 0;
-					RightSlamOnCD = true;
-					m_ts.ResetCurrFrame();
-					m_ts.SetCurrAnimation("Clang Idle");
-					m_ts.SetPlaying(true);
-					SetCurrentState(idle);
+					rightSlamTimer += elapsedTime;
+					if ((rightSlamTimer >= 1.2f && rightSlamTimer < 1.4f) && !(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hSlam2)))
+					{
+						SGD::AudioManager::GetInstance()->PlayAudio(m_hSlam2);
+					}
+					if (rightSlamTimer >= SlamTime)
+					{
+						rightSlamTimer = 0.0f;
+						RightSlamOnCD = true;
+						m_ts.ResetCurrFrame();
+						m_ts.SetCurrAnimation("Clang Idle");
+						m_ts.SetPlaying(true);
+						SetCurrentState(idle);
+					}
 				}
-			}
-			if (castedSwipe == true)
-			{
-				swipeTimer += elapsedTime;
-				if (swipeTimer >= SwipeTime)
+				if (castedSwipe == true && castedRightSlam == false && castedLeftSlam == false && SwipeOnCD == false)
 				{
-					swipeTimer = 0;
-					SwipeOnCD = true;
-					m_ts.ResetCurrFrame();
-					m_ts.SetCurrAnimation("Clang Idle");
-					m_ts.SetPlaying(true);
-					SetCurrentState(idle);
+					swipeTimer += elapsedTime;
+					if (swipeTimer >= SwipeTime)
+					{
+						swipeTimer = 0.0f;
+						SwipeOnCD = true;
+						m_ts.ResetCurrFrame();
+						m_ts.SetCurrAnimation("Clang Idle");
+						m_ts.SetPlaying(true);
+						SetCurrentState(idle);
+					}
 				}
-			}
-			if (wasHit == true)
-			{
-				wasHitCD += elapsedTime;
-				if (wasHitCD >= HitCooldown)
+				if (wasHit == true)
 				{
-					wasHitCD = 0.0f;
-					wasHit = false;
-					SetCurrentState(idle);
-					m_ts.SetCurrAnimation("Clang Idle");
-					m_ts.SetPlaying(true);
+					wasHitCD += elapsedTime;
+					if (wasHitCD >= HitCooldown)
+					{
+						wasHitCD = 0.0f;
+						wasHit = false;
+						SetCurrentState(idle);
+						m_ts.SetCurrAnimation("Clang Idle");
+						m_ts.SetPlaying(true);
+						m_ts.ResetCurrFrame();
+					}
 				}
-			}
 
-			switch (GetCurrentState())
-			{
-			case idle:
-			{
-						 SGD::Rectangle rect = GetRect();
-						 if ((GetPlayer()->GetPosition().x < rect.left ||
-							 GetPlayer()->GetPosition().x > rect.right) &&
-							 GetPlayer()->GetPosition().y > rect.top && castedLeftSlam == false && castedRightSlam == false)
-							 SetCurrentState(slamming);
-						 else if (GetPlayer()->GetPosition().x >= rect.left && GetPlayer()->GetPosition().x <= rect.right &&
-							 GetPlayer()->GetPosition().y < m_ptPosition.y && castedSwipe == false)
-							 SetCurrentState(swipping);
-						 else if (castedBubbles == false)
-							 SetCurrentState(bubbles);
-
-						 if (castedBubbles == true)
-						 {
-							 bubbleCD += elapsedTime;
-							 if (bubbleCD >= BubbleCooldown)
-							 {
-								 bubbleCD = 0;
-								 castedBubbles = false;
-							 }
-						 }
-						 if (SwipeOnCD == true)
-						 {
-							 swipeCD += elapsedTime;
-							 if (swipeCD >= SwipeCooldown)
-							 {
-								 swipeCD = 0;
-								 castedSwipe = false;
-								 SwipeOnCD = false;
-							 }
-						 }
-						 if (LeftSlamOnCD == true)
-						 {
-							 leftSlamCD += elapsedTime;
-							 if (leftSlamCD >= SlamCooldown)
-							 {
-								 leftSlamCD = 0;
-								 LeftSlamOnCD = false;
-								 castedLeftSlam = false;
-							 }
-						 }
-						 if (RightSlamOnCD == true)
-						 {
-							 rightSlamCD += elapsedTime;
-							 if (rightSlamCD >= SlamCooldown)
-							 {
-								 rightSlamCD = 0;
-								 RightSlamOnCD = false;
-								 castedRightSlam = false;
-							 }
-						 }
-						 break;
-			}
-			case slamming:
-			{
+				switch (GetCurrentState())
+				{
+				case idle:
+				{
 							 SGD::Rectangle rect = GetRect();
-							 if (GetPlayer()->GetPosition().x < rect.left && castedLeftSlam == false && castedRightSlam == false)
+							 if ((GetPlayer()->GetPosition().x < rect.left ||
+								 GetPlayer()->GetPosition().x > rect.right) &&
+								 GetPlayer()->GetPosition().y > rect.top && castedLeftSlam == false && castedRightSlam == false && castedSwipe == false)
+								 SetCurrentState(slamming);
+							 else if (GetPlayer()->GetPosition().x >= rect.left && GetPlayer()->GetPosition().x <= rect.right &&
+								 GetPlayer()->GetPosition().y < m_ptPosition.y && castedSwipe == false && castedLeftSlam == false && castedRightSlam == false && SwipeOnCD == false)
+								 SetCurrentState(swipping);
+							 else if (castedBubbles == false/* && castedSwipe == true && ( castedLeftSlam == true || castedRightSlam == true)*/)
 							 {
-								 m_ts.ResetCurrFrame();
-								 m_ts.SetCurrAnimation("Clang Left Slam");
-								 m_ts.SetPlaying(true);
-								 castedLeftSlam = true;
+								 SGD::AudioManager::GetInstance()->PlayAudio(m_hBubble);
+								 SetCurrentState(bubbles);
 							 }
-							 if (GetPlayer()->GetPosition().x > rect.right && castedLeftSlam == false && castedRightSlam == false)
+
+							 if (castedBubbles == true)
 							 {
-								 m_ts.ResetCurrFrame();
-								 m_ts.SetCurrAnimation("Clang Right Slam");
-								 m_ts.SetPlaying(true);
-								 castedRightSlam = true;
+								 bubbleCD += elapsedTime;
+								 if (bubbleCD >= BubbleCooldown)
+								 {
+									 bubbleCD = 0.0f;
+									 castedBubbles = false;
+								 }
+							 }
+							 if (SwipeOnCD == true)
+							 {
+								 swipeCD += elapsedTime;
+								 if (swipeCD >= SwipeCooldown)
+								 {
+									 swipeCD = 0.0f;
+									 castedSwipe = false;
+									 SwipeOnCD = false;
+								 }
+							 }
+							 if (LeftSlamOnCD == true)
+							 {
+								 leftSlamCD += elapsedTime;
+								 if (leftSlamCD >= SlamCooldown)
+								 {
+									 leftSlamCD = 0.0f;
+									 LeftSlamOnCD = false;
+									 castedLeftSlam = false;
+								 }
+							 }
+							 if (RightSlamOnCD == true)
+							 {
+								 rightSlamCD += elapsedTime;
+								 if (rightSlamCD >= SlamCooldown)
+								 {
+									 rightSlamCD = 0.0f;
+									 RightSlamOnCD = false;
+									 castedRightSlam = false;
+								 }
 							 }
 							 break;
-			}
-			case swipping:
-			{
-							 if (castedSwipe == false && castedLeftSlam == false && castedRightSlam == false)
+				}
+				case slamming:
+				{
+								 SGD::Rectangle rect = GetRect();
+								 if (GetPlayer()->GetPosition().x < rect.left && castedLeftSlam == false && castedRightSlam == false)
+								 {
+									 m_ts.ResetCurrFrame();
+									 m_ts.SetCurrAnimation("Clang Left Slam");
+									 m_ts.SetPlaying(true);
+									 castedLeftSlam = true;
+								 }
+								 if (GetPlayer()->GetPosition().x > rect.right && castedLeftSlam == false && castedRightSlam == false)
+								 {
+									 m_ts.ResetCurrFrame();
+									 m_ts.SetCurrAnimation("Clang Right Slam");
+									 m_ts.SetPlaying(true);
+									 castedRightSlam = true;
+								 }
+								 break;
+				}
+				case swipping:
+				{
+								 if (castedSwipe == false && castedLeftSlam == false && castedRightSlam == false)
+								 {
+									 m_ts.ResetCurrFrame();
+									 m_ts.SetCurrAnimation("Clang Swipe");
+									 m_ts.SetPlaying(true);
+									 castedSwipe = true;
+								 }
+								 break;
+				}
+				case bubbles:
+				{
+								if (bubbleCD == 0.0f)
+								{
+									castedBubbles = true;
+									bubbleTimer += elapsedTime;
+									bubbleSpawn += elapsedTime;
+									if (bubbleTimer <= BubbleCastLength && bubbleSpawn >= BubbleSpawnRate)
+									{
+										if (rand() % 2 == 0)
+										{
+											CreateHorizontalBubble* pMsg = new CreateHorizontalBubble(this);
+											pMsg->QueueMessage();
+											pMsg = nullptr;
+										}
+										else
+										{
+											CreateVerticalBubble* pMsg = new CreateVerticalBubble(this);
+											pMsg->QueueMessage();
+											pMsg = nullptr;
+										}
+										bubbleSpawn = 0.0f;
+									}
+
+									if (bubbleTimer >= BubbleCastLength)
+									{
+										bubbleTimer = 0.0f;
+										SetCurrentState(idle);
+									}
+								}
+								break;
+				}
+				case hurt:
+				{
+							 if (m_ts.GetCurrAnimation() != "Clang Hurt")
 							 {
-								 m_ts.ResetCurrFrame();
-								 m_ts.SetCurrAnimation("Clang Swipe");
+								 SetHitPoints(GetHitPoints() - 1);
+								 SGD::Event* pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
+								 SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+								 pATEvent = nullptr;
+								 wasHit = true;
+								 m_ts.SetCurrAnimation("Clang Hurt");
 								 m_ts.SetPlaying(true);
-								 castedSwipe = true;
+								 m_ts.ResetCurrFrame();
+								 SGD::AudioManager::GetInstance()->PlayAudio(m_hHurt);
 							 }
 							 break;
+				}
+				default:
+					break;
+				}
 			}
-			case bubbles:
+			AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
+		}
+		else
+		{
+			if (deathTime >= Death)
 			{
-							if (bubbleCD == 0.0f)
-							{
-								castedBubbles = true;
-								bubbleTimer += elapsedTime;
-								bubbleSpawn += elapsedTime;
-								if (bubbleTimer <= BubbleCastLength && bubbleSpawn >= BubbleSpawnRate)
-								{
-									if (rand() % 2 == 0)
-									{
-										CreateHorizontalBubble* pMsg = new CreateHorizontalBubble(this);
-										pMsg->QueueMessage();
-										pMsg = nullptr;
-									}
-									else
-									{
-										CreateVerticalBubble* pMsg = new CreateVerticalBubble(this);
-										pMsg->QueueMessage();
-										pMsg = nullptr;
-									}
-									bubbleSpawn = 0.0f;
-								}
-
-								if (bubbleTimer >= BubbleCastLength)
-								{
-									bubbleTimer = 0;
-									SetCurrentState(idle);
-								}
-							}
-
-							break;
+				GetPlayer()->SetHasBounce(true);
+				GameplayState::GetInstance()->CreateTeleporter((int)m_ptPosition.x, (int)m_ptPosition.y - 30, "Level5_1", false);
+				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+				pMsg->QueueMessage();
+				pMsg = nullptr;
 			}
-			case hurt:
+			else
 			{
-						 if (m_ts.GetCurrAnimation() != "Clang Hurt")
-						 {
-							 SetHitPoints(GetHitPoints() - 1);
-							 SGD::Event* pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
-							 SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-							 pATEvent = nullptr;
-							 wasHit = true;
-							 m_ts.SetCurrAnimation("Clang Hurt");
-							 m_ts.SetPlaying(true);
-						 }
-						 break;
-			}
-			default:
-				break;
+				deathTime += elapsedTime;
+				alpha -= (unsigned char)(80 * elapsedTime);
 			}
 		}
-		AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 	}
 	else
 	{
-		GetPlayer()->SetHasBounce(true);
-		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-		pMsg->QueueMessage();
-		pMsg = nullptr;
+		StartWaitTime += elapsedTime;
 	}
+
+	if (GetHitPoints() > 0 && roarTimer >= RoarWait)
+	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hRoar);
+		roarTimer = 0.0f;
+	}
+	else if (GetHitPoints() > 0 && roarTimer < RoarWait)
+		roarTimer += elapsedTime;
 }
 
 void Crab::Render(void)
@@ -269,7 +308,7 @@ void Crab::Render(void)
 	//	SGD::Color::Color(255, 255, 0, 0));
 
 	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, IsFacingRight(), 1.0f, {}, 
-		SGD::Color(255, 255, 255 - ((4 - GetHitPoints()) * 60), 255 - ((4 - GetHitPoints()) * 60)));
+		SGD::Color(alpha, 255, 255 - ((4 - GetHitPoints()) * 60), 255 - ((4 - GetHitPoints()) * 60)));
 }
 
 SGD::Rectangle Crab::GetRect(void) const
@@ -348,7 +387,6 @@ void Crab::HandleCollision(const IEntity* pOther)
 		{
 			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 			SGD::EventManager::GetInstance()->SendEventNow(&Event);
-			SetHitPoints(4);
 		}
 	}
 }
@@ -358,5 +396,36 @@ void Crab::HandleEvent(const SGD::Event* pEvent)
 	if (pEvent->GetEventID() == "ASSESS_PLAYER_RANGE" && GetPlayer() == nullptr)
 	{
 		SetPlayer((Player*)pEvent->GetSender());
+	}
+
+	if (pEvent->GetEventID() == "KILL_PLAYER")
+	{
+		if (GetPlayer()->HasArmor() == false)
+		{
+			SetHitPoints(4);
+			StartWaitTime = 0.0f;
+			m_ts.SetCurrAnimation("Clang Idle");
+			m_ts.SetPlaying(true);
+			m_ts.ResetCurrFrame();
+			SetCurrentState(idle);
+			castedLeftSlam = false;
+			castedRightSlam = false;
+			castedSwipe = false;
+			castedBubbles = false;
+			leftSlamTimer = 0.0f;
+			rightSlamTimer = 0.0f;
+			swipeTimer = 0.0f;
+			bubbleTimer = 0.0f;
+			bubbleSpawn = 0.0f;
+			leftSlamCD = 0.0f;
+			rightSlamCD = 0.0f;
+			bubbleCD = 0.0f;
+			swipeCD = 0.0f;
+			roarTimer = 60.0f;
+			SGD::AudioManager::GetInstance()->StopAudio(m_hSlam2);
+			SGD::AudioManager::GetInstance()->StopAudio(m_hBubble);
+			SGD::AudioManager::GetInstance()->StopAudio(m_hRoar);
+			SGD::AudioManager::GetInstance()->StopAudio(m_hHurt);
+		}
 	}
 }
