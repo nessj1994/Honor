@@ -1460,6 +1460,7 @@ void Player::UpdateDeath(float elapsedTime)
 		SGD::Event* pATEvent = new SGD::Event("ResetRoom", nullptr, this);
 		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 		pATEvent = nullptr;
+		GameplayState::GetInstance()->ResetHonorInRoom();
 	}
 }
 

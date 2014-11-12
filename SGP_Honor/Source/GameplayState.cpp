@@ -210,7 +210,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-	LoadLevel("HubLevel");
+	LoadLevel("Level1_1");
 
 	
 	//LoadLevel("HubLevel");
@@ -1205,6 +1205,7 @@ void GameplayState::CreateHonor(int _x, int _y, int _amount, unsigned int _index
 	if (_index < GetHonorVectorSize())
 	{
 		mHonor->SetIsCollected(m_mCollectedHonor[m_strCurrLevel][_index]);
+		mHonor->SetStartedCollected(m_mCollectedHonor[m_strCurrLevel][_index]);
 	}
 	m_pEntities->AddEntity(mHonor, Entity::ENT_HONOR);
 	mHonor->Release();
@@ -2057,6 +2058,7 @@ void GameplayState::LoadLevel(std::string _level)
 	// Create a new level and load the correct file
 	m_pLevel = new Level();
 	m_pLevel->LoadLevel(m_mLevels[_level].c_str());
+	m_pLevel->Startup();
 
 	// Set the players position
 	m_pPlayer->SetPosition({ (float)m_pLevel->GetPlayerX(), (float)m_pLevel->GetPlayerY() });
@@ -2246,4 +2248,22 @@ bool GameplayState::GetLevelUnlocked(std::string _level)
 void GameplayState::UnlockLevel(std::string _level)
 {
 	m_mUnlockedLevels[_level] = true;
+}
+
+/////////////////////////////////////////////
+// ResetHonorInRoom
+// -When the player dies, reset how much honor he collected
+void GameplayState::ResetHonorInRoom()
+{
+	unsigned int dif = m_pPlayer->GetHonorCollected() - m_pLevel->GetHonorBeforeDeath();
+	m_pPlayer->SetHonorCollected(dif);
+	m_pLevel->SetHonorBeforeDeath(0);
+}
+
+/////////////////////////////////////////////
+// IncreaseHonorBeforeDeath
+// -Add the given amount to honor before death
+void GameplayState::IncreaseHonorBeforeDeath(unsigned int _value)
+{
+	m_pLevel->SetHonorBeforeDeath(m_pLevel->GetHonorBeforeDeath() + _value);
 }

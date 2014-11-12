@@ -120,6 +120,8 @@ public:
 	unsigned int GetHonorVectorSize();
 	bool GetLevelUnlocked(std::string _level);
 	void UnlockLevel(std::string _level);
+	void ResetHonorInRoom();
+	void IncreaseHonorBeforeDeath(unsigned int _value);
 
 private:
 
