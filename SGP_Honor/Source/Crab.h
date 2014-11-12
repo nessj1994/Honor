@@ -49,9 +49,7 @@ private:
 	// Sounds
 	SGD::HAudio m_hRoar = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hBubble = SGD::INVALID_HANDLE;
-	SGD::HAudio m_hSlam1 = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hSlam2 = SGD::INVALID_HANDLE;
-	SGD::HAudio m_hSlam3 = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hHurt = SGD::INVALID_HANDLE;
 };
 

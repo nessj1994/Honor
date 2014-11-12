@@ -47,11 +47,13 @@ public:
 	int GetLevelHeight() const { return (m_nHeight * 32); }
 	int GetWidth() const { return m_nWidth; }
 	int GetHeight() const { return m_nHeight; }
+	unsigned int GetHonorBeforeDeath() const { return m_unHonorBeforeDeath; }
 
 
 	//////////////////////////////
 	// Mutators
 	void SetCollectedHonor(std::vector<bool> _honor) { m_vCollectedHonor = _honor; }
+	void SetHonorBeforeDeath(unsigned int _honor) { m_unHonorBeforeDeath = _honor; }
 
 private:
 	//////////////////////////////
@@ -68,6 +70,7 @@ private:
 	std::vector<Armor*>		m_vArmor;
 	int						m_nPlayerX;
 	int						m_nPlayerY;
+	unsigned int			m_unHonorBeforeDeath;
 
 };
 

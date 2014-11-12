@@ -210,9 +210,12 @@ void GameplayState::Enter(void) //Load Resources
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-	LoadLevel("HubLevel");
+	LoadLevel("Level1_1");
 
 	
+
+	//LoadLevel("Level3_1");
+
 	//LoadLevel("HubLevel");
 
 	//("HubLevel");
@@ -921,7 +924,7 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 
 			// Reference to the teleporter entity
 			Teleporter * teleporter = dynamic_cast<Teleporter*>(pCreateMsg->GetOwner());
-
+			GameplayState::GetInstance()->SaveGame();
 			pSelf->LoadLevel(teleporter->GetLevel());
 
 		}
@@ -1071,9 +1074,9 @@ Entity* GameplayState::CreateSpray(Entity* pOwner) const
 {
 	Ice* proj = new Ice;
 	if (pOwner->GetDirection().x == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + 30, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + 40, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	else
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width - 30, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width - 40, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
 	proj->SetSize({ 4, 4 });
 	proj->SetDirection({ pOwner->GetDirection().x, -1 });
@@ -1223,6 +1226,7 @@ void GameplayState::CreateHonor(int _x, int _y, int _amount, unsigned int _index
 	if (_index < GetHonorVectorSize())
 	{
 		mHonor->SetIsCollected(m_mCollectedHonor[m_strCurrLevel][_index]);
+		mHonor->SetStartedCollected(m_mCollectedHonor[m_strCurrLevel][_index]);
 	}
 	m_pEntities->AddEntity(mHonor, Entity::ENT_HONOR);
 	mHonor->Release();
@@ -2085,6 +2089,7 @@ void GameplayState::LoadLevel(std::string _level)
 	// Create a new level and load the correct file
 	m_pLevel = new Level();
 	m_pLevel->LoadLevel(m_mLevels[_level].c_str());
+	m_pLevel->Startup();
 
 	// Set the players position
 	m_pPlayer->SetPosition({ (float)m_pLevel->GetPlayerX(), (float)m_pLevel->GetPlayerY() });
@@ -2274,4 +2279,22 @@ bool GameplayState::GetLevelUnlocked(std::string _level)
 void GameplayState::UnlockLevel(std::string _level)
 {
 	m_mUnlockedLevels[_level] = true;
+}
+
+/////////////////////////////////////////////
+// ResetHonorInRoom
+// -When the player dies, reset how much honor he collected
+void GameplayState::ResetHonorInRoom()
+{
+	unsigned int dif = m_pPlayer->GetHonorCollected() - m_pLevel->GetHonorBeforeDeath();
+	m_pPlayer->SetHonorCollected(dif);
+	m_pLevel->SetHonorBeforeDeath(0);
+}
+
+/////////////////////////////////////////////
+// IncreaseHonorBeforeDeath
+// -Add the given amount to honor before death
+void GameplayState::IncreaseHonorBeforeDeath(unsigned int _value)
+{
+	m_pLevel->SetHonorBeforeDeath(m_pLevel->GetHonorBeforeDeath() + _value);
 }

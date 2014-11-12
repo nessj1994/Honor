@@ -21042,6 +21042,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="TurnMarker" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -21489,8 +21490,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
+		<EventTile event="TurnMarker" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -24590,7 +24590,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="35">
+	<Entities numEntities="36">
 		<Entity type="19" x="496" y="720" numArgs="1" name="Enemy_1">
 			<Argument type="1" name="Type" value="1" />
 		</Entity>
@@ -24708,6 +24708,9 @@
 		</Entity>
 		<Entity type="0" x="608" y="96" numArgs="1" name="Honor_26">
 			<Argument type="1" name="Amount" value="50" />
+		</Entity>
+		<Entity type="19" x="768" y="160" numArgs="1" name="Enemy_1">
+			<Argument type="1" name="Type" value="0" />
 		</Entity>
 	</Entities>
 </Level>

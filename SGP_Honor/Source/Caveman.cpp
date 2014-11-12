@@ -332,7 +332,7 @@ void Caveman::Render(void)
 	if (m_bsCurrState == CM_DEATH)
 	{
 		m_emVictoryEffect->Render({ 470, 220 });
-		font.DrawString("VICTORY!", 400 - Camera::GetInstance()->GetCameraPos().x, 200 - Camera::GetInstance()->GetCameraPos().y, 3, SGD::Color{ 255, 255, 0, 0 });
+		font.DrawString("VICTORY!", (int)(400 - Camera::GetInstance()->GetCameraPos().x), (int)(200 - Camera::GetInstance()->GetCameraPos().y), 3, SGD::Color{ 255, 255, 0, 0 });
 	}
 }
 
