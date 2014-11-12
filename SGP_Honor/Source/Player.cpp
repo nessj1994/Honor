@@ -53,6 +53,7 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("Screen1.5x3");
 	Listener::RegisterForEvent("Screen3x1");
 	Listener::RegisterForEvent("Screen3x1.5");
+	Listener::RegisterForEvent("Screen3x2");
 
 
 
@@ -70,6 +71,7 @@ Player::Player() : Listener(this)
 	m_pBounce = new Bounce();
 	//HUD
 	m_hHonorParticleHUD = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/HonorPiece.png");
+	m_hBubbleCircle = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/bubble.png");
 	//Emitters
 	m_emHonor = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/SilverHonor.xml", "SilverHonor", { (32), (32) });
 	m_emFeatherExplosion = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FeatherExplosion.xml", "FeatherExplosion", { -1000, -1000 });
@@ -328,6 +330,10 @@ void Player::Render(void)
 		// Draw a fading rectangle
 		unsigned char alpha = (char)(((0.5f - m_fDeathTimer) / 0.5f) * 255.0f);
 		GameplayState::GetInstance()->SetScreenFadeout(alpha);
+	}
+	if (IsBouncing())
+	{
+		Camera::GetInstance()->DrawTexture({ m_ptPosition.x-70, m_ptPosition.y-50 }, 0, m_hBubbleCircle, false, 5, {}, {});
 	}
 }
 
@@ -1317,6 +1323,7 @@ void Player::CastDash()
 {
 	m_pDash->CastDash(this);
 
+	m_unCurrentState = FALLING_STATE;
 }
 
 void Player::CastHawk()
@@ -1439,6 +1446,14 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	{
 		m_fPanX = 3;
 		m_fPanY = 1.5;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+
+	if (pEvent->GetEventID() == "Screen3x2")
+	{
+		m_fPanX = 3;
+		m_fPanY = 2;
 		Camera::GetInstance()->SetCameraCap(0);
 
 	}
