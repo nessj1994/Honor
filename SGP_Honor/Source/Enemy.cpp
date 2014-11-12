@@ -12,9 +12,9 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 
-Enemy::Enemy() : SGD::Listener(this)
+Enemy::Enemy() 
 {
-	SGD::Listener::RegisterForEvent("ResetRoom");
+
 }
 
 
@@ -348,11 +348,3 @@ void Enemy::BasicCollision(const IEntity* pOther)
 
 }
 
-void Enemy::HandleEvent(const SGD::Event* pEvent)
-{
-	if (pEvent->GetEventID() == "ResetRoom")
-	{
-		SetAlive(true);
-		SetPosition(GetOriginalPos());
-	}
-}

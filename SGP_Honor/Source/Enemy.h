@@ -6,7 +6,7 @@
 
 
 class Enemy :
-	public Unit , SGD::Listener
+	public Unit
 {
 public:
 	Enemy();
@@ -39,8 +39,6 @@ public:
 	void SetFacingRight(bool _right) { m_bFacingRight = _right; }
 	void SetOriginalPosition(SGD::Point _Pos) { m_ptOriginalPos = _Pos; }
 
-	//Listener
-	void HandleEvent(const SGD::Event* pEvent);
 private:
 
 	Player* m_pPlayer = nullptr;

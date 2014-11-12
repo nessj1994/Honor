@@ -370,7 +370,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level0_1");
+		LoadLevel("Level2_1");
 	}
 
 
@@ -416,6 +416,10 @@ void GameplayState::Update(float elapsedTime)
 
 	m_pEntities->UpdateAll(elapsedTime);
 	Camera::GetInstance()->Update(elapsedTime);
+
+	m_pEntities->CheckWorldCollision(Entity::ENT_PLAYER);
+
+
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BLOCK);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_PERM_FREEZE);
@@ -498,7 +502,6 @@ void GameplayState::Update(float elapsedTime)
 	//if (m_pHonor != nullptr)
 	//m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_HONOR);
 
-	m_pEntities->CheckWorldCollision(Entity::ENT_PLAYER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_FALLING_BLOCK);
 	m_pEntities->CheckWorldCollision(Entity::ENT_PROJ);
 	m_pEntities->CheckWorldCollision(Entity::ENT_HAWK);

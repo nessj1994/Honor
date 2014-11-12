@@ -3,7 +3,7 @@
 #include "../SGD Wrappers/SGD_Listener.h"
 #include <vector>
 
-class MutantBat : public Enemy
+class MutantBat : public Enemy, SGD::Listener
 {
 public:
 	MutantBat();
@@ -17,6 +17,7 @@ public:
 
 	void Begin(SGD::Point _Pos){ m_pPatrolPoint = _Pos; }
 
+	void HandleEvent(const SGD::Event* pEvent);
 private:
 	SGD::Point m_pPatrolPoint;
 	//Pooping Timer

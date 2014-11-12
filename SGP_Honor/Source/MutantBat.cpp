@@ -13,8 +13,9 @@
 #include <cmath>
 #include <Windows.h>
 
-MutantBat::MutantBat()
+MutantBat::MutantBat() : SGD::Listener(this)
 {
+	Listener::RegisterForEvent("ResetRoom");
 	m_ptPosition = { 96, 672 };
 	m_pPatrolPoint = m_ptPosition;
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/MutantBat.xml");
@@ -61,6 +62,7 @@ void MutantBat::Update(float _elapsedTime)
 		SetVelocity({ 0, -20 });
 		if (m_fDieing > 1.8)
 		{
+			SetAlive(false);
 			/*DestroyEntityMessage* temp = new DestroyEntityMessage(this);
 			temp->QueueMessage();
 			temp = nullptr;*/
@@ -237,4 +239,16 @@ void MutantBat::HandleCollision(const IEntity* pOther)
 
 
 	Enemy::HandleCollision(pOther);
+}
+
+void MutantBat::HandleEvent(const SGD::Event* pEvent)
+{
+	if (pEvent->GetEventID() == "ResetRoom")
+	{
+		m_ts.ResetCurrFrame();
+		m_ts.SetCurrAnimation("Flying");
+		m_ts.SetPlaying(true);
+		SetAlive(true);
+		SetPosition(GetOriginalPos());
+	}
 }
