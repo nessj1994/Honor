@@ -11822,7 +11822,7 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
-			<ImageTile type="9" />
+			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -11847,7 +11847,7 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
-			<ImageTile type="9" />
+			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -15175,23 +15175,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="0" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="0" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="0" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -15201,6 +15184,23 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -20114,7 +20114,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="31">
+	<Entities numEntities="28">
 		<Entity type="19" x="640" y="704" numArgs="1" name="Enemy_1">
 			<Argument type="1" name="Type" value="9" />
 		</Entity>
@@ -20129,21 +20129,6 @@
 		</Entity>
 		<Entity type="19" x="1728" y="672" numArgs="1" name="Enemy_5">
 			<Argument type="1" name="Type" value="7" />
-		</Entity>
-		<Entity type="6" x="1824" y="672" numArgs="3" name="Geyser_1">
-			<Argument type="2" name="Speed" value="1.0" />
-			<Argument type="2" name="MaxHeight" value="1.0" />
-			<Argument type="1" name="CurrentState" value="0" />
-		</Entity>
-		<Entity type="6" x="1984" y="672" numArgs="3" name="Geyser_2">
-			<Argument type="2" name="Speed" value="1.0" />
-			<Argument type="2" name="MaxHeight" value="1.0" />
-			<Argument type="1" name="CurrentState" value="0" />
-		</Entity>
-		<Entity type="6" x="2208" y="672" numArgs="3" name="Geyser_3">
-			<Argument type="2" name="Speed" value="1.0" />
-			<Argument type="2" name="MaxHeight" value="1.0" />
-			<Argument type="1" name="CurrentState" value="0" />
 		</Entity>
 		<Entity type="1" x="1568" y="32" numArgs="3" name="Activator_1">
 			<Argument type="0" name="IsPressurePlate" value="0" />

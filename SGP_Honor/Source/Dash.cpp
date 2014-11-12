@@ -29,14 +29,26 @@ void Dash:: CastDash(Unit* pOther)
 		if (((Player*)pOther)->Slowed())
 		{
 			if (pOther->IsFacingRight() == true)
+			{
+				pOther->SetPosition({ pOther->GetPosition().x + 1, pOther->GetPosition().y });
 				pOther->SetVelocity({ 800, 0 });
+
+			}
 			else
+			{
+				pOther->SetPosition({ pOther->GetPosition().x - 1, pOther->GetPosition().y });
+
 				pOther->SetVelocity({ -800, 0 });
+			}
 		}
 		else
 		{
 			if (pOther->IsFacingRight() == true)
+			{
+				pOther->SetPosition({ pOther->GetPosition().x + 1, pOther->GetPosition().y });
+
 				pOther->SetVelocity({ 2000, 0 });
+			}
 			else
 				pOther->SetVelocity({ -2000, 0 });
 		}

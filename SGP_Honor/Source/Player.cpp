@@ -53,6 +53,8 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("Screen1.5x3");
 	Listener::RegisterForEvent("Screen3x1");
 	Listener::RegisterForEvent("Screen3x1.5");
+	Listener::RegisterForEvent("Screen3x2");
+
 
 
 
@@ -109,6 +111,8 @@ Player::~Player()
 /////////////////Interface///////////////////////
 void Player::Update(float elapsedTime)
 {
+	m_bIsColliding = false;
+
 	//Emitter Updates
 	m_emHonor->Update(elapsedTime);
 	m_emFeatherExplosion->Update(elapsedTime);
@@ -401,18 +405,23 @@ void Player::HandleCollision(const IEntity* pOther)
 	if(pOther->GetType() == Entity::ENT_SOLID_WALL)
 	{
 		m_bSliding = false;
-
-		is_Platform = true;
-		BasicCollision(pOther);
-		SetFriction(25.0f);
+		
+			//m_bIsColliding = true;
+			is_Platform = true;
+			BasicCollision(pOther);
+			SetFriction(25.0f);
+		
 	}
 	if(pOther->GetType() == Entity::ENT_LEFT_RAMP)
 	{
 		m_bSliding = false;
 
-		LeftRampCollision(pOther);
-		SetFriction(25.0f);
-		is_Ramp = true;
+
+			LeftRampCollision(pOther);
+			SetFriction(25.0f);
+			is_Ramp = true;
+			m_bIsColliding = true;
+	
 	}
 
 	if(pOther->GetType() == Entity::ENT_ICE_LEFT_RAMP)
@@ -423,11 +432,11 @@ void Player::HandleCollision(const IEntity* pOther)
 
 		if (GetVelocity().x > 0 && m_bFacingRight == false)
 		{
-			m_vtVelocity.x -= 50;
+			m_vtVelocity.x += 50;
 		}
 		else if (GetVelocity().x < 0 && m_bFacingRight == true)
 		{
-			m_vtVelocity.x += 50;
+			m_vtVelocity.x -= 50;
 		}
 		if (SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Q) || SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::E))
 			SetVelocity(GetVelocity() * 1.51f);
@@ -831,7 +840,11 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	float tempVal = 32.0f / 32.0f;
 
 
-	SetGravity(GetGravity() * 4);
+	//SetGravity(GetGravity() * 4);
+
+	SetGravity(0);
+
+
 	SetVelocity({ GetVelocity().x, 0 });
 	if(GetVelocity().x > 300)
 	{
@@ -865,35 +878,73 @@ void Player::LeftRampCollision(const IEntity* pOther)
 	int nIntersectWidth = rIntersection.right - rIntersection.left;
 	int nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
-	if(/*nIntersectWidth*/ /*nIntersectWidth > 1  &&*/ nIntersectWidth < 31)
+
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+
+	if (pInput->IsKeyDown(SGD::Key::Space) == true
+		|| pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)
+
 	{
-		//SetPosition({ GetPosition().x, (float)rObject.bottom - tempVal - GetSize().height });
-		m_ptPosition.y = (float)rObject.bottom - tempVal -  GetSize().height;
-		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
-	}
-	 
-	
-	else if(nIntersectWidth == 31)
-	{
-		//m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
-		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
-
-		//m_ptPosition.y = (float)rObject.top ;
-		//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
-
-		BasicCollision(pOther);
-
-
-	}
-	else if(nIntersectWidth == 32)
-	{
-		BasicCollision(pOther);
-
-		m_ptPosition.x += 1;
+		m_ptPosition.y = (float)rObject.top - 64;
 	}
 
+
+	else
+	{
+		if (/*nIntersectWidth*/ /*nIntersectWidth > 1  &&*/ nIntersectWidth < 31 && nIntersectWidth > 1)
+		{
+			//SetPosition({ GetPosition().x, (float)rObject.bottom - tempVal - GetSize().height });
+			m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
+			m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+		}
+
+		else if (nIntersectWidth <= 1)
+		{
+			m_ptPosition.y += 1;
+			//m_ptPosition.x -= 1;
+
+			//BasicCollision(pOther);
+		}
+
+		else if (nIntersectWidth == 31)
+		{
+			if (m_ptPosition.x > (float)rObject.left)
+			{
+
+			}
+			else
+			{
+				BasicCollision(pOther);
+			}
+
+			//m_ptPosition.x -= 1;
+		}
+		else if (nIntersectWidth == 32)
+		{
+
+			if (m_ptPosition.x > (float)rObject.left)
+				m_ptPosition.x -= 1;
+
+			else
+				m_ptPosition.x += 2;
+
+			BasicCollision(pOther);
+		}
+
+	}
 	if(m_ptPosition.x + m_szSize.width > rObject.right)
 	SetVelocity({ m_vtVelocity.x , 1000 });
+
+
+	if (m_unCurrentState == FALLING_STATE)
+	{
+
+		m_unJumpCount = 0;
+
+		m_fLandTimer = 0.001f;
+		m_unCurrentState = LANDING_STATE;
+	}
 
 }
 
@@ -903,7 +954,11 @@ void Player::RightRampCollision(const IEntity* pOther)
 
 	float tempVal = 32.0f / 32.0f;
 	
-	SetGravity(GetGravity() * 4);
+	//SetGravity(GetGravity() * 4);
+
+	SetGravity(0);
+
+
 	SetVelocity({ GetVelocity().x, 0 });
 	if(GetVelocity().x > 300)
 	{
@@ -916,7 +971,7 @@ void Player::RightRampCollision(const IEntity* pOther)
 	}
 
 
-	//SetGravity(0);
+	
 
 	RECT rPlayer;
 	rPlayer.left = (LONG)GetRect().left;
@@ -954,27 +1009,83 @@ void Player::RightRampCollision(const IEntity* pOther)
 	//float rIntersectWidth = rIntersection.ComputeWidth();
 	//float rIntersectHeight = rIntersection.ComputeHeight();
 
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
-	if(/*nIntersectWidth*/ nIntersectWidth > -31)
+
+	if (pInput->IsKeyDown(SGD::Key::Space) == true
+		|| pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == true)
+
 	{
-		tempVal = 31 / 32;
-
-		m_ptPosition.y = (float)rObject.bottom - GetSize().height - tempVal;
-		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * 1);
+		m_ptPosition.y = (float)rObject.top - 64;
 	}
-	//else
-	//{
-	//	//SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 });
-	//	m_ptPosition.y -= rIntersectHeight;
-	//}
+	else
+	{
 
+
+		//if (/*nIntersectWidth*/ nIntersectWidth > -31)
+		//{
+		//	tempVal = 31 / 32;
+		//
+		//	m_ptPosition.y = (float)rObject.bottom - GetSize().height - tempVal;
+		//	m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * 1);
+		//}
+
+
+
+		if (/*nIntersectWidth*/ /*nIntersectWidth > 1  &&*/ nIntersectWidth < 31)
+		{
+			if (m_ptPosition.x > (float)rObject.left)
+			{
+
+				//SetPosition({ GetPosition().x, (float)rObject.bottom - tempVal - GetSize().height });
+				m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
+				m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+			}
+		}
+		
+
+		else if (nIntersectWidth == 31)
+		{
+			//m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
+			//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+
+			//m_ptPosition.y = (float)rObject.top ;
+			//m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+
+			BasicCollision(pOther);
+
+
+		}
+		else if (nIntersectWidth == 32)
+		{
+
+			if (m_ptPosition.x > (float)rObject.left)
+				m_ptPosition.x -= 1;
+			else
+			{
+				m_ptPosition.x += 1;
+			}
+			BasicCollision(pOther);
+
+			//m_ptPosition.x -= 1;
+		}
+
+
+	}
 
 	if(m_ptPosition.x + m_szSize.width < rObject.left)
 		SetVelocity({ m_vtVelocity.x, 1000 });
 
 
 
+	if (m_unCurrentState == FALLING_STATE)
+	{
 
+		m_unJumpCount = 0;
+
+		m_fLandTimer = 0.001f;
+		m_unCurrentState = LANDING_STATE;
+	}
 	
 
 
@@ -1214,8 +1325,8 @@ void Player::JellyfishCollision(const IEntity* pOther)
 		{
 			const Jellyfish* jfish = dynamic_cast<const Jellyfish*>(pOther);
 			//SetVelocity({ GetVelocity().x, /*GetVelocity().y*/1500 * (-1.0f - (0.1f * jfish->GetBounceCount())) });
-			SetVelocity({ GetVelocity().x, GetVelocity().y * (-1.0f - (0.1f * jfish->GetBounceCount())) });
-			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height /*- nIntersectHeight*/ });
+			SetVelocity({ 0, ( -600.0f * jfish->GetBounceCount() ) });
+		//	SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height /*- nIntersectHeight*/ });
 			SGD::AudioManager::GetInstance()->PlayAudio(m_hJellyfishEffect);
 			//SetIsFalling(false);
 			//SetIsInputStuck(false);
@@ -1327,6 +1438,13 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	{
 		m_fPanX = 3;
 		m_fPanY = 1.3f;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
+	if (pEvent->GetEventID() == "Screen3x2")
+	{
+		m_fPanX = 3;
+		m_fPanY = 2;
 		Camera::GetInstance()->SetCameraCap(0);
 
 	}
