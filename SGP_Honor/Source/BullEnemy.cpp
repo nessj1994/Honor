@@ -265,6 +265,10 @@ void BullEnemy::Update(float elapsedTime)
 // -Main render loop
 void BullEnemy::Render()
 {
+	if (!GetAlive() && m_fDeathTimer <= 0.0f)
+	{
+		return;
+	}
 	Enemy::Render();
 	SGD::Point newPosition = m_ptPosition;
 	newPosition.y += 48;
