@@ -213,5 +213,13 @@ private:
 
 	//Hub World Orb
 	HubWorldOrb* m_pHubOrb;
+
+	//Texture
+	SGD::HTexture m_hXJUMP = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hOAttack = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hXWallJump = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hTriOpenDoor = SGD::INVALID_HANDLE;
+
+
 };
 

@@ -273,7 +273,7 @@ void Caveman::Update(float elapsedTime)
 			SGD::Event* pATEvent = new SGD::Event("GainedHawk", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
-			GameplayState::GetInstance()->SetScreenFadeout(0);
+			GameplayState::GetInstance()->SetScreenFadeout(9);
 			// TODO Delete bull, give player dash, update room
 			GameplayState::GetInstance()->CreateTeleporter(510, 578, "Level3_1", false);
 			GameplayState::GetInstance()->CreateHintStatue(440, 513, "You have The Hawk!(Press D or Right Trigger)");

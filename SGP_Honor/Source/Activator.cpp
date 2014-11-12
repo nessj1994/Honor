@@ -91,7 +91,7 @@ void Activator::Update(float elapsedTime)
 			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
-			m_fSwitchTimer = 0.25f;
+			m_fSwitchTimer = 0.4f;
 		}
 		if (nIntersectHeight > nIntersectWidth)
 		{
@@ -109,7 +109,7 @@ void Activator::Update(float elapsedTime)
 			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
-			m_fSwitchTimer = 0.25f;
+			m_fSwitchTimer = 0.4f;
 		}
 		if (nIntersectHeight == nIntersectWidth
 			&& nIntersectHeight > 0)
@@ -127,7 +127,7 @@ void Activator::Update(float elapsedTime)
 			pATEvent = new SGD::Event("FLIP_LASER", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
-			m_fSwitchTimer = 0.25f;
+			m_fSwitchTimer = 0.4f;
 		}
 
 	}
@@ -193,7 +193,7 @@ void Activator::HandleCollision(const IEntity* pOther)
 			SGD::Event* pATEvent = new SGD::Event("OPEN_DOOR", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
-			m_fSwitchTimer = 0.25f;
+			m_fSwitchTimer = .5f;
 		}
 
 	}
@@ -228,7 +228,7 @@ void Activator::HandleCollision(const IEntity* pOther)
 
 
 
-	if (m_pPlayer != nullptr)
+	if (m_pPlayer != nullptr )
 	{
 		
 		RECT rSwingRect;

@@ -61,9 +61,10 @@ void MutantBat::Update(float _elapsedTime)
 		SetVelocity({ 0, -20 });
 		if (m_fDieing > 1.8)
 		{
-			DestroyEntityMessage* temp = new DestroyEntityMessage(this);
+			/*DestroyEntityMessage* temp = new DestroyEntityMessage(this);
 			temp->QueueMessage();
-			temp = nullptr;
+			temp = nullptr;*/
+			return;
 		}
 		if (m_ts.GetCurrAnimation() != "Dieing")
 		{
@@ -167,13 +168,20 @@ void MutantBat::Update(float _elapsedTime)
 
 void MutantBat::Render()
 {
+	if (!GetAlive())
+	{
+		return;
+	}
 	SGD::GraphicsManager::GetInstance()->DrawRectangle({ { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, m_szSize }, { 255, 255, 255, 255 });
 	Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height / 2 }, 0, m_ts, GetFacingRight(), 1);
 }
 
 void MutantBat::HandleCollision(const IEntity* pOther)
 {
-
+	if (!GetAlive())
+	{
+		return;
+	}
 
 	if (pOther->GetType() == Entity::ENT_PLAYER && GetRect().IsIntersecting(pOther->GetRect()) == true)
 	{

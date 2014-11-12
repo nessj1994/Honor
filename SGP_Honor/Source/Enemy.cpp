@@ -8,12 +8,13 @@
 #include "SwordSwing.h"
 #include "Pouncer.h"
 #include "Squid.h"
-
+#include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 
-Enemy::Enemy()
+Enemy::Enemy() : SGD::Listener(this)
 {
+	SGD::Listener::RegisterForEvent("ResetRoom");
 }
 
 
@@ -30,6 +31,10 @@ Enemy::~Enemy()
 /////////////////Interface//////////////////////
 void Enemy::Update(float elapsedTime)
 {
+	if (!GetAlive())
+	{
+		return;
+	}
 	if (m_pPlayer->GetIsSwinging() == true)
 	{
 		RECT rSwingRect;
@@ -151,6 +156,10 @@ void Enemy::Update(float elapsedTime)
 
 void Enemy::Render(void)
 {
+	if (!GetAlive())
+	{
+		return;
+	}
 	// Render the collision rect
 	//Get the camera position for our offset
 	SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
@@ -176,6 +185,10 @@ int Enemy::GetType(void) const
 
 void Enemy::HandleCollision(const IEntity* pOther)
 {	
+	if (!GetAlive())
+	{
+		return;
+	}
 	if (pOther->GetType() == Entity::ENT_SOLID_WALL)
 	{
 		RECT rMutant;
@@ -333,4 +346,13 @@ void Enemy::BasicCollision(const IEntity* pOther)
 		}
 	}
 
+}
+
+void Enemy::HandleEvent(const SGD::Event* pEvent)
+{
+	if (pEvent->GetEventID() == "ResetRoom")
+	{
+		SetAlive(true);
+		SetPosition(GetOriginalPos());
+	}
 }
