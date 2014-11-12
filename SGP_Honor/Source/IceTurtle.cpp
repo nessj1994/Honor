@@ -3,15 +3,17 @@
 #include "CreateProjectileMessage.h"
 #include "../SGD Wrappers/SGD_MessageManager.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
+#include "../SGD Wrappers/SGD_Event.h"
 #include "AnimationEngine.h"
 #include "Camera.h"
+
 #include "DestroyEntityMessage.h"
 
-IceTurtle::IceTurtle()
+IceTurtle::IceTurtle() : Listener(this)
 {
 	m_szSize = { 32, 32 };
 	m_fFireTimer = 0.0f;
-
+	Listener::RegisterForEvent("ResetRoom");
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/TurtleAnimations.xml");
 	m_ts.SetCurrAnimation("turtleidle");
 	m_bFacingRight = false;
@@ -37,6 +39,17 @@ IceTurtle::~IceTurtle()
 /////////////////Interface//////////////////////
 void IceTurtle::Update(float elapsedTime)
 {
+	if (GetAlive() == false)
+	{
+
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hHitSound);
+		SetAlive(false);
+		/*SGD::AudioManager::GetInstance()->PlayAudio(m_hDeathSound);
+		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+		pMsg->QueueMessage();
+		pMsg = nullptr;*/
+		return;
+	}
 	if(m_fFireTimer > 0.0f)
 	{
 		m_fFireTimer -= elapsedTime;
@@ -92,19 +105,15 @@ void IceTurtle::Update(float elapsedTime)
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 	Enemy::Update(elapsedTime);
 
-	if(GetAlive() == false)
-	{
-
-		SGD::AudioManager::GetInstance()->PlayAudio(m_hHitSound);
-
-		SGD::AudioManager::GetInstance()->PlayAudio(m_hDeathSound);
-		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-		pMsg->QueueMessage();
-		pMsg = nullptr;
-	}
+	
 }
 void IceTurtle::Render(void)
 {
+	//Reset Room 
+	if (!GetAlive())
+	{
+		return;
+	}
 	//Get the camera position for our offset
 	SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
 
@@ -144,4 +153,13 @@ SGD::Rectangle IceTurtle::GetRect(void) const
 void IceTurtle::HandleCollision(const IEntity* pOther)
 {
 
+}
+
+void IceTurtle::HandleEvent(const SGD::Event* pEvent)
+{
+	if (pEvent->GetEventID() == "ResetRoom")
+	{
+		SetAlive(true);
+		SetPosition(GetOriginalPos());
+	}
 }

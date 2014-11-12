@@ -65,9 +65,11 @@ void MutantMan::Update(float _elapsedTime)
 		}
 		if (m_fDeadTImer > 1)
 		{
-			DestroyEntityMessage* Temp = new DestroyEntityMessage(this);
+			//Reseting Enemys
+			SetAlive(false);
+			/*DestroyEntityMessage* Temp = new DestroyEntityMessage(this);
 			Temp->QueueMessage();
-			Temp = nullptr;
+			Temp = nullptr;*/
 		}
 
 		return;
@@ -191,17 +193,6 @@ SGD::Rectangle MutantMan::GetRect(void) const
 void MutantMan::HandleCollision(const IEntity* pOther) 
 {
 
-
-	if (pOther->GetType() == Entity::ENT_PLAYER && GetRect().IsIntersecting(pOther->GetRect()) == true)
-	{
-		if (m_bPlayerAttacked)
-		{
-			//if so move back up but kill the player
-			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
-			SGD::EventManager::GetInstance()->SendEventNow(&Event);
-		}
-	}
-
 	RECT rMutant;
 	rMutant.left = (LONG)GetRect().left;
 	rMutant.top = (LONG)GetRect().top;
@@ -255,7 +246,7 @@ void MutantMan::HandleEvent(const SGD::Event* pEvent)
 {
 	if (pEvent->GetEventID() == "ResetRoom")
 	{
-		
+		SetAlive(true);
+		SetPosition(GetOriginalPos());
 	}
-
 }

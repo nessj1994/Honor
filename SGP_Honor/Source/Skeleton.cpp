@@ -1,6 +1,7 @@
 #include "Skeleton.h"
 #include "AnimationEngine.h"
 #include "DestroyEntityMessage.h"
+#include "../SGD Wrappers/SGD_Event.h"
 #include "Player.h"
 #include "Camera.h"
 #include "CreateGravProjectileMessage.h"
@@ -11,6 +12,7 @@
 // Ctor/Dtor
 Skeleton::Skeleton() : Listener(this)
 {
+	Listener::RegisterForEvent("ResetRoom");
 	m_szSize = { 64, 64 };
 	m_fShootTimer = 1.0f;
 	SetFacingRight(true);
@@ -39,7 +41,7 @@ void Skeleton::Update(float elapsedTime)
 	// only play audio if the player is close
 	float playerDeltaX = abs(GetPlayer()->GetPosition().x - m_ptPosition.x);
 	float playerDeltaY = abs(GetPlayer()->GetPosition().y - m_ptPosition.y);
-	m_bPlayAudio = (playerDeltaX < 600.0f && playerDeltaY < 400.0f);
+	m_bPlayAudio = (playerDeltaX < 600.0f && playerDeltaY < 400.0f);	
 
 	// Check if dying
 	if (!GetAlive() && !m_bDying)
@@ -54,6 +56,8 @@ void Skeleton::Update(float elapsedTime)
 			pAudio->PlayAudio(m_hDeath);
 		}
 	}
+
+	
 
 	// Update direction for bones
 	if (GetFacingRight())
@@ -155,9 +159,11 @@ void Skeleton::Update(float elapsedTime)
 			m_fDeathTimer -= elapsedTime;
 			if (m_fDeathTimer <= 0.0f)
 			{
-				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+				//Reseting Enemys
+				SetAlive(false);
+				/*DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
 				pMsg->QueueMessage();
-				pMsg = nullptr;
+				pMsg = nullptr;*/
 			}
 
 			break;
@@ -210,5 +216,12 @@ void Skeleton::HandleCollision(const IEntity * pOther)
 // -Handles the given event
 void Skeleton::HandleEvent(const SGD::Event* pEvent)
 {
+	if (pEvent->GetEventID() == "ResetRoom")
+	{
+		m_ssCurrState = SS_IDLE;
+		m_bDying = false;
+		SetAlive(true);
+		SetPosition(GetOriginalPos());
+	}
 
 }

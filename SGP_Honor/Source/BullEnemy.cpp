@@ -13,6 +13,7 @@
 BullEnemy::BullEnemy() : Listener(this)
 {
 	Listener::RegisterForEvent("TurnMarker");
+	Listener::RegisterForEvent("ResetRoom");
 	m_szSize = { 64, 48 };
 	m_bsCurrState = BS_RUNNING;
 	m_fChangeTimer = 0.0f;
@@ -65,7 +66,6 @@ void BullEnemy::Update(float elapsedTime)
 			pAudio->PlayAudio(m_hRoar2);
 		}
 	}
-
 	// Every few seconds randomly change direction or switch states
 	// Only if the bull is not in the middle of charging
 	if (m_bsCurrState != BS_RUNNING)
@@ -101,6 +101,11 @@ void BullEnemy::Update(float elapsedTime)
 	{
 		case BS_IDLE:
 		{
+						//For Reset Room
+						if (!GetAlive())
+						{
+							return;
+						}
 			// Update animation
 			m_ts.SetCurrAnimation("Bull_Enemy_Idle");
 			m_ts.SetPlaying(true);
@@ -134,6 +139,11 @@ void BullEnemy::Update(float elapsedTime)
 		}
 		case BS_WALKING:
 		{
+						   //For Reset Room
+						   if (!GetAlive())
+						   {
+							   return;
+						   }
 			// Update animation
 			m_ts.SetCurrAnimation("Bull_Enemy_Running");
 			m_ts.SetPlaying(true);
@@ -175,6 +185,11 @@ void BullEnemy::Update(float elapsedTime)
 		}
 		case BS_RUNNING:
 		{
+			//For Reset Room
+			 if (!GetAlive())
+			 {
+			   return;
+			 }
 			// Update animation
 			m_ts.SetCurrAnimation("Bull_Enemy_Running");
 			m_ts.SetPlaying(true);
@@ -224,9 +239,11 @@ void BullEnemy::Update(float elapsedTime)
 			m_fDeathTimer -= elapsedTime;
 			if (m_fDeathTimer <= 0.0f)
 			{
-				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+				//Reseting Enemys
+				SetAlive(false);
+				/*DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
 				pMsg->QueueMessage();
-				pMsg = nullptr;
+				pMsg = nullptr;*/
 			}
 
 			break;
@@ -285,7 +302,13 @@ void BullEnemy::HandleCollision(const IEntity * pOther)
 void BullEnemy::HandleEvent(const SGD::Event* pEvent)
 {
 	//which event
-
+	if (pEvent->GetEventID() == "ResetRoom")
+	{
+		m_bDying = false;
+		m_bsCurrState = BS_IDLE;
+		SetAlive(true);
+		SetPosition(GetOriginalPos());
+	}
 	//Turn around
 	if (pEvent->GetEventID() == "TurnMarker" &&
 		pEvent->GetSender() == this)

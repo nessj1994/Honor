@@ -10,7 +10,7 @@
 IceBat::IceBat() : Listener(this)
 {
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
-
+	Listener::RegisterForEvent("ResetRoom");
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/IceBatAnimations.xml");
 	m_ts.ResetCurrFrame();
 	m_ts.SetCurrAnimation("icebatfly");
@@ -32,7 +32,18 @@ IceBat::~IceBat()
 
 void IceBat::Update(float elapsedTime)
 {
+	if (GetAlive() == false)
+	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hHitSound);
 
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hDeathSound);
+
+		SetAlive(false);
+		/*DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+		pMsg->QueueMessage();
+		pMsg = nullptr;*/
+		return;
+	}
 	//Right
 	if(m_nDirection == 0)
 	{
@@ -90,23 +101,16 @@ void IceBat::Update(float elapsedTime)
 
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 	Enemy::Update(elapsedTime);
-
-	if(GetAlive() == false)
-	{
-		SGD::AudioManager::GetInstance()->PlayAudio(m_hHitSound);
-
-		SGD::AudioManager::GetInstance()->PlayAudio(m_hDeathSound);
-
-
-		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
-		pMsg->QueueMessage();
-		pMsg = nullptr;
-	}
 }
 
 
 void IceBat::Render(void)
 {
+	//Reset Room 
+	if (!GetAlive())
+	{
+		return;
+	}
 	//Get the camera position for our offset
 	SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
 
@@ -477,6 +481,11 @@ void IceBat::HandleEvent(const SGD::Event* pEvent)
 		{
 			m_bInRange = false;
 		}
+	}
+	if (pEvent->GetEventID() == "ResetRoom")
+	{
+		SetAlive(true);
+		SetPosition(GetOriginalPos());
 	}
 
 }

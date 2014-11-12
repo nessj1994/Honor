@@ -632,9 +632,12 @@ void Player::HandleCollision(const IEntity* pOther)
 	}
 	if(pOther->GetType() == Entity::ENT_ICE_GOLEM)
 	{
-		SGD::Event* pATEvent = new SGD::Event("KILL_PLAYER", nullptr, this);
-		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		pATEvent = nullptr;
+		if (((Enemy*)pOther)->GetAlive())
+		{
+			SGD::Event* pATEvent = new SGD::Event("KILL_PLAYER", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
+		}
 	}
 
 	if(pOther->GetType() == Entity::ENT_BOSS_YETI)
