@@ -100,6 +100,7 @@ Player::~Player()
 	delete m_emHawkReturn;
 	delete m_pSword;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHonorParticleHUD);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBubbleCircle);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hIceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBounceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hJellyfishEffect);
