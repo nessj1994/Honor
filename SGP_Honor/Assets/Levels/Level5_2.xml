@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level name="NewLevel" width="120" height="200" fixed="0" playerX="184" playerY="6156">
+<Level name="NewLevel" width="120" height="200" fixed="0" playerX="212" playerY="6200">
 	<ImageLayers numLayers="0" />
 	<CollisionLayer>
 		<CollisionTile type="-1" />
@@ -5474,7 +5474,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -48005,7 +48005,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="29">
+	<Entities numEntities="22">
 		<Entity type="3" x="318" y="5756" numArgs="2" name="Turret_1">
 			<Argument type="1" name="Direction" value="2" />
 			<Argument type="2" name="Timer" value="1" />
@@ -48087,27 +48087,6 @@
 			<Argument type="0" name="IsVertical" value="0" />
 			<Argument type="2" name="TurnDistance" value="1.0" />
 			<Argument type="2" name="Speed" value="20.0" />
-		</Entity>
-		<Entity type="0" x="369" y="5876" numArgs="1" name="Honor_1">
-			<Argument type="1" name="Amount" value="1" />
-		</Entity>
-		<Entity type="0" x="187" y="5891" numArgs="1" name="Honor_2">
-			<Argument type="1" name="Amount" value="1" />
-		</Entity>
-		<Entity type="0" x="165" y="5746" numArgs="1" name="Honor_3">
-			<Argument type="1" name="Amount" value="1" />
-		</Entity>
-		<Entity type="0" x="462" y="5579" numArgs="1" name="Honor_4">
-			<Argument type="1" name="Amount" value="1" />
-		</Entity>
-		<Entity type="0" x="590" y="5576" numArgs="1" name="Honor_5">
-			<Argument type="1" name="Amount" value="1" />
-		</Entity>
-		<Entity type="0" x="715" y="5574" numArgs="1" name="Honor_6">
-			<Argument type="1" name="Amount" value="1" />
-		</Entity>
-		<Entity type="0" x="3185" y="4640" numArgs="1" name="Honor_7">
-			<Argument type="1" name="Amount" value="1" />
 		</Entity>
 	</Entities>
 </Level>
