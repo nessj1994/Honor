@@ -145,7 +145,7 @@ void Camera::Update(float _elapsedTime)
 			m_ptCameraPosition.x = (m_pPlayer->GetPosition().x - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
 		}
 
-		// Y position
+		 //Y position
 		if (m_pPlayer->GetPosition().y < 520)
 		{
 			m_ptCameraPosition.y = (520 - Game::GetInstance()->GetScreenHeight() / m_fCurrentPanY);// Divide by Scale

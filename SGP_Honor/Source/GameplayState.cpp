@@ -213,6 +213,9 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevel("Level1_1");
 
 	
+
+	//LoadLevel("Level3_1");
+
 	//LoadLevel("HubLevel");
 
 	//("HubLevel");
@@ -903,7 +906,7 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 
 			// Reference to the teleporter entity
 			Teleporter * teleporter = dynamic_cast<Teleporter*>(pCreateMsg->GetOwner());
-
+			GameplayState::GetInstance()->SaveGame();
 			pSelf->LoadLevel(teleporter->GetLevel());
 
 		}
@@ -1053,9 +1056,9 @@ Entity* GameplayState::CreateSpray(Entity* pOwner) const
 {
 	Ice* proj = new Ice;
 	if (pOwner->GetDirection().x == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + 30, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + 40, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	else
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width - 30, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width - 40, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
 	proj->SetSize({ 4, 4 });
 	proj->SetDirection({ pOwner->GetDirection().x, -1 });

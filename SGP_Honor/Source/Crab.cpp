@@ -36,9 +36,7 @@ Crab::Crab() : Listener(this)
 	// Sound
 	m_hRoar = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/CrabRoar.wav");
 	m_hBubble = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bubble.wav");
-	m_hSlam1 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam1.wav");
 	m_hSlam2 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam2.wav");
-	m_hSlam3 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam3.wav");
 	m_hHurt = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/ClangHurt.wav");
 }
 
@@ -47,9 +45,7 @@ Crab::~Crab()
 {
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hRoar);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBubble);
-	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam1);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam2);
-	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam3);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hHurt);
 }
 

@@ -80,6 +80,23 @@ bool ProfileState::Input(void) //Hanlde user Input
 
 	SGD::Rectangle rMouse = SGD::Rectangle({ pInput->GetMousePosition().x, pInput->GetMousePosition().y, pInput->GetMousePosition().x + 1, pInput->GetMousePosition().y + 1 });
 
+	//move option selection cursor right
+	if(pInput->IsKeyPressed(SGD::Key::Right))
+	{
+		m_nOptionCursor += 1;
+		if(m_nOptionCursor > 1)
+		{
+			m_nOptionCursor = 1;
+		}
+	}
+	if(pInput->IsKeyPressed(SGD::Key::Left))
+	{
+		m_nOptionCursor -= 1;
+		if(m_nOptionCursor < 0)
+		{
+			m_nOptionCursor = 0;
+		}
+	}
 
 	//Move the cursor down
 	if(pInput->IsKeyPressed(SGD::Key::Down)
@@ -87,14 +104,14 @@ bool ProfileState::Input(void) //Hanlde user Input
 	{
 		m_nCursor += 1;
 		m_rSword.top += 70;
-		if(m_rSword.top > 530.0f)
+		if(m_rSword.top > 280.0f)
 		{
-			m_rSword.top = 530.0f;
+			m_rSword.top = 280.0f;
 		}
 
-		if(m_nCursor > 4)
+		if(m_nCursor > 2)
 		{
-			m_nCursor = 4;
+			m_nCursor = 2;
 		}
 	}
 	//Move the cursor up
@@ -104,15 +121,17 @@ bool ProfileState::Input(void) //Hanlde user Input
 		m_nCursor -= 1;
 		m_rSword.top -= 70;
 
-		if(m_rSword.top < 250.0f)
-		{
-			m_rSword.top = 250.0f;
-		}
-
 		if(m_nCursor < 0)
 		{
 			m_nCursor = 0;
 		}
+
+		if(m_rSword.top < 140.0f)
+		{
+			m_rSword.top = 140.0f;
+		}
+
+	
 
 
 	}
@@ -178,17 +197,16 @@ bool ProfileState::Input(void) //Hanlde user Input
 		{
 			//Changestate to gameplay state
 			Game::GetInstance()->SetSelectedProfile(1);
-			Game::GetInstance()->AddState(GameplayState::GetInstance());
+			//Game::GetInstance()->AddState(GameplayState::GetInstance());
 
 			// Go into the opening cutscene if it is a new profile
-			CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
-			Game::GetInstance()->AddState(CutSceneState::GetInstance());
+	
 		}
 		else if(m_nCursor == 1)
 		{
 			Game::GetInstance()->SetSelectedProfile(2);
 
-			Game::GetInstance()->AddState(GameplayState::GetInstance());
+			//Game::GetInstance()->AddState(GameplayState::GetInstance());
 
 			//Change State to options state
 			//Game::GetInstance()->AddState(OptionsState::GetInstance());
@@ -197,10 +215,32 @@ bool ProfileState::Input(void) //Hanlde user Input
 		{
 			Game::GetInstance()->SetSelectedProfile(3);
 
-			Game::GetInstance()->AddState(GameplayState::GetInstance());
+			//Game::GetInstance()->AddState(GameplayState::GetInstance());
 
 			//change state to instructions state
 			//Game::GetInstance()->AddState(InstructionsState::GetInstance());
+		}
+		else if(m_nCursor == 3)
+		{
+			Game::GetInstance()->RemoveState();
+		}
+
+		if(m_nOptionCursor == 0)
+		{
+			Game::GetInstance()->SetSelectedProfile(m_nCursor + 1);
+			Game::GetInstance()->AddState(GameplayState::GetInstance());
+			CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
+			Game::GetInstance()->AddState(CutSceneState::GetInstance());
+
+		}
+		else if(m_nOptionCursor == 1)
+		{
+		
+			DeleteProfile(Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber()));
+		
+			LoadProfile(Game::GetInstance()->GetProfile(1));
+			LoadProfile(Game::GetInstance()->GetProfile(2));
+			LoadProfile(Game::GetInstance()->GetProfile(3));
 		}
 
 	}
@@ -237,10 +277,10 @@ void ProfileState::Render(void)
 	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
 
 	//Draw the background
-	pGraphics->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 2.0f, 1.5f });
+	pGraphics->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 1.6f, 1.2f });
 
 	//Draw the title
-	font.DrawString("HONOR", 220, 100, 3, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("HONOR", 220, 10, 3, SGD::Color{ 255, 255, 0, 0 });
 
 
 	pGraphics->DrawTexture(m_hSword, { m_rSword.left, m_rSword.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
@@ -253,11 +293,11 @@ void ProfileState::Render(void)
 		pGraphics->DrawRectangle(m_rProfile1, { 255, 255, 255, 255 }, {}, {});
 		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rPlay.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 
-		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, 240 }, 0.0f, {}, { 255, 255, 255, 255 });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, Game::GetInstance()->GetScreenHeight() / 2 - 170 }, 0.0f, {}, { 255, 255, 255, 255 });
 
 
 
-		font.DrawString("Profile 1", (int)((fWidth - (4 * 19)) / 3.65f), 250, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Profile 1", (int)((fWidth - (4 * 19)) / 3.65f), (int)Game::GetInstance()->GetScreenHeight() / 2 - 160, 1, SGD::Color{ 255, 255, 165, 0 });
 
 		std::ostringstream stringstream;
 		stringstream << Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCollectedHonor();
@@ -272,12 +312,12 @@ void ProfileState::Render(void)
 	else
 	{
 		pGraphics->DrawRectangle(m_rProfile1, { 255, 255, 255, 30 }, {}, {});
-		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, 240 }, 0.0f, {}, { 255, 255, 255, 255 });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, Game::GetInstance()->GetScreenHeight() / 2 - 170 }, 0.0f, {}, { 255, 255, 255, 255 });
 
 
 		//pGraphics->DrawTexture(m_hSword, { m_rPlay.left - 50, m_rPlay.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
 
-		font.DrawString("Profile 1", (int)((fWidth - (4 * 19)) / 3.65f), 250, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Profile 1", (int)((fWidth - (4 * 19)) / 3.65f), (int)Game::GetInstance()->GetScreenHeight() / 2 - 160, 1, SGD::Color{ 255, 255, 165, 0 });
 	}
 
 
@@ -285,9 +325,9 @@ void ProfileState::Render(void)
 	{
 		pGraphics->DrawRectangle(m_rProfile2, { 255, 255, 255, 255 }, {}, {});
 		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rOptions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
-		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, 310 }, 0.0f, {}, { 255, 255, 255, 255 });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, Game::GetInstance()->GetScreenHeight() / 2 - 100 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Profile 2", (int)((fWidth - (4 * 19)) / 3.65f), 320, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Profile 2", (int)((fWidth - (4 * 19)) / 3.65f), (int)Game::GetInstance()->GetScreenHeight() / 2 - 90, 1, SGD::Color{ 255, 255, 165, 0 });
 
 
 		std::ostringstream stringstream;
@@ -298,9 +338,9 @@ void ProfileState::Render(void)
 	else
 	{
 		pGraphics->DrawRectangle(m_rProfile2, { 255, 255, 255, 30 }, {}, {});
-		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, 310 }, 0.0f, {}, { 255, 255, 255, 255 });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, Game::GetInstance()->GetScreenHeight() / 2 - 100 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Profile 2", (int)((fWidth - (4 * 19)) / 3.65f), 320, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Profile 2", (int)((fWidth - (4 * 19)) / 3.65f), (int)Game::GetInstance()->GetScreenHeight() / 2 - 90, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
 
@@ -309,9 +349,9 @@ void ProfileState::Render(void)
 	{
 		pGraphics->DrawRectangle(m_rProfile3, { 255, 255, 255, 255 }, {}, {});
 		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
-		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, Game::GetInstance()->GetScreenHeight() / 2 - 30 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Profile 3", (int)((fWidth - (4 * 19)) / 3.65f), 390, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Profile 3", (int)((fWidth - (4 * 19)) / 3.65f), (int)Game::GetInstance()->GetScreenHeight() / 2 - 20, 1, SGD::Color{ 255, 255, 165, 0 });
 
 		std::ostringstream stringstream;
 		stringstream << Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCollectedHonor();
@@ -321,9 +361,38 @@ void ProfileState::Render(void)
 	else
 	{
 		pGraphics->DrawRectangle(m_rProfile3, { 255, 255, 255, 30 }, {}, {});
-		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, Game::GetInstance()->GetScreenHeight() / 2 - 30 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Profile 3", (int)((fWidth - (4 * 19)) / 3.65f), 390, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Profile 3", (int)((fWidth - (4 * 19)) / 3.65f), (int)Game::GetInstance()->GetScreenHeight() / 2 - 20, 1, SGD::Color{ 255, 255, 165, 0 });
+
+	}
+
+	if(m_nOptionCursor == 0)
+	{
+		pGraphics->DrawRectangle(m_rSelect, { 255, 255, 255, 255 }, {}, {});
+		pGraphics->DrawTexture(m_hButton, { Game::GetInstance()->GetScreenWidth() / 2 - 290, Game::GetInstance()->GetScreenHeight() / 2 + 160 }, 0.0f, {}, { 255, 255, 255, 255 });
+		font.DrawString("Continue", (int)((fWidth - (4 * 19)) / 4.25f), (int)Game::GetInstance()->GetScreenHeight() / 2 + 170, 1, SGD::Color{ 255, 255, 165, 0 });
+
+	}
+	else
+	{
+		pGraphics->DrawRectangle(m_rSelect, { 255, 255, 255, 30 }, {}, {});
+		pGraphics->DrawTexture(m_hButton, { Game::GetInstance()->GetScreenWidth() / 2 - 290, Game::GetInstance()->GetScreenHeight() / 2 + 160 }, 0.0f, {}, { 255, 255, 255, 255 });
+		font.DrawString("Continue", (int)((fWidth - (4 * 19)) / 4.25f), (int)Game::GetInstance()->GetScreenHeight() / 2 + 170, 1, SGD::Color{ 255, 255, 165, 0 });
+
+	}
+	if(m_nOptionCursor == 1)
+	{
+		pGraphics->DrawRectangle(m_rDelete, { 255, 255, 255, 255 }, {}, {});
+		pGraphics->DrawTexture(m_hButton, { Game::GetInstance()->GetScreenWidth() / 2 + 50, Game::GetInstance()->GetScreenHeight() / 2 + 160 }, 0.0f, {}, { 255, 255, 255, 255 });
+		font.DrawString("Delete", (int)(Game::GetInstance()->GetScreenWidth() / 2 + 135), (int)Game::GetInstance()->GetScreenHeight() / 2 + 170, 1, SGD::Color{ 255, 255, 165, 0 });
+
+	}
+	else
+	{
+		pGraphics->DrawRectangle(m_rDelete, { 255, 255, 255, 30 }, {}, {});
+		pGraphics->DrawTexture(m_hButton, { Game::GetInstance()->GetScreenWidth() / 2 + 50, Game::GetInstance()->GetScreenHeight() / 2 + 160 }, 0.0f, {}, { 255, 255, 255, 255 });
+		font.DrawString("Delete", (int)(Game::GetInstance()->GetScreenWidth() / 2 + 135), (int)Game::GetInstance()->GetScreenHeight() / 2 + 170, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
 }
@@ -355,6 +424,7 @@ void ProfileState::LoadProfile(Profile* profile)
 
 	// Create our directory
 	SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
+
 
 	// Create our save file
 	pathtowrite += "\\savefile";
@@ -415,4 +485,51 @@ void ProfileState::LoadProfile(Profile* profile)
 		// Go to the next element
 		pLevel = pLevel->NextSiblingElement();
 	}
+}
+
+void ProfileState::DeleteProfile(Profile* profile)
+{
+
+	HRESULT hr;
+	std::ostringstream stringstream;
+	char path[MAX_PATH];
+	LPWSTR wszPath = NULL;
+	size_t   size;
+
+	// Get the path to the app data folder
+	hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, 0, &wszPath);
+
+	// Convert from LPWSTR to char[]
+	wcstombs_s(&size, path, MAX_PATH, wszPath, MAX_PATH);
+
+	// Convert char types
+	if(hr == S_OK)
+		stringstream << path;
+	std::string pathtowrite = stringstream.str();
+
+	// Add the company and game information
+	pathtowrite += "\\honor\\";
+
+	// Create our directory
+	SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
+
+
+	// Create our save file
+	pathtowrite += "\\savefile";
+
+	if(profile == Game::GetInstance()->GetProfile(1))
+	{
+		pathtowrite += "1.xml";
+	}
+	else if(profile == Game::GetInstance()->GetProfile(2))
+	{
+		pathtowrite += "2.xml";
+	}
+	else if(profile == Game::GetInstance()->GetProfile(3))
+	{
+		pathtowrite += "3.xml";
+	}
+
+	remove(pathtowrite.c_str());
+
 }
