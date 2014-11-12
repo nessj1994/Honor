@@ -19,6 +19,9 @@ Jellyfish::Jellyfish() : Listener(this)
 	m_ts.SetCurrAnimation("Jellyfish Moving");
 	m_ts.SetPlaying(true);
 	m_bFacingRight = false;
+	m_szSize.width = 80;
+	m_szSize.height = 64;
+
 	//m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage) * Camera::GetInstance()->GetZoomScale();
 	m_vtVelocity = SGD::Vector(20, 0);
 }
@@ -69,23 +72,32 @@ void Jellyfish::Render(void)
 	//rMyRect.Offset({ -camPos.x, -camPos.y });
 
 	////Render us with the camera
-	//Camera::GetInstance()->Draw(rMyRect,
-	//	SGD::Color::Color(255, 255, 0, 0));
 	//Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1, SGD::Color(255, 255, 255, 255), {});
+
+
+
+	Camera::GetInstance()->Draw(SGD::Rectangle(
+		(GetRect().left - Camera::GetInstance()->GetCameraPos().x),
+		(GetRect().top  - Camera::GetInstance()->GetCameraPos().y),
+		(GetRect().left - Camera::GetInstance()->GetCameraPos().x + GetSize().width),
+		(GetRect().top - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
+		SGD::Color::Color(255, 255, 0, 0));
+
 	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, m_bFacingRight, 1);
+
 }
 
 SGD::Rectangle Jellyfish::GetRect(void) const
 {
-	//return SGD::Rectangle{ m_ptPosition, m_szSize };
-	return AnimationEngine::GetInstance()->GetRect(m_ts, m_bFacingRight, 1, m_ptPosition);
+	return SGD::Rectangle{ { m_ptPosition.x - 40, m_ptPosition.y - 32 }, m_szSize };
+	//return AnimationEngine::GetInstance()->GetRect(m_ts, m_bFacingRight, 1, m_ptPosition);
 }
 
 void Jellyfish::HandleCollision(const IEntity* pOther)
 {
 	if (pOther->GetType() == Entity::ENT_PLAYER && bouncecounting == false)
 	{
-		if (numOfBounces < 5)
+		if (numOfBounces < 3)
 			numOfBounces++;
 		bouncecounting = true;
 		SGD::Event Event = { "RESET_JELLYFISH_BOUNCE", nullptr, this };
@@ -119,7 +131,7 @@ void Jellyfish::HandleCollision(const IEntity* pOther)
 		{
 			if (rjFish.right == rIntersection.right)
 			{
-				SetPosition({ (float)rObject.left - nIntersectWidth - 26, GetPosition().y });
+				SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
 				patrolDistance = -patrolDistance;
 				m_vtVelocity = -m_vtVelocity;
 				m_bFacingRight = !m_bFacingRight;
@@ -127,7 +139,7 @@ void Jellyfish::HandleCollision(const IEntity* pOther)
 			}
 			if (rjFish.left == rIntersection.left)
 			{
-				SetPosition({ (float)rObject.right + nIntersectWidth + 26, GetPosition().y });
+				SetPosition({ (float)rObject.right + GetSize().width, GetPosition().y });
 				patrolDistance = -patrolDistance;
 				m_vtVelocity = -m_vtVelocity;
 				m_bFacingRight = !m_bFacingRight;
@@ -141,6 +153,6 @@ void Jellyfish::HandleEvent(const SGD::Event* pEvent)
 {
 	if (pEvent->GetEventID() == "RESET_JELLYFISH_BOUNCE" && pEvent->GetSender() != this)
 	{
-		numOfBounces = 0;
+		numOfBounces = 1;
 	}
 }

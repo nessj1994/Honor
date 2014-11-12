@@ -8,7 +8,7 @@ WizardHawk::WizardHawk()
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/Bull_Animation.xml");
 	m_ts.SetCurrAnimation("Bull_Running");
 	m_ts.SetPlaying(true);
-	m_szSize = { 70, 70 };
+	m_szSize = { 32, 32 };
 
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/WizardHawk.png");
 }

@@ -473,10 +473,10 @@ void Wizard::CastHawks()
 		hawkPtr4->SetDestPos({ 700, 600 });
 
 
-		hawkPtr1->SetDestSize({ 70, 70 });
-		hawkPtr2->SetDestSize({ 70, 70 });
-		hawkPtr3->SetDestSize({ 70, 70 });
-		hawkPtr4->SetDestSize({ 70, 70 });
+		hawkPtr1->SetDestSize({ 32, 32 });
+		hawkPtr2->SetDestSize({ 32, 32 });
+		hawkPtr3->SetDestSize({ 32, 32 });
+		hawkPtr4->SetDestSize({ 32, 32 });
 
 	}
 
