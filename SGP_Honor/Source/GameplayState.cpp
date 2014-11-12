@@ -210,7 +210,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-	LoadLevel("Level1_1");
+	LoadLevel("Level3_1");
 
 	
 
@@ -382,11 +382,11 @@ bool GameplayState::Input(void) //Hanlde user Input
 		pAudio->StopAudio(m_hBGM);
 	}
 
-	if (pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyPressed(SGD::Key::Tab))
+	/*if (pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyPressed(SGD::Key::Tab))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
 		pAudio->StopAudio(m_hBGM);
-	}
+	}*/
 
 	return true;
 
