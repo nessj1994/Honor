@@ -48,9 +48,13 @@ void Ice::Update(float elapsedTime)
 	//	}
 	//}
 
-	SetVelocity({ GetVelocity().x, (GetVelocity().y - (-4000) * elapsedTime) });
+	
+	
+		SetVelocity({ GetVelocity().x + (30.0f * m_pOwner->GetDirection().x), (GetVelocity().y - (-4000) * elapsedTime) });
 
-	if (m_fTimer >= .4f)
+
+
+	if (m_fTimer >= 0.4f)
 	{
 		m_pEmitter->Finish();
 		if (m_pEmitter->Done())
@@ -81,6 +85,9 @@ void Ice::Update(float elapsedTime)
 
 	if (rSelf.IsIntersecting(rScreen) == false)
 	{
+
+		
+
 		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
 		pMsg->QueueMessage();
 		pMsg = nullptr;
@@ -131,13 +138,21 @@ void Ice::HandleCollision(const IEntity* pOther)
 	{
 		if (rMutant.bottom == rIntersection.bottom)
 		{
-			SetVelocity({ GetVelocity().x, 0 });
+
+			if (pOther->GetType() == ENT_SOLID_WALL)
+				SetVelocity({ 0, 0 });
+			else
+				SetVelocity({ GetVelocity().x, 0 });
+
+
+
 			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 /*- nIntersectHeight*/ });
 		}
 		if (rMutant.top == rIntersection.top)
 		{
-			SetPosition({ GetPosition().x, (float)rObject.bottom });
 			SetVelocity({ GetVelocity().x, 0 });
+
+			SetPosition({ GetPosition().x, (float)rObject.bottom });
 		}
 	}
 }
