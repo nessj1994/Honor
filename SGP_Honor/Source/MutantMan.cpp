@@ -16,7 +16,7 @@
 
 MutantMan::MutantMan() : Listener(this)
 {
-	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
+	Listener::RegisterForEvent("ResetRoom");
 	m_ptPosition = { 96, 672 };
 	m_pPatrolPoint = m_ptPosition;
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/MutantManAnim.xml");
@@ -253,7 +253,7 @@ void MutantMan::HandleCollision(const IEntity* pOther)
 
 void MutantMan::HandleEvent(const SGD::Event* pEvent)
 {
-	if (pEvent->GetEventID() == "ASSESS_PLAYER_RANGE" && GetPlayer() == nullptr)
+	if (pEvent->GetEventID() == "ResetRoom")
 	{
 		
 	}

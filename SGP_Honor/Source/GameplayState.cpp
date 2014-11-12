@@ -1498,6 +1498,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			BullEnemy * pBull = new BullEnemy();
 			pBull->SetPosition({ (float)_x, (float)_y });
+			pBull->SetOriginalPosition({ (float)_x, (float)_y });
 			pBull->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pBull, Entity::ENT_BULL_ENEMY);
 			pBull->Release();
@@ -1507,6 +1508,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Skeleton * pSkeleton = new Skeleton();
 			pSkeleton->SetPosition({ (float)_x, (float)_y });
+			pSkeleton->SetOriginalPosition({ (float)_x, (float)_y });
 			pSkeleton->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pSkeleton, Entity::ENT_SKELETON);
 			pSkeleton->Release();
@@ -1516,6 +1518,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			MutantMan * pMutant = new MutantMan();
 			pMutant->SetPosition({ (float)_x, (float)_y });
+			pMutant->SetOriginalPosition({ (float)_x, (float)_y });
 			pMutant->Begin({ (float)_x, (float)_y });
 			pMutant->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_MAN);
@@ -1526,6 +1529,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			MutantBat * pMutant = new MutantBat();
 			pMutant->SetPosition({ (float)_x, (float)_y });
+			pMutant->SetOriginalPosition({ (float)_x, (float)_y });
 			pMutant->Begin({ (float)_x, (float)_y });
 			pMutant->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_BIRD);
@@ -1537,6 +1541,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 
 			IceGolem * pIceGolem = new IceGolem();
 			pIceGolem->SetPosition({ (float)_x, (float)_y });
+			pIceGolem->SetOriginalPosition({ (float)_x, (float)_y });
 			pIceGolem->SetPlayer(m_pPlayer);
 			pIceGolem->SetDirection(2);
 			m_pEntities->AddEntity(pIceGolem, Entity::ENT_ICE_GOLEM);
@@ -1547,6 +1552,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			IceBat * pIceBat = new IceBat();
 			pIceBat->SetPosition({ (float)_x, (float)_y });
+			pIceBat->SetOriginalPosition({ (float)_x, (float)_y });
 			pIceBat->SetPlayer(m_pPlayer);
 			pIceBat->SetDirection(2);
 			m_pEntities->AddEntity(pIceBat, Entity::ENT_ICE_BAT);
@@ -1557,6 +1563,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			IceTurtle * pIceTurtle = new IceTurtle();
 			pIceTurtle->SetPosition({ (float)_x, (float)_y });
+			pIceTurtle->SetOriginalPosition({ (float)_x, (float)_y });
 			pIceTurtle->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pIceTurtle, Entity::ENT_ICE_TURTLE);
 			pIceTurtle->Release();
@@ -1567,6 +1574,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Pouncer * pPouncer = new Pouncer();
 			pPouncer->SetPosition({ (float)_x, (float)_y });
+			pPouncer->SetOriginalPosition({ (float)_x, (float)_y });
 			pPouncer->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pPouncer, Entity::ENT_POUNCER);
 			pPouncer->Release();
@@ -1576,6 +1584,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Squid * pSquid = new Squid();
 			pSquid->SetPosition({ (float)_x, (float)_y });
+			pSquid->SetOriginalPosition({ (float)_x, (float)_y });
 			pSquid->SetPlayer(m_pPlayer);
 			m_pEntities->AddEntity(pSquid, Entity::ENT_ENEMY);
 			pSquid->Release();
@@ -1585,6 +1594,7 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 		{
 			Jellyfish * pJelly = new Jellyfish();
 			pJelly->SetPosition({ (float)_x, (float)_y });
+			pJelly->SetOriginalPosition({ (float)_x, (float)_y });
 			pJelly->SetPlayer(m_pPlayer);
 			pJelly->SetPatrol();
 			m_pEntities->AddEntity(pJelly, Entity::ENT_ENEMY);
