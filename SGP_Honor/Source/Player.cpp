@@ -53,6 +53,7 @@ Player::Player() : Listener(this)
 	Listener::RegisterForEvent("Screen1.5x3");
 	Listener::RegisterForEvent("Screen3x1");
 	Listener::RegisterForEvent("Screen3x1.5");
+	Listener::RegisterForEvent("Screen3x2");
 
 
 
@@ -99,6 +100,7 @@ Player::~Player()
 	delete m_emHawkReturn;
 	delete m_pSword;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHonorParticleHUD);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBubbleCircle);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hIceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBounceEffect);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hJellyfishEffect);
@@ -1322,6 +1324,7 @@ void Player::CastDash()
 {
 	m_pDash->CastDash(this);
 
+	m_unCurrentState = FALLING_STATE;
 }
 
 void Player::CastHawk()
@@ -1447,6 +1450,14 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 		Camera::GetInstance()->SetCameraCap(0);
 
 	}
+
+	if (pEvent->GetEventID() == "Screen3x2")
+	{
+		m_fPanX = 3;
+		m_fPanY = 2;
+		Camera::GetInstance()->SetCameraCap(0);
+
+	}
 	if (pEvent->GetEventID() == "Screen1.5x2")
 	{
 		m_fPanX = 1.5;
@@ -1546,6 +1557,9 @@ void Player::UpdateDeath(float elapsedTime)
 		SGD::Event* pATEvent = new SGD::Event("ResetRoom", nullptr, this);
 		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 		pATEvent = nullptr;
+
+		// Reset honor
+		GameplayState::GetInstance()->ResetHonorInRoom();
 	}
 }
 
