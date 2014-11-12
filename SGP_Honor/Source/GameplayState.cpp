@@ -189,6 +189,11 @@ void GameplayState::Enter(void) //Load Resources
 void GameplayState::Exit(void)
 {
 
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hOAttack);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hXJUMP);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hXWallJump);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hTriOpenDoor);
+
 	// Save collected honor
 	m_pLevel->Exit();
 	//SaveHonorVector();
