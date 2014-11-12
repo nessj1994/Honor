@@ -1,5 +1,7 @@
 #include "Honor.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
+#include "../SGD Wrappers/SGD_Event.h"
+#include "../SGD Wrappers/SGD_EventManager.h"
 #include "Camera.h"
 #include "ParticleEngine.h"
 #include "Player.h"
@@ -79,6 +81,7 @@ void Honor::HandleCollision(const IEntity* pOther)
 	{
 		if (GetRect().IsIntersecting(pOther->GetRect()) == true)
 		{
+			GameplayState::GetInstance()->IncreaseHonorBeforeDeath(m_HonorAmount);
 			m_bIsCollected = true;
 			GameplayState::GetInstance()->GetCurrentLevel()->UpdateHonorVector(m_unVectorID, m_bIsCollected);
 		}
@@ -91,9 +94,10 @@ void Honor::HandleEvent(const SGD::Event* pEvent)
 {
 	//which event
 
-	//Turn around
-	//if (pEvent->GetEventID() == "ResetRoom")
-	//{
-	//	SetIsCollected(false);
-	//}
+	// Reset honor
+	if (pEvent->GetEventID() == "ResetRoom" && !m_bStartedCollected)
+	{
+		SetIsCollected(false);
+		GameplayState::GetInstance()->GetCurrentLevel()->UpdateHonorVector(m_unVectorID, m_bIsCollected);
+	}
 }

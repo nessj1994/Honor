@@ -120,6 +120,8 @@ public:
 	unsigned int GetHonorVectorSize();
 	bool GetLevelUnlocked(std::string _level);
 	void UnlockLevel(std::string _level);
+	void ResetHonorInRoom();
+	void IncreaseHonorBeforeDeath(unsigned int _value);
 
 private:
 
@@ -211,5 +213,13 @@ private:
 
 	//Hub World Orb
 	HubWorldOrb* m_pHubOrb;
+
+	//Texture
+	SGD::HTexture m_hXJUMP = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hOAttack = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hXWallJump = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hTriOpenDoor = SGD::INVALID_HANDLE;
+
+
 };
 
