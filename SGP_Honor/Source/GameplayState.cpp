@@ -833,6 +833,20 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
 			}
 
+
+			pProj->Release();
+			pProj = nullptr;
+
+			pProj = pSelf->CreateSpray(pCreateMsg->GetOwner());
+
+			if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+			{
+				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+			}
+			else if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_YETI)
+			{
+				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+			}
 			// if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
 			// {
 			//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_PLAYER_PROJ);
@@ -1053,10 +1067,12 @@ Entity* GameplayState::CreateVertBubble(Entity* pOwner) const
 Entity* GameplayState::CreateSpray(Entity* pOwner) const
 {
 	Ice* proj = new Ice;
+
+	int range = rand() % 96 + 5;
 	if (pOwner->GetDirection().x == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + 40, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + range, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	else
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width - 40, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width - range, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
 	proj->SetSize({ 4, 4 });
 	proj->SetDirection({ pOwner->GetDirection().x, -1 });
