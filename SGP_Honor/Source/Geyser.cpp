@@ -2,7 +2,8 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "Camera.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
-
+#include "ParticleEngine.h"
+#include "Emitter.h"
 
 Geyser::Geyser()
 {
@@ -13,11 +14,13 @@ Geyser::Geyser()
 	m_szOrigSize = m_szSize;
 	
 	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/Geyser.wav");
+	m_EmWaterEffect = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/WaterEffect.xml", "Water", m_ptPosition);
 }
 
 
 Geyser::~Geyser()
 {
+	delete m_EmWaterEffect;
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
 }
 
@@ -25,6 +28,10 @@ Geyser::~Geyser()
 /////////////////Interface//////////////////////
 void Geyser::Update(float elapsedTime)
 {
+	m_EmWaterEffect->SetSize(m_szSize);
+	m_EmWaterEffect->SetPosition(m_ptPosition);
+	m_EmWaterEffect->Update(elapsedTime);
+
 	ChangePillar(m_fMaxHeight, elapsedTime);
 }
 void Geyser::Render(void)
@@ -37,7 +44,9 @@ void Geyser::Render(void)
 	Camera::GetInstance()->Draw(SGD::Rectangle(
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
-		SGD::Color::Color(255, 0, 255, 0));
+		SGD::Color::Color(100, 0, 0, 155));
+
+	m_EmWaterEffect->Render();
 
 }
 
