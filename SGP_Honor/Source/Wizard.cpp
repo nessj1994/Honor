@@ -293,7 +293,7 @@ void Wizard::Update(float elapsedTime)
 
 void Wizard::Render(void)
 {
-	Boss::Render();
+	//Boss::Render();
 
 	SGD::Point newPosition = m_ptPosition;
 	newPosition.y += 38;

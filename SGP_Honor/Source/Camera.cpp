@@ -53,7 +53,7 @@ void Camera::DrawTexture(SGD::Point position, float rotation, SGD::HTexture m_hI
 		scaleX = -scale;
 
 	SGD::GraphicsManager::GetInstance()->DrawTexture(m_hImage,
-	{ position.x - m_ptCameraPosition.x, position.y - m_ptCameraPosition.y }, rotation, rotationOffset, {}, { scaleX, scale });
+	{ position.x - m_ptCameraPosition.x, position.y - m_ptCameraPosition.y }, rotation, rotationOffset, color, { scaleX, scale });
 }
 
 void Camera::DrawTextureSection(SGD::HTexture handle, SGD::Point position, SGD::Rectangle section, float rotation, SGD::Vector rotationOffset, SGD::Color color, SGD::Size scale)
@@ -213,6 +213,13 @@ void Camera::Update(float _elapsedTime)
 		//FINAL BOSS CAMERA
 		m_ptCameraPosition.x = ((GameplayState::GetInstance()->GetCurrentLevel()->GetLevelWidth() / 2) - 175 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
 		m_ptCameraPosition.y = ((GameplayState::GetInstance()->GetCurrentLevel()->GetLevelHeight() / m_fCurrentPanY) - 90);// Divide by Scale
+
+		break;
+
+	case 6:
+		//End CAMERA
+		m_ptCameraPosition.x = ((GameplayState::GetInstance()->GetCurrentLevel()->GetLevelWidth() / 2) - 125 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX); // Divide by Scale
+		m_ptCameraPosition.y = ((GameplayState::GetInstance()->GetCurrentLevel()->GetLevelHeight() / m_fCurrentPanY)) - 300;// Divide by Scale
 
 		break;
 	}

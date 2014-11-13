@@ -200,16 +200,16 @@ void Yeti::Update(float elapsedTime)
 }
 void Yeti::Render(void)
 {
-	//Get the camera position for our offset
-	SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
+	////Get the camera position for our offset
+	//SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
 
-	//create a reference to our rectangle
-	SGD::Rectangle rMyRect = GetRect();
+	////create a reference to our rectangle
+	//SGD::Rectangle rMyRect = GetRect();
 
-	//Offset our rectangle by the camera position for rendering
-	rMyRect.Offset({ -camPos.x, -camPos.y });
+	////Offset our rectangle by the camera position for rendering
+	//rMyRect.Offset({ -camPos.x, -camPos.y });
 
-	Camera::GetInstance()->Draw(rMyRect, SGD::Color(255, 255, 0, 0));
+	//Camera::GetInstance()->Draw(rMyRect, SGD::Color(255, 255, 0, 0));
 
 	//Render us with the camera
 	if(m_bFacingRight == true)

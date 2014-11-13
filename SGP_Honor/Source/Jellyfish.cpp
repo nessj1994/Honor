@@ -76,12 +76,12 @@ void Jellyfish::Render(void)
 
 
 
-	Camera::GetInstance()->Draw(SGD::Rectangle(
+	/*Camera::GetInstance()->Draw(SGD::Rectangle(
 		(GetRect().left - Camera::GetInstance()->GetCameraPos().x),
 		(GetRect().top  - Camera::GetInstance()->GetCameraPos().y),
 		(GetRect().left - Camera::GetInstance()->GetCameraPos().x + GetSize().width),
 		(GetRect().top - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
-		SGD::Color::Color(255, 255, 0, 0));
+		SGD::Color::Color(255, 255, 0, 0));*/
 
 	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, m_bFacingRight, 1);
 

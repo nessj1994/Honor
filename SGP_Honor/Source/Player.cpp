@@ -255,86 +255,89 @@ void Player::Update(float elapsedTime)
 
 void Player::Render(void)
 {
-	//Emitter Renders
-	if ((IsBouncing() || !GetBounce()->GetEMBubbles()->Done()) && HasBounce())
+	if (GameplayState::GetInstance()->GetIsEnding() == false)
 	{
-		GetBounce()->GetEMBubbles()->SetPosition(m_ptPosition);
-		GetBounce()->GetEMBubbles()->Render();
-	}
-	if ((IsDashing() || !GetDash()->GetEMDash()->Done()) && HasDash())
-	{
-		GetDash()->GetEMDash()->SetPosition(m_ptPosition);
-		GetDash()->GetEMDash()->Render();
-	}
-	if ((m_bHawkExplode || !m_emFeatherExplosion->Done()) && HasHawk())
-	{
-		m_emFeatherExplosion->Render();
-	}
-	if (m_bReturningHawk || !m_emHawkReturn->Done())
-	{
-		m_emHawkReturn->Render();
-	}
-
-	//SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
-
-	////Camera::GetInstance()->Draw(SGD::Rectangle(10, 300, 20, 320), SGD::Color::Color(255, 0, 0, 255));
-
-
-	// * Camera::GetInstance()->GetZoomScale().width
-	// * Camera::GetInstance()->GetZoomScale().height
-
-	Camera::GetInstance()->Draw(SGD::Rectangle(
-		(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
-		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y),
-		(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width),
-		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
-		SGD::Color::Color(255, 255, 0, 0));
-
-
-	Camera::GetInstance()->Draw(SGD::Rectangle(m_pSword->GetRect().left, m_pSword->GetRect().top, m_pSword->GetRect().right, m_pSword->GetRect().bottom),
-		SGD::Color::Color(255, 255, 255, 0));
-
-	Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + 16, m_ptPosition.y + 60 }, 0, m_ts, !IsFacingRight(), 1.0f);
-	//Camera::GetInstance()->Draw(SGD::Rectangle(swingRect.left, swingRect.top, swingRect.right, swingRect.bottom),
-	//	SGD::Color::Color(255, 255, 255, 0));
-
-	//Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight(), 1.0f);
-
-	// Draw gui for amount of honor
-	SGD::OStringStream output;
-	//Render Honor emitter in world
-	m_emHonor->RenderINworld();
-	//Render Honor image
-	SGD::GraphicsManager::GetInstance()->DrawTexture(m_hHonorParticleHUD, { 25, 34 });
-
-	output << ": " << m_unHonorCollected;
-	//Local refernce to the font
-	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
-
-
-	//Draw the title
-
-	font.DrawString(output.str().c_str(), 60, 25, 1, SGD::Color{ 255, 255, 0, 0 });
-
-	if (HasBounce() == true)
-	{
-		if (m_fTextTimer <= TEXT_TIME_LENGTH)
+		//Emitter Renders
+		if ((IsBouncing() || !GetBounce()->GetEMBubbles()->Done()) && HasBounce())
 		{
-			Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
-			font.DrawString("YOU GAINED THE BUBBLE ABILITY", (int)(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
-				(int)(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y - 100), 1, SGD::Color{ 255, 255, 0, 0 });
+			GetBounce()->GetEMBubbles()->SetPosition(m_ptPosition);
+			GetBounce()->GetEMBubbles()->Render();
 		}
-	}
+		if ((IsDashing() || !GetDash()->GetEMDash()->Done()) && HasDash())
+		{
+			GetDash()->GetEMDash()->SetPosition(m_ptPosition);
+			GetDash()->GetEMDash()->Render();
+		}
+		if ((m_bHawkExplode || !m_emFeatherExplosion->Done()) && HasHawk())
+		{
+			m_emFeatherExplosion->Render();
+		}
+		if (m_bReturningHawk || !m_emHawkReturn->Done())
+		{
+			m_emHawkReturn->Render();
+		}
 
-	if (m_bDead)
-	{
-		// Draw a fading rectangle
-		unsigned char alpha = (char)(((0.5f - m_fDeathTimer) / 0.5f) * 255.0f);
-		GameplayState::GetInstance()->SetScreenFadeout(alpha);
-	}
-	if (IsBouncing())
-	{
-		Camera::GetInstance()->DrawTexture({ m_ptPosition.x-70, m_ptPosition.y-50 }, 0, m_hBubbleCircle, false, 5, {}, {});
+		//SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+
+		////Camera::GetInstance()->Draw(SGD::Rectangle(10, 300, 20, 320), SGD::Color::Color(255, 0, 0, 255));
+
+
+		// * Camera::GetInstance()->GetZoomScale().width
+		// * Camera::GetInstance()->GetZoomScale().height
+
+		/*Camera::GetInstance()->Draw(SGD::Rectangle(
+			(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
+			(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y),
+			(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width),
+			(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
+			SGD::Color::Color(255, 255, 0, 0));*/
+
+
+		/*Camera::GetInstance()->Draw(SGD::Rectangle(m_pSword->GetRect().left, m_pSword->GetRect().top, m_pSword->GetRect().right, m_pSword->GetRect().bottom),
+			SGD::Color::Color(255, 255, 255, 0));*/
+
+		Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + 16, m_ptPosition.y + 60 }, 0, m_ts, !IsFacingRight(), 1.0f);
+		//Camera::GetInstance()->Draw(SGD::Rectangle(swingRect.left, swingRect.top, swingRect.right, swingRect.bottom),
+		//	SGD::Color::Color(255, 255, 255, 0));
+
+		//Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight(), 1.0f);
+
+		// Draw gui for amount of honor
+		SGD::OStringStream output;
+		//Render Honor emitter in world
+		m_emHonor->RenderINworld();
+		//Render Honor image
+		SGD::GraphicsManager::GetInstance()->DrawTexture(m_hHonorParticleHUD, { 25, 34 });
+
+		output << ": " << m_unHonorCollected;
+		//Local refernce to the font
+		Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+
+
+		//Draw the title
+
+		font.DrawString(output.str().c_str(), 60, 25, 1, SGD::Color{ 255, 255, 0, 0 });
+
+		if (HasBounce() == true)
+		{
+			if (m_fTextTimer <= TEXT_TIME_LENGTH)
+			{
+				Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+				font.DrawString("YOU GAINED THE BUBBLE ABILITY", (int)(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
+					(int)(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y - 100), 1, SGD::Color{ 255, 255, 0, 0 });
+			}
+		}
+
+		if (m_bDead)
+		{
+			// Draw a fading rectangle
+			unsigned char alpha = (char)(((0.5f - m_fDeathTimer) / 0.5f) * 255.0f);
+			GameplayState::GetInstance()->SetScreenFadeout(alpha);
+		}
+		if (IsBouncing())
+		{
+			Camera::GetInstance()->DrawTexture({ m_ptPosition.x - 70, m_ptPosition.y - 50 }, 0, m_hBubbleCircle, false, 5, {}, {});
+		}
 	}
 }
 
@@ -1840,13 +1843,16 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		}
 		if (m_unCurrentState == RESTING_STATE)
 		{
-			if (m_bHasArmor == false)
+			if (is_Swinging == false)
 			{
-				m_ts.SetCurrAnimation("Walking");
-			}
-			else
-			{
-				m_ts.SetCurrAnimation("Armor Player Walking");
+				if (m_bHasArmor == false)
+				{
+					m_ts.SetCurrAnimation("Walking");
+				}
+				else
+				{
+					m_ts.SetCurrAnimation("Armor Player Walking");
+				}
 			}
 		}
 		SetFacingRight(true);
@@ -1888,13 +1894,16 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		}
 		if (m_unCurrentState == RESTING_STATE)
 		{
-			if (m_bHasArmor == false)
+			if (is_Swinging == false)
 			{
-				m_ts.SetCurrAnimation("Walking");
-			}
-			else
-			{
-				m_ts.SetCurrAnimation("Armor Player Walking");
+				if (m_bHasArmor == false)
+				{
+					m_ts.SetCurrAnimation("Walking");
+				}
+				else
+				{
+					m_ts.SetCurrAnimation("Armor Player Walking");
+				}
 			}
 		}
 		SetFacingRight(false);
@@ -2451,15 +2460,33 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 			is_Swinging = true;
 			if (rand() % 2 == 0)
 			{
-				m_ts.SetCurrAnimation("Swing Attack");
-				m_ts.SetPlaying(true);
-				m_ts.ResetCurrFrame();
+				if (m_bHasArmor == false)
+				{
+					m_ts.SetCurrAnimation("Swing Attack");
+					m_ts.SetPlaying(true);
+					m_ts.ResetCurrFrame();
+				}
+				else
+				{
+					m_ts.SetCurrAnimation("Armor Player Swing");
+					m_ts.SetPlaying(true);
+					m_ts.ResetCurrFrame();
+				}
 			}
 			else
 			{
-				m_ts.SetCurrAnimation("Slash Attack");
-				m_ts.SetPlaying(true);
-				m_ts.ResetCurrFrame();
+				if (m_bHasArmor == false)
+				{
+					m_ts.SetCurrAnimation("Slash Attack");
+					m_ts.SetPlaying(true);
+					m_ts.ResetCurrFrame();
+				}
+				else
+				{
+					m_ts.SetCurrAnimation("Armor Player Swipe");
+					m_ts.SetPlaying(true);
+					m_ts.ResetCurrFrame();
+				}
 			}
 		}
 
