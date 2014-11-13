@@ -161,7 +161,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-	LoadLevel("Level3_2");
+	LoadLevel("HubLevel");
 
 	
 
@@ -488,6 +488,7 @@ void GameplayState::Update(float elapsedTime)
 	//Process messages and events
 	SGD::EventManager::GetInstance()->Update();
 	SGD::MessageManager::GetInstance()->Update();
+
 }
 
 /////////////////////////////////////////////
@@ -869,7 +870,7 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 			//Make sure the message isn't a nullptr
 			assert(pCreateMsg != nullptr
 				   && "GameplayState::MessageProc - MSG_CHANGE_LEVEL is not actually a CreateProjectileMessage");
-
+			
 			//Create a local reference to the gameplaystate singleton
 			GameplayState* pSelf = GameplayState::GetInstance();
 
@@ -2019,6 +2020,15 @@ void GameplayState::LoadLevelMap()
 // - Loads the level at the path for the given key
 void GameplayState::LoadLevel(std::string _level)
 {
+	// Clear screen for loading
+	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
+	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { 255, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+
+	//Local refernce to the font
+	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+	font.DrawString("LOADING", 250, 200, 2.0f, { 255, 0, 0 });
+
+	SGD::GraphicsManager::GetInstance()->Update();
 
 	// Clear the old entities
 	m_pEntities->RemoveAll();
