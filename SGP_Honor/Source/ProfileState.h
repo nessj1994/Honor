@@ -41,6 +41,8 @@ private:
 	int m_nCursor = 0;
 	int m_nOptionCursor = 0;
 
+	SGD::HAudio m_hSelection = SGD::INVALID_HANDLE;
+
 
 	SGD::Rectangle m_rProfile1 = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 265, Game::GetInstance()->GetScreenHeight() / 2 - 170 }, SGD::Size{ 260, 65 });
 	SGD::Rectangle m_rProfile2 = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 265, Game::GetInstance()->GetScreenHeight() / 2 - 100 }, SGD::Size{ 260, 65 });

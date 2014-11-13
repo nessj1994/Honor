@@ -156,12 +156,12 @@ void GameplayState::Enter(void) //Load Resources
 	LoadGame();
 	
 	//LoadLevel("Level5_5");
-	m_pPlayer->SetHasBounce(true);
-	m_pPlayer->SetHasDash(true);
-	m_pPlayer->SetHasHawk(true);
-	m_pPlayer->SetHasIce(true);
+	//m_pPlayer->SetHasBounce(true);
+	//m_pPlayer->SetHasDash(true);
+	//m_pPlayer->SetHasHawk(true);
+	//m_pPlayer->SetHasIce(true);
 
-	LoadLevel("Level3_1");
+	LoadLevel("Level3_5");
 
 	
 
@@ -187,6 +187,11 @@ void GameplayState::Enter(void) //Load Resources
 // - unload all resources
 void GameplayState::Exit(void)
 {
+
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hOAttack);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hXJUMP);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hXWallJump);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hTriOpenDoor);
 
 	// Save collected honor
 	m_pLevel->Exit();

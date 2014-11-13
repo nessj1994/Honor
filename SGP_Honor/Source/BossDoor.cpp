@@ -12,16 +12,16 @@
 
 BossDoor::BossDoor()
 {
-	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/Graphics/Teleporter.png");
-	m_hDoorClosed = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Sharp_Fart.wav");
+	//m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/Graphics/Teleporter.png");
+	//m_hDoorClosed = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Sharp_Fart.wav");
 
 }
 
 
 BossDoor::~BossDoor()
 {
-	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
-	SGD::AudioManager::GetInstance()->UnloadAudio(m_hDoorClosed);
+	//SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+	//SGD::AudioManager::GetInstance()->UnloadAudio(m_hDoorClosed);
 }
 
 void BossDoor::Render(void)

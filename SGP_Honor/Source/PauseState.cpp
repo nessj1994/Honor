@@ -50,7 +50,8 @@ void PauseState::Enter(void)
 // - unload all resources
 void PauseState::Exit(void)
 {
-
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hButton);
 }
 
 
