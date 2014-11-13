@@ -210,7 +210,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-	LoadLevel("Level2_3");
+	LoadLevel("HubLevel");
 
 	
 
@@ -376,7 +376,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 
 
 	if (pInput->IsKeyPressed(SGD::Key::Escape) 
-		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
+		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/) || /*For Arcade Input*/pInput->IsKeyPressed(SGD::Key::MouseRight))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
 		pAudio->StopAudio(m_hBGM);
@@ -409,7 +409,7 @@ void GameplayState::Update(float elapsedTime)
 	float x = elapsedTime;
 
 	// Toggle for mini map
-	if (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M))
+	if (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M) || /*For Arcade Input*/SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::MouseLeft))
 	{
 		m_bRenderMiniMap = !m_bRenderMiniMap;
 	}
