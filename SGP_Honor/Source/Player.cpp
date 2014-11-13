@@ -1898,7 +1898,7 @@ void Player::UpdateDash(float elapsedTime)
 		SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 		if (m_fDashCoolTimer <= 0.0f && (pInput->IsKeyPressed(SGD::Key::Tab) == true
 			//if (pInput->IsKeyDown(SGD::Key::Tab) == true
-			|| pInput->IsButtonPressed(0, 3/*5*/ /*Right bumper on xbox controller*/)))
+			|| pInput->IsButtonPressed(0, /*3*/5 /*Right bumper on xbox controller*/)))
 		{
 			m_fDashCoolTimer = .5f;
 			GetDash()->GetEMDash()->Finish(false);
@@ -2069,7 +2069,7 @@ void Player::UpdateHawk(float elapsedTime)
 
 
 		if (pInput->IsKeyDown(SGD::Key::D) == true
-			|| triggerOff > 0 || pInput->IsButtonDown(0, 5/*5*/ /*Right bumper on xbox controller*/)/*JOYSTICK_DEADZONE*/)
+			|| triggerOff > 0 )//|| pInput->IsButtonDown(0, 5/*5*/ /*Right bumper on xbox controller*/)/*JOYSTICK_DEADZONE*/)
 		{
 
 			if (m_bHawkCast == false
@@ -2261,7 +2261,7 @@ void Player::UpdateSpray(float elapsedTime)
 	float triggerOff = pInput->GetTrigger(0);
 
 	if ((pInput->IsKeyDown(SGD::Key::F) == true
-		/*&& m_fShotTimer > 0.25f*/ || triggerOff < 0) && m_bHasIce == true || pInput->IsButtonDown(0, 2/*5*/ /*Right bumper on xbox controller*/))
+		/*&& m_fShotTimer > 0.25f*/ || triggerOff < 0) && m_bHasIce == true)// || pInput->IsButtonDown(0, 2/*5*/ /*Right bumper on xbox controller*/))
 	{
 		if (!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hIceEffect)))
 		{
