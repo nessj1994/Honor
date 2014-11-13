@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "../SGD Wrappers//SGD_GraphicsManager.h"
 #include <vector>
 #include <string>
 
@@ -38,6 +39,7 @@ public:
 	void CheckCollision(IEntity * _entity);
 	void CheckEvent(IEntity * _entity);
 	void UpdateHonorVector(int _index, bool _value);
+	void DrawLoadScreen(unsigned int _progress);
 
 	//////////////////////////////
 	// Accessors
@@ -71,6 +73,7 @@ private:
 	int						m_nPlayerX;
 	int						m_nPlayerY;
 	unsigned int			m_unHonorBeforeDeath;
+	SGD::HTexture			m_hPlayerSheet = SGD::INVALID_HANDLE;
 
 };
 

@@ -4,11 +4,14 @@
 
 MovingPlatform::MovingPlatform()
 {
+	// Load the texture
+	m_hMovingPlatform = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/MovingPlatform.png");
 }
 
 
 MovingPlatform::~MovingPlatform()
 {
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hMovingPlatform);
 }
 
 /////////////////////////////////////////////////
@@ -104,8 +107,12 @@ void MovingPlatform::Render(void)
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
 	//Render us with the camera
-	Camera::GetInstance()->Draw(rMyRect,
-		SGD::Color::Color(255, 120, 80, 50));
+	//Camera::GetInstance()->Draw(rMyRect,
+	//	SGD::Color::Color(255, 120, 80, 50));
+
+	// Draw the moving platform
+	SGD::Point newPoint = { rMyRect.left + Camera::GetInstance()->GetCameraPos().x, rMyRect.top + Camera::GetInstance()->GetCameraPos().y };
+	Camera::GetInstance()->DrawTexture(newPoint, 0.0f, m_hMovingPlatform, false, 1.0f, { 255, 255, 255, 255 }, { 0.0f, 0.0f });
 
 }
 

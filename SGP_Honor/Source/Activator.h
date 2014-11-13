@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "../SGD Wrappers/SGD_Geometry.h"
 #include "../SGD Wrappers/SGD_Listener.h"
+#include "../SGD Wrappers/SGD_GraphicsManager.h"
 
 class Player;
 
@@ -50,6 +51,7 @@ private:
 	unsigned int m_unKeyID = 0;
 
 	SGD::HAudio m_hEffect = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hActivator = SGD::INVALID_HANDLE;
 
 };
 

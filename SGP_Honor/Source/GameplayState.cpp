@@ -167,13 +167,10 @@ void GameplayState::Enter(void) //Load Resources
 	//m_pPlayer->SetHasHawk(true);
 	//m_pPlayer->SetHasIce(true);
 
-	LoadLevel("Level3_5");
-
-
-
-	//LoadLevel("Level3_1");
-
 	//LoadLevel("HubLevel");
+
+
+	LoadLevel("HubLevel");
 
 	//("HubLevel");
 
@@ -332,13 +329,13 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if(pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level1_1");
+		LoadLevel("Level3_1");
 	}
 
 
 
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
-		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
+		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/) || /*For Arcade Input*/pInput->IsKeyPressed(SGD::Key::MouseRight))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
 		pAudio->StopAudio(m_hBGM);
@@ -372,6 +369,7 @@ void GameplayState::Update(float elapsedTime)
 
 	// Toggle for mini map
 	if(SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M))
+		//|| /*For Arcade Input*/SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::MouseLeft))
 	{
 		m_bRenderMiniMap = !m_bRenderMiniMap;
 	}
@@ -502,6 +500,7 @@ void GameplayState::Update(float elapsedTime)
 	//Process messages and events
 	SGD::EventManager::GetInstance()->Update();
 	SGD::MessageManager::GetInstance()->Update();
+
 }
 
 /////////////////////////////////////////////
@@ -886,7 +885,7 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 									   {
 										   pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_HAWK);
 									   }
-
+			
 									   pProj->Release();
 									   pProj = nullptr;
 
@@ -1084,7 +1083,7 @@ Hawk* GameplayState::CreateHawk(Entity* pOwner) const
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
 	proj->SetSize({ 20, 20 });
-	proj->SetDirection({ pOwner->GetDirection() });
+	proj->SetDirection({ 0,0 });
 	proj->SetOwner(pOwner);
 	//pOwner->SetHawkPtr(proj);
 	m_pPlayer->SetHawkPtr(proj);
@@ -2055,6 +2054,15 @@ void GameplayState::LoadLevelMap()
 // - Loads the level at the path for the given key
 void GameplayState::LoadLevel(std::string _level)
 {
+	// Clear screen for loading
+	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
+	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { 255, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+
+	//Local refernce to the font
+	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+	font.DrawString("LOADING", 250, 200, 2.0f, { 255, 0, 0 });
+
+	SGD::GraphicsManager::GetInstance()->Update();
 
 	// Clear the old entities
 	m_pEntities->RemoveAll();

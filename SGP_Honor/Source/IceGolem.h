@@ -37,6 +37,7 @@ private:
 	float m_fRotation = 0.0f;
 	float m_fAggroRange = 200.0f;
 	bool m_bInRange = false;
+	bool m_bPlayedAudio = false;
 	float m_fDistance = 0.0f;
 
 	SGD::HAudio m_hSmashSound = SGD::INVALID_HANDLE;
