@@ -45,5 +45,9 @@ private:
 
 	SGD::HTexture m_hSword = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hButton = SGD::INVALID_HANDLE;
+
+	//For Arcade Machine
+	float m_fInputTimer;
+	float m_fstickYOff;
 };
 

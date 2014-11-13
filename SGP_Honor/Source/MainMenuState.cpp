@@ -72,6 +72,8 @@ void MainMenuState::Enter(void) //Load Resources
 	m_hSword = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/SwordButton.png");
 	m_hButton = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Buttons.png");
 
+	m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
+
 }
 
 
@@ -99,10 +101,22 @@ bool MainMenuState::Input(void) //Hanlde user Input
 	SGD::Rectangle rMouse = SGD::Rectangle({ pInput->GetMousePosition().x, pInput->GetMousePosition().y, pInput->GetMousePosition().x + 1, pInput->GetMousePosition().y + 1 });
 
 
+	if (m_fInputTimer > .2f)
+	{
+		m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
+		m_fInputTimer = 0;
+	}
+
+	m_fInputTimer += .0025f;
+	
 	//Move the cursor down
 	if(pInput->IsKeyPressed(SGD::Key::Down) 
-		|| pInput->IsDPadPressed(0, SGD::DPad::Down))
+		|| pInput->IsDPadPressed(0, SGD::DPad::Down) || m_fstickYOff > 0)
 	{
+		if (m_fstickYOff > 0)
+		{
+			m_fstickYOff = 0;
+		}
 		m_nCursor += 1;
 		m_rSword.top += 70;
 		if(m_rSword.top > 530.0f)
@@ -117,8 +131,12 @@ bool MainMenuState::Input(void) //Hanlde user Input
 	}
 	//Move the cursor up
 	else if(pInput->IsKeyPressed(SGD::Key::Up) 
-		|| pInput->IsDPadPressed(0, SGD::DPad::Up))
+		|| pInput->IsDPadPressed(0, SGD::DPad::Up) || m_fstickYOff < 0)
 	{
+		if (m_fstickYOff < 0)
+		{
+			m_fstickYOff = 0;
+		}
 		m_nCursor -= 1;
 		m_rSword.top -= 70;
 
