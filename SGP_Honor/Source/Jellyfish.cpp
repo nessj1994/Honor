@@ -97,7 +97,7 @@ void Jellyfish::HandleCollision(const IEntity* pOther)
 {
 	if (pOther->GetType() == Entity::ENT_PLAYER && bouncecounting == false)
 	{
-		if (numOfBounces < 3)
+		if (numOfBounces < 4)
 			numOfBounces++;
 		bouncecounting = true;
 		SGD::Event Event = { "RESET_JELLYFISH_BOUNCE", nullptr, this };
@@ -131,7 +131,7 @@ void Jellyfish::HandleCollision(const IEntity* pOther)
 		{
 			if (rjFish.right == rIntersection.right)
 			{
-				SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
+				SetPosition({ (float)rObject.left - GetSize().width / 2, GetPosition().y });
 				patrolDistance = -patrolDistance;
 				m_vtVelocity = -m_vtVelocity;
 				m_bFacingRight = !m_bFacingRight;
@@ -139,7 +139,7 @@ void Jellyfish::HandleCollision(const IEntity* pOther)
 			}
 			if (rjFish.left == rIntersection.left)
 			{
-				SetPosition({ (float)rObject.right + GetSize().width, GetPosition().y });
+				SetPosition({ (float)rObject.right + GetSize().width /2, GetPosition().y });
 				patrolDistance = -patrolDistance;
 				m_vtVelocity = -m_vtVelocity;
 				m_bFacingRight = !m_bFacingRight;

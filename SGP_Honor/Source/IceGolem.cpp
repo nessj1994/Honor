@@ -39,9 +39,13 @@ void IceGolem::Update(float elapsedTime)
 {
 	if (GetAlive() == false)
 	{
-		SGD::AudioManager::GetInstance()->PlayAudio(m_hHitSound);
 
-		SGD::AudioManager::GetInstance()->PlayAudio(m_hDeathSound);
+		if (!m_bPlayedAudio)
+		{
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hHitSound);
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hDeathSound);
+			m_bPlayedAudio = true;
+		}
 
 		SetAlive(false);
 		/*DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
@@ -162,9 +166,9 @@ void IceGolem::Render(void)
 
 	//Render us with the camera
 	if(m_bFacingRight == true)
-		Camera::GetInstance()->DrawAnimation(m_ptPosition, m_fRotation, m_ts, false, 1.0f, {});
+		Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height }, m_fRotation, m_ts, false, 1.0f, {});
 	else
-		Camera::GetInstance()->DrawAnimation(m_ptPosition, m_fRotation, m_ts, true, 1.0f, {});
+		Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height }, m_fRotation, m_ts, true, 1.0f, {});
 
 }
 int IceGolem::GetType(void) const
@@ -521,6 +525,7 @@ void IceGolem::HandleEvent(const SGD::Event* pEvent)
 	{
 		SetAlive(true);
 		SetPosition(GetOriginalPos());
+		m_bPlayedAudio = false;
 	}
 
 }

@@ -237,6 +237,12 @@ private:
 
 	//For Ramp and normal solid wall collision at same time
 	bool m_bIsColliding = false;
+
+	//Keyboard Hawk Control variable
+	float m_nHawkX = 0;
+	float m_nHawkY = 0;
+
+
 };
 
 

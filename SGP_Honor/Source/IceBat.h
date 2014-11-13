@@ -33,6 +33,7 @@ private:
 
 	float m_fAggroRange = 200.0f;
 	bool m_bInRange = false;
+	bool m_bPlayedAudio = false;
 	float m_fDistance = 0.0f;
 	SGD::HAudio m_hDeathSound = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hHitSound = SGD::INVALID_HANDLE;

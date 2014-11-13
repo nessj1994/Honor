@@ -28,6 +28,7 @@ private:
 	float m_fFireTimer = 1.65f;
 	int m_nDirection = 0;
 	float m_fRotation = 0.0f;
+	bool m_bPlayedAudio = false;
 
 	SGD::HAudio m_hShootSound = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hDeathSound = SGD::INVALID_HANDLE;

@@ -34,9 +34,13 @@ void IceBat::Update(float elapsedTime)
 {
 	if (GetAlive() == false)
 	{
-		SGD::AudioManager::GetInstance()->PlayAudio(m_hHitSound);
 
-		SGD::AudioManager::GetInstance()->PlayAudio(m_hDeathSound);
+		if (!m_bPlayedAudio)
+		{
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hHitSound);
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hDeathSound);
+			m_bPlayedAudio = true;
+		}
 
 		SetAlive(false);
 		/*DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
@@ -486,6 +490,7 @@ void IceBat::HandleEvent(const SGD::Event* pEvent)
 	{
 		SetAlive(true);
 		SetPosition(GetOriginalPos());
+		m_bPlayedAudio = false;
 	}
 
 }

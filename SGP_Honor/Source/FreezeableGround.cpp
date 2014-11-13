@@ -65,7 +65,8 @@ void FreezeableGround::Render(void)
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
 		SGD::Color::Color(255, 255, 0, 255));*/
-		Camera::GetInstance()->DrawTextureSection(m_hImage, m_ptPosition, SGD::Rectangle(0, 0, 32, 32), 0, {}, {}, {});
+		Camera::GetInstance()->DrawTextureSection(m_hImage, { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x,
+			m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, SGD::Rectangle(0, 0, 32, 32), 0, {}, {}, { 1, 1 });
 
 	}
 
@@ -76,7 +77,8 @@ void FreezeableGround::Render(void)
 			m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
 			m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
 			SGD::Color::Color(255, 0, 255, 255));*/
-		Camera::GetInstance()->DrawTextureSection(m_hImage, m_ptPosition, SGD::Rectangle(32, 0, 64, 32), 0, {}, {}, {});
+		Camera::GetInstance()->DrawTextureSection(m_hImage, { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x,
+			m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, SGD::Rectangle(32, 0, 64, 32), 0, {}, {}, { 1, 1 });
 	}		
 }
 
