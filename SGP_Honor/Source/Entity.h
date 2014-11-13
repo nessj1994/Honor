@@ -49,7 +49,7 @@ public:
 	float				GetSpeed(void)	const			{ return m_fSpeed; }
 	SGD::Vector			GetDirection(void) const		{ return m_vtDirection; }
 	float				GetFriction(void) const { return m_fFriction; }
-
+	bool				GetHawkCast(void) const	{ return m_bHawkCast; }
 
 
 	////////////////////////////////////////////
@@ -62,7 +62,8 @@ public:
 	void				SetScale(SGD::Size scale)		{ m_szScale = scale; }
 	void				SetSpeed(float speed)			{ m_fSpeed = speed; }
 	void				SetDirection(SGD::Vector _dir)	{ m_vtDirection = _dir; }
-	void				SetFriction(float _friction) { m_fFriction = _friction; }
+	void				SetFriction(float _friction)	{ m_fFriction = _friction; }
+	void				SetHawkCast(bool _hawk)			{ m_bHawkCast = _hawk; }
 
 protected:
 	virtual ~Entity(void);
@@ -87,6 +88,7 @@ protected:
 	SGD::Size			m_szScale				= SGD::Size{ 1, 1 };//2D Scale
 	float				m_fSpeed				= 2550.0f;// 250.0f;
 	float				m_fFriction = 10.0f;
+	bool m_bHawkCast = false;
 
 
 private:
@@ -94,5 +96,7 @@ private:
 	///////////////////////////////////////////////
 	///////////////Reference Counting/////////////
 	unsigned int m_unRefCount = 1; //Calling 'new' gives the prime reference
+
+
 };
 
