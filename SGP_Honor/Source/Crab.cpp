@@ -38,6 +38,7 @@ Crab::Crab() : Listener(this)
 	m_hBubble = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bubble.wav");
 	m_hSlam2 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam2.wav");
 	m_hHurt = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/ClangHurt.wav");
+	m_hSwipe = SGD::AudioManager::GetInstance()->LoadAudio(L"assets/audio/swordswing.wav");
 }
 
 
@@ -47,6 +48,7 @@ Crab::~Crab()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBubble);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam2);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hHurt);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSwipe);
 }
 
 void Crab::Update(float elapsedTime)
@@ -204,6 +206,7 @@ void Crab::Update(float elapsedTime)
 									 m_ts.SetCurrAnimation("Clang Swipe");
 									 m_ts.SetPlaying(true);
 									 castedSwipe = true;
+									 SGD::AudioManager::GetInstance()->PlayAudio(m_hSwipe);
 								 }
 								 break;
 				}

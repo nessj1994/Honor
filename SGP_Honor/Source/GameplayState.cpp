@@ -162,15 +162,15 @@ void GameplayState::Enter(void) //Load Resources
 	LoadGame();
 
 	//LoadLevel("Level5_5");
-	//m_pPlayer->SetHasBounce(true);
-	//m_pPlayer->SetHasDash(true);
-	//m_pPlayer->SetHasHawk(true);
-	//m_pPlayer->SetHasIce(true);
+	m_pPlayer->SetHasBounce(true);
+	m_pPlayer->SetHasDash(true);
+	m_pPlayer->SetHasHawk(true);
+	m_pPlayer->SetHasIce(true);
 
 	//LoadLevel("HubLevel");
 
 
-	LoadLevel("HubLevel");
+	LoadLevel("Level5_1");
 
 	//("HubLevel");
 
@@ -327,11 +327,23 @@ bool GameplayState::Input(void) //Hanlde user Input
 	}
 
 	// Temporary test for level changing
-	if(pInput->IsKeyPressed(SGD::Key::T))
+	if(pInput->IsKeyPressed(SGD::Key::P))
+	{
+		LoadLevel("Level2_1");
+	}
+	if(pInput->IsKeyPressed(SGD::Key::O))
 	{
 		LoadLevel("Level3_1");
+	}	if(pInput->IsKeyPressed(SGD::Key::L))
+	{
+		LoadLevel("Level4_1");
+	}	if(pInput->IsKeyPressed(SGD::Key::I))
+	{
+		LoadLevel("Level5_1");
+	}	if(pInput->IsKeyPressed(SGD::Key::M))
+	{
+		LoadLevel("Level5_5");
 	}
-
 
 
 	if(pInput->IsKeyPressed(SGD::Key::Escape)

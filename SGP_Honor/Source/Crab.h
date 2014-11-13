@@ -51,5 +51,6 @@ private:
 	SGD::HAudio m_hBubble = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hSlam2 = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hHurt = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hSwipe = SGD::INVALID_HANDLE;
 };
 
