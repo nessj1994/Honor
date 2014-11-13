@@ -2,6 +2,8 @@
 #include "Entity.h"
 #include "../SGD Wrappers/SGD_Geometry.h"
 
+class Emitter;
+
 class Geyser :
 	public Entity
 {
@@ -57,6 +59,8 @@ private:
 
 
 	SGD::HAudio m_hEffect = SGD::INVALID_HANDLE;
+
+	Emitter* m_EmWaterEffect;
 
 };
 

@@ -3,6 +3,8 @@
 #include "Activator.h"
 #include "../SGD Wrappers/SGD_Listener.h"
 
+class Emitter;
+
 
 class Laser :
 	public Entity, public SGD::Listener
@@ -57,5 +59,6 @@ private:
 
 	SGD::HAudio m_hEffect = SGD::INVALID_HANDLE;
 
+	Emitter* m_LaserEffect;
 };
 

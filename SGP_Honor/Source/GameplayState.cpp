@@ -137,7 +137,13 @@ void GameplayState::Enter(void) //Load Resources
 
 
 	//Load Audio
-	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/HonorBGM.xwm");
+	m_hWorld1 = pAudio->LoadAudio(L"Assets/Audio/spanish.xwm");
+	m_hWorld2 = pAudio->LoadAudio(L"Assets/Audio/cave.xwm");
+	m_hWorld3 = pAudio->LoadAudio(L"Assets/Audio/mountain.xwm");
+	m_hWorld4 = pAudio->LoadAudio(L"Assets/Audio/Beach.xwm");
+	m_hWorld5 = pAudio->LoadAudio(L"Assets/Audio/World5.xwm");
+	m_hFinalBoss = pAudio->LoadAudio(L"Assets/Audio/FinalBoss.xwm");
+
 
 
 	//Create player with factory method
@@ -154,17 +160,17 @@ void GameplayState::Enter(void) //Load Resources
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadGame();
-	
+
 	//LoadLevel("Level5_5");
-	m_pPlayer->SetHasBounce(true);
-	m_pPlayer->SetHasDash(true);
-	m_pPlayer->SetHasHawk(true);
-	m_pPlayer->SetHasIce(true);
+	//m_pPlayer->SetHasBounce(true);
+	//m_pPlayer->SetHasDash(true);
+	//m_pPlayer->SetHasHawk(true);
+	//m_pPlayer->SetHasIce(true);
 
-	//LoadLevel("Level1_1");
+	//LoadLevel("HubLevel");
 
 
-	
+	LoadLevel("HubLevel");
 
 	
 	LoadLevel("Level5_2");
@@ -202,7 +208,7 @@ void GameplayState::Exit(void)
 	//Save the game
 	SaveGame();
 
-	if (m_pEntities != nullptr)
+	if(m_pEntities != nullptr)
 	{
 		//Deallocate the Entity Manager
 		m_pEntities->RemoveAll();
@@ -218,13 +224,13 @@ void GameplayState::Exit(void)
 	//delete m_pTurret;
 	//delete m_pStalactite;
 
-	if (m_pPlayer != nullptr)
+	if(m_pPlayer != nullptr)
 	{
 		m_pPlayer->Release();
 
 	}
 
-	if (m_pHubOrb != nullptr)
+	if(m_pHubOrb != nullptr)
 	{
 		delete m_pHubOrb;
 	}
@@ -270,10 +276,18 @@ void GameplayState::Exit(void)
 
 
 	//Audio
-	pAudio->StopAudio(m_hBGM);
-	pAudio->UnloadAudio(m_hBGM);
-
-
+	pAudio->StopAudio(m_hWorld1);
+	pAudio->UnloadAudio(m_hWorld1);
+	pAudio->StopAudio(m_hWorld2);
+	pAudio->UnloadAudio(m_hWorld2);
+	pAudio->StopAudio(m_hWorld3);
+	pAudio->UnloadAudio(m_hWorld3);
+	pAudio->StopAudio(m_hWorld4);
+	pAudio->UnloadAudio(m_hWorld4);
+	pAudio->StopAudio(m_hWorld5);
+	pAudio->UnloadAudio(m_hWorld5);
+	pAudio->StopAudio(m_hFinalBoss);
+	pAudio->UnloadAudio(m_hFinalBoss);
 
 	//Terminate and deallocate the SGD Wrappers
 	//event manager
@@ -295,10 +309,10 @@ bool GameplayState::Input(void) //Hanlde user Input
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
 	//Change between windowed and full screen modes
-	if (pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyReleased(SGD::Key::Enter))
+	if(pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyReleased(SGD::Key::Enter))
 	{
 		SGD::GraphicsManager::GetInstance()->Resize({ Game::GetInstance()->GetScreenWidth(),
-													Game::GetInstance()->GetScreenHeight() }, !(Game::GetInstance()->GetWindowed()));
+			Game::GetInstance()->GetScreenHeight() }, !(Game::GetInstance()->GetWindowed()));
 		Game::GetInstance()->SetWindowed(!(Game::GetInstance()->GetWindowed()));
 	}
 
@@ -307,7 +321,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	//{
 	//	m_pDoor->SetOpen(!(m_pDoor->GetOpen()));
 	//}
-	if (pInput->IsKeyPressed(SGD::Key::H))
+	if(pInput->IsKeyPressed(SGD::Key::H))
 	{
 		m_pPlayer->SetHonorCollected(m_pPlayer->GetHonorCollected() + 50);
 		//Gained Honor event for certain doors
@@ -318,15 +332,15 @@ bool GameplayState::Input(void) //Hanlde user Input
 	}
 
 	// Temporary test for level changing
-	if (pInput->IsKeyPressed(SGD::Key::T))
+	if(pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level2_1");
+		LoadLevel("Level3_1");
 	}
 
 
 
-	if (pInput->IsKeyPressed(SGD::Key::Escape) 
-		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/))
+	if(pInput->IsKeyPressed(SGD::Key::Escape)
+		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/) || /*For Arcade Input*/pInput->IsKeyPressed(SGD::Key::MouseRight))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
 		pAudio->StopAudio(m_hBGM);
@@ -334,8 +348,8 @@ bool GameplayState::Input(void) //Hanlde user Input
 
 	/*if (pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyPressed(SGD::Key::Tab))
 	{
-		Game::GetInstance()->AddState(PauseState::GetInstance());
-		pAudio->StopAudio(m_hBGM);
+	Game::GetInstance()->AddState(PauseState::GetInstance());
+	pAudio->StopAudio(m_hBGM);
 	}*/
 
 	return true;
@@ -359,7 +373,8 @@ void GameplayState::Update(float elapsedTime)
 	float x = elapsedTime;
 
 	// Toggle for mini map
-	if (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M))
+	if(SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M))
+		//|| /*For Arcade Input*/SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::MouseLeft))
 	{
 		m_bRenderMiniMap = !m_bRenderMiniMap;
 	}
@@ -482,7 +497,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_VOMIT);
 
 	//Update The Hubworld Orb
-	if (m_strCurrLevel == "HubLevel")
+	if(m_strCurrLevel == "HubLevel")
 	{
 		m_pHubOrb->Update(elapsedTime, m_pPlayer->GetHonorCollected(), { (float)GetCurrentLevel()->GetLevelWidth() / 2, (float)GetCurrentLevel()->GetLevelHeight() / 2 });
 	}
@@ -490,6 +505,7 @@ void GameplayState::Update(float elapsedTime)
 	//Process messages and events
 	SGD::EventManager::GetInstance()->Update();
 	SGD::MessageManager::GetInstance()->Update();
+
 }
 
 /////////////////////////////////////////////
@@ -498,7 +514,7 @@ void GameplayState::Update(float elapsedTime)
 void GameplayState::Render(void)
 {
 	//Render Images for tutorial 
-	if (m_strCurrLevel == "Level0_1")
+	if(m_strCurrLevel == "Level0_1")
 	{
 		Camera::GetInstance()->DrawTexture({ 600, 50 }, 0, m_hXJUMP, false, 1, {}, {});
 		Camera::GetInstance()->DrawTexture({ 1759, 50 }, 0, m_hXJUMP, false, 1, {}, {});
@@ -517,17 +533,17 @@ void GameplayState::Render(void)
 	m_pLevel->RenderImageLayer(false);
 
 	// Draw the mini map
-	if (m_bRenderMiniMap)
+	if(m_bRenderMiniMap)
 	{
 		RenderMiniMap();
 	}
 
 	//Render the Hub world Orb
-	if (m_strCurrLevel == "HubLevel")
+	if(m_strCurrLevel == "HubLevel")
 	{
 		m_pHubOrb->Render();
 	}
-	
+
 
 
 	// Draw a fading rectangle
@@ -545,352 +561,372 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 #pragma warning (1 : 4061)
 
 	//What type of message is this
-	switch (pMsg->GetMessageID())
+	switch(pMsg->GetMessageID())
 	{
-		case MessageID::MSG_CREATE_STALACTITE:
-		{
-			//Downcast to the real message type
-			const CreateStalactiteMessage* pCreateMsg =
-				dynamic_cast<const CreateStalactiteMessage*>(pMsg);
+	case MessageID::MSG_CREATE_STALACTITE:
+	{
+											 //Downcast to the real message type
+											 const CreateStalactiteMessage* pCreateMsg =
+												 dynamic_cast<const CreateStalactiteMessage*>(pMsg);
 
-			//Make sure the message isnt a nullptr
-			assert(pCreateMsg != nullptr
-				   && "GameplayState::MessageProc - MSG_CREATE_STALACTITE is not actually a CreateSTALACTITEMessage");
-			Stalactite* Temp = new Stalactite();
-			Temp->SetPosition(pCreateMsg->GetOwner()->GetPosition());
-			Temp->SetSize({ 64, 64 });
-			Temp->SetFallSpeed(1000);
-			GetInstance()->m_pEntities->AddEntity(Temp, Entity::ENT_STALACTITE);
+											 //Make sure the message isnt a nullptr
+											 assert(pCreateMsg != nullptr
+												 && "GameplayState::MessageProc - MSG_CREATE_STALACTITE is not actually a CreateSTALACTITEMessage");
+											 Stalactite* Temp = new Stalactite();
+											 Temp->SetPosition(pCreateMsg->GetOwner()->GetPosition());
+											 Temp->SetSize({ 64, 64 });
+											 Temp->SetFallSpeed(1000);
+											 GetInstance()->m_pEntities->AddEntity(Temp, Entity::ENT_STALACTITE);
 
-			Temp->Release();
-			Temp = nullptr;
-			break;
-		}
-		case MessageID::MSG_CREATE_VOMIT:
-		{
-			//Downcast to the real message type
-			const CreateVomitMessage* pCreateMsg =
-				dynamic_cast<const CreateVomitMessage*>(pMsg);
+											 Temp->Release();
+											 Temp = nullptr;
+											 break;
+	}
+	case MessageID::MSG_CREATE_VOMIT:
+	{
+										//Downcast to the real message type
+										const CreateVomitMessage* pCreateMsg =
+											dynamic_cast<const CreateVomitMessage*>(pMsg);
 
-			//Make sure the message isnt a nullptr
-			assert(pCreateMsg != nullptr
-				   && "GameplayState::MessageProc - MSG_CREATE_VOMIT is not actually a CreateVomitMessage");
-			pCreateMsg->GetOwner()->GetPosition();
-			Vomit* Temp = new Vomit(pCreateMsg->GetOwner()->GetPosition());
+										//Make sure the message isnt a nullptr
+										assert(pCreateMsg != nullptr
+											&& "GameplayState::MessageProc - MSG_CREATE_VOMIT is not actually a CreateVomitMessage");
+										pCreateMsg->GetOwner()->GetPosition();
+										Vomit* Temp = new Vomit(pCreateMsg->GetOwner()->GetPosition());
 
-			GetInstance()->m_pEntities->AddEntity(Temp, Entity::ENT_VOMIT);
+										GetInstance()->m_pEntities->AddEntity(Temp, Entity::ENT_VOMIT);
 
-			Temp->Release();
-			Temp = nullptr;
-			break;
-		}
-		case MessageID::MSG_CREATE_POOP:
-		{
-			//Downcast to the real message type
-			const CreatePoopMessage* pCreateMsg =
-				dynamic_cast<const CreatePoopMessage*>(pMsg);
+										Temp->Release();
+										Temp = nullptr;
+										break;
+	}
+	case MessageID::MSG_CREATE_POOP:
+	{
+									   //Downcast to the real message type
+									   const CreatePoopMessage* pCreateMsg =
+										   dynamic_cast<const CreatePoopMessage*>(pMsg);
 
-			//Make sure the message isnt a nullptr
-			assert(pCreateMsg != nullptr
-				   && "GameplayState::MessageProc - MSG_CREATE_POOP is not actually a CreatePoopMessage");
-			pCreateMsg->GetOwner()->GetPosition();
-			Poop* Temp = new Poop(pCreateMsg->GetOwner()->GetPosition());
+									   //Make sure the message isnt a nullptr
+									   assert(pCreateMsg != nullptr
+										   && "GameplayState::MessageProc - MSG_CREATE_POOP is not actually a CreatePoopMessage");
+									   pCreateMsg->GetOwner()->GetPosition();
+									   Poop* Temp = new Poop(pCreateMsg->GetOwner()->GetPosition());
 
-			GetInstance()->m_pEntities->AddEntity(Temp, Entity::ENT_POOP);
+									   GetInstance()->m_pEntities->AddEntity(Temp, Entity::ENT_POOP);
 
-			Temp->Release();
-			Temp = nullptr;
-			break;
-		}
-		case MessageID::MSG_DESTROY_ENTITY:
-		{
-			//Downcast to the real message type
-			const DestroyEntityMessage* pDestroyMsg =
-				dynamic_cast<const DestroyEntityMessage*>(pMsg);
+									   Temp->Release();
+									   Temp = nullptr;
+									   break;
+	}
+	case MessageID::MSG_DESTROY_ENTITY:
+	{
+										  //Downcast to the real message type
+										  const DestroyEntityMessage* pDestroyMsg =
+											  dynamic_cast<const DestroyEntityMessage*>(pMsg);
 
-			//Make sure the message isnt a nullptr
-			assert(pDestroyMsg != nullptr
-				   && "GameplayState::MessageProc - MSG_DESTROY_ENTITY is not actually a DestroyEntityMessage");
+										  //Make sure the message isnt a nullptr
+										  assert(pDestroyMsg != nullptr
+											  && "GameplayState::MessageProc - MSG_DESTROY_ENTITY is not actually a DestroyEntityMessage");
 
-			//get the message's entity
-			Entity* ptr = pDestroyMsg->GetEntity();
+										  //get the message's entity
+										  Entity* ptr = pDestroyMsg->GetEntity();
 
-			//Use the singleton to access the entity manager
-			if (ptr != nullptr)
-			{
-				GameplayState::GetInstance()->m_pEntities->RemoveEntity(ptr);
-			}
+										  //Use the singleton to access the entity manager
+										  if(ptr != nullptr)
+										  {
+											  GameplayState::GetInstance()->m_pEntities->RemoveEntity(ptr);
+										  }
 
-			break;
-		}
-		case MessageID::MSG_CREATE_PROJECTILE:
-		{
-			//Downcast to the real message type
-			const CreateProjectileMessage* pCreateMsg =
-				dynamic_cast<const CreateProjectileMessage*>(pMsg);
+										  break;
+	}
+	case MessageID::MSG_CREATE_PROJECTILE:
+	{
+											 //Downcast to the real message type
+											 const CreateProjectileMessage* pCreateMsg =
+												 dynamic_cast<const CreateProjectileMessage*>(pMsg);
 
-			//Make sure the message isn't a nullptr
-			assert(pCreateMsg != nullptr
-				   && "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
+											 //Make sure the message isn't a nullptr
+											 assert(pCreateMsg != nullptr
+												 && "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
 
-			//Create a local reference to the gameplaystate singleton
-			GameplayState* pSelf = GameplayState::GetInstance();
-
-
-			//Play the projectile's audio sound
-
-			//Call CreateProjectile factory method sending in the messages projectile
-			Entity* pProj = pSelf->CreateProjectile(pCreateMsg->GetOwner());
+											 //Create a local reference to the gameplaystate singleton
+											 GameplayState* pSelf = GameplayState::GetInstance();
 
 
-			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
-			{
-				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
-			}
-			else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_TURRET)
-			{
-				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
-			}
+											 //Play the projectile's audio sound
 
-			// if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
-			// {
-			//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_PLAYER_PROJ);
-			// }
-			// else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
-			// {
-			//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_ENEMY_PROJ);
-			// }
-
-			pProj->Release();
-			pProj = nullptr;
+											 //Call CreateProjectile factory method sending in the messages projectile
+											 Entity* pProj = pSelf->CreateProjectile(pCreateMsg->GetOwner());
 
 
-			break;
-		}
-		case MessageID::MSG_CREATE_GRAVPROJECTILE:
-		{
-			//Downcast to the real message type
-			const CreateGravProjectileMessage* pCreateMsg = dynamic_cast<const CreateGravProjectileMessage*>(pMsg);
-
-			//Make sure the message isn't a nullptr
-			assert(pCreateMsg != nullptr
-				   && "GameplayState::MessageProc - MSG_CREATE_GRAVPROJECTILE is not actually a CreateGravProjectileMessage");
-
-			//Create a local reference to the gameplaystate singleton
-			GameplayState* pSelf = GameplayState::GetInstance();
+											 if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+											 {
+												 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+											 }
+											 else if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_TURRET)
+											 {
+												 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+											 }
+											 else if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_ICE_TURTLE)
+											 {
+												 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
 
 
-			//Play the projectile's audio sound
+											 }
 
-			//Call CreateProjectile factory method sending in the messages projectile
-			Entity* pProj = pSelf->CreateGravProjectile(pCreateMsg->GetOwner());
-
-
-			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_SQUID)
-			{
-				GravProjectile * temp = (GravProjectile*)pProj;
-				temp->SetProjectileType(GravProjectile::INK);
-			}
-			else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_SKELETON)
-			{
-				GravProjectile * temp = (GravProjectile*)pProj;
-				temp->SetProjectileType(GravProjectile::BONE);
-			}
-
-			pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
-
-			pProj->Release();
-			pProj = nullptr;
-
-
-			break;
-		}
-		case MessageID::MSG_CREATE_HORIZ_BUBBLE:
-		{
-			//Downcast to the real message type
-			const CreateHorizontalBubble* pCreateMsg = dynamic_cast<const CreateHorizontalBubble*>(pMsg);
-
-			//Make sure the message isn't a nullptr
-			assert(pCreateMsg != nullptr
-				   && "GameplayState::MessageProc - MSG_CREATE_HORIZ_BUBBLE is not actually a CreateHorizontalBubbleMessage");
-
-			//Create a local reference to the gameplaystate singleton
-			GameplayState* pSelf = GameplayState::GetInstance();
-
-
-			//Play the projectile's audio sound
-
-			//Call CreateProjectile factory method sending in the messages projectile
-			Entity* pProj = pSelf->CreateHorizBubble(pCreateMsg->GetOwner());
-
-
-			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_CRAB)
-			{
-				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
-			}
-											 // if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_WIZARD)
+											 // if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
 											 // {
-											//	   pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
-											 //
+											 //	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_PLAYER_PROJ);
+											 // }
+											 // else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+											 // {
+											 //	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_ENEMY_PROJ);
 											 // }
 
-			pProj->Release();
-			pProj = nullptr;
+											 pProj->Release();
+											 pProj = nullptr;
 
 
-			break;
-		}
-		case MessageID::MSG_CREATE_VERT_BUBBLE:
-		{
-			//Downcast to the real message type
-			const CreateVerticalBubble* pCreateMsg = dynamic_cast<const CreateVerticalBubble*>(pMsg);
+											 break;
+	}
+	case MessageID::MSG_CREATE_GRAVPROJECTILE:
+	{
+												 //Downcast to the real message type
+												 const CreateGravProjectileMessage* pCreateMsg = dynamic_cast<const CreateGravProjectileMessage*>(pMsg);
 
-			//Make sure the message isn't a nullptr
-			assert(pCreateMsg != nullptr
-				   && "GameplayState::MessageProc - MSG_CREATE_VERT_BUBBLE is not actually a CreateVerticalBubble");
+												 //Make sure the message isn't a nullptr
+												 assert(pCreateMsg != nullptr
+													 && "GameplayState::MessageProc - MSG_CREATE_GRAVPROJECTILE is not actually a CreateGravProjectileMessage");
 
-			//Create a local reference to the gameplaystate singleton
-			GameplayState* pSelf = GameplayState::GetInstance();
-
-
-			//Play the projectile's audio sound
-
-			//Call CreateProjectile factory method sending in the messages projectile
-			Entity* pProj = pSelf->CreateVertBubble(pCreateMsg->GetOwner());
+												 //Create a local reference to the gameplaystate singleton
+												 GameplayState* pSelf = GameplayState::GetInstance();
 
 
-			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_CRAB)
-			{
-				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
-			}
+												 //Play the projectile's audio sound
 
-			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_WIZARD)
-			{
-				  pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
-
-			}
-
-			pProj->Release();
-			pProj = nullptr;
+												 //Call CreateProjectile factory method sending in the messages projectile
+												 Entity* pProj = pSelf->CreateGravProjectile(pCreateMsg->GetOwner());
 
 
-			break;
-		}
-		case MessageID::MSG_CREATE_SPRAY:
-		{
+												 if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_SQUID)
+												 {
+													 GravProjectile * temp = (GravProjectile*)pProj;
+													 temp->SetProjectileType(GravProjectile::INK);
+												 }
+												 else if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_SKELETON)
+												 {
+													 GravProjectile * temp = (GravProjectile*)pProj;
+													 temp->SetProjectileType(GravProjectile::BONE);
+												 }
 
-			//Downcast to the real message type
-			const CreateSprayMessage* pCreateMsg =
-				dynamic_cast<const CreateSprayMessage*>(pMsg);
+												 pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
 
-			//Make sure the message isn't a nullptr
-			assert(pCreateMsg != nullptr
-				   && "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
-
-			//Create a local reference to the gameplaystate singleton
-			GameplayState* pSelf = GameplayState::GetInstance();
-
-
-			//Play the projectile's audio sound
-
-			//Call CreateProjectile factory method sending in the messages projectile
-			Entity* pProj = pSelf->CreateSpray(pCreateMsg->GetOwner());
+												 pProj->Release();
+												 pProj = nullptr;
 
 
-			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
-			{
-				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
-			}
-			else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_YETI)
-			{
-				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
-			}
+												 break;
+	}
+	case MessageID::MSG_CREATE_HORIZ_BUBBLE:
+	{
+											   //Downcast to the real message type
+											   const CreateHorizontalBubble* pCreateMsg = dynamic_cast<const CreateHorizontalBubble*>(pMsg);
 
-			// if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
-			// {
-			//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_PLAYER_PROJ);
-			// }
-			// else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
-			// {
-			//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_ENEMY_PROJ);
-			// }
+											   //Make sure the message isn't a nullptr
+											   assert(pCreateMsg != nullptr
+												   && "GameplayState::MessageProc - MSG_CREATE_HORIZ_BUBBLE is not actually a CreateHorizontalBubbleMessage");
 
-			pProj->Release();
-			pProj = nullptr;
+											   //Create a local reference to the gameplaystate singleton
+											   GameplayState* pSelf = GameplayState::GetInstance();
 
 
-			break;
+											   //Play the projectile's audio sound
 
-		}
-		case MessageID::MSG_CREATE_HAWK:
-		{
-
-			//Downcast to the real message type
-			const CreateHawkMessage* pCreateMsg =
-				dynamic_cast<const CreateHawkMessage*>(pMsg);
-
-			//Make sure the message isn't a nullptr
-			assert(pCreateMsg != nullptr
-				   && "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
-
-			//Create a local reference to the gameplaystate singleton
-			GameplayState* pSelf = GameplayState::GetInstance();
+											   //Call CreateProjectile factory method sending in the messages projectile
+											   Entity* pProj = pSelf->CreateHorizBubble(pCreateMsg->GetOwner());
 
 
-			//Play the projectile's audio sound
+											   if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_CRAB)
+											   {
+												   pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+											   }
+											   // if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_WIZARD)
+											   // {
+											   //	   pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+											   //
+											   // }
+
+											   pProj->Release();
+											   pProj = nullptr;
 
 
-			//Call CreateProjectile factory method sending in the messages projectile
-			Entity* pProj = pSelf->CreateHawk(pCreateMsg->GetOwner());
+											   break;
+	}
+	case MessageID::MSG_CREATE_VERT_BUBBLE:
+	{
+											  //Downcast to the real message type
+											  const CreateVerticalBubble* pCreateMsg = dynamic_cast<const CreateVerticalBubble*>(pMsg);
+
+											  //Make sure the message isn't a nullptr
+											  assert(pCreateMsg != nullptr
+												  && "GameplayState::MessageProc - MSG_CREATE_VERT_BUBBLE is not actually a CreateVerticalBubble");
+
+											  //Create a local reference to the gameplaystate singleton
+											  GameplayState* pSelf = GameplayState::GetInstance();
 
 
-			if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
-			{
-				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_HAWK);
+											  //Play the projectile's audio sound
+
+											  //Call CreateProjectile factory method sending in the messages projectile
+											  Entity* pProj = pSelf->CreateVertBubble(pCreateMsg->GetOwner());
 
 
-			}
-			else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
-			{
-				pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_HAWK);
-			}
+											  if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_CRAB)
+											  {
+												  pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+											  }
 
-			pProj->Release();
-			pProj = nullptr;
+											  if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_WIZARD)
+											  {
+												  pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_PROJ);
+
+											  }
+
+											  pProj->Release();
+											  pProj = nullptr;
 
 
-			break;
+											  break;
+	}
+	case MessageID::MSG_CREATE_SPRAY:
+	{
 
-		}
-		case MessageID::MSG_CHANGE_LEVEL:
-		{
-			//Downcast to the real message type
-			const ChangeLevelMessage* pCreateMsg =
-				dynamic_cast<const ChangeLevelMessage*>(pMsg);
+										//Downcast to the real message type
+										const CreateSprayMessage* pCreateMsg =
+											dynamic_cast<const CreateSprayMessage*>(pMsg);
 
-			//Make sure the message isn't a nullptr
-			assert(pCreateMsg != nullptr
-				   && "GameplayState::MessageProc - MSG_CHANGE_LEVEL is not actually a CreateProjectileMessage");
+										//Make sure the message isn't a nullptr
+										assert(pCreateMsg != nullptr
+											&& "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
 
-			//Create a local reference to the gameplaystate singleton
-			GameplayState* pSelf = GameplayState::GetInstance();
+										//Create a local reference to the gameplaystate singleton
+										GameplayState* pSelf = GameplayState::GetInstance();
 
-			// Reference to the teleporter entity
-			Teleporter * teleporter = dynamic_cast<Teleporter*>(pCreateMsg->GetOwner());
-			GameplayState::GetInstance()->SaveGame();
-			pSelf->LoadLevel(teleporter->GetLevel());
 
-		}
-		case MessageID::MSG_UNKNOWN:
-		{
-			OutputDebugStringW(L"Game::MessageProc - unknown message id\n");
-			break;
-		}
-		default:
-		{
+										//Play the projectile's audio sound
 
-			break;
-		}
+										//Call CreateProjectile factory method sending in the messages projectile
+										Entity* pProj = pSelf->CreateSpray(pCreateMsg->GetOwner());
+
+
+										if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+										{
+											pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+										}
+										else if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_YETI)
+										{
+											pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+										}
+
+
+										pProj->Release();
+										pProj = nullptr;
+
+										pProj = pSelf->CreateSpray(pCreateMsg->GetOwner());
+
+										if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+										{
+											pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+										}
+										else if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_YETI)
+										{
+											pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+										}
+										// if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+										// {
+										//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_PLAYER_PROJ);
+										// }
+										// else if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+										// {
+										//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_ENEMY_PROJ);
+										// }
+
+										pProj->Release();
+										pProj = nullptr;
+
+
+										break;
+
+	}
+	case MessageID::MSG_CREATE_HAWK:
+	{
+
+									   //Downcast to the real message type
+									   const CreateHawkMessage* pCreateMsg =
+										   dynamic_cast<const CreateHawkMessage*>(pMsg);
+
+									   //Make sure the message isn't a nullptr
+									   assert(pCreateMsg != nullptr
+										   && "GameplayState::MessageProc - MSG_CREATE_PROJECTILE is not actually a CreateProjectileMessage");
+
+									   //Create a local reference to the gameplaystate singleton
+									   GameplayState* pSelf = GameplayState::GetInstance();
+
+
+									   //Play the projectile's audio sound
+
+
+									   //Call CreateProjectile factory method sending in the messages projectile
+									   Entity* pProj = pSelf->CreateHawk(pCreateMsg->GetOwner());
+
+
+									   if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+									   {
+										   pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_HAWK);
+
+
+									   }
+									   else if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_ENEMY)
+									   {
+										   pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_HAWK);
+									   }
+			
+									   pProj->Release();
+									   pProj = nullptr;
+
+
+									   break;
+
+	}
+	case MessageID::MSG_CHANGE_LEVEL:
+	{
+										//Downcast to the real message type
+										const ChangeLevelMessage* pCreateMsg =
+											dynamic_cast<const ChangeLevelMessage*>(pMsg);
+
+										//Make sure the message isn't a nullptr
+										assert(pCreateMsg != nullptr
+											&& "GameplayState::MessageProc - MSG_CHANGE_LEVEL is not actually a CreateProjectileMessage");
+
+										//Create a local reference to the gameplaystate singleton
+										GameplayState* pSelf = GameplayState::GetInstance();
+
+										// Reference to the teleporter entity
+										Teleporter * teleporter = dynamic_cast<Teleporter*>(pCreateMsg->GetOwner());
+										GameplayState::GetInstance()->SaveGame();
+										pSelf->LoadLevel(teleporter->GetLevel());
+
+	}
+	case MessageID::MSG_UNKNOWN:
+	{
+								   OutputDebugStringW(L"Game::MessageProc - unknown message id\n");
+								   break;
+	}
+	default:
+	{
+
+			   break;
+	}
 	}
 
 
@@ -906,16 +942,16 @@ Entity* GameplayState::CreateProjectile(Entity* pOwner) const
 	Projectile* proj = new Projectile();
 	//if (pOwner->GetType() != Entity::ENT_BOSS_WIZARD)
 
-	if (pOwner->GetDirection().x == 1)
+	if(pOwner->GetDirection().x == 1)
 		proj->SetPosition(SGD::Point(pOwner->GetRect().right, pOwner->GetPosition().y - pOwner->GetSize().height / 2));
-	else if (pOwner->GetDirection().x == -1)
+	else if(pOwner->GetDirection().x == -1)
 		proj->SetPosition(SGD::Point(pOwner->GetRect().left, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
-	else if (pOwner->GetDirection().y == -1)
+	else if(pOwner->GetDirection().y == -1)
 		proj->SetPosition(SGD::Point(pOwner->GetSize().width / 2, pOwner->GetRect().top));
-	else if (pOwner->GetDirection().y == 1)
+	else if(pOwner->GetDirection().y == 1)
 		proj->SetPosition(SGD::Point(pOwner->GetSize().width / 2, pOwner->GetRect().bottom));
 
-	if (pOwner->GetDirection().x == 1)
+	if(pOwner->GetDirection().x == 1)
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	else
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
@@ -933,7 +969,7 @@ Entity* GameplayState::CreateProjectile(Entity* pOwner) const
 Entity* GameplayState::CreateGravProjectile(Entity* pOwner) const
 {
 	GravProjectile* proj = new GravProjectile();
-	if (pOwner->GetDirection().x == 1)
+	if(pOwner->GetDirection().x == 1)
 		proj->SetPosition(SGD::Point(pOwner->GetRect().right, pOwner->GetRect().top /*- pOwner->GetRect().ComputeHeight() / 2*/));
 	else
 		proj->SetPosition(SGD::Point(pOwner->GetRect().left, pOwner->GetRect().top /*- pOwner->GetRect().ComputeHeight() / 2*/));
@@ -951,7 +987,7 @@ Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 	proj->SetOwner(pOwner);
 	proj->SetSize({ 40, 40 });*/
 
-	if (pOwner->GetType() == Entity::ENT_BOSS_WIZARD)
+	if(pOwner->GetType() == Entity::ENT_BOSS_WIZARD)
 	{
 
 		GameplayState* pSelf = GameplayState::GetInstance();
@@ -962,15 +998,15 @@ Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 		proj_1->SetSize({ 40, 40 });
 		proj_1->SetDirection({ -1, 1 });
 		pSelf->m_pEntities->AddEntity(proj_1, Entity::ENT_PROJ);
-	
-			
+
+
 
 
 		HorizontalBubble* proj_2 = new HorizontalBubble();
 		proj_2->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + 100));
 		proj_2->SetOwner(pOwner);
 		proj_2->SetSize({ 40, 40 });
-		proj_2->SetDirection({ 0, 1});
+		proj_2->SetDirection({ 0, 1 });
 		pSelf->m_pEntities->AddEntity(proj_2, Entity::ENT_PROJ);
 
 
@@ -983,9 +1019,9 @@ Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 		pSelf->m_pEntities->AddEntity(proj, Entity::ENT_PROJ);
 
 
-			//proj->SetDirection({ -1, 1 });
+		//proj->SetDirection({ -1, 1 });
 
-		
+
 		return proj;
 
 
@@ -998,7 +1034,7 @@ Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 		proj->SetOwner(pOwner);
 		proj->SetSize({ 40, 40 });
 
-		if (rand() % 2 == 1)
+		if(rand() % 2 == 1)
 			proj->SetDirection({ 1, 0 });
 		else
 			proj->SetDirection({ -1, 0 });
@@ -1014,7 +1050,7 @@ Entity* GameplayState::CreateVertBubble(Entity* pOwner) const
 	proj->SetOwner(pOwner);
 	proj->SetSize({ 40, 40 });
 
-	if (rand() % 2 == 1)
+	if(rand() % 2 == 1)
 		proj->SetDirection({ 1, 0 });
 	else
 		proj->SetDirection({ -1, 0 });
@@ -1026,10 +1062,12 @@ Entity* GameplayState::CreateVertBubble(Entity* pOwner) const
 Entity* GameplayState::CreateSpray(Entity* pOwner) const
 {
 	Ice* proj = new Ice;
-	if (pOwner->GetDirection().x == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + 40, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+
+	int range = rand() % 96 + 5;
+	if(pOwner->GetDirection().x == 1)
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width + range, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	else
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width - 40, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x - pOwner->GetSize().width - range, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
 	proj->SetSize({ 4, 4 });
 	proj->SetDirection({ pOwner->GetDirection().x, -1 });
@@ -1044,7 +1082,7 @@ Entity* GameplayState::CreateSpray(Entity* pOwner) const
 Hawk* GameplayState::CreateHawk(Entity* pOwner) const
 {
 	Hawk* proj = new Hawk;
-	if (pOwner->GetDirection().x == 1)
+	if(pOwner->GetDirection().x == 1)
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	else
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
@@ -1088,7 +1126,7 @@ void GameplayState::CreateBlocks(void)
 {
 
 
-	for (unsigned int i = 0; i < 10; i++)
+	for(unsigned int i = 0; i < 10; i++)
 	{
 		Block* pBlock_1 = new Block;
 
@@ -1117,7 +1155,7 @@ void GameplayState::CreateBlocks(void)
 void GameplayState::CreatePermFrozenTiles(void)
 {
 
-	for (unsigned int i = 0; i < 10; i++)
+	for(unsigned int i = 0; i < 10; i++)
 	{
 		FreezeableGround* pFreeze = new FreezeableGround;
 
@@ -1142,7 +1180,7 @@ void GameplayState::CreatePermFrozenTiles(void)
 
 void GameplayState::CreateTempFrozenTiles(void)
 {
-	for (unsigned int i = 0; i < 10; i++)
+	for(unsigned int i = 0; i < 10; i++)
 	{
 		FreezeableGround* pFreeze = new FreezeableGround;
 
@@ -1176,7 +1214,7 @@ void GameplayState::CreateHonor(int _x, int _y, int _amount, unsigned int _index
 	mHonor->SetVectorID(_index);
 	// Check if this has been collected
 	mHonor->SetIsCollected(false);
-	if (_index < GetHonorVectorSize())
+	if(_index < GetHonorVectorSize())
 	{
 		mHonor->SetIsCollected(m_mCollectedHonor[m_strCurrLevel][_index]);
 		mHonor->SetStartedCollected(m_mCollectedHonor[m_strCurrLevel][_index]);
@@ -1244,7 +1282,7 @@ void GameplayState::CreateDoor(int _x, int _y, bool _isHorizontal, int _ID, bool
 {
 	Door * pDoor = new Door();
 	pDoor->SetPosition({ (float)_x, (float)_y });
-	if (_isHorizontal)
+	if(_isHorizontal)
 	{
 		pDoor->SetSize({ 128.0f, 32.0f });
 	}
@@ -1449,120 +1487,120 @@ void GameplayState::CreateTeleporter(int _x, int _y, std::string _level, bool _h
 // -Creates an enemy at the given coordinates
 void GameplayState::CreateEnemy(int _x, int _y, int _type)
 {
-	switch (_type)
+	switch(_type)
 	{
-		case 0: // bull
-		{
-			BullEnemy * pBull = new BullEnemy();
-			pBull->SetPosition({ (float)_x, (float)_y });
-			pBull->SetOriginalPosition({ (float)_x, (float)_y });
-			pBull->SetPlayer(m_pPlayer);
-			m_pEntities->AddEntity(pBull, Entity::ENT_BULL_ENEMY);
-			pBull->Release();
-			break;
-		}
-		case 1: // skeleton
-		{
-			Skeleton * pSkeleton = new Skeleton();
-			pSkeleton->SetPosition({ (float)_x, (float)_y });
-			pSkeleton->SetOriginalPosition({ (float)_x, (float)_y });
-			pSkeleton->SetPlayer(m_pPlayer);
-			m_pEntities->AddEntity(pSkeleton, Entity::ENT_SKELETON);
-			pSkeleton->Release();
-			break;
-		}
-		case 2: // mutant man
-		{
-			MutantMan * pMutant = new MutantMan();
-			pMutant->SetPosition({ (float)_x, (float)_y });
-			pMutant->SetOriginalPosition({ (float)_x, (float)_y });
-			pMutant->Begin({ (float)_x, (float)_y });
-			pMutant->SetPlayer(m_pPlayer);
-			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_MAN);
-			pMutant->Release();
-			break;
-		}
-		case 3: // mutant bird
-		{
-			MutantBat * pMutant = new MutantBat();
-			pMutant->SetPosition({ (float)_x, (float)_y });
-			pMutant->SetOriginalPosition({ (float)_x, (float)_y });
-			pMutant->Begin({ (float)_x, (float)_y });
-			pMutant->SetPlayer(m_pPlayer);
-			m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_BIRD);
-			pMutant->Release();
-			break;
-		}
-		case 4: // ice golem
-		{
+	case 0: // bull
+	{
+				BullEnemy * pBull = new BullEnemy();
+				pBull->SetPosition({ (float)_x, (float)_y });
+				pBull->SetOriginalPosition({ (float)_x, (float)_y });
+				pBull->SetPlayer(m_pPlayer);
+				m_pEntities->AddEntity(pBull, Entity::ENT_BULL_ENEMY);
+				pBull->Release();
+				break;
+	}
+	case 1: // skeleton
+	{
+				Skeleton * pSkeleton = new Skeleton();
+				pSkeleton->SetPosition({ (float)_x, (float)_y });
+				pSkeleton->SetOriginalPosition({ (float)_x, (float)_y });
+				pSkeleton->SetPlayer(m_pPlayer);
+				m_pEntities->AddEntity(pSkeleton, Entity::ENT_SKELETON);
+				pSkeleton->Release();
+				break;
+	}
+	case 2: // mutant man
+	{
+				MutantMan * pMutant = new MutantMan();
+				pMutant->SetPosition({ (float)_x, (float)_y });
+				pMutant->SetOriginalPosition({ (float)_x, (float)_y });
+				pMutant->Begin({ (float)_x, (float)_y });
+				pMutant->SetPlayer(m_pPlayer);
+				m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_MAN);
+				pMutant->Release();
+				break;
+	}
+	case 3: // mutant bird
+	{
+				MutantBat * pMutant = new MutantBat();
+				pMutant->SetPosition({ (float)_x, (float)_y });
+				pMutant->SetOriginalPosition({ (float)_x, (float)_y });
+				pMutant->Begin({ (float)_x, (float)_y });
+				pMutant->SetPlayer(m_pPlayer);
+				m_pEntities->AddEntity(pMutant, Entity::ENT_MUTANT_BIRD);
+				pMutant->Release();
+				break;
+	}
+	case 4: // ice golem
+	{
 
-			IceGolem * pIceGolem = new IceGolem();
-			pIceGolem->SetPosition({ (float)_x, (float)_y });
-			pIceGolem->SetOriginalPosition({ (float)_x, (float)_y });
-			pIceGolem->SetPlayer(m_pPlayer);
-			pIceGolem->SetDirection(2);
-			m_pEntities->AddEntity(pIceGolem, Entity::ENT_ICE_GOLEM);
-			pIceGolem->Release();
-			break;
-		}
-		case 5: // ice bat
-		{
-			IceBat * pIceBat = new IceBat();
-			pIceBat->SetPosition({ (float)_x, (float)_y });
-			pIceBat->SetOriginalPosition({ (float)_x, (float)_y });
-			pIceBat->SetPlayer(m_pPlayer);
-			pIceBat->SetDirection(2);
-			m_pEntities->AddEntity(pIceBat, Entity::ENT_ICE_BAT);
-			pIceBat->Release();
-			break;
-		}
-		case 6: // ice turtle
-		{
-			IceTurtle * pIceTurtle = new IceTurtle();
-			pIceTurtle->SetPosition({ (float)_x, (float)_y });
-			pIceTurtle->SetOriginalPosition({ (float)_x, (float)_y });
-			pIceTurtle->SetPlayer(m_pPlayer);
-			m_pEntities->AddEntity(pIceTurtle, Entity::ENT_ICE_TURTLE);
-			pIceTurtle->Release();
-			pIceTurtle = nullptr;
-			break;
-		}
-		case 7: // hermit crab
-		{
-			Pouncer * pPouncer = new Pouncer();
-			pPouncer->SetPosition({ (float)_x, (float)_y });
-			pPouncer->SetOriginalPosition({ (float)_x, (float)_y });
-			pPouncer->SetPlayer(m_pPlayer);
-			m_pEntities->AddEntity(pPouncer, Entity::ENT_POUNCER);
-			pPouncer->Release();
-			break;
-		}
-		case 8: // squid
-		{
-			Squid * pSquid = new Squid();
-			pSquid->SetPosition({ (float)_x, (float)_y });
-			pSquid->SetOriginalPosition({ (float)_x, (float)_y });
-			pSquid->SetPlayer(m_pPlayer);
-			m_pEntities->AddEntity(pSquid, Entity::ENT_ENEMY);
-			pSquid->Release();
-			break;
-		}
-		case 9: // jellyfish
-		{
-			Jellyfish * pJelly = new Jellyfish();
-			pJelly->SetPosition({ (float)_x, (float)_y });
-			pJelly->SetOriginalPosition({ (float)_x, (float)_y });
-			pJelly->SetPlayer(m_pPlayer);
-			pJelly->SetPatrol();
-			m_pEntities->AddEntity(pJelly, Entity::ENT_ENEMY);
-			pJelly->Release();
-			break;
-		}
-		case 10: //Mini-Wizard (for final boss fight)
-		{
+				IceGolem * pIceGolem = new IceGolem();
+				pIceGolem->SetPosition({ (float)_x, (float)_y });
+				pIceGolem->SetOriginalPosition({ (float)_x, (float)_y });
+				pIceGolem->SetPlayer(m_pPlayer);
+				pIceGolem->SetDirection(2);
+				m_pEntities->AddEntity(pIceGolem, Entity::ENT_ICE_GOLEM);
+				pIceGolem->Release();
+				break;
+	}
+	case 5: // ice bat
+	{
+				IceBat * pIceBat = new IceBat();
+				pIceBat->SetPosition({ (float)_x, (float)_y });
+				pIceBat->SetOriginalPosition({ (float)_x, (float)_y });
+				pIceBat->SetPlayer(m_pPlayer);
+				pIceBat->SetDirection(2);
+				m_pEntities->AddEntity(pIceBat, Entity::ENT_ICE_BAT);
+				pIceBat->Release();
+				break;
+	}
+	case 6: // ice turtle
+	{
+				IceTurtle * pIceTurtle = new IceTurtle();
+				pIceTurtle->SetPosition({ (float)_x, (float)_y });
+				pIceTurtle->SetOriginalPosition({ (float)_x, (float)_y });
+				pIceTurtle->SetPlayer(m_pPlayer);
+				m_pEntities->AddEntity(pIceTurtle, Entity::ENT_ICE_TURTLE);
+				pIceTurtle->Release();
+				pIceTurtle = nullptr;
+				break;
+	}
+	case 7: // hermit crab
+	{
+				Pouncer * pPouncer = new Pouncer();
+				pPouncer->SetPosition({ (float)_x, (float)_y });
+				pPouncer->SetOriginalPosition({ (float)_x, (float)_y });
+				pPouncer->SetPlayer(m_pPlayer);
+				m_pEntities->AddEntity(pPouncer, Entity::ENT_POUNCER);
+				pPouncer->Release();
+				break;
+	}
+	case 8: // squid
+	{
+				Squid * pSquid = new Squid();
+				pSquid->SetPosition({ (float)_x, (float)_y });
+				pSquid->SetOriginalPosition({ (float)_x, (float)_y });
+				pSquid->SetPlayer(m_pPlayer);
+				m_pEntities->AddEntity(pSquid, Entity::ENT_ENEMY);
+				pSquid->Release();
+				break;
+	}
+	case 9: // jellyfish
+	{
+				Jellyfish * pJelly = new Jellyfish();
+				pJelly->SetPosition({ (float)_x, (float)_y });
+				pJelly->SetOriginalPosition({ (float)_x, (float)_y });
+				pJelly->SetPlayer(m_pPlayer);
+				pJelly->SetPatrol();
+				m_pEntities->AddEntity(pJelly, Entity::ENT_ENEMY);
+				pJelly->Release();
+				break;
+	}
+	case 10: //Mini-Wizard (for final boss fight)
+	{
 
 
-		}
+	}
 	}
 	//case 1: // skeleton
 	//{
@@ -1631,127 +1669,127 @@ void GameplayState::CreateEnemy(int _x, int _y, int _type)
 // -Creates a boss at the given coordinates
 void GameplayState::CreateBoss(int _x, int _y, int _type)
 {
-	switch (_type)
+	switch(_type)
 	{
-		case 0: // bull
-		{
-			Bull * pBull = new Bull();
-			pBull->SetPosition({ (float)_x, (float)_y });
-			pBull->SetStartPosition({ (float)_x, (float)_y });
-			pBull->SetPlayer(m_pPlayer);
-			m_pEntities->AddEntity(pBull, Entity::ENT_BOSS_BULL);
-			pBull->Release();
-			break;
-		}
-		case 1: // caveman
-		{
-			Caveman* Temp = new Caveman();
-			Temp->SetPosition({ (float)_x, (float)_y });
-			Temp->SetStartPosition({ (float)_x, (float)_y });
-			Temp->SetPlayer(m_pPlayer);
-			m_pEntities->AddEntity(Temp, Entity::ENT_BOSS_CAVEMAN);
-			Temp->Release();
-			break;
-		}
-		case 2: // yeti
-		{
+	case 0: // bull
+	{
+				Bull * pBull = new Bull();
+				pBull->SetPosition({ (float)_x, (float)_y });
+				pBull->SetStartPosition({ (float)_x, (float)_y });
+				pBull->SetPlayer(m_pPlayer);
+				m_pEntities->AddEntity(pBull, Entity::ENT_BOSS_BULL);
+				pBull->Release();
+				break;
+	}
+	case 1: // caveman
+	{
+				Caveman* Temp = new Caveman();
+				Temp->SetPosition({ (float)_x, (float)_y });
+				Temp->SetStartPosition({ (float)_x, (float)_y });
+				Temp->SetPlayer(m_pPlayer);
+				m_pEntities->AddEntity(Temp, Entity::ENT_BOSS_CAVEMAN);
+				Temp->Release();
+				break;
+	}
+	case 2: // yeti
+	{
 
-			Yeti * pYeti = new Yeti();
-			pYeti->SetPosition({ (float)_x, (float)_y });
-			pYeti->SetStartPosition({ (float)_x, (float)_y });
-			pYeti->SetPlayer(m_pPlayer);
-			m_pEntities->AddEntity(pYeti, Entity::ENT_BOSS_YETI);
-			pYeti->Release();
-			break;
-		}
-		case 3: // crab
-		{
-			Crab * mCrab = new Crab();
-			mCrab->SetPosition({ (float)_x, (float)_y });
-			m_pEntities->AddEntity(mCrab, Entity::ENT_BOSS_CRAB);
-			mCrab->Release();
-			break;
-		}
-		case 4: // wizard
-		{
-			WizardDash* m_pDash1 = new WizardDash;
-			//	m_pDash1->SetPosition({ 100, 400 });
-			m_pDash1->SetPosition({ -200, -200 });
-			m_pDash1->SetFacingRight(true);
+				Yeti * pYeti = new Yeti();
+				pYeti->SetPosition({ (float)_x, (float)_y });
+				pYeti->SetStartPosition({ (float)_x, (float)_y });
+				pYeti->SetPlayer(m_pPlayer);
+				m_pEntities->AddEntity(pYeti, Entity::ENT_BOSS_YETI);
+				pYeti->Release();
+				break;
+	}
+	case 3: // crab
+	{
+				Crab * mCrab = new Crab();
+				mCrab->SetPosition({ (float)_x, (float)_y });
+				m_pEntities->AddEntity(mCrab, Entity::ENT_BOSS_CRAB);
+				mCrab->Release();
+				break;
+	}
+	case 4: // wizard
+	{
+				WizardDash* m_pDash1 = new WizardDash;
+				//	m_pDash1->SetPosition({ 100, 400 });
+				m_pDash1->SetPosition({ -200, -200 });
+				m_pDash1->SetFacingRight(true);
 
-			WizardDash* m_pDash2 = new WizardDash;
-			//m_pDash2->SetPosition({ 400, 400 });
-			m_pDash2->SetPosition({ -200, -200 });
-			m_pDash2->SetFacingRight(false);
-
-
-			WizardDash* m_pDash3 = new WizardDash;
-			//m_pDash3->SetPosition({ 100, 700 });
-			m_pDash3->SetPosition({ -200, -200 });
-			m_pDash3->SetFacingRight(true);
+				WizardDash* m_pDash2 = new WizardDash;
+				//m_pDash2->SetPosition({ 400, 400 });
+				m_pDash2->SetPosition({ -200, -200 });
+				m_pDash2->SetFacingRight(false);
 
 
-			WizardDash* m_pDash4 = new WizardDash;
-			//m_pDash4->SetPosition({ 400, 700 });
-			m_pDash4->SetPosition({ -200, -200 });
-			m_pDash4->SetFacingRight(false);
+				WizardDash* m_pDash3 = new WizardDash;
+				//m_pDash3->SetPosition({ 100, 700 });
+				m_pDash3->SetPosition({ -200, -200 });
+				m_pDash3->SetFacingRight(true);
+
+
+				WizardDash* m_pDash4 = new WizardDash;
+				//m_pDash4->SetPosition({ 400, 700 });
+				m_pDash4->SetPosition({ -200, -200 });
+				m_pDash4->SetFacingRight(false);
 
 
 
 
-			Wizard* m_pWizard = new Wizard;
-			m_pWizard->SetPosition({ (float)_x, (float)_y });
-			m_pWizard->SetStartPosition({ (float)_x, (float)_y });
+				Wizard* m_pWizard = new Wizard;
+				m_pWizard->SetPosition({ (float)_x, (float)_y });
+				m_pWizard->SetStartPosition({ (float)_x, (float)_y });
 
 
-			WizardHawk* m_pHawk1 = new WizardHawk;
-			m_pHawk1->SetPosition({ -300, -300 });
-			m_pHawk1->SetSize({ 1, 1 });
+				WizardHawk* m_pHawk1 = new WizardHawk;
+				m_pHawk1->SetPosition({ -300, -300 });
+				m_pHawk1->SetSize({ 1, 1 });
 
-			WizardHawk* m_pHawk2 = new WizardHawk;
-			m_pHawk2->SetPosition({ -300, -300 });
-			m_pHawk2->SetSize({ 1, 1 });
-
-
-			WizardHawk* m_pHawk3 = new WizardHawk;
-			m_pHawk3->SetPosition({ -300, -300 });
-			m_pHawk3->SetSize({ 1, 1 });
+				WizardHawk* m_pHawk2 = new WizardHawk;
+				m_pHawk2->SetPosition({ -300, -300 });
+				m_pHawk2->SetSize({ 1, 1 });
 
 
-			WizardHawk* m_pHawk4 = new WizardHawk;
-			m_pHawk4->SetPosition({ -300, -300 });
-			m_pHawk4->SetSize({ 1, 1 });
+				WizardHawk* m_pHawk3 = new WizardHawk;
+				m_pHawk3->SetPosition({ -300, -300 });
+				m_pHawk3->SetSize({ 1, 1 });
 
 
-			m_pWizard->SetPlayer(m_pPlayer);
-
-			//Dashptrs
-			m_pWizard->SetDash1(m_pDash1);
-			m_pWizard->SetDash2(m_pDash2);
-			m_pWizard->SetDash3(m_pDash3);
-			m_pWizard->SetDash4(m_pDash4);
-
-			//Hawkptrs
-			m_pWizard->SetHawk1(m_pHawk1);
-			m_pWizard->SetHawk2(m_pHawk2);
-			m_pWizard->SetHawk3(m_pHawk3);
-			m_pWizard->SetHawk4(m_pHawk4);
+				WizardHawk* m_pHawk4 = new WizardHawk;
+				m_pHawk4->SetPosition({ -300, -300 });
+				m_pHawk4->SetSize({ 1, 1 });
 
 
-			m_pEntities->AddEntity(m_pDash1, Entity::ENT_WIZARD_DASH);
-			m_pEntities->AddEntity(m_pDash2, Entity::ENT_WIZARD_DASH);
-			m_pEntities->AddEntity(m_pDash3, Entity::ENT_WIZARD_DASH);
-			m_pEntities->AddEntity(m_pDash4, Entity::ENT_WIZARD_DASH);
+				m_pWizard->SetPlayer(m_pPlayer);
 
-			m_pEntities->AddEntity(m_pHawk1, Entity::ENT_WIZARD_HAWK);
-			m_pEntities->AddEntity(m_pHawk2, Entity::ENT_WIZARD_HAWK);
-			m_pEntities->AddEntity(m_pHawk3, Entity::ENT_WIZARD_HAWK);
-			m_pEntities->AddEntity(m_pHawk4, Entity::ENT_WIZARD_HAWK);
+				//Dashptrs
+				m_pWizard->SetDash1(m_pDash1);
+				m_pWizard->SetDash2(m_pDash2);
+				m_pWizard->SetDash3(m_pDash3);
+				m_pWizard->SetDash4(m_pDash4);
 
-			m_pEntities->AddEntity(m_pWizard, Entity::ENT_BOSS_WIZARD);
-			m_pWizard->Release();
-			break;
-		}
+				//Hawkptrs
+				m_pWizard->SetHawk1(m_pHawk1);
+				m_pWizard->SetHawk2(m_pHawk2);
+				m_pWizard->SetHawk3(m_pHawk3);
+				m_pWizard->SetHawk4(m_pHawk4);
+
+
+				m_pEntities->AddEntity(m_pDash1, Entity::ENT_WIZARD_DASH);
+				m_pEntities->AddEntity(m_pDash2, Entity::ENT_WIZARD_DASH);
+				m_pEntities->AddEntity(m_pDash3, Entity::ENT_WIZARD_DASH);
+				m_pEntities->AddEntity(m_pDash4, Entity::ENT_WIZARD_DASH);
+
+				m_pEntities->AddEntity(m_pHawk1, Entity::ENT_WIZARD_HAWK);
+				m_pEntities->AddEntity(m_pHawk2, Entity::ENT_WIZARD_HAWK);
+				m_pEntities->AddEntity(m_pHawk3, Entity::ENT_WIZARD_HAWK);
+				m_pEntities->AddEntity(m_pHawk4, Entity::ENT_WIZARD_HAWK);
+
+				m_pEntities->AddEntity(m_pWizard, Entity::ENT_BOSS_WIZARD);
+				m_pWizard->Release();
+				break;
+	}
 	}
 
 
@@ -1790,7 +1828,7 @@ void GameplayState::SaveGame()
 	wcstombs_s(&size, path, MAX_PATH, wszPath, MAX_PATH);
 
 	// Convert char types
-	if (hr == S_OK)
+	if(hr == S_OK)
 		stringstream << path;
 	std::string pathtowrite = stringstream.str();
 
@@ -1803,15 +1841,15 @@ void GameplayState::SaveGame()
 	// Create our save file
 	pathtowrite += "\\savefile";
 
-	if (Game::GetInstance()->GetSelectedNumber() == 1)
+	if(Game::GetInstance()->GetSelectedNumber() == 1)
 	{
 		pathtowrite += "1.xml";
 	}
-	else if (Game::GetInstance()->GetSelectedNumber() == 2)
+	else if(Game::GetInstance()->GetSelectedNumber() == 2)
 	{
 		pathtowrite += "2.xml";
 	}
-	else if (Game::GetInstance()->GetSelectedNumber() == 3)
+	else if(Game::GetInstance()->GetSelectedNumber() == 3)
 	{
 		pathtowrite += "3.xml";
 	}
@@ -1833,7 +1871,7 @@ void GameplayState::SaveGame()
 
 	// Loop through each level
 	typedef std::map<std::string, std::vector<bool>>::iterator it_type;
-	for (it_type iter = m_mCollectedHonor.begin(); iter != m_mCollectedHonor.end(); iter++)
+	for(it_type iter = m_mCollectedHonor.begin(); iter != m_mCollectedHonor.end(); iter++)
 	{
 		// Grab the key and value
 		std::string key = iter->first;
@@ -1842,7 +1880,7 @@ void GameplayState::SaveGame()
 		// Create a node for the current level
 		TiXmlElement* Level = new TiXmlElement("Level");
 		Level->SetAttribute("name", key.c_str());
-		if (m_mUnlockedLevels[key])
+		if(m_mUnlockedLevels[key])
 		{
 			Level->SetAttribute("unlocked", "1");
 		}
@@ -1853,10 +1891,10 @@ void GameplayState::SaveGame()
 		Root->LinkEndChild(Level);
 
 		// Loop through each value in the data
-		for (unsigned int i = 0; i < value.size(); ++i)
+		for(unsigned int i = 0; i < value.size(); ++i)
 		{
 			TiXmlElement* Honor = new TiXmlElement("Honor");
-			if (value[i])
+			if(value[i])
 			{
 				Honor->SetAttribute("collected", "1");
 			}
@@ -1885,7 +1923,7 @@ void GameplayState::LoadGame()
 	wcstombs_s(&size, path, MAX_PATH, wszPath, MAX_PATH);
 
 	// Convert char types
-	if (hr == S_OK)
+	if(hr == S_OK)
 		stringstream << path;
 	std::string pathtowrite = stringstream.str();
 
@@ -1898,15 +1936,15 @@ void GameplayState::LoadGame()
 	// Create our save file
 	pathtowrite += "\\savefile";
 
-	if (Game::GetInstance()->GetSelectedNumber() == 1)
+	if(Game::GetInstance()->GetSelectedNumber() == 1)
 	{
 		pathtowrite += "1.xml";
 	}
-	else if (Game::GetInstance()->GetSelectedNumber() == 2)
+	else if(Game::GetInstance()->GetSelectedNumber() == 2)
 	{
 		pathtowrite += "2.xml";
 	}
-	else if (Game::GetInstance()->GetSelectedNumber() == 3)
+	else if(Game::GetInstance()->GetSelectedNumber() == 3)
 	{
 		pathtowrite += "3.xml";
 	}
@@ -1917,7 +1955,7 @@ void GameplayState::LoadGame()
 	doc.LoadFile(pathtowrite.c_str());
 
 	TiXmlElement* pRoot = doc.RootElement();
-	if (pRoot == nullptr)
+	if(pRoot == nullptr)
 	{
 		m_pPlayer->SetHonorCollected(0);
 		return;
@@ -1931,7 +1969,7 @@ void GameplayState::LoadGame()
 
 	// Loop through each level
 	TiXmlElement * pLevel = pRoot->FirstChildElement();
-	while (pLevel)
+	while(pLevel)
 	{
 		// Name of this level, used for the key
 		std::string name = pLevel->Attribute("name");
@@ -1943,12 +1981,12 @@ void GameplayState::LoadGame()
 
 		// Loop through the vector of collected honor
 		TiXmlElement * pVector = pLevel->FirstChildElement();
-		while (pVector)
+		while(pVector)
 		{
 			// Read in value
 			int collected;
 			pVector->Attribute("collected", &collected);
-			if (collected == 1)
+			if(collected == 1)
 			{
 				m_mCollectedHonor[name].push_back(true);
 			}
@@ -1978,20 +2016,20 @@ void GameplayState::LoadLevelMap()
 	TiXmlDocument doc;
 
 	// Load the file
-	if (doc.LoadFile("Assets/Levels/LevelGuide.xml") == false)
+	if(doc.LoadFile("Assets/Levels/LevelGuide.xml") == false)
 	{
 		return;
 	}
 
 	// Grab a reference to the first element
 	TiXmlElement* pLevel = doc.RootElement();
-	if (pLevel == nullptr)
+	if(pLevel == nullptr)
 	{
 		return;
 	}
 
 	// Loop through reading each level
-	while (pLevel != nullptr)
+	while(pLevel != nullptr)
 	{
 		// Read in data and push into the map
 		std::string key = pLevel->Attribute("key");
@@ -2021,6 +2059,15 @@ void GameplayState::LoadLevelMap()
 // - Loads the level at the path for the given key
 void GameplayState::LoadLevel(std::string _level)
 {
+	// Clear screen for loading
+	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
+	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { 255, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+
+	//Local refernce to the font
+	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+	font.DrawString("LOADING", 250, 200, 2.0f, { 255, 0, 0 });
+
+	SGD::GraphicsManager::GetInstance()->Update();
 
 	// Clear the old entities
 	m_pEntities->RemoveAll();
@@ -2029,7 +2076,7 @@ void GameplayState::LoadLevel(std::string _level)
 	m_pEntities->AddEntity(m_pPlayer, Entity::ENT_PLAYER);
 
 	// First unload the last level
-	if (m_pLevel != nullptr)
+	if(m_pLevel != nullptr)
 	{
 		m_pLevel->Exit();
 		delete m_pLevel;
@@ -2049,7 +2096,96 @@ void GameplayState::LoadLevel(std::string _level)
 	m_pPlayer->SetStartPosition({ (float)m_pLevel->GetPlayerX(), (float)m_pLevel->GetPlayerY() });
 	m_pPlayer->SetVelocity({ 0.0f, 0.0f });
 
-	// TODO anything else to reset the player
+
+
+	//Play Music
+	if(_level == "Level1_1" || _level == "Level1_2" || _level == "Level1_3" || _level == "Level1_5")
+	{
+		//if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+		//{
+		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		//}
+
+
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld1, true);
+
+
+
+	}
+	else if(_level == "Level2_1" || _level == "Level2_2" || _level == "Level2_3" || _level == "Level2_4" || _level == "Level2_5")
+	{
+		//if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+		//{
+		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		//}
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld1);
+		}
+
+
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld2))
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld2, true);
+	}
+	else if(_level == "Level3_1" || _level == "Level3_2" || _level == "Level3_3" || _level == "Level3_4" || _level == "Level3_5")
+	{
+		//{
+		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		//}
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld2))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld2);
+		}
+
+
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld3))
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld3, true);
+	}
+	else if(_level == "Level4_1" || _level == "Level4_2" || _level == "Level4_3" || _level == "Level4_4" || _level == "Level4_5")
+	{
+		//{
+		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		//}
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld3))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld3);
+		}
+
+
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld4))
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld4, true);
+	}
+	else if(_level == "Level5_1" || _level == "Level5_2" || _level == "Level5_3" || _level == "Level5_4")
+	{
+		//{
+		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		//}
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld4))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld4);
+		}
+
+
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld5))
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld5, true);
+	}
+	else if(_level == "Level5_5")
+	{
+		//{
+		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		//}
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld5))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld5);
+		}
+
+
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hFinalBoss))
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hFinalBoss, true);
+	}
+
+// TODO anything else to reset the player
 }
 
 /////////////////////////////////////////////
@@ -2078,7 +2214,7 @@ void GameplayState::SaveHonorVector()
 
 	// Loop through each level
 	typedef std::map<std::string, std::vector<bool>>::iterator it_type;
-	for (it_type iter = m_mCollectedHonor.begin(); iter != m_mCollectedHonor.end(); iter++)
+	for(it_type iter = m_mCollectedHonor.begin(); iter != m_mCollectedHonor.end(); iter++)
 	{
 		// Grab the key and value
 		std::string key = iter->first;
@@ -2087,7 +2223,7 @@ void GameplayState::SaveHonorVector()
 		// Create a node for the current level
 		TiXmlElement* Level = new TiXmlElement("Level");
 		Level->SetAttribute("name", key.c_str());
-		if (m_mUnlockedLevels[key])
+		if(m_mUnlockedLevels[key])
 		{
 			Level->SetAttribute("unlocked", "1");
 		}
@@ -2098,10 +2234,10 @@ void GameplayState::SaveHonorVector()
 		Root->LinkEndChild(Level);
 
 		// Loop through each value in the data
-		for (unsigned int i = 0; i < value.size(); ++i)
+		for(unsigned int i = 0; i < value.size(); ++i)
 		{
 			TiXmlElement* Honor = new TiXmlElement("Honor");
-			if (value[i])
+			if(value[i])
 			{
 				Honor->SetAttribute("collected", "1");
 			}
@@ -2126,14 +2262,14 @@ void GameplayState::LoadHonorVector()
 	TiXmlDocument doc;
 
 	// Load the file
-	if (doc.LoadFile("Assets/Levels/CollectedHonor.xml") == false)
+	if(doc.LoadFile("Assets/Levels/CollectedHonor.xml") == false)
 	{
 		return;
 	}
 
 	// Grab reference to the root
 	TiXmlElement* pRoot = doc.RootElement();
-	if (pRoot == nullptr)
+	if(pRoot == nullptr)
 	{
 		return;
 	}
@@ -2145,7 +2281,7 @@ void GameplayState::LoadHonorVector()
 
 	// Loop through each level
 	TiXmlElement * pLevel = pRoot->FirstChildElement();
-	while (pLevel)
+	while(pLevel)
 	{
 		// Name of this level, used for the key
 		std::string name = pLevel->Attribute("name");
@@ -2157,12 +2293,12 @@ void GameplayState::LoadHonorVector()
 
 		// Loop through the vector of collected honor
 		TiXmlElement * pVector = pLevel->FirstChildElement();
-		while (pVector)
+		while(pVector)
 		{
 			// Read in value
 			int collected;
 			pVector->Attribute("collected", &collected);
-			if (collected == 1)
+			if(collected == 1)
 			{
 				m_mCollectedHonor[name].push_back(true);
 			}
@@ -2182,7 +2318,7 @@ void GameplayState::LoadHonorVector()
 
 bool GameplayState::GetHonorValue(unsigned int _index)
 {
-	if (_index < m_mCollectedHonor[m_strCurrLevel].size())
+	if(_index < m_mCollectedHonor[m_strCurrLevel].size())
 	{
 		return m_mCollectedHonor[m_strCurrLevel][_index];
 	}
@@ -2207,8 +2343,8 @@ void GameplayState::RenderMiniMap()
 
 	// Draw the backdrop
 	SGD::Rectangle backDrop = SGD::Rectangle(m_fBorderSize, m_fBorderSize,
-											 Game::GetInstance()->GetScreenWidth() - m_fBorderSize,
-											 Game::GetInstance()->GetScreenHeight() - m_fBorderSize);
+		Game::GetInstance()->GetScreenWidth() - m_fBorderSize,
+		Game::GetInstance()->GetScreenHeight() - m_fBorderSize);
 	pGraphics->DrawRectangle(backDrop, { 100, 200, 200, 200 }, { 0, 0, 0 }, 0);
 
 	// Render the terrain onto the minimap

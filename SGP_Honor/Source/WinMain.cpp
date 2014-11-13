@@ -165,7 +165,7 @@ HWND MakeWindow(HINSTANCE hInstance)
 		return 0;
 
 
-	// Setup window style flags
+	// Setup window style flags							//For Arcade Input
 	DWORD dwWindowStyleFlags = WS_VISIBLE | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
 
 	// Setup the desired client area size
@@ -238,6 +238,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		else									//	losing focus (pause)
 		{
+			
 			Game::GetInstance()->AddState(PauseState::GetInstance());
 			//SGD::AudioManager::GetInstance()->StopAudio(m_hBGM);
 		}

@@ -96010,7 +96010,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="22">
+	<Entities numEntities="34">
 		<Entity type="3" x="318" y="5756" numArgs="2" name="Turret_1">
 			<Argument type="1" name="Direction" value="2" />
 			<Argument type="2" name="Timer" value="1" />
@@ -96023,17 +96023,8 @@
 			<Argument type="1" name="Direction" value="2" />
 			<Argument type="2" name="Timer" value="1" />
 		</Entity>
-		<Entity type="0" x="2616" y="5256" numArgs="1" name="Honor_1">
-			<Argument type="1" name="Amount" value="50" />
-		</Entity>
 		<Entity type="19" x="2982" y="4656" numArgs="1" name="Enemy_1">
 			<Argument type="1" name="Type" value="7" />
-		</Entity>
-		<Entity type="0" x="2708" y="5244" numArgs="1" name="Honor_2">
-			<Argument type="1" name="Amount" value="50" />
-		</Entity>
-		<Entity type="0" x="2658" y="5304" numArgs="1" name="Honor_3">
-			<Argument type="1" name="Amount" value="50" />
 		</Entity>
 		<Entity type="19" x="3332" y="5178" numArgs="1" name="Enemy_2">
 			<Argument type="1" name="Type" value="8" />
@@ -96092,6 +96083,51 @@
 			<Argument type="0" name="IsVertical" value="0" />
 			<Argument type="2" name="TurnDistance" value="1.0" />
 			<Argument type="2" name="Speed" value="20.0" />
+		</Entity>
+		<Entity type="0" x="736" y="5920" numArgs="1" name="Honor_1">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="672" y="5920" numArgs="1" name="Honor_2">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="608" y="5920" numArgs="1" name="Honor_3">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="1600" y="3200" numArgs="1" name="Honor_4">
+			<Argument type="1" name="Amount" value="100" />
+		</Entity>
+		<Entity type="0" x="704" y="4032" numArgs="1" name="Honor_5">
+			<Argument type="1" name="Amount" value="50" />
+		</Entity>
+		<Entity type="0" x="3104" y="4640" numArgs="1" name="Honor_6">
+			<Argument type="1" name="Amount" value="10" />
+		</Entity>
+		<Entity type="0" x="3200" y="4640" numArgs="1" name="Honor_7">
+			<Argument type="1" name="Amount" value="10" />
+		</Entity>
+		<Entity type="0" x="224" y="4416" numArgs="1" name="Honor_8">
+			<Argument type="1" name="Amount" value="5" />
+		</Entity>
+		<Entity type="0" x="128" y="3936" numArgs="1" name="Honor_9">
+			<Argument type="1" name="Amount" value="5" />
+		</Entity>
+		<Entity type="0" x="224" y="3552" numArgs="1" name="Honor_10">
+			<Argument type="1" name="Amount" value="5" />
+		</Entity>
+		<Entity type="0" x="992" y="5440" numArgs="1" name="Honor_11">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="1088" y="5440" numArgs="1" name="Honor_12">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="1760" y="4480" numArgs="1" name="Honor_13">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="1760" y="4192" numArgs="1" name="Honor_14">
+			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="1760" y="3936" numArgs="1" name="Honor_15">
+			<Argument type="1" name="Amount" value="1" />
 		</Entity>
 	</Entities>
 </Level>

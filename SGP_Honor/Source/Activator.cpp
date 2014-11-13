@@ -18,12 +18,13 @@ Activator::Activator(bool isPressure) : Listener(this)
 	m_szSize = { 32, 32 };
 
 	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/Switch.wav");
-
+	m_hActivator = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/Activator.png");
 }
 
 
 Activator::~Activator()
 {
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hActivator);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
 }
 
@@ -92,6 +93,7 @@ void Activator::Update(float elapsedTime)
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
 			m_fSwitchTimer = 0.4f;
+			m_bIsOn = !m_bIsOn;
 		}
 		if (nIntersectHeight > nIntersectWidth)
 		{
@@ -110,6 +112,7 @@ void Activator::Update(float elapsedTime)
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
 			m_fSwitchTimer = 0.4f;
+			m_bIsOn = !m_bIsOn;
 		}
 		if (nIntersectHeight == nIntersectWidth
 			&& nIntersectHeight > 0)
@@ -128,6 +131,7 @@ void Activator::Update(float elapsedTime)
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
 			m_fSwitchTimer = 0.4f;
+			m_bIsOn = !m_bIsOn;
 		}
 
 	}
@@ -149,7 +153,36 @@ void Activator::Render(void)
 
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
-	Camera::GetInstance()->Draw(rMyRect, { 255, 255, 0, 0 });
+	//Camera::GetInstance()->Draw(rMyRect, { 255, 255, 0, 0 });
+
+	// Draw texture
+	SGD::Point newPoint = { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y };
+	if (m_bPressurePlate)
+	{
+		if (m_bIsOn)
+		{
+			SGD::Rectangle rect = { 32, 32, 64, 64 };
+			Camera::GetInstance()->DrawTextureSection(m_hActivator, newPoint, rect, 0.0f, { 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 1.0f, 1.0f });
+		}
+		else
+		{
+			SGD::Rectangle rect = { 0, 32, 32, 64 };
+			Camera::GetInstance()->DrawTextureSection(m_hActivator, newPoint, rect, 0.0f, { 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 1.0f, 1.0f });
+		}
+	}
+	else
+	{
+		if (m_bIsOn)
+		{
+			SGD::Rectangle rect = { 32, 0, 64, 32 };
+			Camera::GetInstance()->DrawTextureSection(m_hActivator, newPoint, rect, 0.0f, { 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 1.0f, 1.0f });
+		}
+		else
+		{
+			SGD::Rectangle rect = { 0, 0, 32, 32 };
+			Camera::GetInstance()->DrawTextureSection(m_hActivator, newPoint, rect, 0.0f, { 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 1.0f, 1.0f });
+		}
+	}
 }
 
 int Activator::GetType(void) const
@@ -194,6 +227,7 @@ void Activator::HandleCollision(const IEntity* pOther)
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
 			m_fSwitchTimer = .5f;
+			m_bIsOn = true;
 		}
 
 	}
@@ -217,6 +251,7 @@ void Activator::HandleCollision(const IEntity* pOther)
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
 			m_fSwitchTimer = 3.0f;
+			m_bIsOn = !m_bIsOn;
 		}
 
 	}

@@ -326,4 +326,5 @@ void PauseState::Render(void)
 		//font.DrawString("Exit", 450, 450, 1, SGD::Color{ 255, 0, 0, 255 });
 	}
 
+
 }

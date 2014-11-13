@@ -31,11 +31,7 @@ BuzzSaw::~BuzzSaw()
 void BuzzSaw::Update(float elapsedTime)
 {
 
-	if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hEffect))
-	{
-		SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
-		m_bEffectPlay = true;
-	}
+
 
 	if (m_unDistance != 0)
 	{
@@ -121,5 +117,10 @@ void BuzzSaw::HandleCollision(const IEntity* pOther)
 		//if so move back up but kill the player
 		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
+		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hEffect))
+		{
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
+			m_bEffectPlay = true;
+		}
 	}
 }

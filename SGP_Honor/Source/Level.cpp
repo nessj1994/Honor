@@ -12,9 +12,10 @@
 #include "LevelCollider.h"
 #include "Game.h"
 #include "GameplayState.h"
+#include "Font.h"
+#include "BitmapFont.h"
 
 #include "../TinyXML/tinyxml.h"
-#include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_Declarations.h"
 #include "../SGD Wrappers/SGD_Handle.h"
 #include "../SGD Wrappers/SGD_Event.h"
@@ -24,6 +25,8 @@
 // Constructor
 Level::Level()
 {
+	// Load texture for player
+	m_hPlayerSheet = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/Charbeach_beard.png");
 }
 
 
@@ -31,6 +34,9 @@ Level::Level()
 // Destructor
 Level::~Level()
 {
+	// Unload player texture
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hPlayerSheet);
+
 	// Loop through and free each image layer
 	for (unsigned int i = 0; i < m_vlLayers.size(); ++i)
 	{
@@ -232,6 +238,11 @@ void Level::Exit()
 // - Loads in the level from the XML file
 bool Level::LoadLevel(const char * _path)
 {
+
+	// Used to keep track of loading progress
+	unsigned int progress = 0;
+	DrawLoadScreen(progress);
+
 	//Create the tinyxml document 
 	TiXmlDocument doc;
 
@@ -247,6 +258,10 @@ bool Level::LoadLevel(const char * _path)
 	{
 		return false;
 	}
+
+	// Update progress
+	++progress;
+	DrawLoadScreen(progress);
 
 	// Read in width and height of the map
 	pRoot->Attribute("width", &m_nWidth);
@@ -265,6 +280,10 @@ bool Level::LoadLevel(const char * _path)
 	TiXmlElement* pImageLayers = pRoot->FirstChildElement();
 	int numLayers = 0;
 	pImageLayers->Attribute("numLayers", &numLayers);
+
+	// Update progress
+	++progress;
+	DrawLoadScreen(progress);
 
 	// Read in each image layer
 	TiXmlElement * pImageLayer = pImageLayers->FirstChildElement();
@@ -328,6 +347,10 @@ bool Level::LoadLevel(const char * _path)
 		pImageLayer = pImageLayer->NextSiblingElement();
 	}
 
+	// Update progress
+	++progress;
+	DrawLoadScreen(progress);
+
 	// Read in the collision layer
 	TiXmlElement * pCollisionLayer = pImageLayers->NextSiblingElement();
 
@@ -345,6 +368,10 @@ bool Level::LoadLevel(const char * _path)
 			pTile = pTile->NextSiblingElement();
 		}
 	}
+
+	// Update progress
+	++progress;
+	DrawLoadScreen(progress);
 
 	// Read in the event layer
 	TiXmlElement * pEventLayer = pCollisionLayer->NextSiblingElement();
@@ -367,6 +394,10 @@ bool Level::LoadLevel(const char * _path)
 			pTile = pTile->NextSiblingElement();
 		}
 	}
+
+	// Update progress
+	++progress;
+	DrawLoadScreen(progress);
 
 	// Read in the entities
 	TiXmlElement * pEntities = pEventLayer->NextSiblingElement();
@@ -637,6 +668,10 @@ bool Level::LoadLevel(const char * _path)
 		}
 	}
 
+	// Update progress
+	++progress;
+	DrawLoadScreen(progress);
+
 
 	return true;
 
@@ -804,4 +839,88 @@ void Level::RenderMiniMap()
 
 		}
 	}
+}
+
+void Level::DrawLoadScreen(unsigned int _progress)
+{
+
+	// Reference to graphics manager
+	SGD::GraphicsManager * pGraphics = SGD::GraphicsManager::GetInstance();
+
+	// Clear screen
+	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
+	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { 255, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+
+
+	// First frame
+	if (_progress >= 0)
+	{
+		pGraphics->DrawTextureSection(m_hPlayerSheet,
+		{ 150, 300 }, { 193, 192, 250, 287 },
+		0.0f, { 0.0f, 0.0f },
+		{ 255, 255, 255, 255 }, { -2.0f, 2.0f });
+	}
+
+	// Second frame
+	if (_progress >= 1)
+	{
+		pGraphics->DrawTextureSection(m_hPlayerSheet,
+		{ 250, 300 }, { 256, 192, 319, 287 },
+		0.0f, { 0.0f, 0.0f },
+		{ 255, 255, 255, 255 }, { -2.0f, 2.0f });
+	}
+
+	// Third frame
+	if (_progress >= 2)
+	{
+		pGraphics->DrawTextureSection(m_hPlayerSheet,
+		{ 350, 316 }, { 317, 200, 383, 287 },
+		0.0f, { 0.0f, 0.0f },
+		{ 255, 255, 255, 255 }, { -2.0f, 2.0f });
+	}
+
+	// Fourth frame
+	if (_progress >= 3)
+	{
+		pGraphics->DrawTextureSection(m_hPlayerSheet,
+		{ 450, 300 }, { 379, 192, 440, 287 },
+		0.0f, { 0.0f, 0.0f },
+		{ 255, 255, 255, 255 }, { -2.0f, 2.0f });
+	}
+
+	// Fifth frame
+	if (_progress >= 4)
+	{
+		pGraphics->DrawTextureSection(m_hPlayerSheet,
+		{ 550, 300 }, { 182, 83, 237, 163 },
+		0.0f, { 0.0f, 0.0f },
+		{ 255, 255, 255, 255 }, { -2.0f, 2.0f });
+	}
+
+	// Sixth frame
+	if (_progress >= 5)
+	{
+		pGraphics->DrawTextureSection(m_hPlayerSheet,
+		{ 650, 285 }, { 243, 83, 288, 171 },
+		0.0f, { 0.0f, 0.0f },
+		{ 255, 255, 255, 255 }, { -2.0f, 2.0f });
+	}
+
+
+	// Seventh frame
+	if (_progress >= 6)
+	{
+		pGraphics->DrawTextureSection(m_hPlayerSheet,
+		{ 770, 320 }, { 290, 83, 344, 194 },
+		0.0f, { 0.0f, 0.0f },
+		{ 255, 255, 255, 255 }, { -2.0f, 2.0f });
+	}
+
+	// Draw loading
+	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+	font.DrawString("LOADING", 250, 200, 2.0f, { 255, 0, 0 });
+
+	// Push final changes
+	pGraphics->Update();
+
 }

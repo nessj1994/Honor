@@ -5,6 +5,7 @@
 #include "../SGD Wrappers/SGD_Event.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
+#include "ParticleEngine.h"
 Laser::Laser() : Listener(this)
 {
 	m_szSize = { 32, 32 };
@@ -19,12 +20,15 @@ Laser::Laser() : Listener(this)
 
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Laser.png");
 	m_hEffect = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/Laser.wav");
+	m_LaserEffect = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/LaserEffect.xml", "Laser", m_ptPosition);
+	m_LaserEffect->SetSize(m_szSize);
 }
 
 
 
 Laser::~Laser()
 {
+	delete m_LaserEffect;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
 }
@@ -33,7 +37,11 @@ Laser::~Laser()
 /////////////////Interface//////////////////////
 void Laser::Update(float elapsedTime)
 {
-
+	//Emitter process for laser
+	m_LaserEffect->SetPosition(m_ptPosition);
+	m_LaserEffect->SetSize(m_szSize);
+	m_LaserEffect->Update(elapsedTime);
+	//
 	if(m_bOn == true)
 	{
 		if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hEffect))
@@ -77,9 +85,17 @@ void Laser::Update(float elapsedTime)
 
 
 	m_bFull = false;
+
+	//Emitter process for laser
+	m_LaserEffect->SetPosition(m_ptPosition);
+	m_LaserEffect->SetSize(m_szSize);
+	m_LaserEffect->Update(elapsedTime);
+	//
 }
 void Laser::Render(void)
 {
+	m_LaserEffect->Render();
+
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 
 
@@ -87,7 +103,9 @@ void Laser::Render(void)
 	Camera::GetInstance()->Draw(SGD::Rectangle(
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
-		SGD::Color::Color(255, 0, 255, 0));
+		SGD::Color::Color(100, 155, 0, 0));
+
+	m_LaserEffect->Render();
 
 	Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y },
 		0.0f, m_hImage, true, 0.8f, {}, {});
