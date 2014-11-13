@@ -1408,8 +1408,8 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	}
 	if (pEvent->GetEventID() == "Screen2x4")
 	{
-		m_fPanX = 2;
-		m_fPanY = 4;
+		m_fPanX = 5;
+		m_fPanY = 2;
 		Camera::GetInstance()->SetCameraCap(0);
 
 	}
@@ -1427,7 +1427,7 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	if (pEvent->GetEventID() == "Screen3x3")
 	{
 		m_fPanX = 3;
-		m_fPanY = 3;
+		m_fPanY = 2.5f;
 		Camera::GetInstance()->SetCameraCap(0);
 
 	}
@@ -2008,7 +2008,7 @@ void Player::UpdateJump(float elapsedTime)
 			}
 			if (m_bSlowed == true)
 			{
-				m_fJumpTimer = 0.25f;
+				m_fJumpTimer = 0.35f;
 
 			}
 			else
