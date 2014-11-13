@@ -113,143 +113,146 @@ Player::~Player()
 /////////////////Interface///////////////////////
 void Player::Update(float elapsedTime)
 {
-	//Emitter Updates
-	m_emHonor->Update(elapsedTime);
-	m_emFeatherExplosion->Update(elapsedTime);
-	m_emHawkReturn->Update(elapsedTime);
-	//
+	if (GameplayState::GetInstance()->GetIsEnding() == false)
+	{
+		//Emitter Updates
+		m_emHonor->Update(elapsedTime);
+		m_emFeatherExplosion->Update(elapsedTime);
+		m_emHawkReturn->Update(elapsedTime);
+		//
 
-	if (HasBounce() == true)
-	{
-		if (m_fTextTimer <= TEXT_TIME_LENGTH)
+		if (HasBounce() == true)
 		{
-			m_fTextTimer += elapsedTime;
-		}
-	}
-
-	//if (m_pSword != nullptr)
-	//{
-	//	m_pSword->Update(elapsedTime);
-	//}
-	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if (m_bDead)
-	{
-		UpdateDeath(elapsedTime);
-	}
-	else
-	{
-		UpdateArmor(elapsedTime);
-		UpdateEmitters(elapsedTime);
-		UpdateTimers(elapsedTime);
-		//Snared Factors done do anything if Snared
-		if (m_bSnared)
-		{
-			UpdateSnared(elapsedTime);
-			return;
+			if (m_fTextTimer <= TEXT_TIME_LENGTH)
+			{
+				m_fTextTimer += elapsedTime;
+			}
 		}
 
-		float leftStickXOff = pInput->GetLeftJoystick(0).x;
-		float leftStickYOff = pInput->GetLeftJoystick(0).y;
-
-		bool leftClamped = false;
-		static int stickFrame = 1;
-		bool controller = pInput->IsControllerConnected(0);
-
-		if (leftStickXOff > -JOYSTICK_DEADZONE && leftStickXOff < JOYSTICK_DEADZONE)
+		//if (m_pSword != nullptr)
+		//{
+		//	m_pSword->Update(elapsedTime);
+		//}
+		SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+		if (m_bDead)
 		{
-			leftStickXOff = 0;
-			leftClamped = true;
-			stickFrame = 5;
+			UpdateDeath(elapsedTime);
 		}
-
-		SetIsBouncing(false);
-		UpdatePlayerSwing(elapsedTime);
-
-		//////// NEED TO UPDATE WITH CONTROLLER ( JORDAN )
-		//if (GetIsInputStuck() == false)
-		//	m_fInputTimer = 0;
-
-
-		/////////////////////////////////////////////////
-		/////////////////Controls////////////////////////
-
-		if (IsDashing() == false)///////////////Dash check begins
+		else
 		{
+			UpdateArmor(elapsedTime);
+			UpdateEmitters(elapsedTime);
+			UpdateTimers(elapsedTime);
+			//Snared Factors done do anything if Snared
+			if (m_bSnared)
+			{
+				UpdateSnared(elapsedTime);
+				return;
+			}
+
+			float leftStickXOff = pInput->GetLeftJoystick(0).x;
+			float leftStickYOff = pInput->GetLeftJoystick(0).y;
+
+			bool leftClamped = false;
+			static int stickFrame = 1;
+			bool controller = pInput->IsControllerConnected(0);
+
+			if (leftStickXOff > -JOYSTICK_DEADZONE && leftStickXOff < JOYSTICK_DEADZONE)
+			{
+				leftStickXOff = 0;
+				leftClamped = true;
+				stickFrame = 5;
+			}
+
+			SetIsBouncing(false);
+			UpdatePlayerSwing(elapsedTime);
+
+			//////// NEED TO UPDATE WITH CONTROLLER ( JORDAN )
+			//if (GetIsInputStuck() == false)
+			//	m_fInputTimer = 0;
+
 
 			/////////////////////////////////////////////////
-			////////////////////Jump/////////////////////////
+			/////////////////Controls////////////////////////
 
-			UpdateJump(elapsedTime);
-
-
-			//	if(GetIsFalling() == false
-			//		&& GetIsJumping() == false)
-			if (m_unCurrentState == RESTING_STATE
-				|| m_unCurrentState == LANDING_STATE
-				|| (m_unCurrentState == JUMPING_STATE && m_bSlowed == true))
+			if (IsDashing() == false)///////////////Dash check begins
 			{
+
 				/////////////////////////////////////////////////
-				/////////////////Friction////////////////////////
+				////////////////////Jump/////////////////////////
 
-				UpdateFriction(elapsedTime, leftClamped);
+				UpdateJump(elapsedTime);
+
+
+				//	if(GetIsFalling() == false
+				//		&& GetIsJumping() == false)
+				if (m_unCurrentState == RESTING_STATE
+					|| m_unCurrentState == LANDING_STATE
+					|| (m_unCurrentState == JUMPING_STATE && m_bSlowed == true))
+				{
+					/////////////////////////////////////////////////
+					/////////////////Friction////////////////////////
+
+					UpdateFriction(elapsedTime, leftClamped);
+				}
+
+
+				UpdateBounce(elapsedTime);
+
+
+				/////////////////////////////////////////////////
+				/////////////////Movement////////////////////////
+				//reset currframe to 0 & set the animation playing to true
+				if (IsDashing() == false && !GetStunned())
+				{
+					UpdateMovement(elapsedTime, stickFrame, leftClamped, leftStickXOff);
+				}
+
+				//m_fShotTimer += elapsedTime;
+
+
+				UpdateDash(elapsedTime);
+
+
+
+
+
+				/////////////////////////////////////////////////
+				///////////////////Shoot/////////////////////////
+
+				UpdateHawk(elapsedTime);
+
+				/////////////////////////////////////////////////
+				///////////////////Spray/////////////////////////
+
+				UpdateSpray(elapsedTime);
+
+				/////////////////////////////////////////////////
+				//////////////Constant Updates///////////////////
+
+				UpdateConstants(elapsedTime);
+
 			}
 
-
-			UpdateBounce(elapsedTime);
-
-
-			/////////////////////////////////////////////////
-			/////////////////Movement////////////////////////
-			//reset currframe to 0 & set the animation playing to true
-			if (IsDashing() == false && !GetStunned())
-			{
-				UpdateMovement(elapsedTime, stickFrame, leftClamped, leftStickXOff);
-			}
-
-			//m_fShotTimer += elapsedTime;
+			UpdateVelocity(elapsedTime);
 
 
-			UpdateDash(elapsedTime);
+			SetIsInputStuck(false);
+
+			is_Left_Coll = false;
+			is_Right_Coll = false;
+
+			//ASSESS RANGE event for those checking to see range of player
+			SGD::Event* pATEvent = new SGD::Event("ASSESS_PLAYER_RANGE", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
 
 
+			Unit::Update(elapsedTime);
+			AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 
-
-
-			/////////////////////////////////////////////////
-			///////////////////Shoot/////////////////////////
-
-			UpdateHawk(elapsedTime);
-
-			/////////////////////////////////////////////////
-			///////////////////Spray/////////////////////////
-
-			UpdateSpray(elapsedTime);
-
-			/////////////////////////////////////////////////
-			//////////////Constant Updates///////////////////
-
-			UpdateConstants(elapsedTime);
-
+			SetGravity(-3000);
 		}
-
-		UpdateVelocity(elapsedTime);
-
-
-		SetIsInputStuck(false);
-
-		is_Left_Coll = false;
-		is_Right_Coll = false;
-
-		//ASSESS RANGE event for those checking to see range of player
-		SGD::Event* pATEvent = new SGD::Event("ASSESS_PLAYER_RANGE", nullptr, this);
-		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		pATEvent = nullptr;
-
-
-		Unit::Update(elapsedTime);
-		AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
-
-		SetGravity(-3000);
 	}
 }
 

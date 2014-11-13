@@ -284,6 +284,8 @@ void Wizard::Update(float elapsedTime)
 
 		//Draw the title
 		font.DrawString("VICTORY", (int)(m_ptPosition.x-200), (int)(m_ptPosition.y-100), 3, SGD::Color{ 255, 255, 0, 0 });
+
+		GameplayState::GetInstance()->WizardDefeated();
 	}
 
 	}

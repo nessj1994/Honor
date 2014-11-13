@@ -162,13 +162,13 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadGame();
 
-	LoadLevel("Level4_1");
+	//LoadLevel("Level5_5");
 	//m_pPlayer->SetHasBounce(true);
 	//m_pPlayer->SetHasDash(true);
 	//m_pPlayer->SetHasHawk(true);
 	//m_pPlayer->SetHasIce(true);
 
-	//LoadLevel("HubLevel");
+	LoadLevel("HubLevel");
 
 
 	//LoadLevel("HubLevel");
@@ -374,7 +374,7 @@ void GameplayState::Update(float elapsedTime)
 	float x = elapsedTime;
 
 	// Toggle for mini map
-	if(SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M))
+	if(SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M) && ending == false)
 		//|| /*For Arcade Input*/SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::MouseLeft))
 	{
 		m_bRenderMiniMap = !m_bRenderMiniMap;
@@ -520,11 +520,12 @@ void GameplayState::Update(float elapsedTime)
 			}
 			else
 			{
-				Game::GetInstance()->AddState(CreditsState::GetInstance());
 				ending = false;
 				endFade = 0;
 				endFadeTimer = 0.0f;
 				endingTimer = 0.0f;
+				SetScreenFadeout(0);
+				Game::GetInstance()->AddState(CreditsState::GetInstance());
 			}
 		}
 	}
@@ -2423,5 +2424,6 @@ void GameplayState::WizardDefeated()
 {
 	LoadLevel("HubLevel");
 	ending = true;
+	m_pPlayer->SetPosition({ -100, -100 });
 	Camera::GetInstance()->SetCameraCap(6);
 }

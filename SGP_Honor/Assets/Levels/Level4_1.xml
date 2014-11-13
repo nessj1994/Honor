@@ -52830,13 +52830,13 @@
 		<Entity type="19" x="4832" y="352" numArgs="1" name="Enemy_2">
 			<Argument type="1" name="Type" value="8" />
 		</Entity>
-		<Entity type="19" x="5504" y="640" numArgs="1" name="Enemy_3">
+		<Entity type="19" x="5504" y="672" numArgs="1" name="Enemy_3">
 			<Argument type="1" name="Type" value="7" />
 		</Entity>
-		<Entity type="19" x="5728" y="640" numArgs="1" name="Enemy_4">
+		<Entity type="19" x="5728" y="672" numArgs="1" name="Enemy_4">
 			<Argument type="1" name="Type" value="7" />
 		</Entity>
-		<Entity type="19" x="5920" y="640" numArgs="1" name="Enemy_6">
+		<Entity type="19" x="5920" y="672" numArgs="1" name="Enemy_6">
 			<Argument type="1" name="Type" value="7" />
 		</Entity>
 		<Entity type="19" x="6048" y="704" numArgs="1" name="Enemy_7">
@@ -52861,7 +52861,7 @@
 		<Entity type="17" x="2112" y="448" numArgs="1" name="HintStatue_1">
 			<Argument type="3" name="Message" value="Shells are not your friends." />
 		</Entity>
-		<Entity type="19" x="2432" y="512" numArgs="1" name="Enemy_1">
+		<Entity type="19" x="2432" y="544" numArgs="1" name="Enemy_1">
 			<Argument type="1" name="Type" value="7" />
 		</Entity>
 		<Entity type="2" x="2656" y="32" numArgs="3" name="Laser_1">
