@@ -358,8 +358,7 @@ void GameplayState::Update(float elapsedTime)
 	float x = elapsedTime;
 
 	// Toggle for mini map
-	if (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M))
-		//|| /*For Arcade Input*/SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::MouseLeft))
+	if (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M)|| /*For Arcade Input*/SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::MouseLeft))
 	{
 		m_bRenderMiniMap = !m_bRenderMiniMap;
 	}
