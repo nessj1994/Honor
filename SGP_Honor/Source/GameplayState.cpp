@@ -138,66 +138,17 @@ void GameplayState::Enter(void) //Load Resources
 
 	//Load Audio
 	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/HonorBGM.xwm");
-	//pAudio->PlayAudio(m_hBGM, true);
 
-	//These are only for testing and will be removed later
-	//m_pDoor = new Door();
-	//m_pBDoor = new BossDoor();
-	//m_pFBlock = new FallingBlock();
-	//m_pSwitch = new Activator(false);
-	//m_pPressurePlate = new Activator(true);
-	//m_pStalactite = new Stalactite();
-	//m_pBuzzSaw = new BuzzSaw();
-	//m_pTurret = new Turret();
-
-	//m_pArmor = new Armor();
-	//m_pHonor = new Honor();
-	//m_pPendulum = new Pendulum();
-	//m_pStatue = new HintStatue();
-	//m_pStatue->SetMessageString("This is a test string");
-
-	//m_pSquid = new Squid();
-	//m_pPouncer = new Pouncer();
-	//m_pJellyfish = new Jellyfish();
-	//m_pJellyfish2 = new Jellyfish();
-	//m_pJellyfish2->SetPosition({900, 700});
 
 	//Create player with factory method
 	m_pPlayer = CreatePlayer();
 
 	Camera::GetInstance()->SetPlayer(m_pPlayer);
 
-	//Add factory methods to put entities in the manager
-	/*CreateBlocks();
-	CreatePermFrozenTiles();
-	CreateTempFrozenTiles();
-	CreateGeyser(1000, 700);
-	CreateLaser(1500, 500, { 1, 1 }, 1500, 700);
-	CreateLava(50, 700);*/
 
-	//CreateMovingPlatform(1000, 500, false, 200, 100);
-
-	// Add Entities to the entity manager
 
 	m_pEntities->AddEntity(m_pPlayer, Entity::ENT_PLAYER);
-	//CreateEnemy(100, 100, 7);
 
-	//Remove this test code later
-	/*m_pEntities->AddEntity(m_pFBlock, Entity::ENT_FALLING_BLOCK);
-	m_pEntities->AddEntity(m_pDoor, Entity::ENT_DOOR);
-	m_pEntities->AddEntity(m_pBDoor, Entity::ENT_BOSS_DOOR);
-	m_pEntities->AddEntity(m_pSwitch, Entity::ENT_SWITCH);
-	m_pEntities->AddEntity(m_pStalactite, Entity::ENT_STALACTITE);
-	m_pEntities->AddEntity(m_pBuzzSaw, Entity::ENT_BUZZSAW);
-	m_pEntities->AddEntity(m_pTurret, Entity::ENT_TURRET);
-	m_pEntities->AddEntity(m_pStalactite, Entity::ENT_STALACTITE);
-
-
-	m_pEntities->AddEntity(m_pArmor, Entity::ENT_ARMOR);
-	m_pEntities->AddEntity(m_pHonor, Entity::ENT_HONOR);
-	m_pEntities->AddEntity(m_pPendulum, Entity::ENT_PENDULUM);
-	m_pEntities->AddEntity(m_pStatue, Entity::ENT_STATUE);
-	m_pDoor->SetActivator(m_pSwitch);*/
 
 
 	// Load in map for the levels and start the first level
@@ -210,25 +161,18 @@ void GameplayState::Enter(void) //Load Resources
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-	LoadLevel("HubLevel");
+	//LoadLevel("HubLevel");
+
 
 	
 
-	//LoadLevel("Level3_1");
+	LoadLevel("HubLevel");
 
 	//LoadLevel("HubLevel");
 
 	//("HubLevel");
 
-	//m_pEntities->AddEntity(m_pSquid, Entity::ENT_ENEMY);
-	//m_pEntities->AddEntity(m_pPouncer, Entity::ENT_ENEMY);
-	//	m_pEntities->AddEntity(m_pJellyfish, Entity::ENT_JELLYFISH);
-	//	m_pEntities->AddEntity(m_pJellyfish2, Entity::ENT_JELLYFISH);
 
-	// Temporary
-	//CreateBullBoss(500, 400);
-	//CreateCrabBoss();
-	//Hub World Orb 
 	m_pHubOrb = new HubWorldOrb();
 	//Turorial Images
 	m_hOAttack = pGraphics->LoadTexture("Assets/graphics/HonorO.png");
@@ -244,6 +188,11 @@ void GameplayState::Enter(void) //Load Resources
 // - unload all resources
 void GameplayState::Exit(void)
 {
+
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hOAttack);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hXJUMP);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hXWallJump);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hTriOpenDoor);
 
 	// Save collected honor
 	m_pLevel->Exit();
@@ -382,11 +331,11 @@ bool GameplayState::Input(void) //Hanlde user Input
 		pAudio->StopAudio(m_hBGM);
 	}
 
-	if (pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyPressed(SGD::Key::Tab))
+	/*if (pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyPressed(SGD::Key::Tab))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
 		pAudio->StopAudio(m_hBGM);
-	}
+	}*/
 
 	return true;
 
@@ -541,6 +490,7 @@ void GameplayState::Update(float elapsedTime)
 	//Process messages and events
 	SGD::EventManager::GetInstance()->Update();
 	SGD::MessageManager::GetInstance()->Update();
+
 }
 
 /////////////////////////////////////////////
@@ -922,7 +872,7 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 			//Make sure the message isn't a nullptr
 			assert(pCreateMsg != nullptr
 				   && "GameplayState::MessageProc - MSG_CHANGE_LEVEL is not actually a CreateProjectileMessage");
-
+			
 			//Create a local reference to the gameplaystate singleton
 			GameplayState* pSelf = GameplayState::GetInstance();
 
@@ -1101,7 +1051,7 @@ Hawk* GameplayState::CreateHawk(Entity* pOwner) const
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
 	proj->SetSize({ 20, 20 });
-	proj->SetDirection({ pOwner->GetDirection() });
+	proj->SetDirection({ 0,0 });
 	proj->SetOwner(pOwner);
 	//pOwner->SetHawkPtr(proj);
 	m_pPlayer->SetHawkPtr(proj);
@@ -2072,6 +2022,15 @@ void GameplayState::LoadLevelMap()
 // - Loads the level at the path for the given key
 void GameplayState::LoadLevel(std::string _level)
 {
+	// Clear screen for loading
+	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
+	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { 255, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
+
+	//Local refernce to the font
+	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+	font.DrawString("LOADING", 250, 200, 2.0f, { 255, 0, 0 });
+
+	SGD::GraphicsManager::GetInstance()->Update();
 
 	// Clear the old entities
 	m_pEntities->RemoveAll();

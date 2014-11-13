@@ -70,6 +70,9 @@ void Bull::Update(float elapsedTime)
 	{
 		case BS_WALKING:
 		{
+			// Quick fix
+			SetIsFalling(false);
+
 			// Update animation
 			m_ts.SetCurrAnimation("Bull_Running");
 			m_ts.SetPlaying(true);
@@ -470,7 +473,7 @@ void Bull::HandleCollision(const IEntity* pOther)
 			SGD::AudioManager::GetInstance()->PlayAudio(m_hRoar2);
 			m_bsCurrState = BS_RETURNING;
 			SetHitPoints(GetHitPoints() - 1);
-			if (m_bFacingRight)
+			if (m_ptPosition.x > 500)
 			{
 				SetVelocity({ -800.0f, -1300.0f });
 				m_bFacingRight = false;

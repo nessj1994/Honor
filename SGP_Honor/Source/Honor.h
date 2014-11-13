@@ -2,6 +2,7 @@
 #include "Entity.h"
 
 #include "../SGD Wrappers/SGD_Listener.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 // Forward declarations
 class Emitter;
@@ -24,6 +25,7 @@ public:
 	void HandleEvent(const SGD::Event* pEvent);
 
 	void SetEmitter();
+	void PlayAudio();
 
 	/////////////////////////////////////////////////
 	/////////////////Accessors//////////////////////
@@ -46,4 +48,14 @@ private:
 	unsigned int m_HonorAmount = 50;
 	unsigned int m_unVectorID = 0;
 	Emitter * m_eEffect;
+
+	// Sounds
+	SGD::HAudio m_hPiano1 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hPiano2 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hPiano3 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hPiano4 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hPiano5 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hPiano6 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hPiano7 = SGD::INVALID_HANDLE;
+
 };
