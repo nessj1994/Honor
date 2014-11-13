@@ -12,6 +12,7 @@ FreezeableGround::FreezeableGround()
 	///////Enum type for Temp or non Temp type (Set in Factory method) used in method to alter the Timer of the freeze to change or not change depending on the type
 
 	m_eEffect = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/SprayParticle.xml", "Ice", m_ptPosition);
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/graphics/FreezableGround.png");
 
 }
 
@@ -19,6 +20,7 @@ FreezeableGround::FreezeableGround()
 FreezeableGround::~FreezeableGround()
 {
 	delete m_eEffect;
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 /////////////////////////////////////////////////
@@ -59,20 +61,22 @@ void FreezeableGround::Render(void)
 	if (GetIsFrozen() == false)
 	{
 
-	Camera::GetInstance()->Draw(SGD::Rectangle(
+	/*Camera::GetInstance()->Draw(SGD::Rectangle(
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
-		SGD::Color::Color(255, 255, 0, 255));
+		SGD::Color::Color(255, 255, 0, 255));*/
+		Camera::GetInstance()->DrawTextureSection(m_hImage, m_ptPosition, SGD::Rectangle(0, 0, 32, 32), 0, {}, {}, {});
 
 	}
 
 	if (GetIsFrozen() == true)
 	{
 		m_eEffect->Render(m_ptPosition);
-		Camera::GetInstance()->Draw(SGD::Rectangle(
+		/*Camera::GetInstance()->Draw(SGD::Rectangle(
 			m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
 			m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
-			SGD::Color::Color(255, 0, 255, 255));
+			SGD::Color::Color(255, 0, 255, 255));*/
+		Camera::GetInstance()->DrawTextureSection(m_hImage, m_ptPosition, SGD::Rectangle(32, 0, 64, 32), 0, {}, {}, {});
 	}		
 }
 
