@@ -36,15 +36,34 @@ void BuzzSaw::Update(float elapsedTime)
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
 		m_bEffectPlay = true;
 	}
-	if(m_bMovingRight == true)
-	{
-		m_vtVelocity.x = 40;
-	}
-	else if(m_bMovingRight == false)
-	{
-		m_vtVelocity.x = -40;
-	}
 
+	if (m_unDistance != 0)
+	{
+		if (m_bHorizontal == true)
+		{
+
+
+			if (m_bMovingRight == true)
+			{
+				m_vtVelocity.x = 800;
+			}
+			else if (m_bMovingRight == false)
+			{
+				m_vtVelocity.x = -800;
+			}
+		}
+		else
+		{
+			if (m_bMovingRight == true)
+			{
+				m_vtVelocity.x = 80;
+			}
+			else if (m_bMovingRight == false)
+			{
+				m_vtVelocity.x = -80;
+			}
+		}
+	}
 
 	if(m_bMovingRight)
 	{

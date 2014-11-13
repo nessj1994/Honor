@@ -163,9 +163,10 @@ void GameplayState::Enter(void) //Load Resources
 
 	LoadLevel("HubLevel");
 
+
 	
 
-	//LoadLevel("Level3_1");
+	LoadLevel("Level5_4");
 
 	//LoadLevel("HubLevel");
 
@@ -1049,7 +1050,7 @@ Hawk* GameplayState::CreateHawk(Entity* pOwner) const
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 
 	proj->SetSize({ 20, 20 });
-	proj->SetDirection({ pOwner->GetDirection() });
+	proj->SetDirection({ 0,0 });
 	proj->SetOwner(pOwner);
 	//pOwner->SetHawkPtr(proj);
 	m_pPlayer->SetHawkPtr(proj);

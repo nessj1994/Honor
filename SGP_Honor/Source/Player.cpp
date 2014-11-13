@@ -334,7 +334,7 @@ void Player::Render(void)
 	}
 	if (IsBouncing())
 	{
-		Camera::GetInstance()->DrawTexture({ m_ptPosition.x-70, m_ptPosition.y-50 }, 0, m_hBubbleCircle, false, 5, {}, {});
+		Camera::GetInstance()->DrawTexture({ m_ptPosition.x - 70, m_ptPosition.y - 50 }, 0, m_hBubbleCircle, false, 5, {}, {});
 	}
 }
 
@@ -1301,14 +1301,15 @@ void Player::JellyfishCollision(const IEntity* pOther)
 	{
 		if (rPlayer.bottom == rIntersection.bottom)
 		{
+
+
+
 			const Jellyfish* jfish = dynamic_cast<const Jellyfish*>(pOther);
 			//SetVelocity({ GetVelocity().x, /*GetVelocity().y*/1500 * (-1.0f - (0.1f * jfish->GetBounceCount())) });
-			SetVelocity({ GetVelocity().x, GetVelocity().y * (-1.0f - (0.1f * jfish->GetBounceCount())) });
-			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height /*- nIntersectHeight*/ });
+			SetVelocity({ 0, (-400.0f * jfish->GetBounceCount()) });
+			//	SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height /*- nIntersectHeight*/ });
 			SGD::AudioManager::GetInstance()->PlayAudio(m_hJellyfishEffect);
 			//SetIsFalling(false);
-			//SetIsInputStuck(false);
-			//SetIsJumping(true);
 		}
 		if (rPlayer.top == rIntersection.top)
 		{
@@ -1407,8 +1408,8 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	}
 	if (pEvent->GetEventID() == "Screen2x4")
 	{
-		m_fPanX = 2;
-		m_fPanY = 4;
+		m_fPanX = 5;
+		m_fPanY = 2;
 		Camera::GetInstance()->SetCameraCap(0);
 
 	}
@@ -1416,37 +1417,31 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	if (pEvent->GetEventID() == "Screen3x1")
 	{
 		m_fPanX = 3;
-		m_fPanY = 1.3f;
+		m_fPanY = 1.2f;
 		Camera::GetInstance()->SetCameraCap(0);
 
 	}
 
-	if (pEvent->GetEventID() == "Screen3x1.5")
-	{
-		m_fPanX = 3;
-		m_fPanY = 1.5f;
-		Camera::GetInstance()->SetCameraCap(0);
 
-	}
 
 	if (pEvent->GetEventID() == "Screen3x3")
 	{
 		m_fPanX = 3;
-		m_fPanY = 3;
+		m_fPanY = 2.5f;
 		Camera::GetInstance()->SetCameraCap(0);
 
 	}
 	if (pEvent->GetEventID() == "Screen2x1.5")
 	{
 		m_fPanX = 2;
-		m_fPanY = 1.5;
+		m_fPanY = 1.5f;
 		Camera::GetInstance()->SetCameraCap(0);
 
 	}
 	if (pEvent->GetEventID() == "Screen3x1.5")
 	{
 		m_fPanX = 3;
-		m_fPanY = 1.5;
+		m_fPanY = 1.5f;
 		Camera::GetInstance()->SetCameraCap(0);
 
 	}
@@ -2013,7 +2008,7 @@ void Player::UpdateJump(float elapsedTime)
 			}
 			if (m_bSlowed == true)
 			{
-				m_fJumpTimer = 0.25f;
+				m_fJumpTimer = 0.35f;
 
 			}
 			else
@@ -2109,29 +2104,108 @@ void Player::UpdateHawk(float elapsedTime)
 
 					if (pInput->IsKeyDown(SGD::Key::LeftArrow) == true)
 					{
-						GetHawkPtr()->SetVelocity({ -400, GetHawkPtr()->GetVelocity().y });
+
+						GetHawkPtr()->SetVelocity({ -200, GetHawkPtr()->GetVelocity().y });
+
+
+						//m_nHawkX -= elapsedTime * 2;
+						//
+						//if (m_nHawkX < -1)
+						//	m_nHawkX = -1;
+						//
+						//if (pInput->IsKeyDown(SGD::Key::RightArrow) == true)
+						//{
+						//	m_nHawkX = 0;
+						//	GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * m_nHawkY) * elapsedTime));
+						//
+						//}
+
+
 					}
 					if (pInput->IsKeyDown(SGD::Key::RightArrow) == true)
 					{
-						GetHawkPtr()->SetVelocity({ 400, GetHawkPtr()->GetVelocity().y });
+						
+						GetHawkPtr()->SetVelocity({ 200, GetHawkPtr()->GetVelocity().y });
+
+
+						//	m_nHawkX += elapsedTime * 2;
+						//
+						//	if (m_nHawkX > 1)
+						//		m_nHawkX = 1;
+						//
+						//	if (pInput->IsKeyDown(SGD::Key::LeftArrow) == true)
+						//	{
+						//		m_nHawkX = 0;
+						//		GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * m_nHawkY) * elapsedTime));
+						//
+						//	}
 
 					}
 
 					if (pInput->IsKeyDown(SGD::Key::UpArrow) == true)
 					{
-						GetHawkPtr()->SetVelocity({ GetHawkPtr()->GetVelocity().x, -300 });
+							GetHawkPtr()->SetVelocity({ GetHawkPtr()->GetVelocity().x, -300 });
+
+
+						//	 m_nHawkY -= elapsedTime * 2;
+						//
+						//	 if (m_nHawkY < -1)
+						//		 m_nHawkY = -1;
+						//
+						//	 if (pInput->IsKeyDown(SGD::Key::DownArrow) == true)
+						//	 {
+						//		 m_nHawkY = 0;
+						//		 GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * m_nHawkX) * elapsedTime, 0));
+						//
+						//	 }
+
+
 					}
 					if (pInput->IsKeyDown(SGD::Key::DownArrow) == true)
 					{
+
 						GetHawkPtr()->SetVelocity({ GetHawkPtr()->GetVelocity().x, 300 });
+
+
+						//	m_nHawkY += elapsedTime * 2;
+						//
+						//	if (m_nHawkY > 1)
+						//		m_nHawkY = 1;
+						//
+						//	if (pInput->IsKeyDown(SGD::Key::UpArrow) == true)
+						//	{
+						//		m_nHawkY = 0;
+						//		GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * m_nHawkX) * elapsedTime, 0));
+						//
+						//	}
+
+						//	GetHawkPtr()->SetVelocity({ GetHawkPtr()->GetVelocity().x, 300 });
+
 					}
 					//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetVelocity().y));
 					//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
+				//	if (pInput->IsKeyDown(SGD::Key::DownArrow) == false
+				//		&& pInput->IsKeyDown(SGD::Key::UpArrow) == false
+				//		&& pInput->IsKeyDown(SGD::Key::LeftArrow) == false
+				//		&& pInput->IsKeyDown(SGD::Key::RightArrow) == false)
+				//	{
+				//		m_nHawkX = 0;
+				//		m_nHawkY = 0;
+				//	}
+				//	else
+				//	{
+				//		GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * m_nHawkX) * elapsedTime, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * m_nHawkY) * elapsedTime));
+				//
+				//	}
+
 
 					GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
+
+
+
 					// X Friction
 
-					if (rightStickXOff == 0 && !(pInput->IsKeyDown(SGD::Key::Left) || pInput->IsKeyDown(SGD::Key::Right)))
+					if (rightStickXOff == 0 && !(pInput->IsKeyDown(SGD::Key::LeftArrow) || pInput->IsKeyDown(SGD::Key::RightArrow)))
 					{
 
 						if (GetHawkPtr()->GetVelocity().x < 0)

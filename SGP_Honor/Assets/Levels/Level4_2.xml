@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level name="NewLevel" width="100" height="24" fixed="0" playerX="85" playerY="665">
+<Level name="NewLevel" width="100" height="24" fixed="0" playerX="76" playerY="664">
 	<ImageLayers numLayers="5">
 		<ImageLayer speed="1" depth="-2" image="\Assets\graphics\TS_Sky.png" name="Background" render="1" tileSetWidth="8" tileSetHeight="8" tileSetSize="32">
 			<ImageTile type="-1" />
@@ -14454,6 +14454,14 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -14470,6 +14478,14 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -14486,6 +14502,14 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -14502,6 +14526,14 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -14518,6 +14550,14 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -14534,6 +14574,14 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -14550,6 +14598,14 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -14566,6 +14622,14 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -14582,6 +14646,14 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -14598,6 +14670,14 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -14614,6 +14694,14 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -14630,6 +14718,14 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -14646,110 +14742,14 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
+		<EventTile event="Screen3x2" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -16848,7 +16848,7 @@
 		<Entity type="19" x="1120" y="192" numArgs="1" name="Enemy_4">
 			<Argument type="1" name="Type" value="7" />
 		</Entity>
-		<Entity type="19" x="1632" y="704" numArgs="1" name="Enemy_5">
+		<Entity type="19" x="1364" y="684" numArgs="1" name="Enemy_5">
 			<Argument type="1" name="Type" value="7" />
 		</Entity>
 		<Entity type="1" x="2144" y="640" numArgs="3" name="Activator_4">
@@ -16908,7 +16908,7 @@
 			<Argument type="0" name="On/Off" value="1" />
 		</Entity>
 		<Entity type="11" x="1056" y="512" numArgs="2" name="Buzzsaw_1">
-			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="0" name="IsHorizontal" value="1" />
 			<Argument type="1" name="ReturnDistance" value="64" />
 		</Entity>
 		<Entity type="2" x="2752" y="32" numArgs="3" name="Laser_2">
