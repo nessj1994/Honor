@@ -754,10 +754,14 @@ void Player::BasicCollision(const IEntity* pOther)
 
 
 
-			if ((pInput->IsButtonDown(0, 0) == true
+			if (
+				
+				/*(pInput->IsButtonDown(0, 0) == true
 				|| pInput->IsKeyDown(SGD::Key::Space))
-				&& (m_unCurrentState != RESTING_STATE
-				|| m_unCurrentState != LANDING_STATE)
+
+				
+				&&*/ (m_unCurrentState != RESTING_STATE
+				 || m_unCurrentState != LANDING_STATE)  
 				//&& m_fButtonTimer > 0
 				)
 			{
@@ -2036,8 +2040,8 @@ void Player::UpdateJump(float elapsedTime)
 
 		}
 
-		if (m_fInputTimer <= 0.20f)
-		{
+		//if (m_fInputTimer <= 0.20f)
+		//{
 			if (GetIsInputStuck() == true)
 			{
 
@@ -2055,7 +2059,7 @@ void Player::UpdateJump(float elapsedTime)
 					SetVelocity({ 900, -900 /*GetJumpVelCur() */ });
 				}
 			}
-		}
+		//}
 	}
 }
 
@@ -2210,9 +2214,9 @@ void Player::UpdateHawk(float elapsedTime)
 
 						if (GetHawkPtr()->GetVelocity().x < 0)
 						{
-							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetAirFriction() * 8), GetHawkPtr()->GetVelocity().y));
 
-							if (GetHawkPtr()->GetVelocity().x > 0.01f)
+							if (GetHawkPtr()->GetVelocity().x > 0.007f)
 							{
 								GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
 
@@ -2220,9 +2224,9 @@ void Player::UpdateHawk(float elapsedTime)
 						}
 						if (GetHawkPtr()->GetVelocity().x > 0)
 						{
-							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - (GetHawkPtr()->GetAirFriction() * 8), GetHawkPtr()->GetVelocity().y));
 
-							if (GetHawkPtr()->GetVelocity().x < -0.01f)
+							if (GetHawkPtr()->GetVelocity().x < -0.007f)
 							{
 								GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
 
@@ -2420,6 +2424,7 @@ void Player::UpdateVelocity(float elapsedTime)
 		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
 	{
 		m_fButtonTimer = 0;
+		SGD::GraphicsManager::GetInstance()->DrawString("ZERO", { 100, 300 }, { 255, 255, 0, 0 });
 
 	}
 
