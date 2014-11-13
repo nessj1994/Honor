@@ -97,7 +97,7 @@ void Jellyfish::HandleCollision(const IEntity* pOther)
 {
 	if (pOther->GetType() == Entity::ENT_PLAYER && bouncecounting == false)
 	{
-		if (numOfBounces < 3)
+		if (numOfBounces < 4)
 			numOfBounces++;
 		bouncecounting = true;
 		SGD::Event Event = { "RESET_JELLYFISH_BOUNCE", nullptr, this };

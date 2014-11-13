@@ -24,6 +24,7 @@ Hawk::Hawk()
 	SGD::AudioManager::GetInstance()->PlayAudio(m_hEffect);
 	m_szSize = { 32, 32 };
 	m_bDead = false;
+	SetDirection({ 0, 0 });
 
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/WizardHawk.png");
 }
@@ -74,7 +75,7 @@ void Hawk::Update(float elapsedTime)
 			SGD::Vector VEL = { 0, 0 };
 			if (m_poTarget.x + 5 < m_ptPosition.x)
 			{
-				VEL.x = -800;
+				VEL.x = -400;
 			}
 			if (m_poTarget.y + 5 < m_ptPosition.y)
 			{
@@ -82,7 +83,7 @@ void Hawk::Update(float elapsedTime)
 			}
 			if (m_poTarget.x - 5 > m_ptPosition.x)
 			{
-				VEL.x = 800;
+				VEL.x = 400;
 			}
 			if (m_poTarget.y - 5 > m_ptPosition.y)
 			{
