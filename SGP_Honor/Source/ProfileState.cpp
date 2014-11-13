@@ -52,7 +52,7 @@ void ProfileState::Enter(void) //Load Resources
 	LoadProfile(Game::GetInstance()->GetProfile(2));
 	LoadProfile(Game::GetInstance()->GetProfile(3));
 
-
+	m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
 }
 
 
@@ -80,8 +80,16 @@ bool ProfileState::Input(void) //Hanlde user Input
 
 	SGD::Rectangle rMouse = SGD::Rectangle({ pInput->GetMousePosition().x, pInput->GetMousePosition().y, pInput->GetMousePosition().x + 1, pInput->GetMousePosition().y + 1 });
 
+	if (m_fInputTimer > .5f)
+	{
+		m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
+		m_fInputTimer = 0;
+	}
+
+	m_fInputTimer += .0025f;
+
 	//move option selection cursor right
-	if(pInput->IsKeyPressed(SGD::Key::Right))
+	if (pInput->IsKeyPressed(SGD::Key::Right) )
 	{
 		m_nOptionCursor += 1;
 		if(m_nOptionCursor > 1)
@@ -89,7 +97,7 @@ bool ProfileState::Input(void) //Hanlde user Input
 			m_nOptionCursor = 1;
 		}
 	}
-	if(pInput->IsKeyPressed(SGD::Key::Left))
+	if (pInput->IsKeyPressed(SGD::Key::Left) )
 	{
 		m_nOptionCursor -= 1;
 		if(m_nOptionCursor < 0)
@@ -100,8 +108,12 @@ bool ProfileState::Input(void) //Hanlde user Input
 
 	//Move the cursor down
 	if(pInput->IsKeyPressed(SGD::Key::Down)
-		|| pInput->IsDPadPressed(0, SGD::DPad::Down))
+		|| pInput->IsDPadPressed(0, SGD::DPad::Down) || m_fstickYOff > 0)
 	{
+		if (m_fstickYOff > 0)
+		{
+			m_fstickYOff = 0;
+		}
 		m_nCursor += 1;
 		m_rSword.top += 70;
 		if(m_rSword.top > 280.0f)
@@ -116,8 +128,12 @@ bool ProfileState::Input(void) //Hanlde user Input
 	}
 	//Move the cursor up
 	else if(pInput->IsKeyPressed(SGD::Key::Up)
-		|| pInput->IsDPadPressed(0, SGD::DPad::Up))
+		|| pInput->IsDPadPressed(0, SGD::DPad::Up) || m_fstickYOff < 0)
 	{
+		if (m_fstickYOff < 0)
+		{
+			m_fstickYOff = 0;
+		}
 		m_nCursor -= 1;
 		m_rSword.top -= 70;
 
