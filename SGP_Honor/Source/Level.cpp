@@ -874,7 +874,7 @@ void Level::DrawLoadScreen(unsigned int _progress)
 	if (_progress >= 2)
 	{
 		pGraphics->DrawTextureSection(m_hPlayerSheet,
-		{ 350, 300 }, { 317, 192, 383, 287 },
+		{ 350, 316 }, { 317, 200, 383, 287 },
 		0.0f, { 0.0f, 0.0f },
 		{ 255, 255, 255, 255 }, { -2.0f, 2.0f });
 	}
@@ -892,7 +892,7 @@ void Level::DrawLoadScreen(unsigned int _progress)
 	if (_progress >= 4)
 	{
 		pGraphics->DrawTextureSection(m_hPlayerSheet,
-		{ 550, 300 }, { 193, 192, 250, 287 },
+		{ 550, 300 }, { 182, 83, 237, 163 },
 		0.0f, { 0.0f, 0.0f },
 		{ 255, 255, 255, 255 }, { -2.0f, 2.0f });
 	}
@@ -901,7 +901,7 @@ void Level::DrawLoadScreen(unsigned int _progress)
 	if (_progress >= 5)
 	{
 		pGraphics->DrawTextureSection(m_hPlayerSheet,
-		{ 650, 300 }, { 256, 192, 319, 287 },
+		{ 650, 285 }, { 243, 83, 288, 171 },
 		0.0f, { 0.0f, 0.0f },
 		{ 255, 255, 255, 255 }, { -2.0f, 2.0f });
 	}
@@ -911,7 +911,7 @@ void Level::DrawLoadScreen(unsigned int _progress)
 	if (_progress >= 6)
 	{
 		pGraphics->DrawTextureSection(m_hPlayerSheet,
-		{ 750, 300 }, { 317, 192, 383, 287 },
+		{ 770, 320 }, { 290, 83, 344, 194 },
 		0.0f, { 0.0f, 0.0f },
 		{ 255, 255, 255, 255 }, { -2.0f, 2.0f });
 	}

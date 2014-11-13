@@ -16,6 +16,15 @@ Honor::Honor() : Listener(this)
 	SetSize(SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage));
 	SGD::Point midPoint = SGD::Point(m_ptPosition.x + m_szSize.width / 4, m_ptPosition.y + m_szSize.height / 4);
 	//m_eEffect = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/GreenHonor.xml", "GreenHonor", midPoint);
+
+	// Sounds
+	m_hPiano1 = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/Piano1.wav");
+	m_hPiano2 = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/Piano2.wav");
+	m_hPiano3 = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/Piano3.wav");
+	m_hPiano4 = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/Piano4.wav");
+	m_hPiano5 = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/Piano5.wav");
+	m_hPiano6 = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/Piano6.wav");
+	m_hPiano7 = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/Piano7.wav");
 }
 
 
@@ -23,6 +32,15 @@ Honor::~Honor()
 {
 	delete m_eEffect;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+
+	// Unload sounds
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hPiano1);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hPiano2);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hPiano3);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hPiano4);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hPiano5);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hPiano6);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hPiano7);
 }
 
 /////////////////////////////////////////////////
@@ -81,6 +99,10 @@ void Honor::HandleCollision(const IEntity* pOther)
 	{
 		if (GetRect().IsIntersecting(pOther->GetRect()) == true)
 		{
+			if (!m_bIsCollected)
+			{
+				PlayAudio();
+			}
 			GameplayState::GetInstance()->IncreaseHonorBeforeDeath(m_HonorAmount);
 			m_bIsCollected = true;
 			GameplayState::GetInstance()->GetCurrentLevel()->UpdateHonorVector(m_unVectorID, m_bIsCollected);
@@ -99,5 +121,37 @@ void Honor::HandleEvent(const SGD::Event* pEvent)
 	{
 		SetIsCollected(false);
 		GameplayState::GetInstance()->GetCurrentLevel()->UpdateHonorVector(m_unVectorID, m_bIsCollected);
+	}
+}
+
+//////////////////////////
+// PlayAudio
+// -Plays the correct audio based on how much honor this piece has
+void Honor::PlayAudio()
+{
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
+	switch (m_HonorAmount)
+	{
+		case 1: // Green 1
+			pAudio->PlayAudio(m_hPiano1);
+			break;
+		case 5: // Blue 5
+			pAudio->PlayAudio(m_hPiano2);
+			break;
+		case 10: // Yellow 10
+			pAudio->PlayAudio(m_hPiano3);
+			break;
+		case 20: // Red 20
+			pAudio->PlayAudio(m_hPiano4);
+			break;
+		case 50: // Purple 50
+			pAudio->PlayAudio(m_hPiano5);
+			break;
+		case 100: // Orange 100
+			pAudio->PlayAudio(m_hPiano6);
+			break;
+		case 200: // Silver 200
+			pAudio->PlayAudio(m_hPiano7);
+			break;
 	}
 }
