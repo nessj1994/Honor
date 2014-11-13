@@ -43,10 +43,13 @@ ProfileState* ProfileState::GetInstance(void)
 // - set up entities
 void ProfileState::Enter(void) //Load Resources
 {
+	m_hSelection = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/selection.wav");
 
 	m_hBackground = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Castle.png");
 	m_hSword = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/SwordButton.png");
 	m_hButton = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Buttons.png");
+	m_hEsc = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/esc.png");
+	m_hCircle = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/circle.png");
 
 	LoadProfile(Game::GetInstance()->GetProfile(1));
 	LoadProfile(Game::GetInstance()->GetProfile(2));
@@ -62,9 +65,12 @@ void ProfileState::Enter(void) //Load Resources
 // - unload all resources
 void ProfileState::Exit(void)
 {
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSelection);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hButton);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hEsc);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hCircle);
 }
 
 
@@ -91,6 +97,7 @@ bool ProfileState::Input(void) //Hanlde user Input
 	//move option selection cursor right
 	if (pInput->IsKeyPressed(SGD::Key::Right) )
 	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
 		m_nOptionCursor += 1;
 		if(m_nOptionCursor > 1)
 		{
@@ -99,6 +106,8 @@ bool ProfileState::Input(void) //Hanlde user Input
 	}
 	if (pInput->IsKeyPressed(SGD::Key::Left) )
 	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
+
 		m_nOptionCursor -= 1;
 		if(m_nOptionCursor < 0)
 		{
@@ -110,6 +119,7 @@ bool ProfileState::Input(void) //Hanlde user Input
 	if(pInput->IsKeyPressed(SGD::Key::Down)
 		|| pInput->IsDPadPressed(0, SGD::DPad::Down) || m_fstickYOff > 0)
 	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
 		if (m_fstickYOff > 0)
 		{
 			m_fstickYOff = 0;
@@ -130,6 +140,8 @@ bool ProfileState::Input(void) //Hanlde user Input
 	else if(pInput->IsKeyPressed(SGD::Key::Up)
 		|| pInput->IsDPadPressed(0, SGD::DPad::Up) || m_fstickYOff < 0)
 	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
+
 		if (m_fstickYOff < 0)
 		{
 			m_fstickYOff = 0;
@@ -411,6 +423,15 @@ void ProfileState::Render(void)
 		font.DrawString("Delete", (int)(Game::GetInstance()->GetScreenWidth() / 2 + 135), (int)Game::GetInstance()->GetScreenHeight() / 2 + 170, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
+
+	font.DrawString("Press ", 30, Game::GetInstance()->GetScreenHeight() - 50, 1.0f, { 255, 130, 0 });
+	pGraphics->DrawTexture(m_hEsc, { 120, Game::GetInstance()->GetScreenHeight() - 40 }, 0.0f, {}, {}, { 0.5f, 0.5f });
+	font.DrawString("or ", 162, Game::GetInstance()->GetScreenHeight() - 50, 1.0f, { 255, 130, 0 });
+	pGraphics->DrawTexture(m_hCircle, { 200, Game::GetInstance()->GetScreenHeight() - 40 }, 0.0f, {}, {}, { 1.0f, 1.0f });
+	font.DrawString("to go back.", 245, Game::GetInstance()->GetScreenHeight() - 50, 1.0f, { 255, 130, 0 });
+
+
+
 }
 
 

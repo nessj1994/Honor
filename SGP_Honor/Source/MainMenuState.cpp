@@ -65,7 +65,7 @@ void MainMenuState::Enter(void) //Load Resources
 	pOption->Attribute("sfx_volume", &nEffectsVol);
 
 
-
+	m_hSelection = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/selection.wav");
 	SGD::AudioManager::GetInstance()->SetMasterVolume(SGD::AudioGroup::Music, nMusicVol);
 	SGD::AudioManager::GetInstance()->SetMasterVolume(SGD::AudioGroup::SoundEffects, nEffectsVol);
 	m_hBackground = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Castle.png");
@@ -86,6 +86,7 @@ void MainMenuState::Exit(void)
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hButton);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSelection);
 }
 
 
@@ -113,6 +114,7 @@ bool MainMenuState::Input(void) //Hanlde user Input
 	if(pInput->IsKeyPressed(SGD::Key::Down) 
 		|| pInput->IsDPadPressed(0, SGD::DPad::Down) || m_fstickYOff > 0)
 	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
 		if (m_fstickYOff > 0)
 		{
 			m_fstickYOff = 0;
@@ -133,6 +135,8 @@ bool MainMenuState::Input(void) //Hanlde user Input
 	else if(pInput->IsKeyPressed(SGD::Key::Up) 
 		|| pInput->IsDPadPressed(0, SGD::DPad::Up) || m_fstickYOff < 0)
 	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
+
 		if (m_fstickYOff < 0)
 		{
 			m_fstickYOff = 0;

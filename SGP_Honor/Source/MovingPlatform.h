@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include <vector>
 
 class MovingPlatform :
@@ -35,4 +36,6 @@ private:
 	float		m_fDistanceTraveled = 0.0f;
 	bool		m_bReturning = false;
 	std::vector<Entity*> m_vEntities;
+	SGD::HTexture m_hMovingPlatform = SGD::INVALID_HANDLE;
+
 };

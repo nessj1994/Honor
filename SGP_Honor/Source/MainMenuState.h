@@ -35,6 +35,7 @@ private:
 	///////////////////// Cursor Index //////////////////////
 	int m_nCursor = 0;
 	
+	SGD::HAudio m_hSelection = SGD::INVALID_HANDLE;
 
 	//SGD::Rectangle m_rPlay = SGD::Rectangle (100.0f, 400.0f, 520.0f, 600.0f );
 	SGD::Rectangle m_rPlay = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 130, Game::GetInstance()->GetScreenHeight() / 2 - 60}, SGD::Size{ 260, 65 });
