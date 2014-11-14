@@ -183,7 +183,7 @@ void GameplayState::Enter(void) //Load Resources
 
 
 	
-	LoadLevel("Level5_1");
+	LoadLevel("Level2_3");
 
 	// LoadLevel("HubLevel");
 
@@ -345,7 +345,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if(pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level3_5");
+		m_bShowFPS ? m_bShowFPS = false : m_bShowFPS = true;
 	}
 
 	if (pInput->IsKeyPressed(SGD::Key::L))
@@ -562,7 +562,10 @@ void GameplayState::Render(void)
 {
 	// Render the FPS
 	SGD::OStringStream output;
-	output << "FPS: " << m_unFPS;
+	if (m_bShowFPS)
+	{
+		output << "FPS: " << m_unFPS;
+	}
 	/*if (ending == false)
 	{*/
 		//Render Images for tutorial 
