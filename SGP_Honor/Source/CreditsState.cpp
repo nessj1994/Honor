@@ -3,7 +3,8 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
 #include "../SGD Wrappers/SGD_Color.h"
-
+#include "Font.h"
+#include "BitmapFont.h"
 #include "Game.h"
 #include "GameplayState.h"
 
@@ -85,6 +86,20 @@ void CreditsState::Update(float elapsedTime)
 // - Render all game entities
 void CreditsState::Render(void)
 {
+	////Create a local reference to the input manager for ease of use
+	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+	pGraphics->DrawRectangle({ 0, 0, 7000, 7000 }, { 255, 0, 0, 0 });
+	//Local refernce to the font
+	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+	//Draw the background
+	font.DrawString("HONOR", 200, 0, 2, SGD::Color{ 255, 255, 255, 255 });
+	font.DrawString("Creators", 250, 100, 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Conor Maloney", 200, 150, 1, SGD::Color{ 255, 255, 255, 255 });
+	font.DrawString("Michael Sciortino", 200, 200, 1, SGD::Color{ 255, 255, 255, 255 });
+	font.DrawString("Jonathan Cox", 200, 250, 1, SGD::Color{ 255, 255, 255, 255 });
+	font.DrawString("Jordan Ness", 200, 300, 1, SGD::Color{ 255, 255, 255, 255 });
+	font.DrawString("Luis Garcia", 200, 350, 1, SGD::Color{ 255, 255, 255, 255 });
 
-
+	font.DrawString("Art", 250, 400, 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Caris Frazier", 200, 450, 1, SGD::Color{ 255, 255, 255, 255 });
 }

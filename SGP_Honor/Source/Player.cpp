@@ -2100,8 +2100,8 @@ void Player::UpdateHawk(float elapsedTime)
 			{
 				if (GetHawkPtr() != nullptr)
 				{
-					float rightStickXOff = pInput->GetRightJoystick(0).x;
-					float rightStickYOff = pInput->GetRightJoystick(0).y;
+					float rightStickXOff = pInput->GetRightJoystick(1).x;
+					float rightStickYOff = pInput->GetRightJoystick(1).y;
 
 
 					if (pInput->IsKeyDown(SGD::Key::LeftArrow) == true)
@@ -2273,7 +2273,7 @@ void Player::UpdateHawk(float elapsedTime)
 
 		}
 		if (triggerOff <= 0
-			&& pInput->IsKeyDown(SGD::Key::D) == false)
+			&& pInput->IsKeyDown(SGD::Key::D) == false || !pInput->IsButtonDown(0, 5/*5*/ /*Right bumper on xbox controller*/))
 		{
 			m_bHawkCast = false;
 

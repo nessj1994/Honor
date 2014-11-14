@@ -82,7 +82,7 @@ void Level::Render()
 	// Render the collision layer
 
 	// Loop through the map
-	for (int xx = 0; xx < m_nWidth; ++xx)
+for (int xx = 0; xx < m_nWidth; ++xx)
 	{
 		for (int yy = 0; yy < m_nHeight; ++yy)
 		{

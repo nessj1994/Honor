@@ -151,29 +151,22 @@ void GameplayState::Enter(void) //Load Resources
 
 	Camera::GetInstance()->SetPlayer(m_pPlayer);
 
-
-
 	m_pEntities->AddEntity(m_pPlayer, Entity::ENT_PLAYER);
-
-
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
 	LoadGame();
 
 	//LoadLevel("Level5_5");
-	//m_pPlayer->SetHasBounce(true);
-	//m_pPlayer->SetHasDash(true);
-	//m_pPlayer->SetHasHawk(true);
-	//m_pPlayer->SetHasIce(true);
+	m_pPlayer->SetHasBounce(true);
+	m_pPlayer->SetHasDash(true);
+	m_pPlayer->SetHasHawk(true);
+	m_pPlayer->SetHasIce(true);
 
 	//LoadLevel("HubLevel");
-
-
 	LoadLevel("HubLevel");
 
 	//("HubLevel");
-
 
 	m_pHubOrb = new HubWorldOrb();
 	//Turorial Images

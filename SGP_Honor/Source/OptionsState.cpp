@@ -54,6 +54,8 @@ void OptionsState::Enter(void) //Load Resources
 
 	m_bFullScreen = !Game::GetInstance()->GetWindowed();
 	pAudio->PlayAudio(m_hBGM);
+
+	m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
 }
 
 
@@ -107,6 +109,18 @@ bool OptionsState::Input(void) //Hanlde user Input
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
+	if (m_fInputTimer > .5f)
+	{
+		m_fstickXoff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).x;
+		if (m_fstickXoff == 0)
+		{
+			m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
+		}		
+		m_fInputTimer = 0;
+	}
+
+	m_fInputTimer += .0025f;
+
 
 	//Change between windowed and full screen modes
 	if(pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyReleased(SGD::Key::Enter))
@@ -126,10 +140,14 @@ bool OptionsState::Input(void) //Hanlde user Input
 
 
 	if(pInput->IsKeyPressed(SGD::Key::Down)
-		|| pInput->IsDPadPressed(0, SGD::DPad::Down))
+		|| pInput->IsDPadPressed(0, SGD::DPad::Down) || m_fstickYOff > 0)
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
 
+		if (m_fstickYOff > 0)
+		{
+			m_fstickYOff = 0;
+		}
 		m_unCursor += 1;
 
 		if(m_unCursor > 2)
@@ -139,10 +157,14 @@ bool OptionsState::Input(void) //Hanlde user Input
 
 	}
 	else if(pInput->IsKeyPressed(SGD::Key::Up)
-		|| pInput->IsDPadPressed(0, SGD::DPad::Up))
+		|| pInput->IsDPadPressed(0, SGD::DPad::Up) || m_fstickYOff < 0)
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
 
+		if (m_fstickYOff < 0)
+		{
+			m_fstickYOff = 0;
+		}
 		m_unCursor -= 1;
 
 		if(m_unCursor < 0)
@@ -153,53 +175,50 @@ bool OptionsState::Input(void) //Hanlde user Input
 
 
 	//Adjust volume for music 
-	if(m_unCursor == 0 /*Music volume*/ && (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::Right) || SGD::InputManager::GetInstance()->IsDPadPressed(0, SGD::DPad::Right)))
+	if (m_unCursor == 0 /*Music volume*/ && (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::Right) || SGD::InputManager::GetInstance()->IsDPadPressed(0, SGD::DPad::Right) || m_fstickXoff > 0))
 	{
 		if(SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::Music) < 100)
 		{
+			m_fstickXoff = 0;
 			SGD::AudioManager::GetInstance()->SetMasterVolume(SGD::AudioGroup::Music,
 				SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::Music) + 5);
 		}
 
 	}
-	else if(m_unCursor == 0 /*Music volume*/ && (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::Left) || SGD::InputManager::GetInstance()->IsDPadPressed(0, SGD::DPad::Left)))
+	else if (m_unCursor == 0 /*Music volume*/ && (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::Left) || SGD::InputManager::GetInstance()->IsDPadPressed(0, SGD::DPad::Left) || m_fstickXoff < 0))
 	{
 		if(SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::Music) > 0)
 		{
+			m_fstickXoff = 0;
 			SGD::AudioManager::GetInstance()->SetMasterVolume(SGD::AudioGroup::Music,
 				SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::Music) - 5);
-
-
-
 		}
 
 
 	}
 
 	//Adjust volume for SFX 
-	if(m_unCursor == 1/*SFX volume*/ && (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::Right) || SGD::InputManager::GetInstance()->IsDPadPressed(0, SGD::DPad::Right)))
+	if (m_unCursor == 1/*SFX volume*/ && (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::Right) || SGD::InputManager::GetInstance()->IsDPadPressed(0, SGD::DPad::Right) || m_fstickXoff > 0))
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
 
 		if(SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects) < 100)
 		{
-
+			m_fstickXoff = 0;
 			SGD::AudioManager::GetInstance()->SetMasterVolume(SGD::AudioGroup::SoundEffects,
 				SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects) + 5);
 		}
 
 	}
-	else if(m_unCursor == 1 /*SFX volume*/ && (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::Left) || SGD::InputManager::GetInstance()->IsDPadPressed(0, SGD::DPad::Left)))
+	else if (m_unCursor == 1 /*SFX volume*/ && (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::Left) || SGD::InputManager::GetInstance()->IsDPadPressed(0, SGD::DPad::Left) || m_fstickXoff < 0))
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
 
 		if(SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects) > 0)
 		{
+			m_fstickXoff = 0;
 			SGD::AudioManager::GetInstance()->SetMasterVolume(SGD::AudioGroup::SoundEffects,
-				SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects) - 5);
-
-
-
+			SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects) - 5);
 		}
 
 
