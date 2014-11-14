@@ -180,7 +180,7 @@ void GameplayState::Enter(void) //Load Resources
 	//LoadLevel("HubLevel");
 
 	
-	LoadLevel("Level4_5");
+	//LoadLevel("Level4_5");
 
 	// LoadLevel("HubLevel");
 
@@ -355,7 +355,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/) || /*For Arcade Input*/pInput->IsKeyPressed(SGD::Key::MouseRight))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
-		pAudio->StopAudio(m_hBGM);
+		//pAudio->StopAudio(m_hBGM);
 	}
 
 	/*if (pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyPressed(SGD::Key::Tab))
