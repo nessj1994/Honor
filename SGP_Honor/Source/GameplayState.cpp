@@ -163,6 +163,7 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	bool oldGame = LoadGame();
 
+	//LoadLevel("Level4_2");
 	m_pPlayer->SetHasBounce(true);
 	m_pPlayer->SetHasDash(true);
 	m_pPlayer->SetHasHawk(true);
@@ -180,6 +181,14 @@ void GameplayState::Enter(void) //Load Resources
 		CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
 		Game::GetInstance()->AddState(CutSceneState::GetInstance());
 	}
+
+
+	
+	LoadLevel("Level5_1");
+
+	// LoadLevel("HubLevel");
+
+	// ("HubLevel");
 
 
 	m_pHubOrb = new HubWorldOrb();
@@ -337,7 +346,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if(pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level3_1");
+		LoadLevel("Level3_5");
 	}
 
 	if (pInput->IsKeyPressed(SGD::Key::L))
@@ -535,6 +544,16 @@ void GameplayState::Update(float elapsedTime)
 			}
 		}
 	}
+	// Increase the FPS timer
+	m_fFPSTimer += elapsedTime;
+	m_unFrames++;
+
+	if (m_fFPSTimer >= 1.0f)		// 1 second refresh rate
+	{
+		m_unFPS = m_unFrames;
+		m_unFrames = 0;
+		m_fFPSTimer = 0.0f;
+	}
 }
 
 /////////////////////////////////////////////
@@ -542,6 +561,9 @@ void GameplayState::Update(float elapsedTime)
 // - Render all game entities
 void GameplayState::Render(void)
 {
+	// Render the FPS
+	SGD::OStringStream output;
+	output << "FPS: " << m_unFPS;
 	/*if (ending == false)
 	{*/
 		//Render Images for tutorial 
@@ -586,7 +608,7 @@ void GameplayState::Render(void)
 	// Draw a fading rectangle
 	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
 	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { m_cScreenFade, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
-
+	SGD::GraphicsManager::GetInstance()->DrawString(output.str().c_str(), { 5, 5 });
 }
 
 //Static Message callback function

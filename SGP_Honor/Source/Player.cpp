@@ -2135,11 +2135,13 @@ void Player::UpdateHawk(float elapsedTime)
 					{
 
 						GetHawkPtr()->SetVelocity({ -200, GetHawkPtr()->GetVelocity().y });
+						GetHawkPtr()->SetDirection({ -1, 0 });
 
 					}
 					if (pInput->IsKeyDown(SGD::Key::RightArrow) == true)
 					{
 						GetHawkPtr()->SetVelocity({ 200, GetHawkPtr()->GetVelocity().y });
+						GetHawkPtr()->SetDirection({ 1, 0 });
 					}
 
 					if (pInput->IsKeyDown(SGD::Key::UpArrow) == true)
