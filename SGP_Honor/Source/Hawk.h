@@ -1,6 +1,8 @@
 #pragma once
 #include "Unit.h"
 #include "Projectile.h"
+#include "Animation.h"
+#include "AnimTimeStamp.h"
 
 class Emitter;
 
@@ -14,6 +16,7 @@ public:
 	virtual void Update(float elapsedTime);
 	virtual void HandleCollision(const IEntity* pOther) override;
 	int GetType(void) const override { return ENT_HAWK; }
+	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void Render(void) override;
 
 
@@ -38,5 +41,7 @@ private:
 	SGD::Point m_poTarget;
 	SGD::Point m_pEndPos;
 	bool m_bDead;
+	AnimTimeStamp m_ts;
+	bool m_bFacingRight = false;
 };
 

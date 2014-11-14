@@ -163,6 +163,7 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	bool oldGame = LoadGame();
 
+	//LoadLevel("Level4_2");
 	m_pPlayer->SetHasBounce(true);
 	m_pPlayer->SetHasDash(true);
 	m_pPlayer->SetHasHawk(true);
