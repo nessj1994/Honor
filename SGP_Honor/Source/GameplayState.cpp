@@ -175,7 +175,7 @@ void GameplayState::Enter(void) //Load Resources
 	}
 	else
 	{
-		LoadLevel("Level0_1");
+		LoadLevel("HubLevel");
 		CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
 		Game::GetInstance()->AddState(CutSceneState::GetInstance());
 	}
