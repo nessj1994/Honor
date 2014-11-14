@@ -2124,7 +2124,7 @@ void Player::UpdateHawk(float elapsedTime)
 					{
 
 						GetHawkPtr()->SetVelocity({ -200, GetHawkPtr()->GetVelocity().y });
-
+						GetHawkPtr()->SetDirection({ -1, 0 });
 
 						//m_nHawkX -= elapsedTime * 2;
 						//
@@ -2144,7 +2144,7 @@ void Player::UpdateHawk(float elapsedTime)
 					{
 						
 						GetHawkPtr()->SetVelocity({ 200, GetHawkPtr()->GetVelocity().y });
-
+						GetHawkPtr()->SetDirection({ 1, 0 });
 
 						//	m_nHawkX += elapsedTime * 2;
 						//
