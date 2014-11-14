@@ -116,13 +116,13 @@ void Hawk::Update(float elapsedTime)
 		SGD::Rectangle rSelf = this->GetRect();
 		SGD::Rectangle rScreen =
 		{
-			0, 0,
+			Camera::GetInstance()->GetCameraPos().x, Camera::GetInstance()->GetCameraPos().y,
 			Game::GetInstance()->GetScreenWidth() + Camera::GetInstance()->GetCameraPos().x,
 			Game::GetInstance()->GetScreenHeight() + Camera::GetInstance()->GetCameraPos().y
 		};
 
 
-		if (rSelf.IsIntersecting(rScreen) == false && m_pOwner->GetType() != ENT_BOSS_CAVEMAN)
+		if (rSelf.IsIntersecting(rScreen) == false /*&& m_pOwner->GetType() != ENT_BOSS_CAVEMAN*/)
 		{
 			//DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
 			//pMsg->QueueMessage();
@@ -131,8 +131,10 @@ void Hawk::Update(float elapsedTime)
 			{
 				Player* temp = dynamic_cast<Player*>(GetOwner());
 				temp->HawkExplode(m_ptPosition);
+
+				GetOwner()->SetHawkCast(false);
 			}
-			SetPosition({ -1000, -1000 });
+		//	SetPosition({ -1000, -1000 });
 
 			SetVelocity({ 0, 0 });
 
@@ -197,9 +199,12 @@ void Hawk::HandleCollision(const IEntity* pOther)
 		{
 			Player* temp = dynamic_cast<Player*>(GetOwner());
 			temp->HawkExplode(m_ptPosition);
-		}
-		SetPosition({ -1000, -1000 });
 
+			GetOwner()->SetHawkCast(false);
+		}
+		//SetPosition({ -1000, -1000 });
+
+		
 		SetVelocity({ 0, 0 });
 
 	}
@@ -220,8 +225,11 @@ void Hawk::HandleCollision(const IEntity* pOther)
 		{
 			Player* temp = dynamic_cast<Player*>(GetOwner());
 			temp->HawkExplode(m_ptPosition);
+
+			GetOwner()->SetHawkCast(false);
+
 		}
-		SetPosition({ -1000, -1000 });
+	//	SetPosition({ -1000, -1000 });
 
 		SetVelocity({ 0, 0 });
 
@@ -245,8 +253,10 @@ void Hawk::HandleCollision(const IEntity* pOther)
 		{
 			Player* temp = dynamic_cast<Player*>(GetOwner());
 			temp->HawkExplode(m_ptPosition);
+			GetOwner()->SetHawkCast(false);
+
 		}
-		SetPosition({ -1000, -1000 });
+		//SetPosition({ -1000, -1000 });
 
 		SetVelocity({ 0, 0 });
 
@@ -280,9 +290,11 @@ void Hawk::HandleCollision(const IEntity* pOther)
 		{
 			Player* temp = dynamic_cast<Player*>(GetOwner());
 			temp->HawkExplode(m_ptPosition);
+			GetOwner()->SetHawkCast(false);
+
 		}
 
-		SetPosition({ -1000, -1000 });
+		//SetPosition({ -1000, -1000 });
 
 		SetVelocity({ 0, 0 });
 
