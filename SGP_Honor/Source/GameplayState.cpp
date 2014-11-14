@@ -162,13 +162,13 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	LoadGame();
 
-	//LoadLevel("Level5_5");
+	LoadLevel("Level3_1");
 	//m_pPlayer->SetHasBounce(true);
 	//m_pPlayer->SetHasDash(true);
 	//m_pPlayer->SetHasHawk(true);
 	//m_pPlayer->SetHasIce(true);
 
-	LoadLevel("HubLevel");
+	//LoadLevel("HubLevel");
 
 
 	//LoadLevel("HubLevel");
