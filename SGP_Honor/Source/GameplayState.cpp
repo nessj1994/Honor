@@ -171,15 +171,23 @@ void GameplayState::Enter(void) //Load Resources
 
 	//LoadLevel("HubLevel");
 
-	if (oldGame)
+	// Special case for tutorial
+	if (Game::GetInstance()->GetSelectedNumber() == 4)
 	{
-		LoadLevel("HubLevel");
+		LoadLevel("Level0_2");
 	}
 	else
 	{
-		LoadLevel("Level0_1");
-		CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
-		Game::GetInstance()->AddState(CutSceneState::GetInstance());
+		if (oldGame)
+		{
+			LoadLevel("HubLevel");
+		}
+		else
+		{
+			LoadLevel("Level0_1");
+			CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
+			Game::GetInstance()->AddState(CutSceneState::GetInstance());
+		}
 	}
 
 
@@ -891,19 +899,19 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 										}
 
 
-										pProj->Release();
-										pProj = nullptr;
+										//pProj->Release();
+										//pProj = nullptr;
 
-										pProj = pSelf->CreateSpray(pCreateMsg->GetOwner());
+										//pProj = pSelf->CreateSpray(pCreateMsg->GetOwner());
 
-										if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
-										{
-											pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
-										}
-										else if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_YETI)
-										{
-											pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
-										}
+										//if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+										//{
+										//	pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+										//}
+										//else if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_YETI)
+										//{
+										//	pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+										//}
 										// if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
 										// {
 										//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_PLAYER_PROJ);

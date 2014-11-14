@@ -2329,7 +2329,7 @@ void Player::UpdateSpray(float elapsedTime)
 		{
 			m_fIceTimer = 0;
 			CreateSprayMessage* pMsg = new CreateSprayMessage(this);
-			pMsg->SendMessageNow();
+			pMsg->QueueMessage();
 			pMsg = nullptr;
 		}
 	}
