@@ -171,15 +171,23 @@ void GameplayState::Enter(void) //Load Resources
 
 	//LoadLevel("HubLevel");
 
-	if (oldGame)
+	// Special case for tutorial
+	if (Game::GetInstance()->GetSelectedNumber() == 4)
 	{
-		LoadLevel("HubLevel");
+		LoadLevel("Level0_2");
 	}
 	else
 	{
-		LoadLevel("Level0_1");
-		CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
-		Game::GetInstance()->AddState(CutSceneState::GetInstance());
+		if (oldGame)
+		{
+			LoadLevel("HubLevel");
+		}
+		else
+		{
+			LoadLevel("Level0_1");
+			CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
+			Game::GetInstance()->AddState(CutSceneState::GetInstance());
+		}
 	}
 
 
