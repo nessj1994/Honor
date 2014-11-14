@@ -1321,7 +1321,7 @@ void Player::JellyfishCollision(const IEntity* pOther)
 
 			const Jellyfish* jfish = dynamic_cast<const Jellyfish*>(pOther);
 			//SetVelocity({ GetVelocity().x, /*GetVelocity().y*/1500 * (-1.0f - (0.1f * jfish->GetBounceCount())) });
-			SetVelocity({ 0, (-400.0f * jfish->GetBounceCount()) });
+			SetVelocity({ 0, (-400.0f  - (400.0f * jfish->GetBounceCount())  ) });
 			//	SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height /*- nIntersectHeight*/ });
 			SGD::AudioManager::GetInstance()->PlayAudio(m_hJellyfishEffect);
 			//SetIsFalling(false);
@@ -1491,6 +1491,10 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	}
 	if (pEvent->GetEventID() == "FOURTHBOSS")
 	{
+
+		m_fPanX = 2;
+		m_fPanY = 2;
+
 		Camera::GetInstance()->SetCameraCap(4);
 
 	}
@@ -1757,12 +1761,20 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		m_fInputTimer += elapsedTime;
 
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if(pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false))
+	if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false)  )
 	{
-		stickFrame = 1;
-		m_ts.ResetCurrFrame();
 
-		m_ts.SetPlaying(true);
+		if (is_Swinging == false)
+		{
+
+			stickFrame = 1;
+
+
+			m_ts.ResetCurrFrame();
+
+			m_ts.SetPlaying(true);
+		}
+		
 	}
 
 	if(pInput->IsKeyPressed(SGD::Key::J))
@@ -1773,7 +1785,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 	}
 
 	//reset currframe to 0 & set the animation playing to false
-	if((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true) || pInput->IsKeyDown(SGD::Key::Space) == true)
+	if ((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true) || pInput->IsKeyDown(SGD::Key::Space) == true )
 	{
 		leftClamped = false;
 	}

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level name="NewLevel" width="128" height="36" fixed="0" playerX="3582" playerY="768">
+<Level name="NewLevel" width="128" height="36" fixed="0" playerX="412" playerY="866">
 	<ImageLayers numLayers="4">
 		<ImageLayer speed="1" depth="-2" image="\Assets\graphics\TS_Snow.png" name="Background" render="1" tileSetWidth="8" tileSetHeight="14" tileSetSize="32">
 			<ImageTile type="-1" />

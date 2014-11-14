@@ -171,7 +171,7 @@ void Enemy::Render(void)
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
 	//Render us with the camera
-	Camera::GetInstance()->Draw(rMyRect, SGD::Color::Color(255, 255, 0, 0));
+	//Camera::GetInstance()->Draw(rMyRect, SGD::Color::Color(255, 255, 0, 0));
 
 	//SGD::GraphicsManager::GetInstance()->DrawString("PRESSED A", { 300, 300 }, { 255, 255, 0, 0 });
 }

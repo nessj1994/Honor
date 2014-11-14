@@ -168,15 +168,15 @@ void GameplayState::Enter(void) //Load Resources
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-	LoadLevel("HubLevel");
+	//LoadLevel("HubLevel");
 
 
 	//LoadLevel("HubLevel");
 
 	
-	//LoadLevel("Level4_2");
+	LoadLevel("Level4_5");
 
-	 LoadLevel("HubLevel");
+	// LoadLevel("HubLevel");
 
 	// ("HubLevel");
 

@@ -70,7 +70,7 @@ void Door::Render(void)
 
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
-	Camera::GetInstance()->Draw(rMyRect, { 255, 0, 0, 255 });
+	//Camera::GetInstance()->Draw(rMyRect, { 255, 0, 0, 255 });
 
 	if(m_bOpen == false && m_bHorizontal == false)
 		Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y }, 0.0f, m_hImage, false, 1.0f, {}, {});
