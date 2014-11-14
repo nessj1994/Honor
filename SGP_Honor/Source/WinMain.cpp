@@ -238,6 +238,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		else									//	losing focus (pause)
 		{
+			
 			Game::GetInstance()->AddState(PauseState::GetInstance());
 			//SGD::AudioManager::GetInstance()->StopAudio(m_hBGM);
 		}

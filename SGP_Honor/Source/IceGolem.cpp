@@ -150,25 +150,25 @@ void IceGolem::Render(void)
 	{
 		return;
 	}
-	//Get the camera position for our offset
-	SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
+	////Get the camera position for our offset
+	//SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
 
-	//create a reference to our rectangle
-	SGD::Rectangle rMyRect = GetRect();
+	////create a reference to our rectangle
+	//SGD::Rectangle rMyRect = GetRect();
 
-	//Offset our rectangle by the camera position for rendering
-	rMyRect.Offset({ -camPos.x, -camPos.y });
+	////Offset our rectangle by the camera position for rendering
+	//rMyRect.Offset({ -camPos.x, -camPos.y });
 
-	float fRotX = rMyRect.left + m_szSize.width / 2;
-	float fRotY = rMyRect.top + m_szSize.height / 2;
+	//float fRotX = rMyRect.left + m_szSize.width / 2;
+	//float fRotY = rMyRect.top + m_szSize.height / 2;
 
-	Camera::GetInstance()->Draw(rMyRect, { 255, 0, 255, 255 });
+	//Camera::GetInstance()->Draw(rMyRect, { 255, 0, 255, 255 });
 
 	//Render us with the camera
 	if(m_bFacingRight == true)
-		Camera::GetInstance()->DrawAnimation(m_ptPosition, m_fRotation, m_ts, false, 1.0f, {});
+		Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height }, m_fRotation, m_ts, false, 1.0f, {});
 	else
-		Camera::GetInstance()->DrawAnimation(m_ptPosition, m_fRotation, m_ts, true, 1.0f, {});
+		Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height }, m_fRotation, m_ts, true, 1.0f, {});
 
 }
 int IceGolem::GetType(void) const

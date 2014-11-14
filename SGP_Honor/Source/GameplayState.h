@@ -80,6 +80,7 @@ public:
 	float GetBorderSize(void) const { return m_fBorderSize; }
 	float GetMiniMapWidth(void) const { return m_fMiniMapWidth; }
 	float GetMiniMapHeight(void) const { return m_fMiniMapHeight; }
+	bool GetIsEnding() const { return ending; }
 
 	//////////////////////////////////////////////////////////
 	////////////////////// Mutators /////////////////////////
@@ -122,6 +123,8 @@ public:
 	void UnlockLevel(std::string _level);
 	void ResetHonorInRoom();
 	void IncreaseHonorBeforeDeath(unsigned int _value);
+
+	void WizardDefeated();
 
 private:
 
@@ -204,12 +207,24 @@ private:
 	Jellyfish* m_pJellyfish2 = nullptr;*/
 
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWorld1 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWorld2 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWorld3 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWorld4 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWorld5 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hFinalBoss = SGD::INVALID_HANDLE;
+
 
 	unsigned char m_cScreenFade = 0;
 	bool m_bRenderMiniMap = false;
 	float m_fBorderSize = 160.0f;
 	float m_fMiniMapWidth = 0.0f;
 	float m_fMiniMapHeight = 0.0f;
+
+	bool ending = false;
+	float endingTimer = 0.0f;
+	unsigned char endFade = 0;
+	float endFadeTimer = 0.0f;
 
 	//Hub World Orb
 	HubWorldOrb* m_pHubOrb;
@@ -219,7 +234,7 @@ private:
 	SGD::HTexture m_hOAttack = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hXWallJump = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hTriOpenDoor = SGD::INVALID_HANDLE;
-
+	
 
 };
 

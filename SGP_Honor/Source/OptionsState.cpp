@@ -43,7 +43,14 @@ void OptionsState::Enter(void) //Load Resources
 {
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
 
+	m_hSelection = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/selection.wav");
+
 	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/HonorBGM.xwm");
+	m_hBackground = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Castle.png");
+	m_hSword = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/SwordButton.png");
+	m_hButton = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Buttons.png");
+	m_hEsc = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/esc.png");
+	m_hCircle = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/circle.png");
 
 	m_bFullScreen = !Game::GetInstance()->GetWindowed();
 	pAudio->PlayAudio(m_hBGM);
@@ -85,6 +92,11 @@ void OptionsState::Exit(void)
 
 	pAudio->StopAudio(m_hBGM);
 	pAudio->UnloadAudio(m_hBGM);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hButton);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hEsc);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hCircle);
 }
 
 
@@ -116,6 +128,8 @@ bool OptionsState::Input(void) //Hanlde user Input
 	if(pInput->IsKeyPressed(SGD::Key::Down)
 		|| pInput->IsDPadPressed(0, SGD::DPad::Down))
 	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
+
 		m_unCursor += 1;
 
 		if(m_unCursor > 2)
@@ -127,6 +141,8 @@ bool OptionsState::Input(void) //Hanlde user Input
 	else if(pInput->IsKeyPressed(SGD::Key::Up)
 		|| pInput->IsDPadPressed(0, SGD::DPad::Up))
 	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
+
 		m_unCursor -= 1;
 
 		if(m_unCursor < 0)
@@ -163,8 +179,11 @@ bool OptionsState::Input(void) //Hanlde user Input
 	//Adjust volume for SFX 
 	if(m_unCursor == 1/*SFX volume*/ && (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::Right) || SGD::InputManager::GetInstance()->IsDPadPressed(0, SGD::DPad::Right)))
 	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
+
 		if(SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects) < 100)
 		{
+
 			SGD::AudioManager::GetInstance()->SetMasterVolume(SGD::AudioGroup::SoundEffects,
 				SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects) + 5);
 		}
@@ -172,6 +191,8 @@ bool OptionsState::Input(void) //Hanlde user Input
 	}
 	else if(m_unCursor == 1 /*SFX volume*/ && (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::Left) || SGD::InputManager::GetInstance()->IsDPadPressed(0, SGD::DPad::Left)))
 	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
+
 		if(SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects) > 0)
 		{
 			SGD::AudioManager::GetInstance()->SetMasterVolume(SGD::AudioGroup::SoundEffects,
@@ -203,7 +224,21 @@ bool OptionsState::Input(void) //Hanlde user Input
 // - Update all game entities
 void OptionsState::Update(float elapsedTime)
 {
+	if(m_unCursor == 0)
+	{
+		if(!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBGM)))
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hBGM);
+	}
+	else if(m_unCursor == 1)
+	{
+		SGD::AudioManager::GetInstance()->StopAudio(m_hBGM);
+		
+	}
+	else
+	{
+		SGD::AudioManager::GetInstance()->StopAudio(m_hBGM);
 
+	}
 
 
 }
@@ -213,7 +248,25 @@ void OptionsState::Update(float elapsedTime)
 // - Render all game entities
 void OptionsState::Render(void)
 {
+	//Create a local reference to the input manager for ease of use
+	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+
 	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+
+	float fWidth = Game::GetInstance()->GetScreenWidth();
+
+
+	//Draw the background
+	pGraphics->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 1.6f, 1.2f });
+
+	//Draw the title
+	font.DrawString("HONOR", 220, 10, 3, SGD::Color{ 255, 255, 130, 0 });
+
+
+	//pGraphics->DrawTexture(m_hSword, { m_rSword.left, m_rSword.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
+
+
+
 
 	int nMusicVol = SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::Music);
 	int nEffectsVol = SGD::AudioManager::GetInstance()->GetMasterVolume(SGD::AudioGroup::SoundEffects);
@@ -225,50 +278,97 @@ void OptionsState::Render(void)
 	ossMus << nMusicVol;
 	ossSFX << nEffectsVol;
 
-
-
-
 	if(m_unCursor == 0)
 	{
-		font.DrawString("Music Volume:", 450, 250, 1, SGD::Color{ 255, 255, 0, 0 });
-		font.DrawString(ossMus.str().c_str(), 700, 250, 1, { 255, 255, 0, 0 });
+		pGraphics->DrawRectangle(m_rPlay, { 255, 255, 255, 255 }, {}, {});
+		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rPlay.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 240 }, 0.0f, {}, { 255, 255, 255, 255 });
+
+
+
+		font.DrawString("Music Volume:", (int)((fWidth - (4 * 19)) / 2.5), 255, .8f, SGD::Color{ 255, 255, 130, 0 });
+		font.DrawString(ossMus.str().c_str(), (int)((fWidth - (4*19)) / 1.5), 255, .8f, { 255, 255, 130, 0 });
+
+
+
 	}
 	else
 	{
-		font.DrawString("Music Volume:", 450, 250, 1, SGD::Color{ 255, 0, 255, 0 });
-		font.DrawString(ossMus.str().c_str(), 700, 250, 1, { 255, 0, 255, 0 });
+		pGraphics->DrawRectangle(m_rPlay, { 255, 255, 255, 30 }, {}, {});
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 240 }, 0.0f, {}, { 255, 255, 255, 255 });
+
+		//pGraphics->DrawTexture(m_hSword, { m_rPlay.left - 50, m_rPlay.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
+
+		font.DrawString("Music Volume:", (int)((fWidth - (4 * 19)) / 2.5), 255, .8f, SGD::Color{ 255, 255, 130, 0 });
+		font.DrawString(ossMus.str().c_str(), (int)((fWidth - (4 * 19)) / 1.5), 255, .8f, { 255, 255, 130, 0 });
 	}
+
 
 	if(m_unCursor == 1)
 	{
-		font.DrawString("Effects Volume:", 450, 282, 1, SGD::Color{ 255, 255, 0, 0 });
-		font.DrawString(ossSFX.str().c_str(), 700, 282, 1, { 255, 255, 0, 0 });
+		pGraphics->DrawRectangle(m_rOptions, { 255, 255, 255, 255 }, {}, {});
+		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rOptions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 310 }, 0.0f, {}, { 255, 255, 255, 255 });
+
+		font.DrawString("Effects Volume:", (int)((fWidth - (4 * 19)) / 2.5), 325, .8f, SGD::Color{ 255, 255, 130, 0 });
+		font.DrawString(ossSFX.str().c_str(), (int)((fWidth - (4 * 19)) / 1.5), 325, .8f, { 255, 255, 130, 0 });
 	}
 	else
 	{
-		font.DrawString("Effects Volume:", 450, 282, 1, SGD::Color{ 255, 0, 255, 0 });
-		font.DrawString(ossSFX.str().c_str(), 700, 282, 1, { 255, 0, 255, 0 });
+		pGraphics->DrawRectangle(m_rOptions, { 255, 255, 255, 30 }, {}, {});
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 310 }, 0.0f, {}, { 255, 255, 255, 255 });
+
+		font.DrawString("Effects Volume:", (int)((fWidth - (4 * 19)) / 2.5), 325, .8f, SGD::Color{ 255, 255, 130, 0 });
+		font.DrawString(ossSFX.str().c_str(), (int)((fWidth - (4 * 19)) / 1.5), 325, .8f, { 255, 255, 130, 0 });
 	}
+
 
 	if(m_unCursor == 2 && m_bFullScreen)
 	{
-		font.DrawString("Full Screen:", 450, 314, 1, SGD::Color{ 255, 255, 0, 0 });
-		font.DrawString(("ON"), 700, 314, 1, SGD::Color{ 255, 255, 0, 0 });
+		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 255 }, {}, {});
+		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
+
+		font.DrawString("Full Screen:", (int)((fWidth - (4 * 19)) / 2.5), 395, .8f, SGD::Color{ 255, 255, 130, 0 });
+		font.DrawString(("ON"), (int)((fWidth - (4 * 19)) / 1.65), 395, .8f, SGD::Color{ 255, 255, 130, 0 });
+
+
 	}
 	else if(m_unCursor != 2 && m_bFullScreen)
 	{
-		font.DrawString("Full Screen:", 450, 314, 1, SGD::Color{ 255, 0, 255, 0 });
-		font.DrawString(("ON"), 700, 314, 1, SGD::Color{ 255, 0, 255, 0 });
+		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 30 }, {}, {});
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
+
+		font.DrawString("Full Screen:", (int)((fWidth - (4 * 19)) / 2.5), 395, .8f, SGD::Color{ 255, 255, 130, 0 });
+		font.DrawString(("ON"), (int)((fWidth - (4 * 19)) / 1.65), 395, .8f, SGD::Color{ 255, 255, 130, 0 });
+
+
+
 	}
 	else if(m_unCursor == 2 && !m_bFullScreen)
 	{
-		font.DrawString("Full Screen:", 450, 314, 1, SGD::Color{ 255, 255, 0, 0 });
-		font.DrawString(("OFF"), 700, 314, 1, SGD::Color{ 255, 255, 0, 0 });
+		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 30 }, {}, {});
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
+
+		font.DrawString("Full Screen:", (int)((fWidth - (4 * 19)) / 2.5), 395, .8f, SGD::Color{ 255, 255, 130, 0 });
+		font.DrawString(("OFF"), (int)((fWidth - (4 * 19)) / 1.65), 395, .8f, SGD::Color{ 255, 255, 130, 0 });
+
+
 	}
 	else if(m_unCursor != 2 && !m_bFullScreen)
 	{
-		font.DrawString("Full Screen:", 450, 314, 1, SGD::Color{ 255, 0, 255, 0 });
-		font.DrawString(("OFF"), 700, 314, 1, SGD::Color{ 255, 0, 255, 0 });
-	}
+		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 30 }, {}, {});
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
+		font.DrawString("Full Screen:", (int)((fWidth - (4 * 19)) / 2.5), 395, .8f, SGD::Color{ 255, 255, 130, 0 });
+		font.DrawString(("OFF"), (int)((fWidth - (4 * 19)) / 1.65), 395, .8f, SGD::Color{ 255, 255, 130, 0 });
+
+	}
+	
+	font.DrawString("Press ", 30, Game::GetInstance()->GetScreenHeight() - 50, 1.0f, { 255, 130, 0 });
+	pGraphics->DrawTexture(m_hEsc, { 120, Game::GetInstance()->GetScreenHeight() - 40 }, 0.0f, {}, {}, { 0.5f, 0.5f });
+	font.DrawString("or ", 162, Game::GetInstance()->GetScreenHeight() - 50, 1.0f, { 255, 130, 0 });
+	pGraphics->DrawTexture(m_hCircle, { 200, Game::GetInstance()->GetScreenHeight() - 40 }, 0.0f, {}, {}, { 1.0f, 1.0f });
+	font.DrawString("to go back.", 245, Game::GetInstance()->GetScreenHeight() - 50, 1.0f, { 255, 130, 0 });
 }

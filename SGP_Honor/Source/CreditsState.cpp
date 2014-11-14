@@ -6,6 +6,8 @@
 
 #include "Game.h"
 #include "GameplayState.h"
+#include "Font.h"
+#include "BitmapFont.h"
 
 ///////////////////////////////////////////////////////////
 ///////////////////// Singleton Accessor /////////////////
@@ -35,7 +37,7 @@ CreditsState* CreditsState::GetInstance(void)
 // - set up entities
 void CreditsState::Enter(void) //Load Resources
 {
-
+	m_hBackground = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Castle.png");
 }
 
 
@@ -45,7 +47,7 @@ void CreditsState::Enter(void) //Load Resources
 // - unload all resources
 void CreditsState::Exit(void)
 {
-
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
 }
 
 
@@ -67,7 +69,8 @@ bool CreditsState::Input(void) //Hanlde user Input
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 1 /*Button B on xbox controller*/))
 	{
-		Game::GetInstance()->RemoveState();
+		Game::GetInstance()->ClearStates();
+		//Game::GetInstance()->RemoveState();
 	}
 	return true;
 }
@@ -77,7 +80,18 @@ bool CreditsState::Input(void) //Hanlde user Input
 // - Update all game entities
 void CreditsState::Update(float elapsedTime)
 {
-
+	if (CreditTimer < 33.0f)
+	{
+		CreditTimer += elapsedTime;
+		textMovement -= 50 * elapsedTime;
+	}
+	else
+	{
+		CreditTimer = 0.0f;
+		textMovement = 0.0f;
+		Game::GetInstance()->ClearStates();
+		//Game::GetInstance()->RemoveState();
+	}
 }
 
 /////////////////////////////////////////////
@@ -85,6 +99,24 @@ void CreditsState::Update(float elapsedTime)
 // - Render all game entities
 void CreditsState::Render(void)
 {
+	SGD::GraphicsManager::GetInstance()->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 1.6f, 1.2f });
 
+	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
 
+	font.DrawString("Developers:", 50, 650 + textMovement, 2, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Jordan Ness", 100, 750 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Jonathan Cox", 100, 800 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Conor Maloney", 100, 850 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Luis Garcia", 100, 900 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Michael Sciortino", 100, 950 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
+
+	font.DrawString("EP:", 50, 1050 + textMovement, 2, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("John Oleske", 100, 1150 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
+
+	font.DrawString("AP:", 50, 1250 + textMovement, 2, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Sean Hathaway", 100, 1350 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
+
+	font.DrawString("Artists:", 50, 1450 + textMovement, 2, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Caris Frazier", 100, 1550 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Gregory Bey", 100, 1600 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
 }

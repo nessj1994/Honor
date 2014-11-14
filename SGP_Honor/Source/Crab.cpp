@@ -38,6 +38,7 @@ Crab::Crab() : Listener(this)
 	m_hBubble = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bubble.wav");
 	m_hSlam2 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Slam2.wav");
 	m_hHurt = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/ClangHurt.wav");
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/graphics/ClangEyes.png");
 }
 
 
@@ -47,6 +48,7 @@ Crab::~Crab()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBubble);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSlam2);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hHurt);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 void Crab::Update(float elapsedTime)
@@ -134,6 +136,7 @@ void Crab::Update(float elapsedTime)
 							 {
 								 SGD::AudioManager::GetInstance()->PlayAudio(m_hBubble);
 								 SetCurrentState(bubbles);
+								 redEyes = true;
 							 }
 
 							 if (castedBubbles == true)
@@ -209,33 +212,53 @@ void Crab::Update(float elapsedTime)
 				}
 				case bubbles:
 				{
-								if (bubbleCD == 0.0f)
+								if (redEyeTimer >= 0.5f)
 								{
-									castedBubbles = true;
-									bubbleTimer += elapsedTime;
-									bubbleSpawn += elapsedTime;
-									if (bubbleTimer <= BubbleCastLength && bubbleSpawn >= BubbleSpawnRate)
+									if (bubbleCD == 0.0f)
 									{
-										if (rand() % 2 == 0)
+										castedBubbles = true;
+										bubbleTimer += elapsedTime;
+										bubbleSpawn += elapsedTime;
+										if (bubbleTimer <= BubbleCastLength && bubbleSpawn >= BubbleSpawnRate)
 										{
-											CreateHorizontalBubble* pMsg = new CreateHorizontalBubble(this);
-											pMsg->QueueMessage();
-											pMsg = nullptr;
+											if (rand() % 2 == 0)
+											{
+												CreateHorizontalBubble* pMsg = new CreateHorizontalBubble(this);
+												pMsg->QueueMessage();
+												pMsg = nullptr;
+											}
+											else
+											{
+												CreateVerticalBubble* pMsg = new CreateVerticalBubble(this);
+												pMsg->QueueMessage();
+												pMsg = nullptr;
+											}
+											bubbleSpawn = 0.0f;
 										}
-										else
-										{
-											CreateVerticalBubble* pMsg = new CreateVerticalBubble(this);
-											pMsg->QueueMessage();
-											pMsg = nullptr;
-										}
-										bubbleSpawn = 0.0f;
-									}
 
-									if (bubbleTimer >= BubbleCastLength)
-									{
-										bubbleTimer = 0.0f;
-										SetCurrentState(idle);
+										if (bubbleTimer >= BubbleCastLength)
+										{
+											if (redEyeCD >= 0.5f)
+											{
+												bubbleTimer = 0.0f;
+												SetCurrentState(idle);
+												redEyes = false;
+												redEyeCD = 0.0f;
+												redEyeTimer = 0.0f;
+												eyealpha = 0;
+											}
+											else
+											{
+												redEyeCD += elapsedTime;
+												eyealpha -= 200 * elapsedTime;
+											}
+										}
 									}
+								}
+								else
+								{
+									redEyeTimer += elapsedTime;
+									eyealpha += 255 * elapsedTime;
 								}
 								break;
 				}
@@ -309,6 +332,11 @@ void Crab::Render(void)
 
 	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, IsFacingRight(), 1.0f, {}, 
 		SGD::Color(alpha, 255, 255 - ((4 - GetHitPoints()) * 60), 255 - ((4 - GetHitPoints()) * 60)));
+
+	if (redEyes == true)
+	{
+		Camera::GetInstance()->DrawTexture({ m_ptPosition.x - 155, m_ptPosition.y - 142 }, 0, m_hImage, false, 1, SGD::Color(eyealpha, 255, 255, 255), {});
+	}
 }
 
 SGD::Rectangle Crab::GetRect(void) const

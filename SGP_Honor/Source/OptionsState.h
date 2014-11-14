@@ -1,6 +1,8 @@
 #pragma once
 #include "IGameState.h"
 #include "../SGD Wrappers/SGD_Handle.h"
+#include "../SGD Wrappers/SGD_Geometry.h"
+#include "Game.h"
 
 class OptionsState :
 	public IGameState
@@ -28,10 +30,24 @@ private:
 	OptionsState& operator= (const OptionsState&)	= delete;
 
 
-	unsigned int m_unCursor = 0;
+	int m_unCursor = 0;
+
+	SGD::HAudio m_hSelection = SGD::INVALID_HANDLE;
+
 
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hBackground = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hSword = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hButton = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hEsc = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hCircle = SGD::INVALID_HANDLE;
 	
+
+	SGD::Rectangle m_rPlay = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 130, Game::GetInstance()->GetScreenHeight() / 2 - 60 }, SGD::Size{ 260, 65 });
+	SGD::Rectangle m_rOptions = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 130, Game::GetInstance()->GetScreenHeight() / 2 + 10 }, SGD::Size{ 260, 65 });
+	SGD::Rectangle m_rInstructions = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 130, Game::GetInstance()->GetScreenHeight() / 2 + 80 }, SGD::Size{ 260, 65 });
+
+
 	unsigned int m_unMusicVol = 100;
 	unsigned int m_unEffectsVol = 100;
 	bool m_bFullScreen;
