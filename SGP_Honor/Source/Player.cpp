@@ -2323,11 +2323,11 @@ void Player::UpdateSpray(float elapsedTime)
 			SGD::AudioManager::GetInstance()->PlayAudio(m_hIceEffect);
 		}
 		//m_fShotTimer = 0.0f;
-		if (m_fIceTimer > .05f)
+		if (m_fIceTimer > 1.0f)
 		{
 			m_fIceTimer = 0;
 			CreateSprayMessage* pMsg = new CreateSprayMessage(this);
-			pMsg->SendMessageNow();
+			pMsg->QueueMessage();
 			pMsg = nullptr;
 		}
 	}

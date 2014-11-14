@@ -866,19 +866,19 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 										}
 
 
-										pProj->Release();
-										pProj = nullptr;
+										//pProj->Release();
+										//pProj = nullptr;
 
-										pProj = pSelf->CreateSpray(pCreateMsg->GetOwner());
+										//pProj = pSelf->CreateSpray(pCreateMsg->GetOwner());
 
-										if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
-										{
-											pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
-										}
-										else if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_YETI)
-										{
-											pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
-										}
+										//if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+										//{
+										//	pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+										//}
+										//else if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_YETI)
+										//{
+										//	pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+										//}
 										// if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
 										// {
 										//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_PLAYER_PROJ);
