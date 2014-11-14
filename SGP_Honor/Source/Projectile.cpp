@@ -17,10 +17,10 @@ Projectile::Projectile()
 
 Projectile::~Projectile()
 {
-	if (m_pOwner)
-	{
-		m_pOwner->Release();
-	}
+	//if (m_pOwner)
+	//{
+	//	m_pOwner->Release();
+	//}
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 

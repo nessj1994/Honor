@@ -57,6 +57,8 @@ Caveman::~Caveman()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGrunt3);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hJump);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hLand);
+	SetPlayer(nullptr);
+	delete m_pHawk;
 	delete m_emEYES;
 	delete m_emVictoryEffect;
 	delete m_hHawkExplode;
@@ -272,13 +274,18 @@ void Caveman::Update(float elapsedTime)
 			SGD::Event* pATEvent = new SGD::Event("GainedHawk", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
+
+			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ m_pHawk };
+			pMsg->QueueMessage();
+			pMsg = nullptr;
+
 			GameplayState::GetInstance()->SetScreenFadeout(9);
 			// TODO Delete bull, give player dash, update room
 			GameplayState::GetInstance()->CreateTeleporter(510, 578, "Level3_1", false);
 			GameplayState::GetInstance()->CreateHintStatue(440, 513, "You have The Hawk!(Press D or Right Trigger)");
 			m_bWon = true;
 		}
-		if (m_fVictoryTimer > 50)
+		if (m_fVictoryTimer > 5)
 		{
 			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
 			pMsg->QueueMessage();

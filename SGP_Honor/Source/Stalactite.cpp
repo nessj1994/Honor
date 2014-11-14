@@ -17,6 +17,8 @@ Stalactite::Stalactite()
 
 Stalactite::~Stalactite()
 {
+
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 /////////////////////////////////////////////////

@@ -40,6 +40,7 @@ Hawk::~Hawk()
 	//pMsg->QueueMessage();
 	//pMsg = nullptr;
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
+
 	//SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
@@ -73,7 +74,7 @@ void Hawk::Update(float elapsedTime)
 	//	m_fCooldown = 0.0f;
 
 	//For Caveman Boss use
-	if (m_pOwner->GetType() == ENT_BOSS_CAVEMAN)
+	if (GetOwner()->GetType() == ENT_BOSS_CAVEMAN)
 	{
 		SGD::Vector distance = m_poTarget - m_ptPosition;
 		if (distance.ComputeLength() > 20)
@@ -103,12 +104,12 @@ void Hawk::Update(float elapsedTime)
 			//Go to the second position if not at it.
 			if (m_poTarget == m_pEndPos)
 			{
-				((Caveman*)m_pOwner)->HawkExplode(m_ptPosition);
+				((Caveman*)GetOwner())->HawkExplode(m_ptPosition);
 				m_bDead = true;
 			}
 			else
 			{
-				((Caveman*)m_pOwner)->ReadyToDrop();
+				((Caveman*)GetOwner())->ReadyToDrop();
 				m_poTarget = m_pEndPos;
 			}
 			
@@ -176,7 +177,7 @@ void Hawk::Render(void)
 
 void Hawk::Attack(SGD::Point _Pos,bool PlayerFacing)
 {
-	if (m_pOwner->GetType() == ENT_BOSS_CAVEMAN)
+	if (GetOwner()->GetType() == ENT_BOSS_CAVEMAN)
 	{
 		m_poTarget = _Pos;
 		m_pEndPos = _Pos;
