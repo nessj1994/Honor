@@ -52816,7 +52816,7 @@
 	</EventLayer>
 	<Entities numEntities="55">
 		<Entity type="17" x="384" y="448" numArgs="1" name="HintStatue_1">
-			<Argument type="3" name="Message" value="These rocks look wet." />
+			<Argument type="3" name="Message" value="These blocks can be frozen." />
 		</Entity>
 		<Entity type="14" x="512" y="576" numArgs="0" name="FreezableGround_6" />
 		<Entity type="14" x="544" y="576" numArgs="0" name="FreezableGround_7" />

@@ -1753,9 +1753,9 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 	if(pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false))
 	{
 		stickFrame = 1;
-		m_ts.ResetCurrFrame();
+		//m_ts.ResetCurrFrame();
 
-		m_ts.SetPlaying(true);
+		//m_ts.SetPlaying(true);
 	}
 
 	if(pInput->IsKeyPressed(SGD::Key::J))
@@ -1848,10 +1848,12 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 				if (m_bHasArmor == false)
 				{
 					m_ts.SetCurrAnimation("Walking");
+					m_ts.SetPlaying(true);
 				}
 				else
 				{
 					m_ts.SetCurrAnimation("Armor Player Walking");
+					m_ts.SetPlaying(true);
 				}
 			}
 		}
@@ -1899,10 +1901,12 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 				if (m_bHasArmor == false)
 				{
 					m_ts.SetCurrAnimation("Walking");
+					m_ts.SetPlaying(true);
 				}
 				else
 				{
 					m_ts.SetCurrAnimation("Armor Player Walking");
+					m_ts.SetPlaying(true);
 				}
 			}
 		}
