@@ -279,14 +279,14 @@ void Yeti::HandleCollision(const IEntity* pOther)
 	{
 
 		BasicCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 	}
 	if(pOther->GetType() == Entity::ENT_LEFT_RAMP)
 	{
 
 
 		LeftRampCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 
 	}
 
@@ -300,7 +300,7 @@ void Yeti::HandleCollision(const IEntity* pOther)
 
 
 		RightRampCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 
 	}
 	if(pOther->GetType() == Entity::ENT_ICE_RIGHT_RAMP)
@@ -333,7 +333,7 @@ void Yeti::HandleCollision(const IEntity* pOther)
 	if(pOther->GetType() == Entity::ENT_NOT_FROZEN)
 	{
 		BasicCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 	}
 
 	if(pOther->GetType() == Entity::ENT_ICE)

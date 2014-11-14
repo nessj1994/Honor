@@ -358,7 +358,7 @@ void Player::HandleCollision(const IEntity* pOther)
 	if (pOther->GetType() == ENT_DOOR)
 	{
 		m_bSliding = false;
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 		BasicCollision(pOther);
 	}
 
@@ -414,14 +414,17 @@ void Player::HandleCollision(const IEntity* pOther)
 
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
+
+		//SGD::GraphicsManager::GetInstance()->DrawString("ZERO", { 100, 300 }, { 255, 255, 0, 0 });
+
 	}
 	if (pOther->GetType() == Entity::ENT_LEFT_RAMP)
 	{
 		m_bSliding = false;
 
 		LeftRampCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 		is_Ramp = true;
 	}
 
@@ -450,7 +453,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		m_bSliding = false;
 
 		RightRampCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 		is_Ramp = true;
 	}
 	if (pOther->GetType() == Entity::ENT_ICE_RIGHT_RAMP)
@@ -482,7 +485,7 @@ void Player::HandleCollision(const IEntity* pOther)
 
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 	}
 
 	if (pOther->GetType() == Entity::ENT_BLOCK)
@@ -491,7 +494,7 @@ void Player::HandleCollision(const IEntity* pOther)
 
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 	}
 
 	if (pOther->GetType() == Entity::ENT_FROZEN)
@@ -519,7 +522,7 @@ void Player::HandleCollision(const IEntity* pOther)
 
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 	}
 
 	if (pOther->GetType() == Entity::ENT_DEATH)
@@ -578,7 +581,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		is_Platform = true;
 		GeyserCollision(pOther);
 		//BasicCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 
 	}
 
@@ -1641,10 +1644,10 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 		&& leftClamped == true))
 	{
 
-		SetVelocity(SGD::Vector(GetVelocity().x + GetFriction(), GetVelocity().y));
+		SetVelocity(SGD::Vector(GetVelocity().x + ( GetFriction() * elapsedTime  ) , GetVelocity().y));
 
 		if (GetVelocity().x > 0
-			&& GetVelocity().x < 10)
+			&& GetVelocity().x < 100)
 		{
 			SetVelocity(SGD::Vector(0, GetVelocity().y));
 		}
@@ -1656,7 +1659,7 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 		&& leftClamped == true))
 	{
 
-		SetVelocity(SGD::Vector(GetVelocity().x - GetFriction(), GetVelocity().y));
+		SetVelocity(SGD::Vector(GetVelocity().x - (GetFriction() * elapsedTime), GetVelocity().y));
 
 		if (GetVelocity().x < 0
 			&& GetVelocity().x > -100)
@@ -2364,7 +2367,7 @@ void Player::UpdateVelocity(float elapsedTime)
 		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
 	{
 		m_fButtonTimer = 0;
-		SGD::GraphicsManager::GetInstance()->DrawString("ZERO", { 100, 300 }, { 255, 255, 0, 0 });
+		//SGD::GraphicsManager::GetInstance()->DrawString("ZERO", { 100, 300 }, { 255, 255, 0, 0 });
 
 	}
 

@@ -50,7 +50,7 @@ void Wizard::Update(float elapsedTime)
 	}
 
 	GetPlayer()->SetSlowed(false);
-	GetPlayer()->SetFriction(25);
+	GetPlayer()->SetFriction(13000.0f);
 
 	switch (m_bsCurrState)
 	{
