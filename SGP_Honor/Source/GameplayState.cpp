@@ -75,7 +75,7 @@
 #include "Caveman.h"
 #include "IceTurtle.h"
 #include "IceGolem.h"
-#include "CreditsState.h"
+	#include "CreditsState.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -163,11 +163,12 @@ void GameplayState::Enter(void) //Load Resources
 	LoadLevelMap();
 	bool oldGame = LoadGame();
 
-	//m_pPlayer->SetHasBounce(true);
-	//m_pPlayer->SetHasDash(true);
-	//m_pPlayer->SetHasHawk(true);
-	//m_pPlayer->SetHasIce(true);
+	m_pPlayer->SetHasBounce(true);
+	m_pPlayer->SetHasDash(true);
+	m_pPlayer->SetHasHawk(true);
+	m_pPlayer->SetHasIce(true);
 
+	//LoadLevel("HubLevel");
 
 	if (oldGame)
 	{
@@ -179,6 +180,16 @@ void GameplayState::Enter(void) //Load Resources
 		CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
 		Game::GetInstance()->AddState(CutSceneState::GetInstance());
 	}
+
+	//LoadLevel("HubLevel");
+
+	
+	LoadLevel("Level4_5");
+
+	// LoadLevel("HubLevel");
+
+	// ("HubLevel");
+
 
 	m_pHubOrb = new HubWorldOrb();
 	//Turorial Images
