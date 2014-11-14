@@ -97,5 +97,4 @@ void Stalactite::HandleCollision(const IEntity* pOther)
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
 	}
 
-
 }
