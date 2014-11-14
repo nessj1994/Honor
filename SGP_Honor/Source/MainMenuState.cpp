@@ -168,7 +168,9 @@ bool MainMenuState::Input(void) //Hanlde user Input
 
 		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
 		{
-			Game::GetInstance()->AddState(InstructionsState::GetInstance());
+			//change state to instructions state
+			Game::GetInstance()->SetSelectedProfile(4);
+			Game::GetInstance()->AddState(GameplayState::GetInstance());
 
 		}
 	}
@@ -221,7 +223,8 @@ bool MainMenuState::Input(void) //Hanlde user Input
 		else if(m_nCursor == 2)
 		{
 			//change state to instructions state
-			Game::GetInstance()->AddState(InstructionsState::GetInstance());
+			Game::GetInstance()->SetSelectedProfile(4);
+			Game::GetInstance()->AddState(GameplayState::GetInstance());
 		}
 		else if(m_nCursor == 3)
 		{
@@ -326,14 +329,14 @@ void MainMenuState::Render(void)
 		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Instructions", (int)((fWidth - (12 * 14)) / 2), 390, 1, SGD::Color{ 255, 255,165, 0 });
+		font.DrawString("Tutorial", (int)((fWidth - (12 * 14)) / 2), 390, 1, SGD::Color{ 255, 255,165, 0 });
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 30 }, {}, {});
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Instructions", (int)((fWidth - (12 * 14)) / 2), 390, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Tutorial", (int)((fWidth - (12 * 14)) / 2), 390, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
 

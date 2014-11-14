@@ -2168,7 +2168,7 @@ void Player::UpdateHawk(float elapsedTime)
 
 						if (GetHawkPtr()->GetVelocity().x < 0)
 						{
-							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetAirFriction() * 8), GetHawkPtr()->GetVelocity().y));
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetAirFriction() * 80), GetHawkPtr()->GetVelocity().y));
 
 							if (GetHawkPtr()->GetVelocity().x > 0.007f)
 							{
@@ -2178,7 +2178,7 @@ void Player::UpdateHawk(float elapsedTime)
 						}
 						if (GetHawkPtr()->GetVelocity().x > 0)
 						{
-							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - (GetHawkPtr()->GetAirFriction() * 8), GetHawkPtr()->GetVelocity().y));
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - (GetHawkPtr()->GetAirFriction() * 80), GetHawkPtr()->GetVelocity().y));
 
 							if (GetHawkPtr()->GetVelocity().x < -0.007f)
 							{
@@ -2329,7 +2329,7 @@ void Player::UpdateSpray(float elapsedTime)
 		{
 			m_fIceTimer = 0;
 			CreateSprayMessage* pMsg = new CreateSprayMessage(this);
-			pMsg->SendMessageNow();
+			pMsg->QueueMessage();
 			pMsg = nullptr;
 		}
 	}

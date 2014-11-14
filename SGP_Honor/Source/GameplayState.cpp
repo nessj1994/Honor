@@ -171,20 +171,28 @@ void GameplayState::Enter(void) //Load Resources
 
 	//LoadLevel("HubLevel");
 
-	if (oldGame)
+	// Special case for tutorial
+	if (Game::GetInstance()->GetSelectedNumber() == 4)
 	{
-		LoadLevel("HubLevel");
+		LoadLevel("Level0_2");
 	}
 	else
 	{
-		LoadLevel("Level0_1");
-		CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
-		Game::GetInstance()->AddState(CutSceneState::GetInstance());
+		if (oldGame)
+		{
+			LoadLevel("HubLevel");
+		}
+		else
+		{
+			LoadLevel("Level0_1");
+			CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
+			Game::GetInstance()->AddState(CutSceneState::GetInstance());
+		}
 	}
 
 
 	
-	LoadLevel("Level5_5");
+	//LoadLevel("Level5_5");
 
 	// LoadLevel("HubLevel");
 
@@ -346,7 +354,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if(pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level3_5");
+		m_bShowFPS ? m_bShowFPS = false : m_bShowFPS = true;
 	}
 
 	if (pInput->IsKeyPressed(SGD::Key::L))
@@ -563,7 +571,10 @@ void GameplayState::Render(void)
 {
 	// Render the FPS
 	SGD::OStringStream output;
-	output << "FPS: " << m_unFPS;
+	if (m_bShowFPS)
+	{
+		output << "FPS: " << m_unFPS;
+	}
 	/*if (ending == false)
 	{*/
 		//Render Images for tutorial 
@@ -888,19 +899,19 @@ void GameplayState::MessageProc(const SGD::Message* pMsg)
 										}
 
 
-										pProj->Release();
-										pProj = nullptr;
+										//pProj->Release();
+										//pProj = nullptr;
 
-										pProj = pSelf->CreateSpray(pCreateMsg->GetOwner());
+										//pProj = pSelf->CreateSpray(pCreateMsg->GetOwner());
 
-										if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
-										{
-											pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
-										}
-										else if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_YETI)
-										{
-											pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
-										}
+										//if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
+										//{
+										//	pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+										//}
+										//else if(pCreateMsg->GetOwner()->GetType() == Entity::ENT_BOSS_YETI)
+										//{
+										//	pSelf->m_pEntities->AddEntity(pProj, Entity::ENT_SPRAY);
+										//}
 										// if (pCreateMsg->GetOwner()->GetType() == Entity::ENT_PLAYER)
 										// {
 										//	 pSelf->m_pEntities->AddEntity(pProj, EntityManager::BUCKET_PLAYER_PROJ);
