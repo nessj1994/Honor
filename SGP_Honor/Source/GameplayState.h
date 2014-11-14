@@ -236,6 +236,7 @@ private:
 	SGD::HTexture m_hTriOpenDoor = SGD::INVALID_HANDLE;
 	
 	//FPS Count
+	bool			m_bShowFPS;
 	unsigned int	m_unFPS = 60;
 	unsigned int	m_unFrames = 0;
 	float			m_fFPSTimer;

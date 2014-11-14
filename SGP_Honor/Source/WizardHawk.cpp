@@ -2,6 +2,7 @@
 #include "AnimationEngine.h"
 #include "Camera.h"
 #include "Wizard.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 WizardHawk::WizardHawk()
 {
@@ -29,7 +30,6 @@ void WizardHawk::Update(float elapsedTime)
 
 	if (m_fTimer < 0)
 	{
-
 		if (m_ptPosition.x != -300)
 		{
 			if (m_ptPosition.x < m_ptDestPos.x)

@@ -37,6 +37,5 @@ private:
 	Entity* m_pOwner = nullptr;
 	float m_fTimer = 0.0f;
 	
-
 };
 
