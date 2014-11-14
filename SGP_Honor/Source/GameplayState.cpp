@@ -519,7 +519,7 @@ void GameplayState::Update(float elapsedTime)
 			endFadeTimer += elapsedTime;
 			if (endFadeTimer < 3.0f)
 			{
-				endFade += 159 * elapsedTime;
+				endFade += (unsigned char)(159 * elapsedTime);
 				SetScreenFadeout(endFade);
 			}
 			else
