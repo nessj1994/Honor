@@ -1,5 +1,6 @@
 #pragma once
 #include "IGameState.h"
+#include "../SGD Wrappers/SGD_Handle.h"
 class CreditsState :
 	public IGameState
 {
@@ -25,5 +26,9 @@ private:
 
 	CreditsState(CreditsState&) = delete;
 	CreditsState& operator= (CreditsState&) = delete;
+
+	float CreditTimer = 0.0f;
+	float textMovement = 0.0f;
+	SGD::HTexture m_hBackground = SGD::INVALID_HANDLE;
 };
 

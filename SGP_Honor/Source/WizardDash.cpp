@@ -63,16 +63,16 @@ void WizardDash::Update(float elapsedTime)
 }
 void WizardDash::Render(void)
 {
-	SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
+	//SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
 
-	//create a reference to our rectangle
-	SGD::Rectangle rMyRect = GetRect();
+	////create a reference to our rectangle
+	//SGD::Rectangle rMyRect = GetRect();
 
-	//Offset our rectangle by the camera position for rendering
-	rMyRect.Offset({ -camPos.x, -camPos.y });
+	////Offset our rectangle by the camera position for rendering
+	//rMyRect.Offset({ -camPos.x, -camPos.y });
 
-	//Render us with the camera
-	Camera::GetInstance()->Draw(rMyRect, SGD::Color::Color(255, 255, 0, 0));
+	////Render us with the camera
+	//Camera::GetInstance()->Draw(rMyRect, SGD::Color::Color(255, 255, 0, 0));
 
 	if(m_bFacingRight == true)
 		Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + 64, m_ptPosition.y + m_szSize.height }, 0.0f, m_ts, false, 1.0f, {});

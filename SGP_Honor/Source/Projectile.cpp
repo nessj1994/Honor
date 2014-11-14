@@ -11,7 +11,7 @@
 Projectile::Projectile()
 {
 	SetSpeed(5000);
-
+	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/graphics/TurretShot.png");
 }
 
 
@@ -21,6 +21,7 @@ Projectile::~Projectile()
 	{
 		m_pOwner->Release();
 	}
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 
@@ -95,10 +96,11 @@ void Projectile::Update(float elapsedTime)
 
 void Projectile::Render(void)
 {
-	Camera::GetInstance()->Draw(SGD::Rectangle(
+	/*Camera::GetInstance()->Draw(SGD::Rectangle(
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y,
 		m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height),
-		SGD::Color::Color(255, 0, 255, 0));
+		SGD::Color::Color(255, 0, 255, 0));*/
+	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1, {}, {});
 
 }
 

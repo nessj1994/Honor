@@ -87,7 +87,7 @@ bool ProfileState::Input(void) //Hanlde user Input
 	SGD::Rectangle rMouse = SGD::Rectangle({ pInput->GetMousePosition().x, pInput->GetMousePosition().y, pInput->GetMousePosition().x + 1, pInput->GetMousePosition().y + 1 });
 
 	//move option selection cursor right
-	if(pInput->IsKeyPressed(SGD::Key::Right))
+	if(pInput->IsKeyPressed(SGD::Key::Right) || pInput->IsDPadPressed(0, SGD::DPad::Right))
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
 		m_nOptionCursor += 1;
@@ -96,7 +96,7 @@ bool ProfileState::Input(void) //Hanlde user Input
 			m_nOptionCursor = 1;
 		}
 	}
-	if(pInput->IsKeyPressed(SGD::Key::Left))
+	if(pInput->IsKeyPressed(SGD::Key::Left) || pInput->IsDPadPressed(0, SGD::DPad::Left))
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
 
@@ -144,7 +144,7 @@ bool ProfileState::Input(void) //Hanlde user Input
 			m_rSword.top = 140.0f;
 		}
 
-	
+
 
 
 	}
@@ -213,7 +213,7 @@ bool ProfileState::Input(void) //Hanlde user Input
 			//Game::GetInstance()->AddState(GameplayState::GetInstance());
 
 			// Go into the opening cutscene if it is a new profile
-	
+
 		}
 		else if(m_nCursor == 1)
 		{
@@ -248,9 +248,9 @@ bool ProfileState::Input(void) //Hanlde user Input
 		}
 		else if(m_nOptionCursor == 1)
 		{
-		
+
 			DeleteProfile(Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber()));
-		
+
 			LoadProfile(Game::GetInstance()->GetProfile(1));
 			LoadProfile(Game::GetInstance()->GetProfile(2));
 			LoadProfile(Game::GetInstance()->GetProfile(3));
@@ -293,7 +293,7 @@ void ProfileState::Render(void)
 	pGraphics->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 1.6f, 1.2f });
 
 	//Draw the title
-	font.DrawString("HONOR", 220, 10, 3, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("HONOR", 220, 10, 3, SGD::Color{ 255, 255, 130, 0 });
 
 
 	pGraphics->DrawTexture(m_hSword, { m_rSword.left, m_rSword.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
@@ -308,6 +308,8 @@ void ProfileState::Render(void)
 
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, Game::GetInstance()->GetScreenHeight() / 2 - 170 }, 0.0f, {}, { 255, 255, 255, 255 });
 
+		std::string time;
+		time = Game::GetInstance()->GetProfile(m_nCursor + 1)->GetTime();
 
 
 		font.DrawString("Profile 1", (int)((fWidth - (4 * 19)) / 3.65f), (int)Game::GetInstance()->GetScreenHeight() / 2 - 160, 1, SGD::Color{ 255, 255, 165, 0 });
@@ -315,8 +317,9 @@ void ProfileState::Render(void)
 		std::ostringstream stringstream;
 		stringstream << Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCollectedHonor();
 
-		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300) - 30, 220, 1, { 255, 255, 0, 0 });
-		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300) - 30, 252, 1, { 255, 255, 0, 0 });
+		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300) - 30, 220, 1, { 255, 255, 130, 0 });
+		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300) - 30, 252, 1, { 255, 255, 130, 0 });
+		font.DrawString("Time Created:" + time, (int)(m_rProfile1.left + 300) - 30, 284, 1, { 255, 255, 130, 0 });
 
 		//font.DrawString(Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel().c_str(), m_rProfile1.left + 400, 220, 1, { 255, 255, 0, 0 });
 
@@ -341,12 +344,15 @@ void ProfileState::Render(void)
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, Game::GetInstance()->GetScreenHeight() / 2 - 100 }, 0.0f, {}, { 255, 255, 255, 255 });
 
 		font.DrawString("Profile 2", (int)((fWidth - (4 * 19)) / 3.65f), (int)Game::GetInstance()->GetScreenHeight() / 2 - 90, 1, SGD::Color{ 255, 255, 165, 0 });
+		std::string time = Game::GetInstance()->GetProfile(m_nCursor + 1)->GetTime();
 
 
 		std::ostringstream stringstream;
 		stringstream << Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCollectedHonor();
-		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300) - 30, 220, 1, { 255, 255, 0, 0 });
-		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300) - 30, 252, 1, { 255, 255, 0, 0 });
+		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300) - 30, 220, 1, { 255, 255, 130, 0 });
+		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300) - 30, 252, 1, { 255, 255, 130, 0 });
+		font.DrawString("Time Created:" + time, (int)(m_rProfile1.left + 300) - 30, 284, 1, { 255, 255, 130, 0 });
+
 	}
 	else
 	{
@@ -360,6 +366,8 @@ void ProfileState::Render(void)
 
 	if(m_nCursor == 2)
 	{
+
+		std::string time = Game::GetInstance()->GetProfile(m_nCursor + 1)->GetTime();
 		pGraphics->DrawRectangle(m_rProfile3, { 255, 255, 255, 255 }, {}, {});
 		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 4, Game::GetInstance()->GetScreenHeight() / 2 - 30 }, 0.0f, {}, { 255, 255, 255, 255 });
@@ -368,8 +376,10 @@ void ProfileState::Render(void)
 
 		std::ostringstream stringstream;
 		stringstream << Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCollectedHonor();
-		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300) - 30, 220, 1, { 255, 255, 0, 0 });
-		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300) - 30, 252, 1, { 255, 255, 0, 0 });
+		font.DrawString("Current Level: " + Game::GetInstance()->GetProfile(m_nCursor + 1)->GetCurrentLevel(), (int)(m_rProfile1.left + 300) - 30, 220, 1, { 255, 255, 130, 0 });
+		font.DrawString("Collected Honor: " + stringstream.str(), (int)(m_rProfile1.left + 300) - 30, 252, 1, { 255, 255, 130, 0 });
+		font.DrawString("Time Created:" + time, (int)(m_rProfile1.left + 300) - 30, 284, 1, { 255, 255, 130, 0 });
+
 	}
 	else
 	{
@@ -470,11 +480,17 @@ void ProfileState::LoadProfile(Profile* profile)
 	doc.LoadFile(pathtowrite.c_str());
 
 
+	std::string time;
 
 	TiXmlElement* pRoot = doc.RootElement();
 
 	if(pRoot == nullptr)
 	{
+		profile->SetHonorCollected(0);
+		profile->SetCurrentLevel("Level0_1");
+		time = "N/A";
+		profile->SetTime(time);
+
 		return;
 	}
 
@@ -483,9 +499,21 @@ void ProfileState::LoadProfile(Profile* profile)
 	pRoot->Attribute("totalHonor", &totalHonor);
 	profile->SetHonorCollected(totalHonor);
 
+
+
+	if(pRoot->Attribute("time"))
+	{
+		time = pRoot->Attribute("time");
+	}
+	else
+	{
+		time = "N/A";
+	}
+	profile->SetTime(time);
+
 	// Loop through each level
 	TiXmlElement * pLevel = pRoot->FirstChildElement();
-	
+
 	std::string CurrentLevel;
 
 	while(pLevel)
@@ -496,7 +524,7 @@ void ProfileState::LoadProfile(Profile* profile)
 		// If this level has been unlocked
 		int unlocked;
 		pLevel->Attribute("unlocked", &unlocked);
-		
+
 
 		if(unlocked ? true : false)
 		{

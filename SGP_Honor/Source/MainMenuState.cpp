@@ -271,7 +271,7 @@ void MainMenuState::Render(void)
 	pGraphics->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 1.6f, 1.2f });
 
 	//Draw the title
-	font.DrawString("HONOR", 220, 100, 3, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("HONOR", 220, 100, 3, SGD::Color{ 255, 255, 130, 0 });
 
 
 	pGraphics->DrawTexture(m_hSword, { m_rSword.left, m_rSword.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
