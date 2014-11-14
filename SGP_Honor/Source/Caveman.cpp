@@ -46,7 +46,6 @@ Caveman::Caveman() : SGD::Listener(this)
 	m_hGrunt3 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Grunt3.wav");
 	m_hJump = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Jump.wav");
 	m_hLand = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Land.wav");
-	m_hKick = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Kick.wav");
 
 }
 
@@ -58,7 +57,6 @@ Caveman::~Caveman()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGrunt3);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hJump);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hLand);
-	SGD::AudioManager::GetInstance()->UnloadAudio(m_hKick);
 	delete m_emEYES;
 	delete m_emVictoryEffect;
 	delete m_hHawkExplode;
@@ -66,7 +64,7 @@ Caveman::~Caveman()
 
 void Caveman::Update(float elapsedTime)
 {
-
+	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
 	//Emitter updates
 	m_hHawkExplode->Update(elapsedTime);
 	m_emEYES->Update(elapsedTime);
@@ -95,7 +93,6 @@ void Caveman::Update(float elapsedTime)
 		{
 			//m_bsCurrState = CM_SLASHING;
 		}
-			
 	}
 
 	//Hawk Update
@@ -148,6 +145,7 @@ void Caveman::Update(float elapsedTime)
 			m_ts.ResetCurrFrame();
 			m_ts.SetCurrAnimation("CaveManJumping");
 			m_ts.SetPlaying(true);
+			pAudio->PlayAudio(m_hJump);
 		}
 		if (m_fInTheAir < .5f)
 		{
@@ -201,6 +199,7 @@ void Caveman::Update(float elapsedTime)
 	case Caveman::CM_ATTACKING:		
 		if (m_ts.GetCurrAnimation() != "CaveManAttack")
 		{
+			pAudio->PlayAudio(m_hGrunt2);
 			m_ts.ResetCurrFrame();
 			m_ts.SetCurrAnimation("CaveManAttack");
 			m_ts.SetPlaying(true);
@@ -325,7 +324,7 @@ void Caveman::Render(void)
 		m_pHawk->Render();
 	}
 	
-	Boss::Render();
+	//Boss::Render();
 	//Animation Render
 	Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height / 2 }, 0, m_ts, m_bFacingRight, 1);
 
@@ -342,6 +341,7 @@ void Caveman::HandleCollision(const IEntity* pOther)
 	{
 		if (m_bsCurrState == CM_FALLING)
 		{
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hLand);
 			m_bsCurrState = CM_RUNING;
 		}
 	}
@@ -349,6 +349,7 @@ void Caveman::HandleCollision(const IEntity* pOther)
 	{
 		if (m_bsCurrState == CM_JUMPING || m_bsCurrState == CM_FALLING)
 		{
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hGrunt1);
 			m_fHitTimer = 0;
 			m_bsCurrState = CM_STUNNED;
 			m_fStunnedTimer = 0;

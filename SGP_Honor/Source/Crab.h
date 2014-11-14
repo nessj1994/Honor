@@ -44,7 +44,12 @@ private:
 	bool SwipeOnCD = false;
 	bool wasHit = false;
 
+	bool redEyes = false;
+	float redEyeTimer = 0.0f;
+	float redEyeCD = 0.0f;
+
 	unsigned char alpha = 255;
+	unsigned char eyealpha = 0;
 
 	// Sounds
 	SGD::HAudio m_hRoar = SGD::INVALID_HANDLE;

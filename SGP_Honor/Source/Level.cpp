@@ -74,71 +74,71 @@ void Level::Update(float _dt)
 // - Draw the collision layer to the screen
 void Level::Render()
 {
-	// Handle to graphics manager
-	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+	//// Handle to graphics manager
+	//SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 
-	// TODO - Revamp
+	//// TODO - Revamp
 
-	// Render the collision layer
+	//// Render the collision layer
 
-	// Loop through the map
-for (int xx = 0; xx < m_nWidth; ++xx)
-	{
-		for (int yy = 0; yy < m_nHeight; ++yy)
-		{
-			// Determine color based on tile type
-			int value = m_nCollisionLayer[xx][yy];
-			SGD::Color color = { 0, 0, 0 };
+	//// Loop through the map
+	//for (int xx = 0; xx < m_nWidth; ++xx)
+	//{
+	//	for (int yy = 0; yy < m_nHeight; ++yy)
+	//	{
+	//		// Determine color based on tile type
+	//		int value = m_nCollisionLayer[xx][yy];
+	//		SGD::Color color = { 0, 0, 0 };
 
-			switch (value)
-			{
-				// Walls
-				case 0:
-					color = { 150, 150, 150 }; // gray
-					break;
-					// Death
-				case 1:
-					color = { 255, 150, 150 }; // red
-					break;
-					// Left ramp
-				case 2:
-					color = { 160, 80, 250 }; // purple
-					break;
-					// Right ramp
-				case 3:
-					color = { 250, 70, 210 }; // pink
-					break;
-					// Ice
-				case 4:
-					color = { 0, 220, 220 }; // Cyan
-					break;
-					// Ice left ramp
-				case 5:
-					color = { 50, 110, 0 }; // dark green
-					break;
-					// Ice right ramp
-				case 6:
-					color = { 30, 220, 0 }; // light green
-					break;
+	//		switch (value)
+	//		{
+	//			// Walls
+	//			case 0:
+	//				color = { 150, 150, 150 }; // gray
+	//				break;
+	//				// Death
+	//			case 1:
+	//				color = { 255, 150, 150 }; // red
+	//				break;
+	//				// Left ramp
+	//			case 2:
+	//				color = { 160, 80, 250 }; // purple
+	//				break;
+	//				// Right ramp
+	//			case 3:
+	//				color = { 250, 70, 210 }; // pink
+	//				break;
+	//				// Ice
+	//			case 4:
+	//				color = { 0, 220, 220 }; // Cyan
+	//				break;
+	//				// Ice left ramp
+	//			case 5:
+	//				color = { 50, 110, 0 }; // dark green
+	//				break;
+	//				// Ice right ramp
+	//			case 6:
+	//				color = { 30, 220, 0 }; // light green
+	//				break;
 
-			}
+	//		}
 
-			// Don't draw empty tiles
-			if (value != -1)
-			{
-				// Rectangle for drawing
-				//SGD::Rectangle rect = { xx * 32.0f, yy * 32.0f, xx * 32.0f + 32, yy * 32.0f + 32 };
-				//pGraphics->DrawRectangle(rect, color, { 0, 0, 0 }, 2);
+	//		// Don't draw empty tiles
+	//		if (value != -1)
+	//		{
+	//			// Rectangle for drawing
+	//			//SGD::Rectangle rect = { xx * 32.0f, yy * 32.0f, xx * 32.0f + 32, yy * 32.0f + 32 };
+	//			//pGraphics->DrawRectangle(rect, color, { 0, 0, 0 }, 2);
 
-				Camera::GetInstance()->Draw(SGD::Rectangle(
-					xx * 32.0f - Camera::GetInstance()->GetCameraPos().x				/** Camera::GetInstance()->GetZoomScale()*/,
-					yy * 32.0f - Camera::GetInstance()->GetCameraPos().y				/** Camera::GetInstance()->GetZoomScale()*/,
-					xx * 32.0f - Camera::GetInstance()->GetCameraPos().x + 32.0f		/** Camera::GetInstance()->GetZoomScale()*/,
-					yy * 32.0f - Camera::GetInstance()->GetCameraPos().y + 32.0f		/** Camera::GetInstance()->GetZoomScale()*/),
-					color);
-			}
-		}
-	}
+	//			Camera::GetInstance()->Draw(SGD::Rectangle(
+	//				xx * 32.0f - Camera::GetInstance()->GetCameraPos().x				/** Camera::GetInstance()->GetZoomScale()*/,
+	//				yy * 32.0f - Camera::GetInstance()->GetCameraPos().y				/** Camera::GetInstance()->GetZoomScale()*/,
+	//				xx * 32.0f - Camera::GetInstance()->GetCameraPos().x + 32.0f		/** Camera::GetInstance()->GetZoomScale()*/,
+	//				yy * 32.0f - Camera::GetInstance()->GetCameraPos().y + 32.0f		/** Camera::GetInstance()->GetZoomScale()*/),
+	//				color);
+	//		}
+	//	}
+	//}
 
 }
 

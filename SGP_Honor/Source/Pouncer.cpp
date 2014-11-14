@@ -75,7 +75,7 @@ void Pouncer::Update(float elapsedTime)
 			{
 				isPouncing = false;
 			}
-			else if (isPouncing == false && inAir == false)
+			if (isPouncing == false && inAir == false)
 			{
 				m_ts.SetCurrAnimation("Hermit Crab Hide");
 				m_ts.ResetCurrFrame();
@@ -94,7 +94,7 @@ void Pouncer::Update(float elapsedTime)
 
 			SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
 
-			Unit::Update(elapsedTime);
+			Entity::Update(elapsedTime);
 			AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 		}
 	}
@@ -144,7 +144,7 @@ void Pouncer::HandleCollision(const IEntity* pOther)
 
 	if (GetAlive())
 	{
-		Enemy::HandleCollision(pOther);
+		Unit::HandleCollision(pOther);
 
 		if (pOther->GetType() == Entity::ENT_SOLID_WALL || pOther->GetType() == Entity::ENT_DOOR || pOther->GetType() == Entity::ENT_LEFT_RAMP
 			|| pOther->GetType() == Entity::ENT_RIGHT_RAMP)
@@ -191,7 +191,7 @@ void Pouncer::HandleCollision(const IEntity* pOther)
 				if (rPouncer.bottom == rIntersection.bottom)
 				{
 					SetVelocity({ GetVelocity().x, 0 });
-					SetPosition({ GetPosition().x, (float)rObject.top - nIntersectHeight - 1 });
+					SetPosition({ GetPosition().x, (float)rObject.top - nIntersectHeight + 1 });
 					inAir = false;
 				}
 				if (rPouncer.top == rIntersection.top)
@@ -221,6 +221,10 @@ void Pouncer::HandleEvent(const SGD::Event* pEvent)
 	{
 		SetAlive(true);
 		SetPosition(GetOriginalPos());
+		SetVelocity({ 0, 0 });
+		m_ts.SetCurrAnimation("Hermit Crab Hide");
+		m_ts.ResetCurrFrame();
+		m_ts.SetPlaying(true);
 	}
 	if (pEvent->GetEventID() == "ASSESS_PLAYER_RANGE" && target == nullptr)
 	{

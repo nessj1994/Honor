@@ -22,6 +22,7 @@
 #include "CreateStalactite.h"
 #include "MovingPlatform.h"
 #include "IceBat.h"
+#include "CutSceneState.h"
 
 #include "HubWorldOrb.h"
 
@@ -74,6 +75,7 @@
 #include "Caveman.h"
 #include "IceTurtle.h"
 #include "IceGolem.h"
+#include "CreditsState.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -155,18 +157,24 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadGame();
+	bool oldGame = LoadGame();
 
-	//LoadLevel("Level5_5");
 	m_pPlayer->SetHasBounce(true);
 	m_pPlayer->SetHasDash(true);
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-	//LoadLevel("HubLevel");
-	LoadLevel("HubLevel");
 
-	//("HubLevel");
+	if (oldGame)
+	{
+		LoadLevel("HubLevel");
+	}
+	else
+	{
+		LoadLevel("Level0_1");
+		CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
+		Game::GetInstance()->AddState(CutSceneState::GetInstance());
+	}
 
 	m_pHubOrb = new HubWorldOrb();
 	//Turorial Images
@@ -174,6 +182,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_hXJUMP = pGraphics->LoadTexture("Assets/graphics/HonorX.png");
 	m_hXWallJump = pGraphics->LoadTexture("Assets/graphics/HonorWall.png");
 	m_hTriOpenDoor = pGraphics->LoadTexture("Assets/graphics/HonorTriangle.png");
+
 }
 
 
@@ -325,6 +334,10 @@ bool GameplayState::Input(void) //Hanlde user Input
 		LoadLevel("Level3_1");
 	}
 
+	if (pInput->IsKeyPressed(SGD::Key::L))
+	{
+		WizardDefeated();
+	}
 
 
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
@@ -361,7 +374,8 @@ void GameplayState::Update(float elapsedTime)
 	float x = elapsedTime;
 
 	// Toggle for mini map
-	if (SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M)|| /*For Arcade Input*/SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::MouseLeft))
+	if(SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M) && ending == false)
+		//|| /*For Arcade Input*/SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::MouseLeft))
 	{
 		m_bRenderMiniMap = !m_bRenderMiniMap;
 	}
@@ -493,6 +507,28 @@ void GameplayState::Update(float elapsedTime)
 	SGD::EventManager::GetInstance()->Update();
 	SGD::MessageManager::GetInstance()->Update();
 
+	if (ending == true)
+	{
+		endingTimer += elapsedTime;
+		if (endingTimer >= 5.0f)
+		{
+			endFadeTimer += elapsedTime;
+			if (endFadeTimer < 3.0f)
+			{
+				endFade += (unsigned char)(159 * elapsedTime);
+				SetScreenFadeout(endFade);
+			}
+			else
+			{
+				ending = false;
+				endFade = 0;
+				endFadeTimer = 0.0f;
+				endingTimer = 0.0f;
+				SetScreenFadeout(0);
+				Game::GetInstance()->AddState(CreditsState::GetInstance());
+			}
+		}
+	}
 }
 
 /////////////////////////////////////////////
@@ -500,30 +536,38 @@ void GameplayState::Update(float elapsedTime)
 // - Render all game entities
 void GameplayState::Render(void)
 {
-	//Render Images for tutorial 
-	if(m_strCurrLevel == "Level0_1")
+	/*if (ending == false)
+	{*/
+		//Render Images for tutorial 
+		if (m_strCurrLevel == "Level0_1")
+		{
+			Camera::GetInstance()->DrawTexture({ 600, 50 }, 0, m_hXJUMP, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 1759, 50 }, 0, m_hXJUMP, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 2736, 200 }, 0, m_hXWallJump, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 3803, 10 }, 0, m_hOAttack, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 4304, 200 }, 0, m_hTriOpenDoor, false, 1, {}, {});
+		}
+		//\
+
+		m_pLevel->Render();
+		m_pLevel->RenderImageLayer(true);
+
+
+		//Camera::GetInstance()->DrawTexture({ 270, 400 }, {}, SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/images.jpg"), false);
+		m_pEntities->RenderAll();
+		m_pLevel->RenderImageLayer(false);
+
+		// Draw the mini map
+		if (m_bRenderMiniMap && ending == false)
+		{
+			RenderMiniMap();
+		}
+	/*}
+	else
 	{
-		Camera::GetInstance()->DrawTexture({ 600, 50 }, 0, m_hXJUMP, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 1759, 50 }, 0, m_hXJUMP, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 2736, 200 }, 0, m_hXWallJump, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 3803, 10 }, 0, m_hOAttack, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 4304, 200 }, 0, m_hTriOpenDoor, false, 1, {}, {});
-	}
-	//\
-
-	m_pLevel->Render();
-	m_pLevel->RenderImageLayer(true);
-
-
-	//Camera::GetInstance()->DrawTexture({ 270, 400 }, {}, SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/images.jpg"), false);
-	m_pEntities->RenderAll();
-	m_pLevel->RenderImageLayer(false);
-
-	// Draw the mini map
-	if(m_bRenderMiniMap)
-	{
-		RenderMiniMap();
-	}
+		m_pLevel->Render();
+		m_pLevel->RenderImageLayer(true);
+	}*/
 
 	//Render the Hub world Orb
 	if(m_strCurrLevel == "HubLevel")
@@ -1895,7 +1939,7 @@ void GameplayState::SaveGame()
 	doc.SaveFile(pathtowrite.c_str());
 }
 
-void GameplayState::LoadGame()
+bool GameplayState::LoadGame()
 {
 	HRESULT hr;
 	std::ostringstream stringstream;
@@ -1939,13 +1983,13 @@ void GameplayState::LoadGame()
 	//Create the doc
 	TiXmlDocument doc;
 
-	doc.LoadFile(pathtowrite.c_str());
+	bool check = doc.LoadFile(pathtowrite.c_str());
 
 	TiXmlElement* pRoot = doc.RootElement();
 	if(pRoot == nullptr)
 	{
 		m_pPlayer->SetHonorCollected(0);
-		return;
+		return false;
 
 	}
 
@@ -1992,6 +2036,7 @@ void GameplayState::LoadGame()
 	//m_pPlayer->SetPosition(SGD::Point((float)x, (float)y));
 	int temp = 0;
 	temp++;
+	return check;
 }
 
 /////////////////////////////////////////////
@@ -2373,4 +2418,13 @@ void GameplayState::ResetHonorInRoom()
 void GameplayState::IncreaseHonorBeforeDeath(unsigned int _value)
 {
 	m_pLevel->SetHonorBeforeDeath(m_pLevel->GetHonorBeforeDeath() + _value);
+}
+
+
+void GameplayState::WizardDefeated()
+{
+	LoadLevel("HubLevel");
+	ending = true;
+	m_pPlayer->SetPosition({ -100, -100 });
+	Camera::GetInstance()->SetCameraCap(6);
 }

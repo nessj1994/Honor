@@ -107,8 +107,31 @@ void Laser::Render(void)
 
 	m_LaserEffect->Render();
 
-	Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y },
-		0.0f, m_hImage, true, 0.8f, {}, {});
+	//Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y },
+	//	0.0f, m_hImage, true, 0.8f, {}, {});
+
+	SGD::Point newPoint = { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y };
+	// Right
+	if (m_vtDirection.x == 1)
+	{
+		SGD::Rectangle newRect = { 0, 0, 32, 32 };
+		Camera::GetInstance()->DrawTextureSection(m_hImage, newPoint, newRect, 0.0f, { 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 1.0f, 1.0f });
+	}
+	else if (m_vtDirection.y == -1) // Up
+	{
+		SGD::Rectangle newRect = { 32, 32, 64, 64 };
+		Camera::GetInstance()->DrawTextureSection(m_hImage, newPoint, newRect, 0.0f, { 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 1.0f, 1.0f });
+	}
+	else if (m_vtDirection.x == -1) // Left
+	{
+		SGD::Rectangle newRect = { 0, 32, 32, 64 };
+		Camera::GetInstance()->DrawTextureSection(m_hImage, newPoint, newRect, 0.0f, { 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 1.0f, 1.0f });
+	}
+	else // Down
+	{
+		SGD::Rectangle newRect = { 32, 0, 64, 32 };
+		Camera::GetInstance()->DrawTextureSection(m_hImage, newPoint, newRect, 0.0f, { 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 1.0f, 1.0f });
+	}
 }
 
 int Laser::GetType(void) const

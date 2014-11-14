@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
 <options>
-    <option music_volume="20" />
-    <option sfx_volume="20" />
+    <option music_volume="5" />
+    <option sfx_volume="25" />
 </options>
