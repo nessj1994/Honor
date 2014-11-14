@@ -183,14 +183,6 @@ void GameplayState::Enter(void) //Load Resources
 	}
 
 
-	
-	LoadLevel("Level5_1");
-
-	// LoadLevel("HubLevel");
-
-	// ("HubLevel");
-
-
 	m_pHubOrb = new HubWorldOrb();
 	//Turorial Images
 	m_hOAttack = pGraphics->LoadTexture("Assets/graphics/HonorO.png");
