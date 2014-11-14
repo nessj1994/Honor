@@ -303,7 +303,8 @@ void Caveman::HawkExplode(SGD::Point _Pos)
 
 void Caveman::DropStalactites()
 {
-	if (m_fStalacTimer > .18f && m_bDrop)
+	float x = (float)(GetHitPoints() * .1f);
+	if (m_fStalacTimer > x && m_bDrop)
 	{
 		m_fStalacTimer = 0;
 		//make a stalactite
@@ -374,6 +375,8 @@ void Caveman::HandleEvent(const SGD::Event* pEvent)
 		if (m_bsCurrState != CM_DEATH)
 		{
 			SetHitPoints(3);
+			SetPosition({ 510, 500 });
+			m_bsCurrState = CM_THINKING;
 		}		
 	}
 

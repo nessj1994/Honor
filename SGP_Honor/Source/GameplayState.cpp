@@ -187,7 +187,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	// LoadLevel("HubLevel");
 
-	 ("HubLevel");
+	// ("HubLevel");
 
 
 	m_pHubOrb = new HubWorldOrb();
@@ -345,7 +345,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if(pInput->IsKeyPressed(SGD::Key::T))
 	{
-		LoadLevel("Level3_1");
+		LoadLevel("Level2_5");
 	}
 
 	if (pInput->IsKeyPressed(SGD::Key::L))

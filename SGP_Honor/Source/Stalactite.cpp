@@ -1,5 +1,6 @@
 #include "Stalactite.h"
 #include "LevelCollider.h"
+#include "Player.h"
 #include "DestroyEntityMessage.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_EventManager.h"
@@ -11,6 +12,7 @@ Stalactite::Stalactite()
 	m_szSize = { 16, 16 };
 	m_ptPosition = { 900, 200 };
 	m_ptStartPosition = { 900, 200 };
+	m_fFallSpeed = 100;
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/Fallingspike.png", {});
 }
 
@@ -23,7 +25,8 @@ Stalactite::~Stalactite()
 /////////////////Interface//////////////////////
 void Stalactite::Update(float elapsedTime)
 {
-	if(m_bIsFalling)
+	m_fFallSpeed = 600;
+    if(m_bIsFalling)
 	{
 		m_vtVelocity.y = m_fFallSpeed;
 	}
@@ -55,7 +58,7 @@ void Stalactite::Render(void)
 	//Offset our rectangle by the camera position for rendering
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
-	Camera::GetInstance()->Draw(rMyRect, { 255, 0, 255, 255 });
+	//Camera::GetInstance()->Draw(rMyRect, { 255, 0, 255, 255 });
 	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1, {}, {});
 }
 
@@ -85,6 +88,10 @@ void Stalactite::HandleCollision(const IEntity* pOther)
 	}
 	if (pOther->GetType() == ENT_PLAYER)
 	{
+		if (((Player*)pOther)->IsDashing())
+		{
+			return;
+		}
 	  //if so move back up but kill the player
 		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
