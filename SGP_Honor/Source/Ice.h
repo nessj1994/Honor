@@ -21,15 +21,15 @@ public:
 
 
 	virtual void Update(float elapsedTime)  override;
-	void CastIce(Unit* pOther);
+	//void CastIce(Unit* pOther);
 
 	virtual void Render(void) override;
 
 
 	int GetType(void) const override { return ENT_SPRAY; }
-	Entity* GetOwner(void) const { return m_pOwner; }
+	//Entity* GetOwner(void) const { return m_pOwner; }
 
-	void SetOwner(Entity* owner) { if (m_pOwner) m_pOwner->Release(); m_pOwner = owner; m_pOwner->AddRef(); }
+	//void SetOwner(Entity* owner);
 
 	virtual void HandleCollision(const IEntity* pOther) override;
 
@@ -42,7 +42,7 @@ public:
 private:
 
 
-	Entity* m_pOwner = nullptr;
+	//Entity* m_pOwner = nullptr;
 	Emitter* m_pEmitter = nullptr;
 	float m_fTimer = 0;
 

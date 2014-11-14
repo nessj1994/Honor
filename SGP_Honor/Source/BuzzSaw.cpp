@@ -93,7 +93,7 @@ void BuzzSaw::Render(void)
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
 	//Render us with the camera
-	Camera::GetInstance()->DrawTexture(m_ptPosition, rotation, m_hImage, false, 1.0f, SGD::Color::Color(255, 255, 255, 0), m_szSize / 2.0f);
+	Camera::GetInstance()->DrawTexture(m_ptPosition, rotation, m_hImage, false, 1.0f, SGD::Color::Color(255, 255, 255, 255), m_szSize / 2.0f);
 }
 
 int BuzzSaw::GetType(void) const
