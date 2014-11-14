@@ -364,7 +364,7 @@ void Player::HandleCollision(const IEntity* pOther)
 	if (pOther->GetType() == ENT_DOOR)
 	{
 		m_bSliding = false;
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 		BasicCollision(pOther);
 	}
 
@@ -420,14 +420,17 @@ void Player::HandleCollision(const IEntity* pOther)
 
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
+
+		//SGD::GraphicsManager::GetInstance()->DrawString("ZERO", { 100, 300 }, { 255, 255, 0, 0 });
+
 	}
 	if (pOther->GetType() == Entity::ENT_LEFT_RAMP)
 	{
 		m_bSliding = false;
 
 		LeftRampCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 		is_Ramp = true;
 	}
 
@@ -456,7 +459,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		m_bSliding = false;
 
 		RightRampCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 		is_Ramp = true;
 	}
 	if (pOther->GetType() == Entity::ENT_ICE_RIGHT_RAMP)
@@ -488,7 +491,7 @@ void Player::HandleCollision(const IEntity* pOther)
 
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 	}
 
 	if (pOther->GetType() == Entity::ENT_BLOCK)
@@ -497,7 +500,7 @@ void Player::HandleCollision(const IEntity* pOther)
 
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 	}
 
 	if (pOther->GetType() == Entity::ENT_FROZEN)
@@ -525,7 +528,7 @@ void Player::HandleCollision(const IEntity* pOther)
 
 		is_Platform = true;
 		BasicCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 	}
 
 	if (pOther->GetType() == Entity::ENT_DEATH)
@@ -584,7 +587,7 @@ void Player::HandleCollision(const IEntity* pOther)
 		is_Platform = true;
 		GeyserCollision(pOther);
 		//BasicCollision(pOther);
-		SetFriction(25.0f);
+		SetFriction(13000.0f);
 
 	}
 
@@ -762,9 +765,13 @@ void Player::BasicCollision(const IEntity* pOther)
 
 
 
-			if ((pInput->IsButtonDown(0, 0) == true
+			if (
+
+				/*(pInput->IsButtonDown(0, 0) == true
 				|| pInput->IsKeyDown(SGD::Key::Space))
-				&& (m_unCurrentState != RESTING_STATE
+
+
+				&&*/ (m_unCurrentState != RESTING_STATE
 				|| m_unCurrentState != LANDING_STATE)
 				//&& m_fButtonTimer > 0
 				)
@@ -1314,7 +1321,7 @@ void Player::JellyfishCollision(const IEntity* pOther)
 
 			const Jellyfish* jfish = dynamic_cast<const Jellyfish*>(pOther);
 			//SetVelocity({ GetVelocity().x, /*GetVelocity().y*/1500 * (-1.0f - (0.1f * jfish->GetBounceCount())) });
-			SetVelocity({ 0, (-400.0f * jfish->GetBounceCount()) });
+			SetVelocity({ 0, (-400.0f  - (400.0f * jfish->GetBounceCount())  ) });
 			//	SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height /*- nIntersectHeight*/ });
 			SGD::AudioManager::GetInstance()->PlayAudio(m_hJellyfishEffect);
 			//SetIsFalling(false);
@@ -1484,6 +1491,10 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 	}
 	if (pEvent->GetEventID() == "FOURTHBOSS")
 	{
+
+		m_fPanX = 2;
+		m_fPanY = 2;
+
 		Camera::GetInstance()->SetCameraCap(4);
 
 	}
@@ -1643,10 +1654,10 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 		&& leftClamped == true))
 	{
 
-		SetVelocity(SGD::Vector(GetVelocity().x + GetFriction(), GetVelocity().y));
+		SetVelocity(SGD::Vector(GetVelocity().x + ( GetFriction() * elapsedTime  ) , GetVelocity().y));
 
 		if (GetVelocity().x > 0
-			&& GetVelocity().x < 10)
+			&& GetVelocity().x < 100)
 		{
 			SetVelocity(SGD::Vector(0, GetVelocity().y));
 		}
@@ -1658,7 +1669,7 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 		&& leftClamped == true))
 	{
 
-		SetVelocity(SGD::Vector(GetVelocity().x - GetFriction(), GetVelocity().y));
+		SetVelocity(SGD::Vector(GetVelocity().x - (GetFriction() * elapsedTime), GetVelocity().y));
 
 		if (GetVelocity().x < 0
 			&& GetVelocity().x > -100)
@@ -1750,7 +1761,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		m_fInputTimer += elapsedTime;
 
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if(pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false))
+	if (pInput->IsKeyPressed(SGD::Key::E) == true || pInput->IsKeyPressed(SGD::Key::Q) == true || (stickFrame == 5 && leftClamped == false)  )
 	{
 		stickFrame = 1;
 		//m_ts.ResetCurrFrame();
@@ -1766,7 +1777,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 	}
 
 	//reset currframe to 0 & set the animation playing to false
-	if((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true) || pInput->IsKeyDown(SGD::Key::Space) == true)
+	if ((pInput->IsKeyDown(SGD::Key::E) == true || pInput->IsKeyDown(SGD::Key::Q) == true) || pInput->IsKeyDown(SGD::Key::Space) == true )
 	{
 		leftClamped = false;
 	}
@@ -2054,26 +2065,26 @@ void Player::UpdateJump(float elapsedTime)
 
 		}
 
-		if (m_fInputTimer <= 0.20f)
+		//if (m_fInputTimer <= 0.20f)
+		//{
+		if (GetIsInputStuck() == true)
 		{
-			if (GetIsInputStuck() == true)
+
+			if (is_Right_Coll == true
+				&& m_fButtonTimer < 0.08)
 			{
+				SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
+				SetVelocity({ -900, -900 });
+			}
 
-				if (is_Right_Coll == true
-					&& m_fButtonTimer < 0.08)
-				{
-					SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
-					SetVelocity({ -900, -900 });
-				}
-
-				if (is_Left_Coll == true
-					&& m_fButtonTimer < 0.08)
-				{
-					SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
-					SetVelocity({ 900, -900 /*GetJumpVelCur() */ });
-				}
+			if (is_Left_Coll == true
+				&& m_fButtonTimer < 0.08)
+			{
+				SetJumpVelCur(GetJumpVelCur() - 2000 * elapsedTime);
+				SetVelocity({ 900, -900 /*GetJumpVelCur() */ });
 			}
 		}
+		//}
 	}
 }
 
@@ -2126,58 +2137,16 @@ void Player::UpdateHawk(float elapsedTime)
 						GetHawkPtr()->SetVelocity({ -200, GetHawkPtr()->GetVelocity().y });
 						GetHawkPtr()->SetDirection({ -1, 0 });
 
-						//m_nHawkX -= elapsedTime * 2;
-						//
-						//if (m_nHawkX < -1)
-						//	m_nHawkX = -1;
-						//
-						//if (pInput->IsKeyDown(SGD::Key::RightArrow) == true)
-						//{
-						//	m_nHawkX = 0;
-						//	GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * m_nHawkY) * elapsedTime));
-						//
-						//}
-
-
 					}
 					if (pInput->IsKeyDown(SGD::Key::RightArrow) == true)
 					{
-						
 						GetHawkPtr()->SetVelocity({ 200, GetHawkPtr()->GetVelocity().y });
 						GetHawkPtr()->SetDirection({ 1, 0 });
-
-						//	m_nHawkX += elapsedTime * 2;
-						//
-						//	if (m_nHawkX > 1)
-						//		m_nHawkX = 1;
-						//
-						//	if (pInput->IsKeyDown(SGD::Key::LeftArrow) == true)
-						//	{
-						//		m_nHawkX = 0;
-						//		GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * m_nHawkY) * elapsedTime));
-						//
-						//	}
-
 					}
 
 					if (pInput->IsKeyDown(SGD::Key::UpArrow) == true)
 					{
-							GetHawkPtr()->SetVelocity({ GetHawkPtr()->GetVelocity().x, -300 });
-
-
-						//	 m_nHawkY -= elapsedTime * 2;
-						//
-						//	 if (m_nHawkY < -1)
-						//		 m_nHawkY = -1;
-						//
-						//	 if (pInput->IsKeyDown(SGD::Key::DownArrow) == true)
-						//	 {
-						//		 m_nHawkY = 0;
-						//		 GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * m_nHawkX) * elapsedTime, 0));
-						//
-						//	 }
-
-
+						GetHawkPtr()->SetVelocity({ GetHawkPtr()->GetVelocity().x, -300 });
 					}
 					if (pInput->IsKeyDown(SGD::Key::DownArrow) == true)
 					{
@@ -2185,36 +2154,7 @@ void Player::UpdateHawk(float elapsedTime)
 						GetHawkPtr()->SetVelocity({ GetHawkPtr()->GetVelocity().x, 300 });
 
 
-						//	m_nHawkY += elapsedTime * 2;
-						//
-						//	if (m_nHawkY > 1)
-						//		m_nHawkY = 1;
-						//
-						//	if (pInput->IsKeyDown(SGD::Key::UpArrow) == true)
-						//	{
-						//		m_nHawkY = 0;
-						//		GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * m_nHawkX) * elapsedTime, 0));
-						//
-						//	}
-
-						//	GetHawkPtr()->SetVelocity({ GetHawkPtr()->GetVelocity().x, 300 });
-
 					}
-					//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetVelocity().y));
-					//	GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
-				//	if (pInput->IsKeyDown(SGD::Key::DownArrow) == false
-				//		&& pInput->IsKeyDown(SGD::Key::UpArrow) == false
-				//		&& pInput->IsKeyDown(SGD::Key::LeftArrow) == false
-				//		&& pInput->IsKeyDown(SGD::Key::RightArrow) == false)
-				//	{
-				//		m_nHawkX = 0;
-				//		m_nHawkY = 0;
-				//	}
-				//	else
-				//	{
-				//		GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * m_nHawkX) * elapsedTime, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * m_nHawkY) * elapsedTime));
-				//
-				//	}
 
 
 					GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetSpeed() * rightStickXOff) * elapsedTime, GetHawkPtr()->GetVelocity().y + (GetHawkPtr()->GetSpeed() * rightStickYOff) * elapsedTime));
@@ -2228,9 +2168,9 @@ void Player::UpdateHawk(float elapsedTime)
 
 						if (GetHawkPtr()->GetVelocity().x < 0)
 						{
-							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetAirFriction() * 8), GetHawkPtr()->GetVelocity().y));
 
-							if (GetHawkPtr()->GetVelocity().x > 0.01f)
+							if (GetHawkPtr()->GetVelocity().x > 0.007f)
 							{
 								GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
 
@@ -2238,9 +2178,9 @@ void Player::UpdateHawk(float elapsedTime)
 						}
 						if (GetHawkPtr()->GetVelocity().x > 0)
 						{
-							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - (GetHawkPtr()->GetAirFriction() * 4), GetHawkPtr()->GetVelocity().y));
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - (GetHawkPtr()->GetAirFriction() * 8), GetHawkPtr()->GetVelocity().y));
 
-							if (GetHawkPtr()->GetVelocity().x < -0.01f)
+							if (GetHawkPtr()->GetVelocity().x < -0.007f)
 							{
 								GetHawkPtr()->SetVelocity(SGD::Vector(0, GetHawkPtr()->GetVelocity().y));
 
@@ -2312,14 +2252,25 @@ void Player::UpdateHawk(float elapsedTime)
 				}
 
 
+				
+
+			}
+
+		}
+
+		if (m_bHawkCast == false)
+		{
+			if (GetHawkPtr() != nullptr)
+			{
+
+
+
 				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ GetHawkPtr() };
 				pMsg->QueueMessage();
 				pMsg = nullptr;
 
 				SetHawkPtr(nullptr);
-
 			}
-
 		}
 
 
@@ -2376,7 +2327,6 @@ void Player::UpdateSpray(float elapsedTime)
 		//m_fShotTimer = 0.0f;
 		if (m_fIceTimer > .05f)
 		{
-
 			m_fIceTimer = 0;
 			CreateSprayMessage* pMsg = new CreateSprayMessage(this);
 			pMsg->SendMessageNow();
@@ -2438,6 +2388,7 @@ void Player::UpdateVelocity(float elapsedTime)
 		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false)
 	{
 		m_fButtonTimer = 0;
+		//SGD::GraphicsManager::GetInstance()->DrawString("ZERO", { 100, 300 }, { 255, 255, 0, 0 });
 
 	}
 

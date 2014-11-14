@@ -242,8 +242,6 @@ bool ProfileState::Input(void) //Hanlde user Input
 		{
 			Game::GetInstance()->SetSelectedProfile(m_nCursor + 1);
 			Game::GetInstance()->AddState(GameplayState::GetInstance());
-			CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
-			Game::GetInstance()->AddState(CutSceneState::GetInstance());
 
 		}
 		else if(m_nOptionCursor == 1)
@@ -409,11 +407,11 @@ void ProfileState::Render(void)
 
 	}
 
-	font.DrawString("Press ", 30, Game::GetInstance()->GetScreenHeight() - 50, 1.0f, { 255, 130, 0 });
+	font.DrawString("Press ", 30, (int)(Game::GetInstance()->GetScreenHeight() - 50), 1.0f, { 255, 130, 0 });
 	pGraphics->DrawTexture(m_hEsc, { 120, Game::GetInstance()->GetScreenHeight() - 40 }, 0.0f, {}, {}, { 0.5f, 0.5f });
-	font.DrawString("or ", 162, Game::GetInstance()->GetScreenHeight() - 50, 1.0f, { 255, 130, 0 });
+	font.DrawString("or ", 162, (int)(Game::GetInstance()->GetScreenHeight() - 50), 1.0f, { 255, 130, 0 });
 	pGraphics->DrawTexture(m_hCircle, { 200, Game::GetInstance()->GetScreenHeight() - 40 }, 0.0f, {}, {}, { 1.0f, 1.0f });
-	font.DrawString("to go back.", 245, Game::GetInstance()->GetScreenHeight() - 50, 1.0f, { 255, 130, 0 });
+	font.DrawString("to go back.", 245, (int)(Game::GetInstance()->GetScreenHeight() - 50), 1.0f, { 255, 130, 0 });
 
 
 
