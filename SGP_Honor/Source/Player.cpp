@@ -2325,7 +2325,6 @@ void Player::UpdateSpray(float elapsedTime)
 		//m_fShotTimer = 0.0f;
 		if (m_fIceTimer > .05f)
 		{
-
 			m_fIceTimer = 0;
 			CreateSprayMessage* pMsg = new CreateSprayMessage(this);
 			pMsg->SendMessageNow();
