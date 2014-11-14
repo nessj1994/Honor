@@ -22,6 +22,7 @@
 #include "CreateStalactite.h"
 #include "MovingPlatform.h"
 #include "IceBat.h"
+#include "CutSceneState.h"
 
 #include <ctime>
 #include "HubWorldOrb.h"
@@ -75,7 +76,7 @@
 #include "Caveman.h"
 #include "IceTurtle.h"
 #include "IceGolem.h"
-#include "CreditsState.h"
+	#include "CreditsState.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -161,7 +162,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadGame();
+	bool oldGame = LoadGame();
 
 	//LoadLevel("Level4_1");
 	m_pPlayer->SetHasBounce(true);
@@ -171,10 +172,25 @@ void GameplayState::Enter(void) //Load Resources
 
 	//LoadLevel("HubLevel");
 
+	if (oldGame)
+	{
+		LoadLevel("HubLevel");
+	}
+	else
+	{
+		LoadLevel("Level0_1");
+		CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
+		Game::GetInstance()->AddState(CutSceneState::GetInstance());
+	}
 
-	LoadLevel("HubLevel");
+	//LoadLevel("HubLevel");
 
-	//("HubLevel");
+	//
+	//LoadLevel("Level5_1");
+
+	// LoadLevel("HubLevel");
+
+	// ("HubLevel");
 
 
 	m_pHubOrb = new HubWorldOrb();
@@ -357,7 +373,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/) || /*For Arcade Input*/pInput->IsKeyPressed(SGD::Key::MouseRight))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
-		pAudio->StopAudio(m_hBGM);
+		//pAudio->StopAudio(m_hBGM);
 	}
 
 	/*if (pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyPressed(SGD::Key::Tab))
@@ -387,7 +403,7 @@ void GameplayState::Update(float elapsedTime)
 	float x = elapsedTime;
 
 	// Toggle for mini map
-	if(SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M))
+	if(SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M) && ending == false)
 		//|| /*For Arcade Input*/SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::MouseLeft))
 	{
 		m_bRenderMiniMap = !m_bRenderMiniMap;
@@ -528,18 +544,29 @@ void GameplayState::Update(float elapsedTime)
 			endFadeTimer += elapsedTime;
 			if (endFadeTimer < 3.0f)
 			{
-				endFade += 159 * elapsedTime;
+				endFade += (unsigned char)(159 * elapsedTime);
 				SetScreenFadeout(endFade);
 			}
 			else
 			{
-				Game::GetInstance()->AddState(CreditsState::GetInstance());
 				ending = false;
 				endFade = 0;
 				endFadeTimer = 0.0f;
 				endingTimer = 0.0f;
+				SetScreenFadeout(0);
+				Game::GetInstance()->AddState(CreditsState::GetInstance());
 			}
 		}
+	}
+	// Increase the FPS timer
+	m_fFPSTimer += elapsedTime;
+	m_unFrames++;
+
+	if (m_fFPSTimer >= 1.0f)		// 1 second refresh rate
+	{
+		m_unFPS = m_unFrames;
+		m_unFrames = 0;
+		m_fFPSTimer = 0.0f;
 	}
 }
 
@@ -548,6 +575,9 @@ void GameplayState::Update(float elapsedTime)
 // - Render all game entities
 void GameplayState::Render(void)
 {
+	// Render the FPS
+	SGD::OStringStream output;
+	output << "FPS: " << m_unFPS;
 	/*if (ending == false)
 	{*/
 		//Render Images for tutorial 
@@ -592,7 +622,7 @@ void GameplayState::Render(void)
 	// Draw a fading rectangle
 	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
 	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { m_cScreenFade, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
-
+	SGD::GraphicsManager::GetInstance()->DrawString(output.str().c_str(), { 5, 5 });
 }
 
 //Static Message callback function
@@ -1964,7 +1994,7 @@ void GameplayState::SaveGame()
 	doc.SaveFile(pathtowrite.c_str());
 }
 
-void GameplayState::LoadGame()
+bool GameplayState::LoadGame()
 {
 	HRESULT hr;
 	std::ostringstream stringstream;
@@ -2008,13 +2038,13 @@ void GameplayState::LoadGame()
 	//Create the doc
 	TiXmlDocument doc;
 
-	doc.LoadFile(pathtowrite.c_str());
+	bool check = doc.LoadFile(pathtowrite.c_str());
 
 	TiXmlElement* pRoot = doc.RootElement();
 	if(pRoot == nullptr)
 	{
 		m_pPlayer->SetHonorCollected(0);
-		return;
+		return false;
 
 	}
 
@@ -2061,6 +2091,7 @@ void GameplayState::LoadGame()
 	//m_pPlayer->SetPosition(SGD::Point((float)x, (float)y));
 	int temp = 0;
 	temp++;
+	return check;
 }
 
 /////////////////////////////////////////////
@@ -2449,5 +2480,6 @@ void GameplayState::WizardDefeated()
 {
 	LoadLevel("HubLevel");
 	ending = true;
+	m_pPlayer->SetPosition({ -100, -100 });
 	Camera::GetInstance()->SetCameraCap(6);
 }

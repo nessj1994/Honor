@@ -159,7 +159,7 @@ private:
 	///////////////////////////////////////////////////////////
 	//////////////////// Save and Load ///////////////////////
 	void SaveGame();
-	void LoadGame();
+	bool LoadGame();
 	void LoadLevelMap();
 
 	
@@ -235,6 +235,9 @@ private:
 	SGD::HTexture m_hXWallJump = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hTriOpenDoor = SGD::INVALID_HANDLE;
 	
-
+	//FPS Count
+	unsigned int	m_unFPS = 60;
+	unsigned int	m_unFrames = 0;
+	float			m_fFPSTimer;
 };
 

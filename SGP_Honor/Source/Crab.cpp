@@ -253,7 +253,7 @@ void Crab::Update(float elapsedTime)
 											else
 											{
 												redEyeCD += elapsedTime;
-												eyealpha -= 200 * elapsedTime;
+												eyealpha -= (unsigned char)(200 * elapsedTime);
 											}
 										}
 									}
@@ -261,7 +261,7 @@ void Crab::Update(float elapsedTime)
 								else
 								{
 									redEyeTimer += elapsedTime;
-									eyealpha += 255 * elapsedTime;
+									eyealpha += (unsigned char)(255 * elapsedTime);
 								}
 								break;
 				}

@@ -153,7 +153,7 @@ private:
 	bool m_bHasIce = false;
 	bool m_bHasBounce = false;
 	bool m_bHasArmor = false;
-	bool m_bHawkCast = false;
+	//bool m_bHawkCast = false;
 
 
 	bool is_Jumping = false;

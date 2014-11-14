@@ -7,6 +7,7 @@
 #include "Emitter.h"
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "Caveman.h"
+#include "AnimationEngine.h"
 
 Hawk::Hawk()
 {
@@ -26,7 +27,10 @@ Hawk::Hawk()
 	m_bDead = false;
 	SetDirection({ 0, 0 });
 
-	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/WizardHawk.png");
+	//m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/WizardHawk.png");
+	AnimationEngine::GetInstance()->LoadAnimation("Assets/Hawk.xml");
+	m_ts.SetCurrAnimation("Hawk Fly");
+	m_ts.SetPlaying(true);
 }
 
 
@@ -36,7 +40,7 @@ Hawk::~Hawk()
 	//pMsg->QueueMessage();
 	//pMsg = nullptr;
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
-	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+	//SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 
@@ -50,6 +54,7 @@ void Hawk::Update(float elapsedTime)
 		{
 			SetVelocity({ 450, GetVelocity().y });
 		}
+		m_bFacingRight = true;
 	}
 
 	else
@@ -59,6 +64,7 @@ void Hawk::Update(float elapsedTime)
 		{
 			SetVelocity({ -450, GetVelocity().y });
 		}
+		m_bFacingRight = false;
 	}
 
 	//if (GetPosition().x == -100)
@@ -116,13 +122,13 @@ void Hawk::Update(float elapsedTime)
 		SGD::Rectangle rSelf = this->GetRect();
 		SGD::Rectangle rScreen =
 		{
-			0, 0,
+			Camera::GetInstance()->GetCameraPos().x, Camera::GetInstance()->GetCameraPos().y,
 			Game::GetInstance()->GetScreenWidth() + Camera::GetInstance()->GetCameraPos().x,
 			Game::GetInstance()->GetScreenHeight() + Camera::GetInstance()->GetCameraPos().y
 		};
 
 
-		if (rSelf.IsIntersecting(rScreen) == false && m_pOwner->GetType() != ENT_BOSS_CAVEMAN)
+		if (rSelf.IsIntersecting(rScreen) == false /*&& m_pOwner->GetType() != ENT_BOSS_CAVEMAN*/)
 		{
 			//DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
 			//pMsg->QueueMessage();
@@ -131,15 +137,22 @@ void Hawk::Update(float elapsedTime)
 			{
 				Player* temp = dynamic_cast<Player*>(GetOwner());
 				temp->HawkExplode(m_ptPosition);
+
+				GetOwner()->SetHawkCast(false);
 			}
-			SetPosition({ -1000, -1000 });
+		//	SetPosition({ -1000, -1000 });
 
 			SetVelocity({ 0, 0 });
 
 
 		}
 
+		AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
+}
 
+SGD::Rectangle Hawk::GetRect(void) const
+{
+	return AnimationEngine::GetInstance()->GetRect(m_ts, !m_bFacingRight, 1, m_ptPosition);
 }
 
 void Hawk::Render(void)
@@ -154,8 +167,9 @@ void Hawk::Render(void)
 
 	////Render us with the camera
 	//Camera::GetInstance()->Draw(rMyRect, SGD::Color::Color(255, 255, 0, 0));
-	Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y },
-		0.0f, m_hImage, true, 0.8f, {}, {});
+	/*Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y },
+		0.0f, m_hImage, true, 0.8f, {}, {});*/
+	Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !m_bFacingRight, 1);
 
 }
 
@@ -197,9 +211,12 @@ void Hawk::HandleCollision(const IEntity* pOther)
 		{
 			Player* temp = dynamic_cast<Player*>(GetOwner());
 			temp->HawkExplode(m_ptPosition);
-		}
-		SetPosition({ -1000, -1000 });
 
+			GetOwner()->SetHawkCast(false);
+		}
+		//SetPosition({ -1000, -1000 });
+
+		
 		SetVelocity({ 0, 0 });
 
 	}
@@ -220,8 +237,11 @@ void Hawk::HandleCollision(const IEntity* pOther)
 		{
 			Player* temp = dynamic_cast<Player*>(GetOwner());
 			temp->HawkExplode(m_ptPosition);
+
+			GetOwner()->SetHawkCast(false);
+
 		}
-		SetPosition({ -1000, -1000 });
+	//	SetPosition({ -1000, -1000 });
 
 		SetVelocity({ 0, 0 });
 
@@ -245,8 +265,10 @@ void Hawk::HandleCollision(const IEntity* pOther)
 		{
 			Player* temp = dynamic_cast<Player*>(GetOwner());
 			temp->HawkExplode(m_ptPosition);
+			GetOwner()->SetHawkCast(false);
+
 		}
-		SetPosition({ -1000, -1000 });
+		//SetPosition({ -1000, -1000 });
 
 		SetVelocity({ 0, 0 });
 
@@ -280,9 +302,11 @@ void Hawk::HandleCollision(const IEntity* pOther)
 		{
 			Player* temp = dynamic_cast<Player*>(GetOwner());
 			temp->HawkExplode(m_ptPosition);
+			GetOwner()->SetHawkCast(false);
+
 		}
 
-		SetPosition({ -1000, -1000 });
+		//SetPosition({ -1000, -1000 });
 
 		SetVelocity({ 0, 0 });
 

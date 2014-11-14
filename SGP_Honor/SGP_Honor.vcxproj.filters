@@ -75,13 +75,13 @@
       <Filter>Bitmap Font</Filter>
     </ClCompile>
     <ClCompile Include="Source\Boss.cpp">
-      <Filter>Entities\Enemies\Boss</Filter>
+      <Filter>Entities\Collectibles\Enemies\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy.cpp">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Source\Crab.cpp">
-      <Filter>Entities\Enemies\Boss</Filter>
+      <Filter>Entities\Collectibles\Enemies\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Source\EntityManager.cpp">
       <Filter>Entities\Manager &amp; Main Entity</Filter>
@@ -90,7 +90,7 @@
       <Filter>Entities\Manager &amp; Main Entity</Filter>
     </ClCompile>
     <ClCompile Include="Source\Bull.cpp">
-      <Filter>Entities\Enemies\Boss</Filter>
+      <Filter>Entities\Collectibles\Enemies\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Source\BuzzSaw.cpp">
       <Filter>Entities\Obstacles</Filter>
@@ -180,10 +180,10 @@
       <Filter>Engines\Particle</Filter>
     </ClCompile>
     <ClCompile Include="Source\Yeti.cpp">
-      <Filter>Entities\Enemies\Boss</Filter>
+      <Filter>Entities\Collectibles\Enemies\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Source\Caveman.cpp">
-      <Filter>Entities\Enemies\Boss</Filter>
+      <Filter>Entities\Collectibles\Enemies\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Source\Turret.cpp">
       <Filter>Entities\Obstacles</Filter>
@@ -192,7 +192,7 @@
       <Filter>Levels</Filter>
     </ClCompile>
     <ClCompile Include="Source\Wizard.cpp">
-      <Filter>Entities\Enemies\Boss</Filter>
+      <Filter>Entities\Collectibles\Enemies\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Source\Stalactite.cpp">
       <Filter>Entities\Obstacles</Filter>
@@ -219,7 +219,7 @@
       <Filter>Entities\Obstacles</Filter>
     </ClCompile>
     <ClCompile Include="Source\Unit.cpp">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Source\LevelCollider.cpp">
       <Filter>Engines\Tile</Filter>
@@ -240,16 +240,16 @@
       <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="Source\Pouncer.cpp">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Source\Squid.cpp">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Source\Jellyfish.cpp">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Source\MutantMan.cpp">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Source\HorizontalBubble.cpp" />
     <ClCompile Include="Source\VerticalBubble.cpp" />
@@ -261,10 +261,10 @@
     <ClCompile Include="Source\WizardDash.cpp" />
     <ClCompile Include="Source\WizardHawk.cpp" />
     <ClCompile Include="Source\BullEnemy.cpp">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Source\Skeleton.cpp">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Source\Vomit.cpp">
       <Filter>Entities\Obstacles</Filter>
@@ -273,7 +273,7 @@
       <Filter>Messages</Filter>
     </ClCompile>
     <ClCompile Include="source\MutantBat.cpp">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Source\Poop.cpp">
       <Filter>Entities\Obstacles</Filter>
@@ -392,13 +392,13 @@
       <Filter>Bitmap Font</Filter>
     </ClInclude>
     <ClInclude Include="Source\Boss.h">
-      <Filter>Entities\Enemies\Boss</Filter>
+      <Filter>Entities\Collectibles\Enemies\Boss</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Source\Crab.h">
-      <Filter>Entities\Enemies\Boss</Filter>
+      <Filter>Entities\Collectibles\Enemies\Boss</Filter>
     </ClInclude>
     <ClInclude Include="Source\EntityManager.h">
       <Filter>Entities\Manager &amp; Main Entity</Filter>
@@ -407,7 +407,7 @@
       <Filter>Entities\Manager &amp; Main Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\Bull.h">
-      <Filter>Entities\Enemies\Boss</Filter>
+      <Filter>Entities\Collectibles\Enemies\Boss</Filter>
     </ClInclude>
     <ClInclude Include="Source\BuzzSaw.h">
       <Filter>Entities\Obstacles</Filter>
@@ -497,16 +497,16 @@
       <Filter>Entities\Obstacles</Filter>
     </ClInclude>
     <ClInclude Include="Source\Yeti.h">
-      <Filter>Entities\Enemies\Boss</Filter>
+      <Filter>Entities\Collectibles\Enemies\Boss</Filter>
     </ClInclude>
     <ClInclude Include="Source\Caveman.h">
-      <Filter>Entities\Enemies\Boss</Filter>
+      <Filter>Entities\Collectibles\Enemies\Boss</Filter>
     </ClInclude>
     <ClInclude Include="Source\World.h">
       <Filter>Levels</Filter>
     </ClInclude>
     <ClInclude Include="Source\Wizard.h">
-      <Filter>Entities\Enemies\Boss</Filter>
+      <Filter>Entities\Collectibles\Enemies\Boss</Filter>
     </ClInclude>
     <ClInclude Include="Source\Turret.h">
       <Filter>Entities\Obstacles</Filter>
@@ -539,7 +539,7 @@
       <Filter>Messages</Filter>
     </ClInclude>
     <ClInclude Include="Source\Unit.h">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Source\LevelCollider.h">
       <Filter>Engines\Tile</Filter>
@@ -561,16 +561,16 @@
       <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Source\Pouncer.h">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Source\Squid.h">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Source\Jellyfish.h">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Source\MutantMan.h">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Source\HorizontalBubble.h" />
     <ClInclude Include="Source\VerticalBubble.h" />
@@ -582,10 +582,10 @@
     <ClInclude Include="Source\WizardDash.h" />
     <ClInclude Include="Source\WizardHawk.h" />
     <ClInclude Include="Source\BullEnemy.h">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Source\Skeleton.h">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Source\Vomit.h">
       <Filter>Entities\Obstacles</Filter>
@@ -594,7 +594,7 @@
       <Filter>Messages</Filter>
     </ClInclude>
     <ClInclude Include="source\MutantBat.h">
-      <Filter>Entities\Enemies</Filter>
+      <Filter>Entities\Collectibles\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Source\Poop.h">
       <Filter>Entities\Obstacles</Filter>
@@ -677,10 +677,10 @@
     <Filter Include="Entities\Player">
       <UniqueIdentifier>{34dea155-ea5c-4ac3-ae83-c1ccb39c1fca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Entities\Enemies">
+    <Filter Include="Entities\Collectibles\Enemies">
       <UniqueIdentifier>{10f7e670-9452-4eae-b511-d8c8637a2361}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Entities\Enemies\Boss">
+    <Filter Include="Entities\Collectibles\Enemies\Boss">
       <UniqueIdentifier>{9f204dd9-b5d1-4d23-b717-1e3906641a78}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
