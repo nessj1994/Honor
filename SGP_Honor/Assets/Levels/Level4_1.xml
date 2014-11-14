@@ -27356,7 +27356,7 @@
 			<ImageTile type="35" />
 			<ImageTile type="43" />
 			<ImageTile type="35" />
-			<ImageTile type="43" />
+			<ImageTile type="10" />
 			<ImageTile type="18" />
 			<ImageTile type="10" />
 			<ImageTile type="18" />
@@ -36198,11 +36198,11 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="0" />
-		<CollisionTile type="0" />
-		<CollisionTile type="0" />
-		<CollisionTile type="0" />
-		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
+		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />

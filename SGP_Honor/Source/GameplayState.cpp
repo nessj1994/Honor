@@ -74,6 +74,7 @@
 #include "Caveman.h"
 #include "IceTurtle.h"
 #include "IceGolem.h"
+	#include "CreditsState.h"
 
 #include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -167,7 +168,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_pPlayer->SetHasHawk(true);
 	m_pPlayer->SetHasIce(true);
 
-	//LoadLevel("HubLevel");
+	LoadLevel("HubLevel");
 
 
 	//LoadLevel("HubLevel");
@@ -186,6 +187,7 @@ void GameplayState::Enter(void) //Load Resources
 	m_hXJUMP = pGraphics->LoadTexture("Assets/graphics/HonorX.png");
 	m_hXWallJump = pGraphics->LoadTexture("Assets/graphics/HonorWall.png");
 	m_hTriOpenDoor = pGraphics->LoadTexture("Assets/graphics/HonorTriangle.png");
+
 }
 
 
@@ -337,6 +339,10 @@ bool GameplayState::Input(void) //Hanlde user Input
 		LoadLevel("Level3_1");
 	}
 
+	if (pInput->IsKeyPressed(SGD::Key::L))
+	{
+		WizardDefeated();
+	}
 
 
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
@@ -373,7 +379,7 @@ void GameplayState::Update(float elapsedTime)
 	float x = elapsedTime;
 
 	// Toggle for mini map
-	if(SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M))
+	if(SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::M) && ending == false)
 		//|| /*For Arcade Input*/SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::MouseLeft))
 	{
 		m_bRenderMiniMap = !m_bRenderMiniMap;
@@ -506,6 +512,28 @@ void GameplayState::Update(float elapsedTime)
 	SGD::EventManager::GetInstance()->Update();
 	SGD::MessageManager::GetInstance()->Update();
 
+	if (ending == true)
+	{
+		endingTimer += elapsedTime;
+		if (endingTimer >= 5.0f)
+		{
+			endFadeTimer += elapsedTime;
+			if (endFadeTimer < 3.0f)
+			{
+				endFade += 159 * elapsedTime;
+				SetScreenFadeout(endFade);
+			}
+			else
+			{
+				ending = false;
+				endFade = 0;
+				endFadeTimer = 0.0f;
+				endingTimer = 0.0f;
+				SetScreenFadeout(0);
+				Game::GetInstance()->AddState(CreditsState::GetInstance());
+			}
+		}
+	}
 }
 
 /////////////////////////////////////////////
@@ -513,30 +541,38 @@ void GameplayState::Update(float elapsedTime)
 // - Render all game entities
 void GameplayState::Render(void)
 {
-	//Render Images for tutorial 
-	if(m_strCurrLevel == "Level0_1")
+	/*if (ending == false)
+	{*/
+		//Render Images for tutorial 
+		if (m_strCurrLevel == "Level0_1")
+		{
+			Camera::GetInstance()->DrawTexture({ 600, 50 }, 0, m_hXJUMP, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 1759, 50 }, 0, m_hXJUMP, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 2736, 200 }, 0, m_hXWallJump, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 3803, 10 }, 0, m_hOAttack, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 4304, 200 }, 0, m_hTriOpenDoor, false, 1, {}, {});
+		}
+		//\
+
+		m_pLevel->Render();
+		m_pLevel->RenderImageLayer(true);
+
+
+		//Camera::GetInstance()->DrawTexture({ 270, 400 }, {}, SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/images.jpg"), false);
+		m_pEntities->RenderAll();
+		m_pLevel->RenderImageLayer(false);
+
+		// Draw the mini map
+		if (m_bRenderMiniMap && ending == false)
+		{
+			RenderMiniMap();
+		}
+	/*}
+	else
 	{
-		Camera::GetInstance()->DrawTexture({ 600, 50 }, 0, m_hXJUMP, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 1759, 50 }, 0, m_hXJUMP, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 2736, 200 }, 0, m_hXWallJump, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 3803, 10 }, 0, m_hOAttack, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 4304, 200 }, 0, m_hTriOpenDoor, false, 1, {}, {});
-	}
-	//\
-
-	m_pLevel->Render();
-	m_pLevel->RenderImageLayer(true);
-
-
-	//Camera::GetInstance()->DrawTexture({ 270, 400 }, {}, SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/images.jpg"), false);
-	m_pEntities->RenderAll();
-	m_pLevel->RenderImageLayer(false);
-
-	// Draw the mini map
-	if(m_bRenderMiniMap)
-	{
-		RenderMiniMap();
-	}
+		m_pLevel->Render();
+		m_pLevel->RenderImageLayer(true);
+	}*/
 
 	//Render the Hub world Orb
 	if(m_strCurrLevel == "HubLevel")
@@ -2386,4 +2422,13 @@ void GameplayState::ResetHonorInRoom()
 void GameplayState::IncreaseHonorBeforeDeath(unsigned int _value)
 {
 	m_pLevel->SetHonorBeforeDeath(m_pLevel->GetHonorBeforeDeath() + _value);
+}
+
+
+void GameplayState::WizardDefeated()
+{
+	LoadLevel("HubLevel");
+	ending = true;
+	m_pPlayer->SetPosition({ -100, -100 });
+	Camera::GetInstance()->SetCameraCap(6);
 }

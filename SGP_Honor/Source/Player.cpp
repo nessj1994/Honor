@@ -113,228 +113,234 @@ Player::~Player()
 /////////////////Interface///////////////////////
 void Player::Update(float elapsedTime)
 {
-	//Emitter Updates
-	m_emHonor->Update(elapsedTime);
-	m_emFeatherExplosion->Update(elapsedTime);
-	m_emHawkReturn->Update(elapsedTime);
-	//
+	if (GameplayState::GetInstance()->GetIsEnding() == false)
+	{
+		//Emitter Updates
+		m_emHonor->Update(elapsedTime);
+		m_emFeatherExplosion->Update(elapsedTime);
+		m_emHawkReturn->Update(elapsedTime);
+		//
 
-	if (HasBounce() == true)
-	{
-		if (m_fTextTimer <= TEXT_TIME_LENGTH)
+		if (HasBounce() == true)
 		{
-			m_fTextTimer += elapsedTime;
-		}
-	}
-
-	//if (m_pSword != nullptr)
-	//{
-	//	m_pSword->Update(elapsedTime);
-	//}
-	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
-	if (m_bDead)
-	{
-		UpdateDeath(elapsedTime);
-	}
-	else
-	{
-		UpdateArmor(elapsedTime);
-		UpdateEmitters(elapsedTime);
-		UpdateTimers(elapsedTime);
-		//Snared Factors done do anything if Snared
-		if (m_bSnared)
-		{
-			UpdateSnared(elapsedTime);
-			return;
+			if (m_fTextTimer <= TEXT_TIME_LENGTH)
+			{
+				m_fTextTimer += elapsedTime;
+			}
 		}
 
-		float leftStickXOff = pInput->GetLeftJoystick(0).x;
-		float leftStickYOff = pInput->GetLeftJoystick(0).y;
-
-		bool leftClamped = false;
-		static int stickFrame = 1;
-		bool controller = pInput->IsControllerConnected(0);
-
-		if (leftStickXOff > -JOYSTICK_DEADZONE && leftStickXOff < JOYSTICK_DEADZONE)
+		//if (m_pSword != nullptr)
+		//{
+		//	m_pSword->Update(elapsedTime);
+		//}
+		SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+		if (m_bDead)
 		{
-			leftStickXOff = 0;
-			leftClamped = true;
-			stickFrame = 5;
+			UpdateDeath(elapsedTime);
 		}
-
-		SetIsBouncing(false);
-		UpdatePlayerSwing(elapsedTime);
-
-		//////// NEED TO UPDATE WITH CONTROLLER ( JORDAN )
-		//if (GetIsInputStuck() == false)
-		//	m_fInputTimer = 0;
-
-
-		/////////////////////////////////////////////////
-		/////////////////Controls////////////////////////
-
-		if (IsDashing() == false)///////////////Dash check begins
+		else
 		{
+			UpdateArmor(elapsedTime);
+			UpdateEmitters(elapsedTime);
+			UpdateTimers(elapsedTime);
+			//Snared Factors done do anything if Snared
+			if (m_bSnared)
+			{
+				UpdateSnared(elapsedTime);
+				return;
+			}
+
+			float leftStickXOff = pInput->GetLeftJoystick(0).x;
+			float leftStickYOff = pInput->GetLeftJoystick(0).y;
+
+			bool leftClamped = false;
+			static int stickFrame = 1;
+			bool controller = pInput->IsControllerConnected(0);
+
+			if (leftStickXOff > -JOYSTICK_DEADZONE && leftStickXOff < JOYSTICK_DEADZONE)
+			{
+				leftStickXOff = 0;
+				leftClamped = true;
+				stickFrame = 5;
+			}
+
+			SetIsBouncing(false);
+			UpdatePlayerSwing(elapsedTime);
+
+			//////// NEED TO UPDATE WITH CONTROLLER ( JORDAN )
+			//if (GetIsInputStuck() == false)
+			//	m_fInputTimer = 0;
+
 
 			/////////////////////////////////////////////////
-			////////////////////Jump/////////////////////////
+			/////////////////Controls////////////////////////
 
-			UpdateJump(elapsedTime);
-
-
-			//	if(GetIsFalling() == false
-			//		&& GetIsJumping() == false)
-			if (m_unCurrentState == RESTING_STATE
-				|| m_unCurrentState == LANDING_STATE
-				|| (m_unCurrentState == JUMPING_STATE && m_bSlowed == true))
+			if (IsDashing() == false)///////////////Dash check begins
 			{
+
 				/////////////////////////////////////////////////
-				/////////////////Friction////////////////////////
+				////////////////////Jump/////////////////////////
 
-				UpdateFriction(elapsedTime, leftClamped);
+				UpdateJump(elapsedTime);
+
+
+				//	if(GetIsFalling() == false
+				//		&& GetIsJumping() == false)
+				if (m_unCurrentState == RESTING_STATE
+					|| m_unCurrentState == LANDING_STATE
+					|| (m_unCurrentState == JUMPING_STATE && m_bSlowed == true))
+				{
+					/////////////////////////////////////////////////
+					/////////////////Friction////////////////////////
+
+					UpdateFriction(elapsedTime, leftClamped);
+				}
+
+
+				UpdateBounce(elapsedTime);
+
+
+				/////////////////////////////////////////////////
+				/////////////////Movement////////////////////////
+				//reset currframe to 0 & set the animation playing to true
+				if (IsDashing() == false && !GetStunned())
+				{
+					UpdateMovement(elapsedTime, stickFrame, leftClamped, leftStickXOff);
+				}
+
+				//m_fShotTimer += elapsedTime;
+
+
+				UpdateDash(elapsedTime);
+
+
+
+
+
+				/////////////////////////////////////////////////
+				///////////////////Shoot/////////////////////////
+
+				UpdateHawk(elapsedTime);
+
+				/////////////////////////////////////////////////
+				///////////////////Spray/////////////////////////
+
+				UpdateSpray(elapsedTime);
+
+				/////////////////////////////////////////////////
+				//////////////Constant Updates///////////////////
+
+				UpdateConstants(elapsedTime);
+
 			}
 
-
-			UpdateBounce(elapsedTime);
-
-
-			/////////////////////////////////////////////////
-			/////////////////Movement////////////////////////
-			//reset currframe to 0 & set the animation playing to true
-			if (IsDashing() == false && !GetStunned())
-			{
-				UpdateMovement(elapsedTime, stickFrame, leftClamped, leftStickXOff);
-			}
-
-			//m_fShotTimer += elapsedTime;
+			UpdateVelocity(elapsedTime);
 
 
-			UpdateDash(elapsedTime);
+			SetIsInputStuck(false);
+
+			is_Left_Coll = false;
+			is_Right_Coll = false;
+
+			//ASSESS RANGE event for those checking to see range of player
+			SGD::Event* pATEvent = new SGD::Event("ASSESS_PLAYER_RANGE", nullptr, this);
+			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+			pATEvent = nullptr;
 
 
+			Unit::Update(elapsedTime);
+			AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 
-
-
-			/////////////////////////////////////////////////
-			///////////////////Shoot/////////////////////////
-
-			UpdateHawk(elapsedTime);
-
-			/////////////////////////////////////////////////
-			///////////////////Spray/////////////////////////
-
-			UpdateSpray(elapsedTime);
-
-			/////////////////////////////////////////////////
-			//////////////Constant Updates///////////////////
-
-			UpdateConstants(elapsedTime);
-
+			SetGravity(-3000);
 		}
-
-		UpdateVelocity(elapsedTime);
-
-
-		SetIsInputStuck(false);
-
-		is_Left_Coll = false;
-		is_Right_Coll = false;
-
-		//ASSESS RANGE event for those checking to see range of player
-		SGD::Event* pATEvent = new SGD::Event("ASSESS_PLAYER_RANGE", nullptr, this);
-		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		pATEvent = nullptr;
-
-
-		Unit::Update(elapsedTime);
-		AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
-
-		SetGravity(-3000);
 	}
 }
 
 void Player::Render(void)
 {
-	//Emitter Renders
-	if ((IsBouncing() || !GetBounce()->GetEMBubbles()->Done()) && HasBounce())
+	if (GameplayState::GetInstance()->GetIsEnding() == false)
 	{
-		GetBounce()->GetEMBubbles()->SetPosition(m_ptPosition);
-		GetBounce()->GetEMBubbles()->Render();
-	}
-	if ((IsDashing() || !GetDash()->GetEMDash()->Done()) && HasDash())
-	{
-		GetDash()->GetEMDash()->SetPosition(m_ptPosition);
-		GetDash()->GetEMDash()->Render();
-	}
-	if ((m_bHawkExplode || !m_emFeatherExplosion->Done()) && HasHawk())
-	{
-		m_emFeatherExplosion->Render();
-	}
-	if (m_bReturningHawk || !m_emHawkReturn->Done())
-	{
-		m_emHawkReturn->Render();
-	}
-
-	//SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
-
-	////Camera::GetInstance()->Draw(SGD::Rectangle(10, 300, 20, 320), SGD::Color::Color(255, 0, 0, 255));
-
-
-	// * Camera::GetInstance()->GetZoomScale().width
-	// * Camera::GetInstance()->GetZoomScale().height
-
-	Camera::GetInstance()->Draw(SGD::Rectangle(
-		(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
-		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y),
-		(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width),
-		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
-		SGD::Color::Color(255, 255, 0, 0));
-
-
-	Camera::GetInstance()->Draw(SGD::Rectangle(m_pSword->GetRect().left, m_pSword->GetRect().top, m_pSword->GetRect().right, m_pSword->GetRect().bottom),
-		SGD::Color::Color(255, 255, 255, 0));
-
-	Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + 16, m_ptPosition.y + 60 }, 0, m_ts, !IsFacingRight(), 1.0f);
-	//Camera::GetInstance()->Draw(SGD::Rectangle(swingRect.left, swingRect.top, swingRect.right, swingRect.bottom),
-	//	SGD::Color::Color(255, 255, 255, 0));
-
-	//Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight(), 1.0f);
-
-	// Draw gui for amount of honor
-	SGD::OStringStream output;
-	//Render Honor emitter in world
-	m_emHonor->RenderINworld();
-	//Render Honor image
-	SGD::GraphicsManager::GetInstance()->DrawTexture(m_hHonorParticleHUD, { 25, 34 });
-
-	output << ": " << m_unHonorCollected;
-	//Local refernce to the font
-	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
-
-
-	//Draw the title
-
-	font.DrawString(output.str().c_str(), 60, 25, 1, SGD::Color{ 255, 255, 0, 0 });
-
-	if (HasBounce() == true)
-	{
-		if (m_fTextTimer <= TEXT_TIME_LENGTH)
+		//Emitter Renders
+		if ((IsBouncing() || !GetBounce()->GetEMBubbles()->Done()) && HasBounce())
 		{
-			Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
-			font.DrawString("YOU GAINED THE BUBBLE ABILITY", (int)(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
-				(int)(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y - 100), 1, SGD::Color{ 255, 255, 0, 0 });
+			GetBounce()->GetEMBubbles()->SetPosition(m_ptPosition);
+			GetBounce()->GetEMBubbles()->Render();
 		}
-	}
+		if ((IsDashing() || !GetDash()->GetEMDash()->Done()) && HasDash())
+		{
+			GetDash()->GetEMDash()->SetPosition(m_ptPosition);
+			GetDash()->GetEMDash()->Render();
+		}
+		if ((m_bHawkExplode || !m_emFeatherExplosion->Done()) && HasHawk())
+		{
+			m_emFeatherExplosion->Render();
+		}
+		if (m_bReturningHawk || !m_emHawkReturn->Done())
+		{
+			m_emHawkReturn->Render();
+		}
 
-	if (m_bDead)
-	{
-		// Draw a fading rectangle
-		unsigned char alpha = (char)(((0.5f - m_fDeathTimer) / 0.5f) * 255.0f);
-		GameplayState::GetInstance()->SetScreenFadeout(alpha);
-	}
-	if (IsBouncing())
-	{
-		Camera::GetInstance()->DrawTexture({ m_ptPosition.x - 70, m_ptPosition.y - 50 }, 0, m_hBubbleCircle, false, 5, {}, {});
+		//SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
+
+		////Camera::GetInstance()->Draw(SGD::Rectangle(10, 300, 20, 320), SGD::Color::Color(255, 0, 0, 255));
+
+
+		// * Camera::GetInstance()->GetZoomScale().width
+		// * Camera::GetInstance()->GetZoomScale().height
+
+		/*Camera::GetInstance()->Draw(SGD::Rectangle(
+			(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
+			(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y),
+			(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width),
+			(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
+			SGD::Color::Color(255, 255, 0, 0));*/
+
+
+		/*Camera::GetInstance()->Draw(SGD::Rectangle(m_pSword->GetRect().left, m_pSword->GetRect().top, m_pSword->GetRect().right, m_pSword->GetRect().bottom),
+			SGD::Color::Color(255, 255, 255, 0));*/
+
+		Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + 16, m_ptPosition.y + 60 }, 0, m_ts, !IsFacingRight(), 1.0f);
+		//Camera::GetInstance()->Draw(SGD::Rectangle(swingRect.left, swingRect.top, swingRect.right, swingRect.bottom),
+		//	SGD::Color::Color(255, 255, 255, 0));
+
+		//Camera::GetInstance()->DrawAnimation(m_ptPosition, 0, m_ts, !IsFacingRight(), 1.0f);
+
+		// Draw gui for amount of honor
+		SGD::OStringStream output;
+		//Render Honor emitter in world
+		m_emHonor->RenderINworld();
+		//Render Honor image
+		SGD::GraphicsManager::GetInstance()->DrawTexture(m_hHonorParticleHUD, { 25, 34 });
+
+		output << ": " << m_unHonorCollected;
+		//Local refernce to the font
+		Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+
+
+		//Draw the title
+
+		font.DrawString(output.str().c_str(), 60, 25, 1, SGD::Color{ 255, 255, 0, 0 });
+
+		if (HasBounce() == true)
+		{
+			if (m_fTextTimer <= TEXT_TIME_LENGTH)
+			{
+				Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
+				font.DrawString("YOU GAINED THE BUBBLE ABILITY", (int)(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
+					(int)(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y - 100), 1, SGD::Color{ 255, 255, 0, 0 });
+			}
+		}
+
+		if (m_bDead)
+		{
+			// Draw a fading rectangle
+			unsigned char alpha = (char)(((0.5f - m_fDeathTimer) / 0.5f) * 255.0f);
+			GameplayState::GetInstance()->SetScreenFadeout(alpha);
+		}
+		if (IsBouncing())
+		{
+			Camera::GetInstance()->DrawTexture({ m_ptPosition.x - 70, m_ptPosition.y - 50 }, 0, m_hBubbleCircle, false, 5, {}, {});
+		}
 	}
 }
 
@@ -1844,13 +1850,16 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		}
 		if(m_unCurrentState == RESTING_STATE)
 		{
-			if(m_bHasArmor == false)
+			if (is_Swinging == false)
 			{
-				m_ts.SetCurrAnimation("Walking");
-			}
-			else
-			{
-				m_ts.SetCurrAnimation("Armor Player Walking");
+				if (m_bHasArmor == false)
+				{
+					m_ts.SetCurrAnimation("Walking");
+				}
+				else
+				{
+					m_ts.SetCurrAnimation("Armor Player Walking");
+				}
 			}
 		}
 		SetFacingRight(true);
@@ -1892,13 +1901,16 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		}
 		if(m_unCurrentState == RESTING_STATE)
 		{
-			if(m_bHasArmor == false)
+			if (is_Swinging == false)
 			{
-				m_ts.SetCurrAnimation("Walking");
-			}
-			else
-			{
-				m_ts.SetCurrAnimation("Armor Player Walking");
+				if (m_bHasArmor == false)
+				{
+					m_ts.SetCurrAnimation("Walking");
+				}
+				else
+				{
+					m_ts.SetCurrAnimation("Armor Player Walking");
+				}
 			}
 		}
 		SetFacingRight(false);
@@ -2473,15 +2485,33 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 			is_Swinging = true;
 			if (rand() % 2 == 0)
 			{
-				m_ts.SetCurrAnimation("Swing Attack");
-				m_ts.SetPlaying(true);
-				m_ts.ResetCurrFrame();
+				if (m_bHasArmor == false)
+				{
+					m_ts.SetCurrAnimation("Swing Attack");
+					m_ts.SetPlaying(true);
+					m_ts.ResetCurrFrame();
+				}
+				else
+				{
+					m_ts.SetCurrAnimation("Armor Player Swing");
+					m_ts.SetPlaying(true);
+					m_ts.ResetCurrFrame();
+				}
 			}
 			else
 			{
-				m_ts.SetCurrAnimation("Slash Attack");
-				m_ts.SetPlaying(true);
-				m_ts.ResetCurrFrame();
+				if (m_bHasArmor == false)
+				{
+					m_ts.SetCurrAnimation("Slash Attack");
+					m_ts.SetPlaying(true);
+					m_ts.ResetCurrFrame();
+				}
+				else
+				{
+					m_ts.SetCurrAnimation("Armor Player Swipe");
+					m_ts.SetPlaying(true);
+					m_ts.ResetCurrFrame();
+				}
 			}
 		}
 

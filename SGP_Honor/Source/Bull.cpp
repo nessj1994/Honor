@@ -423,7 +423,7 @@ void Bull::Update(float elapsedTime)
 // -Draw the bull and his animations
 void Bull::Render(void)
 {
-	Boss::Render();
+	//Boss::Render();
 	SGD::Point newPosition = m_ptPosition;
 	newPosition.y += 96;
 	newPosition.x += 64;

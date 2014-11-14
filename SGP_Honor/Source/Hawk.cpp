@@ -146,16 +146,16 @@ void Hawk::Update(float elapsedTime)
 
 void Hawk::Render(void)
 {
-	SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
+	//SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
 
-	//create a reference to our rectangle
-	SGD::Rectangle rMyRect = GetRect();
+	////create a reference to our rectangle
+	//SGD::Rectangle rMyRect = GetRect();
 
-	//Offset our rectangle by the camera position for rendering
-	rMyRect.Offset({ -camPos.x, -camPos.y });
+	////Offset our rectangle by the camera position for rendering
+	//rMyRect.Offset({ -camPos.x, -camPos.y });
 
-	//Render us with the camera
-	Camera::GetInstance()->Draw(rMyRect, SGD::Color::Color(255, 255, 0, 0));
+	////Render us with the camera
+	//Camera::GetInstance()->Draw(rMyRect, SGD::Color::Color(255, 255, 0, 0));
 	Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y },
 		0.0f, m_hImage, true, 0.8f, {}, {});
 

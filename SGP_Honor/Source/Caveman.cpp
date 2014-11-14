@@ -325,7 +325,7 @@ void Caveman::Render(void)
 		m_pHawk->Render();
 	}
 	
-	Boss::Render();
+	//Boss::Render();
 	//Animation Render
 	Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height / 2 }, 0, m_ts, m_bFacingRight, 1);
 
