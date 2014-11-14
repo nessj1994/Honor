@@ -14,17 +14,16 @@ Door::Door() : Listener(this)
 	m_ptPosition = { 200, 150 };
 	m_szSize = { 100, 200 };
 
-	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/DoorObstacle.png");
-	m_hOpenImage = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/DoorOpen.png");
+	m_hDoorH = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/DoorHorizontal.png");
+	m_hDoorV = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/DoorVertical.png");
 
 }
 
 
 Door::~Door()
 {
-	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
-	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hOpenImage);
-
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hDoorH);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hDoorV);
 }
 
 /////////////////////////////////////////////////
@@ -70,24 +69,52 @@ void Door::Render(void)
 
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
-	Camera::GetInstance()->Draw(rMyRect, { 255, 0, 0, 255 });
+	//Camera::GetInstance()->Draw(rMyRect, { 255, 0, 0, 255 });
 
-	if(m_bOpen == false && m_bHorizontal == false)
-		Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y }, 0.0f, m_hImage, false, 1.0f, {}, {});
-	else if(m_bOpen == true && m_bHorizontal == false)
+	//if(m_bOpen == false && m_bHorizontal == false)
+	//	Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y }, 0.0f, m_hImage, false, 1.0f, {}, {});
+	//else if(m_bOpen == true && m_bHorizontal == false)
+	//{
+	//	Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y }, 0.0f, m_hOpenImage, false, 1.0f, {}, {});
+
+	//}
+	//else if(m_bOpen == false && m_bHorizontal == true)
+	//{
+	//	Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width - 50, m_ptPosition.y }, 1.57f, m_hImage, false, 1.0f, {}, {});
+
+	//}
+	//else if(m_bOpen == true && m_bHorizontal == true)
+	//{
+	//	Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y }, 1.57f, m_hOpenImage, false, 1.0f, {}, {});
+
+	//}
+
+	SGD::Point newPoint = { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y };
+	if (m_bOpen)
 	{
-		Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y }, 0.0f, m_hOpenImage, false, 1.0f, {}, {});
-
+		if (m_bHorizontal)
+		{
+			SGD::Rectangle newRect = { 0, 32, 192, 64 };
+			Camera::GetInstance()->DrawTextureSection(m_hDoorH, newPoint, newRect, 0.0f, { 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 1.0f, 1.0f });
+		}
+		else
+		{
+			SGD::Rectangle newRect = { 0, 0, 32, 192 };
+			Camera::GetInstance()->DrawTextureSection(m_hDoorV, newPoint, newRect, 0.0f, { 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 1.0f, 1.0f });
+		}
 	}
-	else if(m_bOpen == false && m_bHorizontal == true)
+	else
 	{
-		Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width - 50, m_ptPosition.y }, 1.57f, m_hImage, false, 1.0f, {}, {});
-
-	}
-	else if(m_bOpen == true && m_bHorizontal == true)
-	{
-		Camera::GetInstance()->DrawTexture({ m_ptPosition.x + m_szSize.width, m_ptPosition.y }, 1.57f, m_hOpenImage, false, 1.0f, {}, {});
-
+		if (m_bHorizontal)
+		{
+			SGD::Rectangle newRect = { 0, 0, 192, 32 };
+			Camera::GetInstance()->DrawTextureSection(m_hDoorH, newPoint, newRect, 0.0f, { 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 1.0f, 1.0f });
+		}
+		else
+		{
+			SGD::Rectangle newRect = { 32, 0, 64, 192 };
+			Camera::GetInstance()->DrawTextureSection(m_hDoorV, newPoint, newRect, 0.0f, { 0.0f, 0.0f }, { 255, 255, 255, 255 }, { 1.0f, 1.0f });
+		}
 	}
 
 }
