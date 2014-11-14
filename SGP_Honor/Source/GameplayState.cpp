@@ -172,18 +172,34 @@ void GameplayState::Enter(void) //Load Resources
 
 	//LoadLevel("HubLevel");
 
-	if (oldGame)
+	// Special case for tutorial
+	if (Game::GetInstance()->GetSelectedNumber() == 4)
 	{
-		LoadLevel("Level2_5");
+		LoadLevel("Level0_2");
 	}
 	else
 	{
-		LoadLevel("Level0_1");
-		CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
-		Game::GetInstance()->AddState(CutSceneState::GetInstance());
+		if (oldGame)
+		{
+			LoadLevel("HubLevel");
+		}
+		else
+		{
+			LoadLevel("Level0_1");
+			CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
+			Game::GetInstance()->AddState(CutSceneState::GetInstance());
+		}
 	}
 
 	//LoadLevel("HubLevel");
+
+	
+	//LoadLevel("Level5_5");
+
+	// LoadLevel("HubLevel");
+
+	// ("HubLevel");
+
 
 	m_pHubOrb = new HubWorldOrb();
 	//Turorial Images
@@ -340,12 +356,13 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if(pInput->IsKeyPressed(SGD::Key::P))
 	{
-		LoadLevel("Level2_1");
+		//LoadLevel("Level3_5");
+		m_bShowFPS ? m_bShowFPS = false : m_bShowFPS = true;
 	}
 	if(pInput->IsKeyPressed(SGD::Key::O))
 	{
-		LoadLevel("Level3_1");
-	}	if(pInput->IsKeyPressed(SGD::Key::L))
+		LoadLevel("HubLevel");
+	}	/*if(pInput->IsKeyPressed(SGD::Key::L))
 	{
 		LoadLevel("Level4_1");
 	}	if(pInput->IsKeyPressed(SGD::Key::I))
@@ -355,11 +372,11 @@ bool GameplayState::Input(void) //Hanlde user Input
 	{
 		LoadLevel("Level5_5");
 	}
-
-	if (pInput->IsKeyPressed(SGD::Key::L))
-	{
-		WizardDefeated();
-	}
+*/
+	//if (pInput->IsKeyPressed(SGD::Key::L))
+	//{
+	//	WizardDefeated();
+	//}
 
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/) || /*For Arcade Input*/pInput->IsKeyPressed(SGD::Key::MouseRight))
@@ -569,7 +586,10 @@ void GameplayState::Render(void)
 {
 	// Render the FPS
 	SGD::OStringStream output;
-	output << "FPS: " << m_unFPS;
+	if (m_bShowFPS)
+	{
+		output << "FPS: " << m_unFPS;
+	}
 	/*if (ending == false)
 	{*/
 		//Render Images for tutorial 
@@ -1064,7 +1084,7 @@ Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 		proj_1->SetDirection({ -1, 1 });
 		pSelf->m_pEntities->AddEntity(proj_1, Entity::ENT_PROJ);
 
-
+		proj_1->Release();
 
 
 		HorizontalBubble* proj_2 = new HorizontalBubble();
@@ -1074,7 +1094,7 @@ Entity* GameplayState::CreateHorizBubble(Entity* pOwner) const
 		proj_2->SetDirection({ 0, 1 });
 		pSelf->m_pEntities->AddEntity(proj_2, Entity::ENT_PROJ);
 
-
+		proj_2->Release();
 
 		HorizontalBubble* proj = new HorizontalBubble();
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + 100));
@@ -1782,6 +1802,7 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 				m_pDash1->SetPosition({ -200, -200 });
 				m_pDash1->SetFacingRight(true);
 
+
 				WizardDash* m_pDash2 = new WizardDash;
 				//m_pDash2->SetPosition({ 400, 400 });
 				m_pDash2->SetPosition({ -200, -200 });
@@ -1833,7 +1854,7 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 				m_pWizard->SetDash2(m_pDash2);
 				m_pWizard->SetDash3(m_pDash3);
 				m_pWizard->SetDash4(m_pDash4);
-
+				
 				//Hawkptrs
 				m_pWizard->SetHawk1(m_pHawk1);
 				m_pWizard->SetHawk2(m_pHawk2);
@@ -1853,6 +1874,19 @@ void GameplayState::CreateBoss(int _x, int _y, int _type)
 
 				m_pEntities->AddEntity(m_pWizard, Entity::ENT_BOSS_WIZARD);
 				m_pWizard->Release();
+
+
+				m_pDash1->Release();
+				m_pDash2->Release();
+				m_pDash3->Release();
+				m_pDash4->Release();
+				m_pHawk1->Release();
+				m_pHawk2->Release();
+				m_pHawk3->Release();
+				m_pHawk4->Release();
+
+
+
 				break;
 	}
 	}
@@ -2178,6 +2212,33 @@ void GameplayState::LoadLevel(std::string _level)
 
 
 	//Play Music
+	if(_level == "HubLevel")
+	{
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld1);
+		}
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld2))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld2);
+		}
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld3))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld3);
+		}
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld4))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld4);
+		}
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld5))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld5);
+		}
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hFinalBoss))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hFinalBoss);
+		}
+	}
 	if(_level == "Level1_1" || _level == "Level1_2" || _level == "Level1_3" || _level == "Level1_5")
 	{
 		//if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
@@ -2470,7 +2531,7 @@ void GameplayState::IncreaseHonorBeforeDeath(unsigned int _value)
 
 void GameplayState::WizardDefeated()
 {
-	LoadLevel("HubLevel");
+	//LoadLevel("HubLevel");
 	ending = true;
 	m_pPlayer->SetPosition({ -100, -100 });
 	Camera::GetInstance()->SetCameraCap(6);

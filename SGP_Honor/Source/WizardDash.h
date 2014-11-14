@@ -19,13 +19,13 @@ public:
 	////////////////////////////////////////////////
 	/////////////////Accessors/////////////////////
 	//SGD::Vector GetDirection(void) const { return m_vtDirection; }
-	Entity* GetOwner(void) const { return m_pOwner; }
+	//Entity* GetOwner(void) const { return m_pOwner; }
 
 
 	///////////////////////////////////////////////
 	////////////////Mutators//////////////////////
 	//void SetDirection(SGD::Vector Direction) { m_vtDirection = Direction; }
-	void SetOwner(Entity* owner) { if (m_pOwner) m_pOwner->Release(); m_pOwner = owner; m_pOwner->AddRef(); }
+	//void SetOwner(Entity* owner) { if (m_pOwner) m_pOwner->Release(); m_pOwner = owner; if(m_pOwner)m_pOwner->AddRef(); }
 	void SetTimer(float _timer) { m_fTimer = _timer; }
 
 
@@ -34,9 +34,8 @@ private:
 
 	//particle effect 
 	//SGD::Vector m_vtDirection = { 0, 0 };
-	Entity* m_pOwner = nullptr;
+	//Entity* m_pOwner = nullptr;
 	float m_fTimer = 0.0f;
 	
-
 };
 

@@ -87,5 +87,8 @@ private:
 	float m_fVictoryTimer;
 	Emitter* m_emVictoryEffect;
 	bool m_bWon = false;
+
+	//HitPoints
+	int m_iHitpoints = 3;
 };
 

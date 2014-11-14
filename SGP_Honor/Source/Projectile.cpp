@@ -11,6 +11,7 @@
 Projectile::Projectile()
 {
 	SetSpeed(5000);
+	if(m_hImage == SGD::INVALID_HANDLE)
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/graphics/TurretShot.png");
 }
 

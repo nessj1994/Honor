@@ -37,6 +37,6 @@ private:
 	SGD::Point m_ptStartPosition;
 	bool m_bIsFalling = true;
 	float m_fRespawnTimer = 0.0f;
-	float m_fFallSpeed = 300.0f;
+	float m_fFallSpeed = 0;
 };
 
