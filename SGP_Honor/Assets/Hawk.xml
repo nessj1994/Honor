@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Animations Character="Hawk">
+  <Animation name="Hawk Fly" spritesheet="hawk.png" looping="1">
+    <Frame RenderRectLeft="6" RenderRectTop="2" RenderRectRight="57" RenderRectBottom="39" CollisionRectLeft="19" CollisionRectTop="24" CollisionRectRight="39" CollisionRectBottom="36" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="22" anchorpointY="34" />
+    <Frame RenderRectLeft="118" RenderRectTop="6" RenderRectRight="171" RenderRectBottom="36" CollisionRectLeft="131" CollisionRectTop="21" CollisionRectRight="151" CollisionRectBottom="33" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="22" anchorpointY="27" />
+    <Frame RenderRectLeft="65" RenderRectTop="11" RenderRectRight="114" RenderRectBottom="52" CollisionRectLeft="76" CollisionRectTop="19" CollisionRectRight="96" CollisionRectBottom="31" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="20" anchorpointY="20" />
+    <Frame RenderRectLeft="175" RenderRectTop="13" RenderRectRight="232" RenderRectBottom="42" CollisionRectLeft="193" CollisionRectTop="23" CollisionRectRight="213" CollisionRectBottom="35" ActiveRectLeft="0" ActiveRectTop="0" ActiveRectRight="0" ActiveRectBottom="0" EventPointX="0" EventPointY="0" event="none" duration="0.2" anchorpointX="27" anchorpointY="22" />
+  </Animation>
+</Animations>

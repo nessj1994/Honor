@@ -2135,11 +2135,13 @@ void Player::UpdateHawk(float elapsedTime)
 					{
 
 						GetHawkPtr()->SetVelocity({ -200, GetHawkPtr()->GetVelocity().y });
+						GetHawkPtr()->SetDirection({ -1, 0 });
 
 					}
 					if (pInput->IsKeyDown(SGD::Key::RightArrow) == true)
 					{
 						GetHawkPtr()->SetVelocity({ 200, GetHawkPtr()->GetVelocity().y });
+						GetHawkPtr()->SetDirection({ 1, 0 });
 					}
 
 					if (pInput->IsKeyDown(SGD::Key::UpArrow) == true)
@@ -2327,7 +2329,7 @@ void Player::UpdateSpray(float elapsedTime)
 		{
 			m_fIceTimer = 0;
 			CreateSprayMessage* pMsg = new CreateSprayMessage(this);
-			pMsg->SendMessageNow();
+			pMsg->QueueMessage();
 			pMsg = nullptr;
 		}
 	}
