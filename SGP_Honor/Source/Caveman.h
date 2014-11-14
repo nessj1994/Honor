@@ -82,7 +82,6 @@ private:
 	SGD::HAudio m_hGrunt3 = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hJump = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hLand = SGD::INVALID_HANDLE;
-	SGD::HAudio m_hKick = SGD::INVALID_HANDLE;
 
 	//Victory Timer
 	float m_fVictoryTimer;

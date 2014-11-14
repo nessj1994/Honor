@@ -90,6 +90,7 @@ public:
 		m_nSelectedProfile = number;
 	}
 
+	IGameState* GetCurrentGameState() const { return m_CurrentGameState; }
 
 private:
 	/////////////////////////////////////////////////////////////////////////
@@ -130,6 +131,5 @@ private:
 	Profile* m_pProfile1 = new Profile(1);
 	Profile* m_pProfile2 = new Profile(2);
 	Profile* m_pProfile3 = new Profile(3);
-
 };
 

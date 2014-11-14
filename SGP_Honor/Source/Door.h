@@ -54,6 +54,7 @@ private:
 	Activator* m_pActivator = nullptr;
 	unsigned int m_unKeyID = 0;
 
-	SGD::HTexture m_hOpenImage = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hDoorH = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hDoorV = SGD::INVALID_HANDLE;
 };
 

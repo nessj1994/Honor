@@ -22,6 +22,7 @@
 #include "CreateStalactite.h"
 #include "MovingPlatform.h"
 #include "IceBat.h"
+#include "CutSceneState.h"
 
 #include "HubWorldOrb.h"
 
@@ -160,9 +161,8 @@ void GameplayState::Enter(void) //Load Resources
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
-	LoadGame();
+	bool oldGame = LoadGame();
 
-	//LoadLevel("Level5_5");
 	m_pPlayer->SetHasBounce(true);
 	m_pPlayer->SetHasDash(true);
 	m_pPlayer->SetHasHawk(true);
@@ -170,6 +170,16 @@ void GameplayState::Enter(void) //Load Resources
 
 	//LoadLevel("HubLevel");
 
+	if (oldGame)
+	{
+		LoadLevel("HubLevel");
+	}
+	else
+	{
+		LoadLevel("Level0_1");
+		CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
+		Game::GetInstance()->AddState(CutSceneState::GetInstance());
+	}
 
 	//LoadLevel("HubLevel");
 
@@ -520,7 +530,7 @@ void GameplayState::Update(float elapsedTime)
 			endFadeTimer += elapsedTime;
 			if (endFadeTimer < 3.0f)
 			{
-				endFade += 159 * elapsedTime;
+				endFade += (unsigned char)(159 * elapsedTime);
 				SetScreenFadeout(endFade);
 			}
 			else
@@ -1944,7 +1954,7 @@ void GameplayState::SaveGame()
 	doc.SaveFile(pathtowrite.c_str());
 }
 
-void GameplayState::LoadGame()
+bool GameplayState::LoadGame()
 {
 	HRESULT hr;
 	std::ostringstream stringstream;
@@ -1988,13 +1998,13 @@ void GameplayState::LoadGame()
 	//Create the doc
 	TiXmlDocument doc;
 
-	doc.LoadFile(pathtowrite.c_str());
+	bool check = doc.LoadFile(pathtowrite.c_str());
 
 	TiXmlElement* pRoot = doc.RootElement();
 	if(pRoot == nullptr)
 	{
 		m_pPlayer->SetHonorCollected(0);
-		return;
+		return false;
 
 	}
 
@@ -2041,6 +2051,7 @@ void GameplayState::LoadGame()
 	//m_pPlayer->SetPosition(SGD::Point((float)x, (float)y));
 	int temp = 0;
 	temp++;
+	return check;
 }
 
 /////////////////////////////////////////////

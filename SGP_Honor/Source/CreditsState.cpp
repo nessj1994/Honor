@@ -103,20 +103,20 @@ void CreditsState::Render(void)
 
 	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
 
-	font.DrawString("Developers:", 50, 650 + textMovement, 2, SGD::Color{ 255, 255, 0, 0 });
-	font.DrawString("Jordan Ness", 100, 750 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
-	font.DrawString("Jonathan Cox", 100, 800 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
-	font.DrawString("Conor Maloney", 100, 850 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
-	font.DrawString("Luis Garcia", 100, 900 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
-	font.DrawString("Michael Sciortino", 100, 950 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Developers:", 50, (int)(650 + textMovement), 2, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Jordan Ness", 100, (int)(750 + textMovement), 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Jonathan Cox", 100, (int)(800 + textMovement), 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Conor Maloney", 100, (int)(850 + textMovement), 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Luis Garcia", 100, (int)(900 + textMovement), 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Michael Sciortino", 100, (int)(950 + textMovement), 1, SGD::Color{ 255, 255, 0, 0 });
 
-	font.DrawString("EP:", 50, 1050 + textMovement, 2, SGD::Color{ 255, 255, 0, 0 });
-	font.DrawString("John Oleske", 100, 1150 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("EP:", 50, (int)(1050 + textMovement), 2, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("John Oleske", 100, (int)(1150 + textMovement), 1, SGD::Color{ 255, 255, 0, 0 });
 
-	font.DrawString("AP:", 50, 1250 + textMovement, 2, SGD::Color{ 255, 255, 0, 0 });
-	font.DrawString("Sean Hathaway", 100, 1350 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("AP:", 50, (int)(1250 + textMovement), 2, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Sean Hathaway", 100, (int)(1350 + textMovement), 1, SGD::Color{ 255, 255, 0, 0 });
 
-	font.DrawString("Artists:", 50, 1450 + textMovement, 2, SGD::Color{ 255, 255, 0, 0 });
-	font.DrawString("Caris Frazier", 100, 1550 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
-	font.DrawString("Gregory Bey", 100, 1600 + textMovement, 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Artists:", 50, (int)(1450 + textMovement), 2, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Caris Frazier", 100, (int)(1550 + textMovement), 1, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("Gregory Bey", 100, (int)(1600 + textMovement), 1, SGD::Color{ 255, 255, 0, 0 });
 }
