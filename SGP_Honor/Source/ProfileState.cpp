@@ -242,8 +242,6 @@ bool ProfileState::Input(void) //Hanlde user Input
 		{
 			Game::GetInstance()->SetSelectedProfile(m_nCursor + 1);
 			Game::GetInstance()->AddState(GameplayState::GetInstance());
-			CutSceneState::GetInstance()->SetCutScenePath("Assets/CutScenes/Intro.xml");
-			Game::GetInstance()->AddState(CutSceneState::GetInstance());
 
 		}
 		else if(m_nOptionCursor == 1)
