@@ -94,11 +94,14 @@ void OptionsState::Exit(void)
 
 	pAudio->StopAudio(m_hBGM);
 	pAudio->UnloadAudio(m_hBGM);
+	pAudio->StopAudio(m_hSelection);
+	pAudio->UnloadAudio(m_hSelection);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hButton);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hEsc);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hCircle);
+	
 }
 
 
@@ -300,7 +303,7 @@ void OptionsState::Render(void)
 	if(m_unCursor == 0)
 	{
 		pGraphics->DrawRectangle(m_rPlay, { 255, 255, 255, 255 }, {}, {});
-		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rPlay.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rPlay.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 240 }, 0.0f, {}, { 255, 255, 255, 255 });
 
@@ -327,7 +330,7 @@ void OptionsState::Render(void)
 	if(m_unCursor == 1)
 	{
 		pGraphics->DrawRectangle(m_rOptions, { 255, 255, 255, 255 }, {}, {});
-		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rOptions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rOptions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 310 }, 0.0f, {}, { 255, 255, 255, 255 });
 
 		font.DrawString("Effects Volume:", (int)((fWidth - (4 * 19)) / 2.5), 325, .8f, SGD::Color{ 255, 255, 130, 0 });
@@ -346,7 +349,7 @@ void OptionsState::Render(void)
 	if(m_unCursor == 2 && m_bFullScreen)
 	{
 		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 255 }, {}, {});
-		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
 		font.DrawString("Full Screen:", (int)((fWidth - (4 * 19)) / 2.5), 395, .8f, SGD::Color{ 255, 255, 130, 0 });
@@ -367,6 +370,9 @@ void OptionsState::Render(void)
 	}
 	else if(m_unCursor == 2 && !m_bFullScreen)
 	{
+		pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+
+
 		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 30 }, {}, {});
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 

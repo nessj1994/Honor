@@ -30,7 +30,7 @@ HorizontalBubble::HorizontalBubble()
 	//	SetDirection({ -1, 0 });
 
 	SetSpeed(5000);
-	
+	if(m_hImage == SGD::INVALID_HANDLE)
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/HorizontalBubble.png");
 	m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage);
 }

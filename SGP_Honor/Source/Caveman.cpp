@@ -57,9 +57,12 @@ Caveman::~Caveman()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hGrunt3);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hJump);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hLand);
+	SetPlayer(nullptr);
+	delete m_pHawk;
 	delete m_emEYES;
 	delete m_emVictoryEffect;
 	delete m_hHawkExplode;
+	//delete m_pHawk;
 }
 
 void Caveman::Update(float elapsedTime)
@@ -206,11 +209,11 @@ void Caveman::Update(float elapsedTime)
 		}
 		if (GetPlayer()->IsFacingRight())
 		{
-			m_pHawk->Attack({ GetPlayer()->GetPosition().x + 300, 160 },GetPlayer()->IsFacingRight());
+			m_pHawk->Attack({ GetPlayer()->GetPosition().x + 300, 180 },GetPlayer()->IsFacingRight());
 		}
 		else
 		{
-			m_pHawk->Attack({ GetPlayer()->GetPosition().x - 300, 160 }, GetPlayer()->IsFacingRight());
+			m_pHawk->Attack({ GetPlayer()->GetPosition().x - 300, 180 }, GetPlayer()->IsFacingRight());
 		}		
 		m_fStalacTimer = 0;
 		SetVelocity({ 0, 0 });
@@ -272,13 +275,18 @@ void Caveman::Update(float elapsedTime)
 			SGD::Event* pATEvent = new SGD::Event("GainedHawk", nullptr, this);
 			SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
 			pATEvent = nullptr;
+
+			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ m_pHawk };
+			pMsg->QueueMessage();
+			pMsg = nullptr;
+
 			GameplayState::GetInstance()->SetScreenFadeout(9);
 			// TODO Delete bull, give player dash, update room
 			GameplayState::GetInstance()->CreateTeleporter(510, 578, "Level3_1", false);
 			GameplayState::GetInstance()->CreateHintStatue(440, 513, "You have The Hawk!(Press D or Right Trigger)");
 			m_bWon = true;
 		}
-		if (m_fVictoryTimer > 50)
+		if (m_fVictoryTimer > 5)
 		{
 			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
 			pMsg->QueueMessage();
@@ -303,7 +311,8 @@ void Caveman::HawkExplode(SGD::Point _Pos)
 
 void Caveman::DropStalactites()
 {
-	if (m_fStalacTimer > .18f && m_bDrop)
+	float x = (float)(GetHitPoints() * .1f);
+	if (m_fStalacTimer > x && m_bDrop)
 	{
 		m_fStalacTimer = 0;
 		//make a stalactite
@@ -374,6 +383,8 @@ void Caveman::HandleEvent(const SGD::Event* pEvent)
 		if (m_bsCurrState != CM_DEATH)
 		{
 			SetHitPoints(3);
+			SetPosition({ 510, 500 });
+			m_bsCurrState = CM_THINKING;
 		}		
 	}
 

@@ -65,6 +65,8 @@ private:
 	float m_fVunerableTimer = 6.0f;
 	float m_fBubbleSpawner = 1.0f;
 
+	float m_fLaughTimer = 15.0f;
+
 	bool floatingLeft = true;
 	bool clonesCasted = false;
 	bool hawksCasted = false;
@@ -76,6 +78,10 @@ private:
 
 	WizardState m_bsCurrState;
 	SGD::HAudio m_hVictory = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hFloating = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hBat = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hDash = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hLaugh = SGD::INVALID_HANDLE;
 
 	WizardDash* dashPtr1 = nullptr;
 	WizardDash* dashPtr2 = nullptr;

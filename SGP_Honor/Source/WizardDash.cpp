@@ -1,6 +1,7 @@
 #include "WizardDash.h"
 #include "AnimationEngine.h"
 #include "Camera.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 
 WizardDash::WizardDash()
@@ -15,6 +16,7 @@ WizardDash::WizardDash()
 
 WizardDash::~WizardDash()
 {
+	/*SetOwner(nullptr);*/
 }
 
 

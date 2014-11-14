@@ -12,7 +12,6 @@ GravProjectile::GravProjectile()
 
 GravProjectile::~GravProjectile()
 {
-	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
 void GravProjectile::Update(float elapsedTime)
@@ -65,6 +64,10 @@ void GravProjectile::SetProjectileType(ProjectileType _type)
 {
 	// Save the type
 	m_ptType = _type;
+	if (m_hImage != SGD::INVALID_HANDLE)
+	{
+		SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+	}
 
 	// Load the correct image with the sprite
 	switch (_type)

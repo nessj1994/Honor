@@ -661,9 +661,9 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_BOSS_YETI)
 	{
-		//SGD::Event* pATEvent = new SGD::Event("KILL_PLAYER", nullptr, this);
-		//SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		//pATEvent = nullptr;
+		SGD::Event* pATEvent = new SGD::Event("KILL_PLAYER", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
 	}
 
 }
@@ -2135,11 +2135,13 @@ void Player::UpdateHawk(float elapsedTime)
 					{
 
 						GetHawkPtr()->SetVelocity({ -200, GetHawkPtr()->GetVelocity().y });
+						GetHawkPtr()->SetDirection({ -1, 0 });
 
 					}
 					if (pInput->IsKeyDown(SGD::Key::RightArrow) == true)
 					{
 						GetHawkPtr()->SetVelocity({ 200, GetHawkPtr()->GetVelocity().y });
+						GetHawkPtr()->SetDirection({ 1, 0 });
 					}
 
 					if (pInput->IsKeyDown(SGD::Key::UpArrow) == true)
@@ -2166,7 +2168,7 @@ void Player::UpdateHawk(float elapsedTime)
 
 						if (GetHawkPtr()->GetVelocity().x < 0)
 						{
-							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetAirFriction() * 8), GetHawkPtr()->GetVelocity().y));
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x + (GetHawkPtr()->GetAirFriction() * 80), GetHawkPtr()->GetVelocity().y));
 
 							if (GetHawkPtr()->GetVelocity().x > 0.007f)
 							{
@@ -2176,7 +2178,7 @@ void Player::UpdateHawk(float elapsedTime)
 						}
 						if (GetHawkPtr()->GetVelocity().x > 0)
 						{
-							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - (GetHawkPtr()->GetAirFriction() * 8), GetHawkPtr()->GetVelocity().y));
+							GetHawkPtr()->SetVelocity(SGD::Vector(GetHawkPtr()->GetVelocity().x - (GetHawkPtr()->GetAirFriction() * 80), GetHawkPtr()->GetVelocity().y));
 
 							if (GetHawkPtr()->GetVelocity().x < -0.007f)
 							{
@@ -2325,10 +2327,9 @@ void Player::UpdateSpray(float elapsedTime)
 		//m_fShotTimer = 0.0f;
 		if (m_fIceTimer > .05f)
 		{
-
 			m_fIceTimer = 0;
 			CreateSprayMessage* pMsg = new CreateSprayMessage(this);
-			pMsg->SendMessageNow();
+			pMsg->QueueMessage();
 			pMsg = nullptr;
 		}
 	}

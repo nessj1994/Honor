@@ -13,9 +13,11 @@
 #include "CreateVerticalBubble.h"
 #include "DestroyEntityMessage.h"
 
+#define WizardLaughTime 20.0f
+
 Wizard::Wizard() : Listener(this)
 {
-
+	
 	//m_bsCurrState = WZ_FLOATING;
 	m_bsCurrState = WZ_BULL;
 	SetSize({ 160.0f, 96.0f });
@@ -24,6 +26,10 @@ Wizard::Wizard() : Listener(this)
 	m_ts.SetCurrAnimation("Wizard Floating");
 	m_ts.SetPlaying(true);
 	m_hVictory = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/BossDefeat.wav");
+	m_hFloating = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/WizardFloat.wav");
+	m_hBat = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/WizardBat.wav");
+	m_hDash = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/DashEffect.wav");
+	m_hLaugh = SGD::AudioManager::GetInstance()->LoadAudio("Assets/Audio/WizardLaugh.wav");
 
 	m_fOrigStateTimer = 0.0f;
 	m_fCurStateTimer = m_fOrigStateTimer;
@@ -35,6 +41,11 @@ Wizard::Wizard() : Listener(this)
 
 Wizard::~Wizard()
 {
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hFloating);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBat);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hDash);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hLaugh);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hVictory);
 }
 
 
@@ -47,6 +58,21 @@ void Wizard::Update(float elapsedTime)
 	if (m_nDamage >= 3)
 	{
 		m_bsCurrState = WZ_DEATH;
+	}
+
+	if (m_fLaughTimer < WizardLaughTime)
+	{
+		m_fLaughTimer += elapsedTime;
+	}
+	else
+	{
+		m_fLaughTimer = 0.0f;
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hLaugh);
+	}
+
+	if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hFloating) == false)
+	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hFloating, true);
 	}
 
 	GetPlayer()->SetSlowed(false);
@@ -138,6 +164,7 @@ void Wizard::Update(float elapsedTime)
 
 						clonesCasted = false;
 						hawksCasted = false;
+
 						break;
 	}
 	case WZ_BULL:
@@ -149,13 +176,19 @@ void Wizard::Update(float elapsedTime)
 						ClonesUpdate(elapsedTime);
 
 						if (clonesCasted == false)
+						{
 							CastClones();
+							if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hDash) == false)
+							{
+								SGD::AudioManager::GetInstance()->PlayAudio(m_hDash, true);
+							}
+						}
 					}
 					if ((m_fCurStateTimer - m_fOrigStateTimer) > 5.0f)
 					{
 
 						m_bsCurrState = WZ_FLOATING;
-
+						SGD::AudioManager::GetInstance()->StopAudio(m_hDash);
 						m_fOrigStateTimer = m_fCurStateTimer;
 
 					}
@@ -178,10 +211,20 @@ void Wizard::Update(float elapsedTime)
 						{
 							m_fHawkStateTimer = 5.5f;
 							CastHawks();
+							if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBat) == false)
+							{
+								SGD::AudioManager::GetInstance()->PlayAudio(m_hBat, true);
+							}
 						}
 
 						if (clonesCasted == false)
+						{
 							CastClones();
+							if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hDash) == false)
+							{
+								SGD::AudioManager::GetInstance()->PlayAudio(m_hDash, true);
+							}
+						}
 
 					}
 
@@ -189,8 +232,8 @@ void Wizard::Update(float elapsedTime)
 					{
 
 						m_bsCurrState = WZ_FLOATING;
-
-
+						SGD::AudioManager::GetInstance()->StopAudio(m_hBat);
+						SGD::AudioManager::GetInstance()->StopAudio(m_hDash);
 					}
 
 					break;
@@ -278,12 +321,20 @@ void Wizard::Update(float elapsedTime)
 	}
 	case WZ_DEATH:
 	{
+					/* delete dashPtr1;
+					 delete dashPtr2;
+					 delete dashPtr3;
+					 delete dashPtr4;*/
+			
+
+		
 		SetVelocity({ 0, 0 });
 		//Local refernce to the font
 		Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
 
 		//Draw the title
 		font.DrawString("VICTORY", (int)(m_ptPosition.x-200), (int)(m_ptPosition.y-100), 3, SGD::Color{ 255, 255, 0, 0 });
+
 
 		GameplayState::GetInstance()->WizardDefeated();
 	}
