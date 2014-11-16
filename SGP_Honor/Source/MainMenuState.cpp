@@ -336,7 +336,7 @@ void MainMenuState::Render(void)
 		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 30 }, {}, {});
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Tutorial", (int)((fWidth - (12 * 14f)) / 1.85), 390, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Tutorial", (int)((fWidth - (12 * 14.0f)) / 1.85), 390, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
 
