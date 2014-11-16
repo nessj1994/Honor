@@ -661,9 +661,9 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_BOSS_YETI)
 	{
-		//SGD::Event* pATEvent = new SGD::Event("KILL_PLAYER", nullptr, this);
-		//SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		//pATEvent = nullptr;
+		SGD::Event* pATEvent = new SGD::Event("KILL_PLAYER", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
 	}
 
 }

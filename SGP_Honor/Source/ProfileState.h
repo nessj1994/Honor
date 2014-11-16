@@ -30,6 +30,7 @@ public:
 	void DeleteProfile(Profile* profile);
 
 
+
 private:
 
 	ProfileState() = default;

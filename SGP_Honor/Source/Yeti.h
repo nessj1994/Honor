@@ -46,8 +46,8 @@ private:
 
 	float m_fAttackCoolDown = 0.0f;
 	float m_fBlizzardCooldown = 20.0f;
-	float m_fAggroRange = 400.0f;
-	float m_fMeleeRange = 70.0f;
+	float m_fAggroRange = 500.0f;
+	float m_fMeleeRange = 100.0f;
 	float m_fDistance = 0.0f;
 	float m_fJumpTimer = 0.0f;
 	float m_fStartTimer = 2.0f;

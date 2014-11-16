@@ -84182,71 +84182,6 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
-		<EventTile event="" />
 		<EventTile event="JUMP_TIME" />
 		<EventTile event="JUMP_TIME" />
 		<EventTile event="JUMP_TIME" />
@@ -84626,11 +84561,76 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
+		<EventTile event="" />
 		<EventTile event="FROST_SPRAY" />
 		<EventTile event="FROST_SPRAY" />
 		<EventTile event="FROST_SPRAY" />
 		<EventTile event="FROST_SPRAY" />
-		<EventTile event="KILL_BOSS" />
+		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -85143,7 +85143,7 @@
 		<EventTile event="END_SPRAY" />
 		<EventTile event="END_SPRAY" />
 		<EventTile event="END_SPRAY" />
-		<EventTile event="TurnMarker" />
+		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
@@ -98318,7 +98318,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="67">
+	<Entities numEntities="66">
 		<Entity type="20" x="129" y="65" numArgs="1" name="Boss_1">
 			<Argument type="1" name="Type" value="2" />
 		</Entity>
@@ -98335,10 +98335,6 @@
 		<Entity type="8" x="2529" y="384" numArgs="0" name="FallingBlock_4" />
 		<Entity type="8" x="2559" y="384" numArgs="0" name="FallingBlock_5" />
 		<Entity type="11" x="2146" y="512" numArgs="2" name="Buzzsaw_1">
-			<Argument type="0" name="IsHorizontal" value="1" />
-			<Argument type="1" name="ReturnDistance" value="64" />
-		</Entity>
-		<Entity type="11" x="1217" y="354" numArgs="2" name="Buzzsaw_2">
 			<Argument type="0" name="IsHorizontal" value="1" />
 			<Argument type="1" name="ReturnDistance" value="64" />
 		</Entity>

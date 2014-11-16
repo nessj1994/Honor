@@ -16,6 +16,7 @@ WizardDash::WizardDash()
 
 WizardDash::~WizardDash()
 {
+	/*SetOwner(nullptr);*/
 }
 
 

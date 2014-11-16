@@ -18,6 +18,7 @@ WizardHawk::WizardHawk()
 WizardHawk::~WizardHawk()
 {
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+	delete m_pWizard;
 }
 
 

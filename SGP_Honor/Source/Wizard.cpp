@@ -17,7 +17,7 @@
 
 Wizard::Wizard() : Listener(this)
 {
-
+	
 	//m_bsCurrState = WZ_FLOATING;
 	m_bsCurrState = WZ_BULL;
 	SetSize({ 160.0f, 96.0f });
@@ -45,6 +45,7 @@ Wizard::~Wizard()
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hBat);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hDash);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hLaugh);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hVictory);
 }
 
 
@@ -320,12 +321,20 @@ void Wizard::Update(float elapsedTime)
 	}
 	case WZ_DEATH:
 	{
+					/* delete dashPtr1;
+					 delete dashPtr2;
+					 delete dashPtr3;
+					 delete dashPtr4;*/
+			
+
+		
 		SetVelocity({ 0, 0 });
 		//Local refernce to the font
 		Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
 
 		//Draw the title
 		font.DrawString("VICTORY", (int)(m_ptPosition.x-200), (int)(m_ptPosition.y-100), 3, SGD::Color{ 255, 255, 0, 0 });
+
 
 		GameplayState::GetInstance()->WizardDefeated();
 	}
