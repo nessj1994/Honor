@@ -61,7 +61,7 @@ void Stalactite::Render(void)
 	rMyRect.Offset({ -camPos.x, -camPos.y });
 
 	//Camera::GetInstance()->Draw(rMyRect, { 255, 0, 255, 255 });
-	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, 1, {}, {});
+	Camera::GetInstance()->DrawTexture(m_ptPosition, 0, m_hImage, false, .2, {}, {});
 }
 
 int Stalactite::GetType(void) const
