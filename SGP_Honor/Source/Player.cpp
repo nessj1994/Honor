@@ -661,9 +661,9 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_BOSS_YETI)
 	{
-		//SGD::Event* pATEvent = new SGD::Event("KILL_PLAYER", nullptr, this);
-		//SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		//pATEvent = nullptr;
+		SGD::Event* pATEvent = new SGD::Event("KILL_PLAYER", nullptr, this);
+		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		pATEvent = nullptr;
 	}
 
 }
@@ -799,7 +799,7 @@ void Player::BasicCollision(const IEntity* pOther)
 				if (m_unJumpCount == 3)
 					SetVelocity({ GetVelocity().x, -1900.0f });
 
-
+				m_unCurrentState = JUMPING_STATE;
 				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height  /*- nIntersectHeight*/ });
 			}
 
@@ -2022,8 +2022,8 @@ void Player::UpdateJump(float elapsedTime)
 	{
 		m_fButtonTimer += elapsedTime;
 		//if(GetIsJumping() == false)
-		if (m_unCurrentState == RESTING_STATE
-			|| m_unCurrentState == LANDING_STATE)
+		if (m_unCurrentState == RESTING_STATE)
+		//	|| m_unCurrentState == LANDING_STATE)
 		{
 			m_ts.ResetCurrFrame();
 			m_ts.SetPlaying(false);

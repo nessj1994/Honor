@@ -274,7 +274,7 @@ void MainMenuState::Render(void)
 	pGraphics->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 1.6f, 1.2f });
 
 	//Draw the title
-	font.DrawString("HONOR", 220, 100, 3, SGD::Color{ 255, 255, 0, 0 });
+	font.DrawString("HONOR", 220, 100, 3, SGD::Color{ 255, 255, 130, 0 });
 
 
 	pGraphics->DrawTexture(m_hSword, { m_rSword.left, m_rSword.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
@@ -329,14 +329,14 @@ void MainMenuState::Render(void)
 		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Tutorial", (int)((fWidth - (12 * 14)) / 2), 390, 1, SGD::Color{ 255, 255,165, 0 });
+		font.DrawString("Tutorial", (int)((fWidth - (12 * 14)) / 1.85f), 390, 1, SGD::Color{ 255, 255,165, 0 });
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 30 }, {}, {});
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Tutorial", (int)((fWidth - (12 * 14)) / 2), 390, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Tutorial", (int)((fWidth - (12 * 14.0f)) / 1.85), 390, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
 

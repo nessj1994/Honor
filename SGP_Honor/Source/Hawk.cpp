@@ -40,6 +40,7 @@ Hawk::~Hawk()
 	//pMsg->QueueMessage();
 	//pMsg = nullptr;
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hEffect);
+
 	//SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 

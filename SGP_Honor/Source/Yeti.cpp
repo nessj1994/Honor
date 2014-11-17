@@ -20,10 +20,11 @@ Yeti::Yeti() : Listener(this)
 	Listener::RegisterForEvent("KILL_BOSS");
 	Listener::RegisterForEvent("FROST_SPRAY");
 	Listener::RegisterForEvent("END_SPRAY");
+	Listener::RegisterForEvent("ResetRoom");
 
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/YetiAnimations.xml");
 	m_ts.ResetCurrFrame();
-	m_ts.SetCurrAnimation("yetispecial");
+	m_ts.SetCurrAnimation("yetiidle");
 	m_ts.SetPlaying(true);
 	m_szSize = { 128, 128 };
 	SetStartPosition(m_ptPosition);
@@ -87,6 +88,7 @@ void Yeti::Update(float elapsedTime)
 								  //melee attack?
 								  if(fabs(m_fDistance) <= m_fMeleeRange)
 								  {
+									  SGD::AudioManager::GetInstance()->PlayAudio(m_hSlam);
 									  m_ts.ResetCurrFrame();
 									  m_ts.SetCurrAnimation("yetismash");
 									  SetCurrentState(MELEE_STATE);
@@ -104,9 +106,9 @@ void Yeti::Update(float elapsedTime)
 
 
 
-							  if(m_vtVelocity.x < 400)
+							  if(m_vtVelocity.x < 500)
 							  {
-								  m_vtVelocity.x = 400;
+								  m_vtVelocity.x = 500;
 							  }
 
 						  }
@@ -116,6 +118,10 @@ void Yeti::Update(float elapsedTime)
 	{
 						//Commence melee attack
 
+						if(fabs(m_fDistance) > m_fMeleeRange)
+						{
+							SetCurrentState(CHASING_STATE);
+						}
 
 						if(!m_ts.IsPlaying())
 						{
@@ -153,16 +159,20 @@ void Yeti::Update(float elapsedTime)
 	case SPRAYING_STATE:
 	{
 						   //Spraying Blocks
-						   if(m_bSpraying == true)
+						   m_fStartTimer -= elapsedTime;
+						   if(m_fStartTimer <= 0.0f)
 						   {
-							   CreateSprayMessage* pMsg = new CreateSprayMessage(this);
-							   pMsg->QueueMessage();
-							   pMsg = nullptr;
-						   }
+							   if(m_bSpraying == true)
+							   {
+								   CreateSprayMessage* pMsg = new CreateSprayMessage(this);
+								   pMsg->QueueMessage();
+								   pMsg = nullptr;
+							   }
 
-						   if(m_vtVelocity.x < 400)
-						   {
-							   m_vtVelocity.x = 400;
+							   if(m_vtVelocity.x < 500)
+							   {
+								   m_vtVelocity.x = 500;
+							   }
 						   }
 						   break;
 	}
@@ -238,7 +248,7 @@ void Yeti::BasicCollision(const IEntity* pOther)
 	SGD::Rectangle rOther = pOther->GetRect();
 
 	SGD::Rectangle rIntersect = rMyRect.ComputeIntersection(rOther);
-	
+
 	SetGravity(-3000);
 
 
@@ -267,7 +277,7 @@ void Yeti::BasicCollision(const IEntity* pOther)
 		else
 		{
 			SetVelocity({ 0, GetVelocity().y });
-			SetPosition({ rOther.right , GetPosition().y });
+			SetPosition({ rOther.right, GetPosition().y });
 		}
 	}
 }
@@ -350,7 +360,7 @@ void Yeti::HandleCollision(const IEntity* pOther)
 		{
 			m_vtVelocity.x += 50;
 		}
-	
+
 
 	}
 
@@ -389,7 +399,7 @@ void Yeti::HandleEvent(const SGD::Event* pEvent)
 		{
 			m_bSpraying = true;
 			SetCurrentState(SPRAYING_STATE);
-	
+
 		}
 
 		if(pEvent->GetEventID() == "END_SPRAY")
@@ -420,8 +430,8 @@ void Yeti::HandleEvent(const SGD::Event* pEvent)
 		}
 		else if((pPlayer->GetPosition().x + pPlayer->GetSize().width) < GetPosition().x)
 		{
-			//SGD::Event Event = { "KILL_PLAYER", nullptr, this };
-			//SGD::EventManager::GetInstance()->SendEventNow(&Event);
+			SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+			SGD::EventManager::GetInstance()->SendEventNow(&Event);
 		}
 
 		else
@@ -430,6 +440,15 @@ void Yeti::HandleEvent(const SGD::Event* pEvent)
 
 			m_bInRange = false;
 		}
+	}
+
+	if(pEvent->GetEventID() == "ResetRoom")
+	{
+		m_ptPosition = GetStartPosition();
+		SetCurrentState(CHASING_STATE);
+		m_fStartTimer = 2.0f;
+		m_bFacingRight = true;
+
 	}
 
 

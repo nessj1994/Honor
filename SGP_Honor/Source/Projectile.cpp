@@ -11,16 +11,17 @@
 Projectile::Projectile()
 {
 	SetSpeed(5000);
+	if(m_hImage == SGD::INVALID_HANDLE)
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/graphics/TurretShot.png");
 }
 
 
 Projectile::~Projectile()
 {
-	if (m_pOwner)
-	{
-		m_pOwner->Release();
-	}
+	//if (m_pOwner)
+	//{
+	//	m_pOwner->Release();
+	//}
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
 }
 
