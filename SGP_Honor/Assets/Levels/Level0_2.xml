@@ -18389,7 +18389,7 @@
 	</EventLayer>
 	<Entities numEntities="12">
 		<Entity type="17" x="516" y="491" numArgs="1" name="HintStatue_1">
-			<Argument type="3" name="Message" value="                    Jump with the 'X' button" />
+			<Argument type="3" name="Message" value="       Jump with the 'X' button" />
 		</Entity>
 		<Entity type="17" x="1571" y="469" numArgs="1" name="HintStatue_2">
 			<Argument type="3" name="Message" value="             Hold 'X' to jump longer" />
@@ -18423,7 +18423,7 @@
 			<Argument type="3" name="Message" value="           'O' to Swing Sword" />
 		</Entity>
 		<Entity type="17" x="4490" y="484" numArgs="1" name="HintStatue_5">
-			<Argument type="3" name="Message" value="Now exit to the menu!" />
+			<Argument type="3" name="Message" value="         Now exit to the menu!" />
 		</Entity>
 		<Entity type="4" x="4064" y="64" numArgs="3" name="Door_1">
 			<Argument type="0" name="IsHorizontal" value="0" />

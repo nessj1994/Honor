@@ -30,6 +30,7 @@
 #include "Camera.h"
 #include "Honor.h"
 #include "Jellyfish.h"
+#include "Armor.h"
 
 
 #define JOYSTICK_DEADZONE  0.6f
@@ -288,12 +289,12 @@ void Player::Render(void)
 		// * Camera::GetInstance()->GetZoomScale().width
 		// * Camera::GetInstance()->GetZoomScale().height
 
-		/*Camera::GetInstance()->Draw(SGD::Rectangle(
+		Camera::GetInstance()->Draw(SGD::Rectangle(
 			(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
 			(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y),
 			(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width),
 			(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
-			SGD::Color::Color(255, 255, 0, 0));*/
+			SGD::Color::Color(255, 255, 0, 0));
 
 
 		/*Camera::GetInstance()->Draw(SGD::Rectangle(m_pSword->GetRect().left, m_pSword->GetRect().top, m_pSword->GetRect().right, m_pSword->GetRect().bottom),
@@ -386,30 +387,34 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_ARMOR)
 	{
-		m_bHasArmor = true;
-		if (m_ts.GetCurrAnimation() == "Idle")
+		const Armor* armor = dynamic_cast<const Armor*>(pOther);
+		if (!armor->GetIsCollected())
 		{
-			m_ts.SetCurrAnimation("Armor Player Idle");
-			m_ts.SetPlaying(true);
-			m_ts.ResetCurrFrame();
-		}
-		else if (m_ts.GetCurrAnimation() == "Jump")
-		{
-			m_ts.SetCurrAnimation("Armor Player Jump");
-			m_ts.SetPlaying(true);
-			m_ts.ResetCurrFrame();
-		}
-		else if (m_ts.GetCurrAnimation() == "Walking")
-		{
-			m_ts.SetCurrAnimation("Armor Player Walking");
-			m_ts.SetPlaying(true);
-			m_ts.ResetCurrFrame();
-		}
-		else if (m_ts.GetCurrAnimation() == "dashing")
-		{
-			m_ts.SetCurrAnimation("Armor Player dashing");
-			m_ts.SetPlaying(true);
-			m_ts.ResetCurrFrame();
+			m_bHasArmor = true;
+			if (m_ts.GetCurrAnimation() == "Idle")
+			{
+				m_ts.SetCurrAnimation("Armor Player Idle");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+			}
+			else if (m_ts.GetCurrAnimation() == "Jump")
+			{
+				m_ts.SetCurrAnimation("Armor Player Jump");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+			}
+			else if (m_ts.GetCurrAnimation() == "Walking")
+			{
+				m_ts.SetCurrAnimation("Armor Player Walking");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+			}
+			else if (m_ts.GetCurrAnimation() == "dashing")
+			{
+				m_ts.SetCurrAnimation("Armor Player dashing");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+			}
 		}
 	}
 
