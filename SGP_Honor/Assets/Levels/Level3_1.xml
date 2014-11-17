@@ -36883,7 +36883,7 @@
 		<EventTile event="" />
 	</EventLayer>
 	<Entities numEntities="43">
-		<Entity type="1" x="640" y="640" numArgs="3" name="Activator_1">
+		<Entity type="1" x="704" y="640" numArgs="3" name="Activator_1">
 			<Argument type="0" name="IsPressurePlate" value="0" />
 			<Argument type="0" name="Active" value="0" />
 			<Argument type="1" name="ID" value="2" />
