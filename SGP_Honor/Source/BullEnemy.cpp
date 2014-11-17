@@ -24,6 +24,7 @@ BullEnemy::BullEnemy() : Listener(this)
 	m_hRunning = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Running.wav");
 	m_hRoar1 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Roar1.wav");
 	m_hRoar2 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Roar3.wav");
+	m_fResetTimer = 1;
 }
 
 BullEnemy::~BullEnemy()
@@ -39,6 +40,13 @@ BullEnemy::~BullEnemy()
 // -Main update loop
 void BullEnemy::Update(float elapsedTime)
 {
+	//For Reset Bug
+	if (m_fResetTimer > .5f)
+	{
+		m_ptPosition = GetOriginalPos();
+	}
+	m_fResetTimer -= elapsedTime;
+	//
 	m_unPrevFrame = m_ts.GetCurrFrame();
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
@@ -68,7 +76,7 @@ void BullEnemy::Update(float elapsedTime)
 	}
 	// Every few seconds randomly change direction or switch states
 	// Only if the bull is not in the middle of charging
-	if (m_bsCurrState != BS_RUNNING)
+	if (m_bsCurrState != BS_RUNNING && m_bsCurrState != BS_DEATH)
 	{
 		m_fChangeTimer -= elapsedTime;
 		if (m_fChangeTimer <= 0.0f)
@@ -84,6 +92,7 @@ void BullEnemy::Update(float elapsedTime)
 				case 1:
 				{
 					m_bsCurrState = BS_WALKING;
+					break;
 				}
 				case 2:
 				{
@@ -91,6 +100,7 @@ void BullEnemy::Update(float elapsedTime)
 					{
 						SetFacingRight(!GetFacingRight());
 					}
+					break;
 				}
 			}
 		}
@@ -292,6 +302,10 @@ void BullEnemy::HandleCollision(const IEntity * pOther)
 	}
 	if (pOther->GetType() == ENT_LASER)
 	{
+		if (m_bsCurrState == BS_DEATH)
+		{
+			return;
+		}
 		m_bDying = true;
 		m_fDeathTimer = 0.5f;
 		m_bsCurrState = BS_DEATH;
@@ -312,6 +326,7 @@ void BullEnemy::HandleEvent(const SGD::Event* pEvent)
 		m_bsCurrState = BS_IDLE;
 		SetAlive(true);
 		SetPosition(GetOriginalPos());
+		m_fResetTimer = 1;
 	}
 	//Turn around
 	if (pEvent->GetEventID() == "TurnMarker" &&

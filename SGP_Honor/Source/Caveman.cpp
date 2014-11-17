@@ -311,6 +311,10 @@ void Caveman::HawkExplode(SGD::Point _Pos)
 
 void Caveman::DropStalactites()
 {
+	if (m_bsCurrState == CM_DEATH)
+	{
+		return;
+	}
 	float x = (float)(GetHitPoints() * .1f);
 	if (m_fStalacTimer > x && m_bDrop)
 	{
@@ -340,7 +344,7 @@ void Caveman::Render(void)
 	if (m_bsCurrState == CM_DEATH)
 	{
 		m_emVictoryEffect->Render({ 470, 220 });
-		font.DrawString("VICTORY!", (int)(400 - Camera::GetInstance()->GetCameraPos().x), (int)(200 - Camera::GetInstance()->GetCameraPos().y), 3, SGD::Color{ 255, 255, 0, 0 });
+		font.DrawString("VICTORY!", (int)(350 - Camera::GetInstance()->GetCameraPos().x), (int)(200 - Camera::GetInstance()->GetCameraPos().y), 3, SGD::Color{ 255, 255, 0, 0 });
 	}
 }
 
@@ -373,6 +377,10 @@ void Caveman::HandleCollision(const IEntity* pOther)
 ////////////// Listener Interface //////////////
 void Caveman::HandleEvent(const SGD::Event* pEvent)
 {
+	if (m_bsCurrState == CM_DEATH)
+	{
+
+	}
 	if (pEvent->GetEventID() == "FLIP_LASER")
 	{
 		m_bLaserOn ? m_bLaserOn = false : m_bLaserOn = true;

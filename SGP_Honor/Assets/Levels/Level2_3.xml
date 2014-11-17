@@ -27026,58 +27026,58 @@
 			<Argument type="1" name="ActivatorIndex" value="0" />
 			<Argument type="0" name="On" value="1" />
 		</Entity>
-		<Entity type="19" x="352" y="1248" numArgs="1" name="Enemy_1">
+		<Entity type="19" x="359" y="1241" numArgs="1" name="Enemy_1">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="416" y="1248" numArgs="1" name="Enemy_2">
+		<Entity type="19" x="417" y="1238" numArgs="1" name="Enemy_2">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="480" y="1248" numArgs="1" name="Enemy_3">
+		<Entity type="19" x="480" y="1238" numArgs="1" name="Enemy_3">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="544" y="1248" numArgs="1" name="Enemy_4">
+		<Entity type="19" x="539" y="1236" numArgs="1" name="Enemy_4">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="608" y="1248" numArgs="1" name="Enemy_5">
+		<Entity type="19" x="602" y="1240" numArgs="1" name="Enemy_5">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="672" y="1248" numArgs="1" name="Enemy_6">
+		<Entity type="19" x="669" y="1238" numArgs="1" name="Enemy_6">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="736" y="1248" numArgs="1" name="Enemy_7">
+		<Entity type="19" x="732" y="1237" numArgs="1" name="Enemy_7">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="800" y="1248" numArgs="1" name="Enemy_8">
+		<Entity type="19" x="796" y="1235" numArgs="1" name="Enemy_8">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="864" y="1248" numArgs="1" name="Enemy_9">
+		<Entity type="19" x="861" y="1235" numArgs="1" name="Enemy_9">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="928" y="1248" numArgs="1" name="Enemy_10">
+		<Entity type="19" x="928" y="1236" numArgs="1" name="Enemy_10">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="992" y="1248" numArgs="1" name="Enemy_11">
+		<Entity type="19" x="990" y="1235" numArgs="1" name="Enemy_11">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="1056" y="1248" numArgs="1" name="Enemy_12">
+		<Entity type="19" x="1050" y="1233" numArgs="1" name="Enemy_12">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="1120" y="1248" numArgs="1" name="Enemy_13">
+		<Entity type="19" x="1116" y="1232" numArgs="1" name="Enemy_13">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="1184" y="1248" numArgs="1" name="Enemy_14">
+		<Entity type="19" x="1180" y="1229" numArgs="1" name="Enemy_14">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="1248" y="1248" numArgs="1" name="Enemy_15">
+		<Entity type="19" x="1241" y="1237" numArgs="1" name="Enemy_15">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="1312" y="1248" numArgs="1" name="Enemy_16">
+		<Entity type="19" x="1304" y="1238" numArgs="1" name="Enemy_16">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="1376" y="1248" numArgs="1" name="Enemy_17">
+		<Entity type="19" x="1368" y="1238" numArgs="1" name="Enemy_17">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
-		<Entity type="19" x="1440" y="1248" numArgs="1" name="Enemy_18">
+		<Entity type="19" x="1433" y="1238" numArgs="1" name="Enemy_18">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
 		<Entity type="1" x="2240" y="928" numArgs="3" name="Activator_2">

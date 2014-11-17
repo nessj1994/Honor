@@ -154,11 +154,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	Camera::GetInstance()->SetPlayer(m_pPlayer);
 
-
-
 	m_pEntities->AddEntity(m_pPlayer, Entity::ENT_PLAYER);
-
-
 
 	// Load in map for the levels and start the first level
 	LoadLevelMap();
@@ -346,18 +342,18 @@ bool GameplayState::Input(void) //Hanlde user Input
 	//}
 	if (pInput->IsKeyPressed(SGD::Key::H))
 	{
-		m_pPlayer->SetHonorCollected(m_pPlayer->GetHonorCollected() + 50);
-		//Gained Honor event for certain doors
-		SGD::Event* pATEvent = new SGD::Event("HONOR_GAINED", nullptr, m_pPlayer);
-		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		pATEvent = nullptr;
+		//m_pPlayer->SetHonorCollected(m_pPlayer->GetHonorCollected() + 50);
+		////Gained Honor event for certain doors
+		//SGD::Event* pATEvent = new SGD::Event("HONOR_GAINED", nullptr, m_pPlayer);
+		//SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		//pATEvent = nullptr;
 
 	}
 
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::P))
 	{
-		//LoadLevel("Level3_5");
+		LoadLevel("Level2_3");
 		m_bShowFPS ? m_bShowFPS = false : m_bShowFPS = true;
 	}
 	if (pInput->IsKeyPressed(SGD::Key::O) && (m_strCurrLevel != "Level0_1" && m_strCurrLevel != "Level0_2"))
@@ -380,7 +376,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	}*/
 
 	if (pInput->IsKeyPressed(SGD::Key::Escape)
-		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/) || /*For Arcade Input*/pInput->IsKeyPressed(SGD::Key::MouseRight))
+		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/) )//|| /*For Arcade Input*/pInput->IsKeyPressed(SGD::Key::MouseRight))
 	{
 		Game::GetInstance()->AddState(PauseState::GetInstance());
 		//pAudio->StopAudio(m_hBGM);
@@ -495,6 +491,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_RIGHT_RAMP);
 	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_DEATH);
 	//FLocking Collisions
+	m_pEntities->CheckCollisions(Entity::ENT_MUTANT_MAN, Entity::ENT_DOOR);
 	m_pEntities->CheckCollisions(Entity::ENT_MUTANT_BIRD, Entity::ENT_MUTANT_BIRD);
 	m_pEntities->CheckCollisions(Entity::ENT_MUTANT_MAN, Entity::ENT_MUTANT_MAN);
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_ENEMY);
@@ -522,6 +519,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
 	m_pEntities->CheckWorldCollision(Entity::ENT_BULL_ENEMY);
 	m_pEntities->CheckWorldCollision(Entity::ENT_SKELETON);
+	m_pEntities->CheckWorldCollision(Entity::ENT_ICE_GOLEM);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_POUNCER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_MUTANT_BIRD);

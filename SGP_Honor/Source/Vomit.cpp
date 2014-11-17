@@ -1,5 +1,6 @@
 #include "Vomit.h"
 #include "Emitter.h"
+#include "Camera.h"
 #include "ParticleEngine.h"
 #include "DestroyEntityMessage.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
@@ -12,6 +13,7 @@ Vomit::Vomit(SGD::Point _Pos)
 	m_eEffect = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/Vomit.xml", "Vomit", m_ptPosition);
 	m_eVomit = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/VomitPile.xml", "VomitPile", m_ptPosition);
 	m_szSize = m_eEffect->GetSize();
+	m_szSize.width -= 20;
 	m_eEffect->SetPosition(_Pos);
 	m_bFinished = false;
 }
@@ -71,7 +73,7 @@ void Vomit::Render(void)
 {
 	m_eVomit->Render();
 	m_eEffect->Render();
-	SGD::GraphicsManager::GetInstance()->DrawRectangle(GetRect(), { 255, 0, 128, 0 }, {}, 2);
+	//Camera::GetInstance()->Draw(GetRect(), { 255, 255, 0, 0 });
 }
 
 int Vomit::GetType(void) const
@@ -134,7 +136,7 @@ void Vomit::HandleCollision(const IEntity* pOther)
 		}
 		if (rMutant.top == rIntersection.top)
 		{
-			SetPosition({ GetPosition().x, (float)rObject.bottom });
+			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height + 1 });
 			SetVelocity({ GetVelocity().x, 0 });
 		}
 	}
