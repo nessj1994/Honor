@@ -27,6 +27,7 @@ Crab::Crab() : Listener(this)
 {
 	Listener::RegisterForEvent("ASSESS_PLAYER_RANGE");
 	Listener::RegisterForEvent("KILL_PLAYER");
+	Listener::RegisterForEvent("ResetRoom");
 	SetCurrentState(idle);
 
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/KingClang.xml");
@@ -282,6 +283,8 @@ void Crab::Update(float elapsedTime)
 								 castedRightSlam = false;
 								 castedSwipe = false;
 								 castedBubbles = false;
+								 LeftSlamOnCD = false;
+								 RightSlamOnCD = false;
 								 leftSlamTimer = 0.0f;
 								 rightSlamTimer = 0.0f;
 								 swipeTimer = 0.0f;
@@ -289,9 +292,10 @@ void Crab::Update(float elapsedTime)
 								 bubbleSpawn = 0.0f;
 								 leftSlamCD = 0.0f;
 								 rightSlamCD = 0.0f;
-								 bubbleCD = 0.0f;
 								 swipeCD = 0.0f;
+								 bubbleTimer = 0.0f;
 								 eyealpha = 0;
+								 redEyeTimer = 0.0f;
 								 SGD::AudioManager::GetInstance()->StopAudio(m_hSlam2);
 								 SGD::AudioManager::GetInstance()->StopAudio(m_hBubble);
 							 }
@@ -445,7 +449,7 @@ void Crab::HandleEvent(const SGD::Event* pEvent)
 		SetPlayer((Player*)pEvent->GetSender());
 	}
 
-	if (pEvent->GetEventID() == "KILL_PLAYER")
+	if (pEvent->GetEventID() == "KILL_PLAYER" || pEvent->GetEventID() == "ResetRoom")
 	{
 		if (GetPlayer()->HasArmor() == false)
 		{
@@ -459,6 +463,8 @@ void Crab::HandleEvent(const SGD::Event* pEvent)
 			castedRightSlam = false;
 			castedSwipe = false;
 			castedBubbles = false;
+			LeftSlamOnCD = false;
+			RightSlamOnCD = false;
 			leftSlamTimer = 0.0f;
 			rightSlamTimer = 0.0f;
 			swipeTimer = 0.0f;
@@ -469,6 +475,8 @@ void Crab::HandleEvent(const SGD::Event* pEvent)
 			bubbleCD = 0.0f;
 			swipeCD = 0.0f;
 			roarTimer = 60.0f;
+			eyealpha = 0;
+			redEyeTimer = 0.0f;
 			SGD::AudioManager::GetInstance()->StopAudio(m_hSlam2);
 			SGD::AudioManager::GetInstance()->StopAudio(m_hBubble);
 			SGD::AudioManager::GetInstance()->StopAudio(m_hRoar);
