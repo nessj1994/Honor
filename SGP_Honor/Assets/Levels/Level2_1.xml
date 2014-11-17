@@ -10092,7 +10092,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="40">
+	<Entities numEntities="41">
 		<Entity type="11" x="497" y="447" numArgs="2" name="Buzzsaw_1">
 			<Argument type="0" name="IsHorizontal" value="0" />
 			<Argument type="1" name="ReturnDistance" value="0" />
@@ -10236,5 +10236,6 @@
 		<Entity type="0" x="2400" y="448" numArgs="1" name="Honor_21">
 			<Argument type="1" name="Amount" value="5" />
 		</Entity>
+		<Entity type="13" x="2176" y="96" numArgs="0" name="Armor_1" />
 	</Entities>
 </Level>
