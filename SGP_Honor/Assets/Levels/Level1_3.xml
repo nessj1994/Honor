@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Level name="NewLevel" width="128" height="32" fixed="0" playerX="88" playerY="699">
+<Level name="NewLevel" width="128" height="32" fixed="0" playerX="92" playerY="690">
 	<ImageLayers numLayers="4">
 		<ImageLayer speed="1" depth="-3" image="\Assets\graphics\TS_Sky.png" name="Sky" render="1" tileSetWidth="8" tileSetHeight="8" tileSetSize="32">
 			<ImageTile type="0" />
@@ -16938,7 +16938,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -16970,8 +16970,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17002,7 +17003,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17034,8 +17034,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17066,7 +17067,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17098,8 +17098,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17130,7 +17131,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17322,8 +17322,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17354,7 +17355,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17386,8 +17386,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17418,7 +17419,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17450,8 +17450,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17482,7 +17483,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17674,8 +17674,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17706,7 +17707,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17738,7 +17738,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17770,8 +17770,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17802,7 +17803,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17834,7 +17834,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -17996,6 +17996,7 @@
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18026,7 +18027,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18058,8 +18058,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18090,7 +18091,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18122,8 +18122,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18154,7 +18155,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18186,7 +18186,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18348,6 +18348,7 @@
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18378,7 +18379,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18410,8 +18410,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18442,7 +18443,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18474,8 +18474,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18506,7 +18507,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18538,7 +18538,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18730,8 +18730,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18762,7 +18763,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18794,8 +18794,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18826,7 +18827,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18858,8 +18858,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -18890,7 +18891,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19082,8 +19082,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19114,7 +19115,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19146,8 +19146,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19178,7 +19179,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19210,8 +19210,9 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19242,7 +19243,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19434,7 +19434,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
@@ -19452,6 +19452,7 @@
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19466,7 +19467,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19498,7 +19498,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19530,7 +19530,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19697,6 +19697,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19722,7 +19723,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19754,13 +19754,14 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19786,7 +19787,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19818,13 +19818,14 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19850,7 +19851,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19914,13 +19914,14 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19946,7 +19947,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19978,13 +19978,14 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -20010,7 +20011,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -20042,13 +20042,14 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -20074,7 +20075,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -20106,13 +20106,14 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -20138,7 +20139,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -24590,7 +24590,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="27">
+	<Entities numEntities="87">
 		<Entity type="1" x="3872" y="704" numArgs="3" name="Activator_1">
 			<Argument type="0" name="IsPressurePlate" value="0" />
 			<Argument type="0" name="Active" value="0" />
@@ -24676,6 +24676,246 @@
 		</Entity>
 		<Entity type="0" x="3072" y="640" numArgs="1" name="Honor_14">
 			<Argument type="1" name="Amount" value="5" />
+		</Entity>
+		<Entity type="11" x="512" y="992" numArgs="2" name="Buzzsaw_1">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="544" y="992" numArgs="2" name="Buzzsaw_2">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="576" y="992" numArgs="2" name="Buzzsaw_3">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="608" y="992" numArgs="2" name="Buzzsaw_4">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="640" y="992" numArgs="2" name="Buzzsaw_5">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="672" y="992" numArgs="2" name="Buzzsaw_6">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="704" y="992" numArgs="2" name="Buzzsaw_7">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="896" y="992" numArgs="2" name="Buzzsaw_8">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="928" y="992" numArgs="2" name="Buzzsaw_9">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1056" y="992" numArgs="2" name="Buzzsaw_10">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="960" y="992" numArgs="2" name="Buzzsaw_11">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1024" y="992" numArgs="2" name="Buzzsaw_12">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="992" y="992" numArgs="2" name="Buzzsaw_13">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1248" y="992" numArgs="2" name="Buzzsaw_14">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1280" y="992" numArgs="2" name="Buzzsaw_15">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1312" y="992" numArgs="2" name="Buzzsaw_16">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1344" y="992" numArgs="2" name="Buzzsaw_17">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1376" y="992" numArgs="2" name="Buzzsaw_18">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1408" y="992" numArgs="2" name="Buzzsaw_19">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1600" y="992" numArgs="2" name="Buzzsaw_20">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1632" y="992" numArgs="2" name="Buzzsaw_21">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1664" y="992" numArgs="2" name="Buzzsaw_22">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1696" y="992" numArgs="2" name="Buzzsaw_23">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1728" y="992" numArgs="2" name="Buzzsaw_24">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1760" y="992" numArgs="2" name="Buzzsaw_25">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1952" y="992" numArgs="2" name="Buzzsaw_26">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="1984" y="992" numArgs="2" name="Buzzsaw_27">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2016" y="992" numArgs="2" name="Buzzsaw_28">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2048" y="992" numArgs="2" name="Buzzsaw_29">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2080" y="992" numArgs="2" name="Buzzsaw_30">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2112" y="992" numArgs="2" name="Buzzsaw_31">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2304" y="992" numArgs="2" name="Buzzsaw_32">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2336" y="992" numArgs="2" name="Buzzsaw_33">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2368" y="992" numArgs="2" name="Buzzsaw_34">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2400" y="992" numArgs="2" name="Buzzsaw_35">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2432" y="992" numArgs="2" name="Buzzsaw_36">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2464" y="992" numArgs="2" name="Buzzsaw_37">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2656" y="992" numArgs="2" name="Buzzsaw_38">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2688" y="992" numArgs="2" name="Buzzsaw_39">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2720" y="992" numArgs="2" name="Buzzsaw_40">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2752" y="992" numArgs="2" name="Buzzsaw_41">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2784" y="992" numArgs="2" name="Buzzsaw_42">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="2816" y="992" numArgs="2" name="Buzzsaw_43">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3008" y="992" numArgs="2" name="Buzzsaw_44">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3040" y="992" numArgs="2" name="Buzzsaw_45">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3072" y="992" numArgs="2" name="Buzzsaw_46">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3104" y="992" numArgs="2" name="Buzzsaw_47">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3296" y="992" numArgs="2" name="Buzzsaw_48">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3328" y="992" numArgs="2" name="Buzzsaw_49">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3360" y="992" numArgs="2" name="Buzzsaw_50">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3392" y="992" numArgs="2" name="Buzzsaw_51">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3424" y="992" numArgs="2" name="Buzzsaw_52">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3488" y="992" numArgs="2" name="Buzzsaw_53">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3520" y="992" numArgs="2" name="Buzzsaw_54">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3552" y="992" numArgs="2" name="Buzzsaw_55">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3584" y="992" numArgs="2" name="Buzzsaw_56">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3616" y="992" numArgs="2" name="Buzzsaw_57">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3648" y="992" numArgs="2" name="Buzzsaw_58">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3680" y="992" numArgs="2" name="Buzzsaw_59">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
+		</Entity>
+		<Entity type="11" x="3712" y="992" numArgs="2" name="Buzzsaw_60">
+			<Argument type="0" name="IsHorizontal" value="0" />
+			<Argument type="1" name="ReturnDistance" value="0" />
 		</Entity>
 	</Entities>
 </Level>
