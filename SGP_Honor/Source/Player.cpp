@@ -1724,7 +1724,6 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 			if (GetVelocity().y > 0)
 			{
 				SetVelocity({ GetVelocity().x, 0 });
-
 			}
 		}
 
