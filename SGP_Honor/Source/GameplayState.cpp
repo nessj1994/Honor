@@ -194,7 +194,7 @@ void GameplayState::Enter(void) //Load Resources
 	//LoadLevel("HubLevel");
 
 
-	//LoadLevel("Level4_1");
+	//LoadLevel("Level5_5");
 
 	// LoadLevel("HubLevel");
 
@@ -2526,7 +2526,7 @@ void GameplayState::IncreaseHonorBeforeDeath(unsigned int _value)
 
 void GameplayState::WizardDefeated()
 {
-	//LoadLevel("HubLevel");
+	LoadLevel("HubLevel");
 	ending = true;
 	m_pPlayer->SetPosition({ -100, -100 });
 	Camera::GetInstance()->SetCameraCap(6);
