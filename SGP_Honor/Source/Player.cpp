@@ -252,7 +252,18 @@ void Player::Update(float elapsedTime)
 			Unit::Update(elapsedTime);
 			AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 
+
+			
+
+
 			SetGravity(-3000);
+
+			
+
+
+
+
+
 		}
 	}
 }
@@ -352,6 +363,11 @@ SGD::Rectangle Player::GetRect(void) const
 
 void Player::HandleCollision(const IEntity* pOther)
 {
+
+	
+
+
+
 	float leftStickXOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).x;
 	
 	m_bSlowed = false;
@@ -817,7 +833,10 @@ void Player::BasicCollision(const IEntity* pOther)
 
 					m_unJumpCount = 0;
 
-					m_fLandTimer = 0.001f;
+					//m_fLandTimer = 0.001f;
+
+					m_fLandTimer = 0.00001f;
+
 					m_unCurrentState = LANDING_STATE;
 				}
 
@@ -2027,8 +2046,10 @@ void Player::UpdateJump(float elapsedTime)
 	{
 		m_fButtonTimer += elapsedTime;
 		//if(GetIsJumping() == false)
-		if (m_unCurrentState == RESTING_STATE)
-		//	|| m_unCurrentState == LANDING_STATE)
+		if ((m_unCurrentState == RESTING_STATE
+			|| m_unCurrentState == LANDING_STATE)
+			&& m_fButtonTimer < 0.05f
+			 )
 		{
 			m_ts.ResetCurrFrame();
 			m_ts.SetPlaying(false);
@@ -2372,9 +2393,9 @@ void Player::UpdateVelocity(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	if (m_unCurrentState == LANDING_STATE
-		&& m_fLandTimer <= 0
-		&& pInput->IsKeyDown(SGD::Key::Space) == false
-		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false
+		//&& m_fLandTimer <= 0
+		//&& pInput->IsKeyDown(SGD::Key::Space) == false
+		//&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false
 		)
 	{
 		if (m_bHasArmor == false)
@@ -2467,6 +2488,11 @@ void Player::UpdateVelocity(float elapsedTime)
 				SetVelocity(SGD::Vector(-1475, GetVelocity().y));
 		}
 
+	}
+
+	if (GetVelocity().y > 50)
+	{
+		m_unCurrentState = FALLING_STATE;
 	}
 
 }
