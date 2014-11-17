@@ -207,6 +207,16 @@ bool ProfileState::Input(void) //Hanlde user Input
 		}
 	}
 
+	if(m_rSelect.IsIntersecting(rMouse))
+	{
+		m_nOptionCursor = 0;
+	}
+	if(m_rDelete.IsIntersecting(rMouse))
+	{
+		m_nOptionCursor = 1;
+		
+	}
+
 
 
 	//Change between windowed and full screen modes
@@ -406,6 +416,7 @@ void ProfileState::Render(void)
 	if(m_nOptionCursor == 0)
 	{
 		pGraphics->DrawRectangle(m_rSelect, { 255, 255, 255, 255 }, {}, {});
+		pGraphics->DrawTexture(m_hSword, { m_rSword2.left, m_rSword2.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { Game::GetInstance()->GetScreenWidth() / 2 - 290, Game::GetInstance()->GetScreenHeight() / 2 + 160 }, 0.0f, {}, { 255, 255, 255, 255 });
 		font.DrawString("Continue", (int)((fWidth - (4 * 19)) / 4.25f), (int)Game::GetInstance()->GetScreenHeight() / 2 + 170, 1, SGD::Color{ 255, 255, 165, 0 });
 
@@ -420,6 +431,8 @@ void ProfileState::Render(void)
 	if(m_nOptionCursor == 1)
 	{
 		pGraphics->DrawRectangle(m_rDelete, { 255, 255, 255, 255 }, {}, {});
+		pGraphics->DrawTexture(m_hSword, { m_rSword2.left + 350, m_rSword2.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
+
 		pGraphics->DrawTexture(m_hButton, { Game::GetInstance()->GetScreenWidth() / 2 + 50, Game::GetInstance()->GetScreenHeight() / 2 + 160 }, 0.0f, {}, { 255, 255, 255, 255 });
 		font.DrawString("Delete", (int)(Game::GetInstance()->GetScreenWidth() / 2 + 135), (int)Game::GetInstance()->GetScreenHeight() / 2 + 170, 1, SGD::Color{ 255, 255, 165, 0 });
 
@@ -541,6 +554,7 @@ void ProfileState::LoadProfile(Profile* profile)
 
 		if(unlocked ? true : false)
 		{
+			if(name != "World1Level" && name != "World2Level" && name != "World3Level" && name != "World4Level" && name != "World5Level")
 			profile->SetCurrentLevel(name);
 		}
 
