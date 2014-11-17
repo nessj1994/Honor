@@ -353,7 +353,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::P))
 	{
-		LoadLevel("Level2_2");
+		LoadLevel("Level0_1");
 		m_bShowFPS ? m_bShowFPS = false : m_bShowFPS = true;
 	}
 	if (pInput->IsKeyPressed(SGD::Key::O) && (m_strCurrLevel != "Level0_1" && m_strCurrLevel != "Level0_2"))
@@ -591,21 +591,19 @@ void GameplayState::Render(void)
 	}
 	/*if (ending == false)
 	{*/
-	//Render Images for tutorial 
-	if (m_strCurrLevel == "Level0_1")
-	{
-		Camera::GetInstance()->DrawTexture({ 600, 50 }, 0, m_hXJUMP, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 1759, 50 }, 0, m_hXJUMP, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 2736, 200 }, 0, m_hXWallJump, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 3803, 10 }, 0, m_hOAttack, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 4304, 200 }, 0, m_hTriOpenDoor, false, 1, {}, {});
-	}
-	//\
 
 	m_pLevel->Render();
 	m_pLevel->RenderImageLayer(true);
 
-
+	//Render Images for tutorial 
+	if (m_strCurrLevel == "Level0_1")
+	{
+		Camera::GetInstance()->DrawTexture({ 600, 300 }, 0, m_hXJUMP, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ 1759, 300 }, 0, m_hXJUMP, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ 2720, 200 }, 0, m_hXWallJump, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ 3803, 60 }, 0, m_hOAttack, false, .5, {}, {});
+		Camera::GetInstance()->DrawTexture({ 4180, 250 }, 0, m_hTriOpenDoor, false, 1, {}, {});
+	}
 	//Camera::GetInstance()->DrawTexture({ 270, 400 }, {}, SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/images.jpg"), false);
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
@@ -623,11 +621,13 @@ void GameplayState::Render(void)
 	}
 
 
-
+	
+	//
 	// Draw a fading rectangle
 	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
 	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { m_cScreenFade, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
 	SGD::GraphicsManager::GetInstance()->DrawString(output.str().c_str(), { 5, 5 });
+
 }
 
 //Static Message callback function
