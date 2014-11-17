@@ -18419,10 +18419,10 @@
 		<Entity type="17" x="2688" y="448" numArgs="1" name="HintStatue_3">
 			<Argument type="3" name="Message" value="                     Wall Jump!" />
 		</Entity>
-		<Entity type="17" x="3744" y="128" numArgs="1" name="HintStatue_4">
+		<Entity type="17" x="3744" y="96" numArgs="1" name="HintStatue_4">
 			<Argument type="3" name="Message" value="           'O' to Swing Sword" />
 		</Entity>
-		<Entity type="17" x="4512" y="480" numArgs="1" name="HintStatue_5">
+		<Entity type="17" x="4512" y="448" numArgs="1" name="HintStatue_5">
 			<Argument type="3" name="Message" value="     'TRIANGLE' to Enter Doors" />
 		</Entity>
 		<Entity type="18" x="4288" y="512" numArgs="2" name="Teleporter_1">

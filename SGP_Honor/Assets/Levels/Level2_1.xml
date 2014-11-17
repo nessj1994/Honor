@@ -10159,11 +10159,6 @@
 			<Argument type="1" name="ActivatorIndex" value="0" />
 			<Argument type="0" name="On" value="1" />
 		</Entity>
-		<Entity type="2" x="224" y="32" numArgs="3" name="Laser_6">
-			<Argument type="1" name="Direction" value="3" />
-			<Argument type="1" name="ActivatorIndex" value="0" />
-			<Argument type="0" name="On" value="1" />
-		</Entity>
 		<Entity type="2" x="1568" y="384" numArgs="3" name="Laser_1">
 			<Argument type="1" name="Direction" value="3" />
 			<Argument type="1" name="ActivatorIndex" value="0" />
@@ -10237,5 +10232,8 @@
 			<Argument type="1" name="Amount" value="5" />
 		</Entity>
 		<Entity type="13" x="2176" y="96" numArgs="0" name="Armor_1" />
+		<Entity type="17" x="416" y="192" numArgs="1" name="HintStatue_1">
+			<Argument type="3" name="Message" value="Dash Through Lasers! (S or RB)" />
+		</Entity>
 	</Entities>
 </Level>

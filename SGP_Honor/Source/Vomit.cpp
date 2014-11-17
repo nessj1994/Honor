@@ -14,6 +14,7 @@ Vomit::Vomit(SGD::Point _Pos)
 	m_eVomit = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/VomitPile.xml", "VomitPile", m_ptPosition);
 	m_szSize = m_eEffect->GetSize();
 	m_szSize.width -= 20;
+	m_eEffect->SetSize(m_szSize);
 	m_eEffect->SetPosition(_Pos);
 	m_bFinished = false;
 }
@@ -44,7 +45,7 @@ void Vomit::Update(float elapsedTime)
 	m_fTimer += elapsedTime;
 	m_eEffect->SetPosition(m_ptPosition);
 	m_eVomit->SetPosition(m_ptPosition);
-	SetVelocity({ GetVelocity().x, (200 - (-500) * elapsedTime) });
+	SetVelocity({ GetVelocity().x, (1000 - (-5000) * elapsedTime) });
 	if (m_fTimer >= 5)
 	{
 		m_eVomit->Finish();
@@ -73,7 +74,7 @@ void Vomit::Render(void)
 {
 	m_eVomit->Render();
 	m_eEffect->Render();
-	//Camera::GetInstance()->Draw(GetRect(), { 255, 255, 0, 0 });
+	Camera::GetInstance()->Draw(GetRect(), { 255, 255, 0, 0 });
 }
 
 int Vomit::GetType(void) const
