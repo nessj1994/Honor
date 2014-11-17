@@ -289,12 +289,12 @@ void Player::Render(void)
 		// * Camera::GetInstance()->GetZoomScale().width
 		// * Camera::GetInstance()->GetZoomScale().height
 
-		Camera::GetInstance()->Draw(SGD::Rectangle(
-			(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
-			(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y),
-			(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width),
-			(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
-			SGD::Color::Color(255, 255, 0, 0));
+	//	Camera::GetInstance()->Draw(SGD::Rectangle(
+	//		(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
+	//		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y),
+	//		(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width),
+	//		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
+	//		SGD::Color::Color(255, 255, 0, 0));
 
 
 		/*Camera::GetInstance()->Draw(SGD::Rectangle(m_pSword->GetRect().left, m_pSword->GetRect().top, m_pSword->GetRect().right, m_pSword->GetRect().bottom),
