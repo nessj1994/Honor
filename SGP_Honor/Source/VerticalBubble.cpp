@@ -14,8 +14,11 @@ VerticalBubble::VerticalBubble()
 	//else
 	//	SetDirection({ -1, 0 });
 
-	if(m_hImage == SGD::INVALID_HANDLE)
-	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/VerticalBubble.png");
+	if (m_hImage != SGD::INVALID_HANDLE)
+	{
+		SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hImage);
+		m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/VerticalBubble.png");
+	}
 	m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage);
 }
 
