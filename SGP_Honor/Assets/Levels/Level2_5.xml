@@ -2337,7 +2337,7 @@
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
-		<CollisionTile type="-1" />
+		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
@@ -2361,7 +2361,7 @@
 		<CollisionTile type="1" />
 		<CollisionTile type="1" />
 		<CollisionTile type="0" />
-		<CollisionTile type="-1" />
+		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
@@ -2385,7 +2385,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="1" />
 		<CollisionTile type="0" />
-		<CollisionTile type="-1" />
+		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -2409,7 +2409,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="1" />
 		<CollisionTile type="0" />
-		<CollisionTile type="-1" />
+		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -3109,7 +3109,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />
-		<EventTile event="Screen2x4" />
+		<EventTile event="Screen2x2" />
 		<EventTile event="" />
 		<EventTile event="" />
 		<EventTile event="" />

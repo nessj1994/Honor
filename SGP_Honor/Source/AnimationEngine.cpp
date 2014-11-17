@@ -55,9 +55,9 @@ void AnimationEngine::Update(float elapsedTime, AnimTimeStamp& ts, IEntity* send
 
 	if (m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetEvent() != "none")
 	{
-		SGD::Event* pATEvent = new SGD::Event(m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetEvent().c_str(), nullptr, this);
-		SGD::EventManager::GetInstance()->SendEventNow(pATEvent);
-		pATEvent = nullptr;
+	//	SGD::Event* pATEvent = new SGD::Event(m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetEvent().c_str(), nullptr, this);
+	//	SGD::EventManager::GetInstance()->SendEventNow(pATEvent);
+	//	pATEvent = nullptr;
 	}
 
 	if (ts.GetTimeWaited() >= m_mAnimationMap[ts.GetCurrAnimation()].GetFrames()[ts.GetCurrFrame()].GetDuration())

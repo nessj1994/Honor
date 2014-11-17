@@ -30,6 +30,7 @@
 #include "Camera.h"
 #include "Honor.h"
 #include "Jellyfish.h"
+#include "Armor.h"
 
 
 #define JOYSTICK_DEADZONE  0.6f
@@ -288,12 +289,12 @@ void Player::Render(void)
 		// * Camera::GetInstance()->GetZoomScale().width
 		// * Camera::GetInstance()->GetZoomScale().height
 
-		/*Camera::GetInstance()->Draw(SGD::Rectangle(
-			(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
-			(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y),
-			(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width),
-			(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
-			SGD::Color::Color(255, 255, 0, 0));*/
+	//	Camera::GetInstance()->Draw(SGD::Rectangle(
+	//		(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
+	//		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y),
+	//		(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x + GetSize().width),
+	//		(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y + GetSize().height)),
+	//		SGD::Color::Color(255, 255, 0, 0));
 
 
 		/*Camera::GetInstance()->Draw(SGD::Rectangle(m_pSword->GetRect().left, m_pSword->GetRect().top, m_pSword->GetRect().right, m_pSword->GetRect().bottom),
@@ -386,30 +387,34 @@ void Player::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_ARMOR)
 	{
-		m_bHasArmor = true;
-		if (m_ts.GetCurrAnimation() == "Idle")
+		const Armor* armor = dynamic_cast<const Armor*>(pOther);
+		if (!armor->GetIsCollected())
 		{
-			m_ts.SetCurrAnimation("Armor Player Idle");
-			m_ts.SetPlaying(true);
-			m_ts.ResetCurrFrame();
-		}
-		else if (m_ts.GetCurrAnimation() == "Jump")
-		{
-			m_ts.SetCurrAnimation("Armor Player Jump");
-			m_ts.SetPlaying(true);
-			m_ts.ResetCurrFrame();
-		}
-		else if (m_ts.GetCurrAnimation() == "Walking")
-		{
-			m_ts.SetCurrAnimation("Armor Player Walking");
-			m_ts.SetPlaying(true);
-			m_ts.ResetCurrFrame();
-		}
-		else if (m_ts.GetCurrAnimation() == "dashing")
-		{
-			m_ts.SetCurrAnimation("Armor Player dashing");
-			m_ts.SetPlaying(true);
-			m_ts.ResetCurrFrame();
+			m_bHasArmor = true;
+			if (m_ts.GetCurrAnimation() == "Idle")
+			{
+				m_ts.SetCurrAnimation("Armor Player Idle");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+			}
+			else if (m_ts.GetCurrAnimation() == "Jump")
+			{
+				m_ts.SetCurrAnimation("Armor Player Jump");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+			}
+			else if (m_ts.GetCurrAnimation() == "Walking")
+			{
+				m_ts.SetCurrAnimation("Armor Player Walking");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+			}
+			else if (m_ts.GetCurrAnimation() == "dashing")
+			{
+				m_ts.SetCurrAnimation("Armor Player dashing");
+				m_ts.SetPlaying(true);
+				m_ts.ResetCurrFrame();
+			}
 		}
 	}
 
@@ -799,7 +804,7 @@ void Player::BasicCollision(const IEntity* pOther)
 				if (m_unJumpCount == 3)
 					SetVelocity({ GetVelocity().x, -1900.0f });
 
-
+				m_unCurrentState = JUMPING_STATE;
 				SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height  /*- nIntersectHeight*/ });
 			}
 
@@ -1551,6 +1556,7 @@ void Player::KillPlayer()
 
 		// TODO Add effects
 		m_bSlowed = false;
+		SetIsBouncing(false);
 	}
 }
 
@@ -1718,7 +1724,6 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 			if (GetVelocity().y > 0)
 			{
 				SetVelocity({ GetVelocity().x, 0 });
-
 			}
 		}
 
@@ -1936,7 +1941,7 @@ void Player::UpdateDash(float elapsedTime)
 		SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 		if (m_fDashCoolTimer <= 0.0f && (pInput->IsKeyPressed(SGD::Key::S) == true
 			//if (pInput->IsKeyDown(SGD::Key::Tab) == true
-			|| pInput->IsButtonPressed(0, /*3*/5 /*Right bumper on xbox controller*/)))
+			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/)))
 		{
 			m_fDashCoolTimer = .5f;
 			GetDash()->GetEMDash()->Finish(false);
@@ -2022,8 +2027,8 @@ void Player::UpdateJump(float elapsedTime)
 	{
 		m_fButtonTimer += elapsedTime;
 		//if(GetIsJumping() == false)
-		if (m_unCurrentState == RESTING_STATE
-			|| m_unCurrentState == LANDING_STATE)
+		if (m_unCurrentState == RESTING_STATE)
+		//	|| m_unCurrentState == LANDING_STATE)
 		{
 			m_ts.ResetCurrFrame();
 			m_ts.SetPlaying(false);
@@ -2107,7 +2112,7 @@ void Player::UpdateHawk(float elapsedTime)
 
 
 		if (pInput->IsKeyDown(SGD::Key::W) == true
-			|| triggerOff > 0 )//|| pInput->IsButtonDown(0, 5/*5*/ /*Right bumper on xbox controller*/)/*JOYSTICK_DEADZONE*/)
+			|| triggerOff > 0  )//|| pInput->IsButtonDown(0, 5/*5*/ /*Right bumper on xbox controller*/)/*JOYSTICK_DEADZONE*/)
 		{
 
 			if (m_bHawkCast == false
@@ -2318,7 +2323,7 @@ void Player::UpdateSpray(float elapsedTime)
 	float triggerOff = pInput->GetTrigger(0);
 
 	if ((pInput->IsKeyDown(SGD::Key::RightShift) == true
-		/*&& m_fShotTimer > 0.25f*/ || triggerOff < 0) && m_bHasIce == true)// || pInput->IsButtonDown(0, 2/*5*/ /*Right bumper on xbox controller*/))
+		/*&& m_fShotTimer > 0.25f*/ || triggerOff < 0) && m_bHasIce == true )// || pInput->IsButtonDown(0, 2/*5*/ /*Right bumper on xbox controller*/))
 	{
 		if (!(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hIceEffect)))
 		{

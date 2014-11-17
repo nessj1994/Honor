@@ -122,7 +122,6 @@ int Game::Update()
 
 	}
 
-
 	return 0;
 }
 

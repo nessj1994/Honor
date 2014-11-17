@@ -3,7 +3,8 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
 #include "../SGD Wrappers/SGD_Color.h"
-
+#include "Font.h"
+#include "BitmapFont.h"
 #include "Game.h"
 #include "GameplayState.h"
 #include "Font.h"

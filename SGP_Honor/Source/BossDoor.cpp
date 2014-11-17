@@ -68,6 +68,7 @@ void BossDoor::HandleCollision(const IEntity* pOther)
 			Player * pPlayer = (Player*)pOther;
 			if (pPlayer->GetHonorCollected() >= m_unRequiredHonor)
 			{
+				GameplayState::GetInstance()->UnlockLevel(m_sLevel);
 				ChangeLevelMessage* pMsg = new ChangeLevelMessage{ this };
 				pMsg->QueueMessage();
 				pMsg = nullptr;

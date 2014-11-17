@@ -172,7 +172,7 @@ void Camera::Update(float _elapsedTime)
 
 		break;
 	case 2:
-		//FINAL BOSS CAMERA
+		//Second BOSS CAMERA
 		if (m_pPlayer->GetPosition().x < 300)
 		{
 			m_ptCameraPosition.x = (300 - Game::GetInstance()->GetScreenWidth() / m_fCurrentPanX) - 140; // Divide by Scale
