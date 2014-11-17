@@ -12741,7 +12741,7 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 		</ImageLayer>
-		<ImageLayer speed="1" depth="-1" image="\Assets\graphics\ZPU_Set_5_by_Zeroplumber.png" name="Terrain" render="0" tileSetWidth="16" tileSetHeight="16" tileSetSize="32">
+		<ImageLayer speed="1" depth="-1" image="\Assets\graphics\ZPU_Set_5_by_Zeroplumber.png" name="Terrain" render="1" tileSetWidth="16" tileSetHeight="16" tileSetSize="32">
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
@@ -13550,9 +13550,9 @@
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
+			<ImageTile type="47" />
+			<ImageTile type="47" />
+			<ImageTile type="47" />
 			<ImageTile type="8" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -13567,9 +13567,6 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="8" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
@@ -13585,6 +13582,9 @@
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
+			<ImageTile type="47" />
+			<ImageTile type="47" />
+			<ImageTile type="47" />
 			<ImageTile type="8" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -13614,9 +13614,9 @@
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
+			<ImageTile type="-1" />
+			<ImageTile type="-1" />
+			<ImageTile type="-1" />
 			<ImageTile type="8" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -13646,9 +13646,9 @@
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
+			<ImageTile type="-1" />
+			<ImageTile type="-1" />
+			<ImageTile type="-1" />
 			<ImageTile type="8" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -13742,9 +13742,9 @@
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
+			<ImageTile type="-1" />
+			<ImageTile type="-1" />
+			<ImageTile type="-1" />
 			<ImageTile type="8" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -13759,7 +13759,6 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="8" />
-			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
@@ -13775,8 +13774,9 @@
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
+			<ImageTile type="-1" />
+			<ImageTile type="-1" />
+			<ImageTile type="-1" />
 			<ImageTile type="8" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -13791,7 +13791,6 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="8" />
-			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
@@ -13807,8 +13806,9 @@
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
+			<ImageTile type="-1" />
+			<ImageTile type="-1" />
+			<ImageTile type="-1" />
 			<ImageTile type="8" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -13887,8 +13887,6 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="8" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
@@ -13904,7 +13902,9 @@
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
-			<ImageTile type="15" />
+			<ImageTile type="-1" />
+			<ImageTile type="-1" />
+			<ImageTile type="-1" />
 			<ImageTile type="8" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -13919,8 +13919,6 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="8" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
@@ -13936,7 +13934,9 @@
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
-			<ImageTile type="15" />
+			<ImageTile type="-1" />
+			<ImageTile type="-1" />
+			<ImageTile type="-1" />
 			<ImageTile type="8" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -13951,9 +13951,6 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="8" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
-			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
@@ -13969,6 +13966,9 @@
 			<ImageTile type="15" />
 			<ImageTile type="15" />
 			<ImageTile type="15" />
+			<ImageTile type="47" />
+			<ImageTile type="47" />
+			<ImageTile type="47" />
 			<ImageTile type="8" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -19954,8 +19954,8 @@
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
+		<CollisionTile type="0" />
+		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -19969,7 +19969,6 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
@@ -20001,7 +20000,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
@@ -20018,6 +20017,7 @@
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -20113,7 +20113,6 @@
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
-		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -20129,7 +20128,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
@@ -20161,7 +20160,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
@@ -20193,6 +20192,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
@@ -20273,7 +20273,6 @@
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
-		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -20289,7 +20288,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="0" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
@@ -20321,6 +20320,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
+		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
@@ -20338,8 +20338,8 @@
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
 		<CollisionTile type="0" />
-		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
+		<CollisionTile type="0" />
+		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -31858,7 +31858,7 @@
 			<Argument type="0" name="Active" value="0" />
 			<Argument type="1" name="ID" value="1" />
 		</Entity>
-		<Entity type="19" x="860" y="294" numArgs="1" name="Enemy_2">
+		<Entity type="19" x="874" y="274" numArgs="1" name="Enemy_2">
 			<Argument type="1" name="Type" value="2" />
 		</Entity>
 		<Entity type="3" x="896" y="384" numArgs="2" name="Turret_1">
@@ -31885,7 +31885,7 @@
 			<Argument type="1" name="Direction" value="3" />
 			<Argument type="2" name="Timer" value="1.0" />
 		</Entity>
-		<Entity type="19" x="1026" y="298" numArgs="1" name="Enemy_1">
+		<Entity type="19" x="1024" y="282" numArgs="1" name="Enemy_1">
 			<Argument type="1" name="Type" value="2" />
 		</Entity>
 		<Entity type="3" x="1152" y="384" numArgs="2" name="Turret_7">
@@ -31900,7 +31900,7 @@
 			<Argument type="1" name="Direction" value="3" />
 			<Argument type="2" name="Timer" value="1.0" />
 		</Entity>
-		<Entity type="19" x="1190" y="294" numArgs="1" name="Enemy_2">
+		<Entity type="19" x="1168" y="272" numArgs="1" name="Enemy_2">
 			<Argument type="1" name="Type" value="2" />
 		</Entity>
 		<Entity type="18" x="6112" y="704" numArgs="2" name="Teleporter_1">
@@ -32024,7 +32024,7 @@
 			<Argument type="1" name="ActivatorIndex" value="10" />
 			<Argument type="0" name="StartOpen" value="0" />
 		</Entity>
-		<Entity type="4" x="1056" y="352" numArgs="3" name="Door_2">
+		<Entity type="4" x="1024" y="352" numArgs="3" name="Door_2">
 			<Argument type="0" name="IsHorizontal" value="1" />
 			<Argument type="1" name="ActivatorIndex" value="10" />
 			<Argument type="0" name="StartOpen" value="0" />
