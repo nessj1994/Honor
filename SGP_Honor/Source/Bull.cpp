@@ -22,11 +22,11 @@ Bull::Bull() : Listener(this)
 	SetSize({ 160.0f, 96.0f });
 	m_bFacingRight = false;
 	m_bsCurrState = BS_WALKING;
-	m_fWalkTimer = 5.0f;
+	m_fWalkTimer = 2.0f;
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/Bull_Animation.xml");
 	m_ts.SetCurrAnimation("Bull_Running");
 	m_ts.SetPlaying(true);
-	SetHitPoints(1);
+	SetHitPoints(3);
 	m_eFire1 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect1.xml", "FireEffect1", m_ptPosition);
 	m_eFire2 = ParticleEngine::GetInstance()->LoadEmitter("Assets/Particles/FireEffect2.xml", "FireEffect2", m_ptPosition);
 
@@ -394,7 +394,7 @@ void Bull::Update(float elapsedTime)
 				Player * player = (Player*)(GetPlayer());
 				player->SetHasDash(true);
 				GameplayState::GetInstance()->CreateTeleporter(1000, 512, "Level2_1", false);
-				GameplayState::GetInstance()->CreateHintStatue(700, 480, "You have dash!");
+				GameplayState::GetInstance()->CreateHintStatue(700, 450, " You have dash! Press RB/S to cast");
 				DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
 				pMsg->QueueMessage();
 				pMsg = nullptr;
@@ -573,7 +573,7 @@ void Bull::ResetBull()
 	m_ts.ResetCurrFrame();
 
 	// Reset timers
-	m_fWalkTimer = 5.0f;
+	m_fWalkTimer = 2.0f;
 	m_fTurnTimer = 0.0f;
 	m_fChargeTimer = 0.0f;
 	m_fRunTimer = 0.0f;
