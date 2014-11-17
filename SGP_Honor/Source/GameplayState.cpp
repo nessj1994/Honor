@@ -194,7 +194,7 @@ void GameplayState::Enter(void) //Load Resources
 	//LoadLevel("HubLevel");
 
 	
-	//LoadLevel("Level5_5");
+	LoadLevel("Level4_1");
 
 	// LoadLevel("HubLevel");
 
@@ -373,10 +373,10 @@ bool GameplayState::Input(void) //Hanlde user Input
 		LoadLevel("Level5_5");
 	}
 */
-	//if (pInput->IsKeyPressed(SGD::Key::L))
-	//{
-	//	WizardDefeated();
-	//}
+	/*if (pInput->IsKeyPressed(SGD::Key::L))
+	{
+		WizardDefeated();
+	}*/
 
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 7 /*Button start on xbox controller*/) || /*For Arcade Input*/pInput->IsKeyPressed(SGD::Key::MouseRight))
