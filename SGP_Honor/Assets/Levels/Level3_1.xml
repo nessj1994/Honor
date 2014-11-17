@@ -31023,7 +31023,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="0" />
-		<CollisionTile type="-1" />
+		<CollisionTile type="1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />

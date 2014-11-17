@@ -13,6 +13,8 @@
 #include "Font.h"
 #include "BitmapFont.h"
 #include "Profile.h"
+#include "ParticleEngine.h"
+#include "Emitter.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 ///////////////////////////////////////////////////////////
@@ -43,6 +45,7 @@ ProfileState* ProfileState::GetInstance(void)
 // - set up entities
 void ProfileState::Enter(void) //Load Resources
 {
+	m_emBackgroundEffect = ParticleEngine::GetInstance()->LoadEmitter("assets/particles/MainSelect.xml", "MainSelect", { 0, 0 });
 	m_hSelection = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/selection.wav");
 
 	m_hBackground = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Castle.png");
@@ -56,6 +59,8 @@ void ProfileState::Enter(void) //Load Resources
 	LoadProfile(Game::GetInstance()->GetProfile(3));
 
 	m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
+
+	m_emTitle = ParticleEngine::GetInstance()->LoadEmitter("assets/particles/TitleMain.xml", "Title", { 220, -100 });
 }
 
 
@@ -65,6 +70,8 @@ void ProfileState::Enter(void) //Load Resources
 // - unload all resources
 void ProfileState::Exit(void)
 {
+	delete m_emBackgroundEffect;
+	delete m_emTitle;
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSelection);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hButton);
@@ -286,7 +293,8 @@ bool ProfileState::Input(void) //Hanlde user Input
 // - Update all game entities
 void ProfileState::Update(float elapsedTime)
 {
-
+	m_emBackgroundEffect->Update(elapsedTime);
+	m_emTitle->Update(elapsedTime);
 }
 
 /////////////////////////////////////////////
@@ -294,7 +302,7 @@ void ProfileState::Update(float elapsedTime)
 // - Render all game entities
 void ProfileState::Render(void)
 {
-
+	
 	//Create a local reference to the input manager for ease of use
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 
@@ -304,7 +312,9 @@ void ProfileState::Render(void)
 
 	//Draw the background
 	pGraphics->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 1.6f, 1.2f });
-
+	//Emitter
+	m_emBackgroundEffect->Render();
+	m_emTitle->Render({ 220, 10 });
 	//Draw the title
 	font.DrawString("HONOR", 220, 10, 3, SGD::Color{ 255, 255, 130, 0 });
 

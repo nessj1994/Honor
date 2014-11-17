@@ -177,7 +177,7 @@ void GameplayState::Enter(void) //Load Resources
 	{
 		if (oldGame)
 		{
-			LoadLevel("HubLevel");
+			LoadLevel("Level3_4");
 		}
 		else
 		{
@@ -351,7 +351,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::P))
 	{
-		LoadLevel("Level2_5");
+		LoadLevel("Level2_3");
 		m_bShowFPS ? m_bShowFPS = false : m_bShowFPS = true;
 	}
 	if (pInput->IsKeyPressed(SGD::Key::O) && (m_strCurrLevel != "Level0_1" && m_strCurrLevel != "Level0_2"))
@@ -596,7 +596,7 @@ void GameplayState::Render(void)
 	m_pLevel->RenderImageLayer(true);
 
 	//Render Images for tutorial 
-	if (m_strCurrLevel == "Level0_1")
+	if (m_strCurrLevel == "Level0_1" || m_strCurrLevel == "Level0_2")
 	{
 		Camera::GetInstance()->DrawTexture({ 600, 300 }, 0, m_hXJUMP, false, 1, {}, {});
 		Camera::GetInstance()->DrawTexture({ 1759, 300 }, 0, m_hXJUMP, false, 1, {}, {});
