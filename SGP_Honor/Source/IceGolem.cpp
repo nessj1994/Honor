@@ -135,9 +135,13 @@ void IceGolem::Update(float elapsedTime)
 
 		}
 	}
+
+	SetGravity(-1500);
+	SetVelocity({ GetVelocity().x, GetVelocity().y - GetGravity() * elapsedTime });
+
+
+
 	m_ptPosition += m_vtVelocity * elapsedTime;
-
-
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 	Enemy::Update(elapsedTime);
 

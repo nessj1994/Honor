@@ -63,7 +63,7 @@ void BossDoor::HandleCollision(const IEntity* pOther)
 
 		//if (leftStickYOff < -0.8)
 		if (SGD::InputManager::GetInstance()->IsButtonPressed(0, 3) == true ||
-			SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::S))
+			SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::E))
 		{
 			Player * pPlayer = (Player*)pOther;
 			if (pPlayer->GetHonorCollected() >= m_unRequiredHonor)

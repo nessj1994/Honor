@@ -59,5 +59,8 @@ private:
 	SGD::HTexture m_hEsc = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hCircle = SGD::INVALID_HANDLE;
 
+	//For Arcade Machine
+	float m_fInputTimer;
+	float m_fstickYOff;
 };
 

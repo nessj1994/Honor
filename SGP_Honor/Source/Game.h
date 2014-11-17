@@ -90,7 +90,7 @@ public:
 		m_nSelectedProfile = number;
 	}
 
-	IGameState* GetCurrentGameState() const { return m_CurrentGameState; }
+	IGameState* GetCurrentGameState() const { return m_vGameStates[m_nCurrentState] /*m_CurrentGameState*/; }
 
 private:
 	/////////////////////////////////////////////////////////////////////////

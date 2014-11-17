@@ -52,7 +52,7 @@ void Teleporter::HandleCollision(const IEntity* pOther)
 		{
 			//if (leftStickYOff < -0.8)
 			if (SGD::InputManager::GetInstance()->IsButtonPressed(0, 3) == true ||
-				SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::S))
+				SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::E))
 			{
 				if (GameplayState::GetInstance()->GetLevelUnlocked(m_sLevel))
 				{
@@ -70,7 +70,7 @@ void Teleporter::HandleCollision(const IEntity* pOther)
 		{
 			//if (leftStickYOff < -0.8)
 			if (SGD::InputManager::GetInstance()->IsButtonPressed(0, 3) == true ||
-				SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::S))
+				SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::E))
 			{
 				GameplayState::GetInstance()->UnlockLevel(m_sLevel);
 				ChangeLevelMessage* pMsg = new ChangeLevelMessage{ this };

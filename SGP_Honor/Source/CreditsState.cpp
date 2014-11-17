@@ -3,7 +3,8 @@
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
 #include "../SGD Wrappers/SGD_Color.h"
-
+#include "Font.h"
+#include "BitmapFont.h"
 #include "Game.h"
 #include "GameplayState.h"
 #include "Font.h"
@@ -80,10 +81,10 @@ bool CreditsState::Input(void) //Hanlde user Input
 // - Update all game entities
 void CreditsState::Update(float elapsedTime)
 {
-	if (CreditTimer < 33.0f)
+	if (CreditTimer < 16.0f)
 	{
 		CreditTimer += elapsedTime;
-		textMovement -= 50 * elapsedTime;
+		textMovement -= 100 * elapsedTime;
 	}
 	else
 	{

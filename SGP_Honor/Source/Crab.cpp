@@ -278,6 +278,22 @@ void Crab::Update(float elapsedTime)
 								 m_ts.SetPlaying(true);
 								 m_ts.ResetCurrFrame();
 								 SGD::AudioManager::GetInstance()->PlayAudio(m_hHurt);
+								 castedLeftSlam = false;
+								 castedRightSlam = false;
+								 castedSwipe = false;
+								 castedBubbles = false;
+								 leftSlamTimer = 0.0f;
+								 rightSlamTimer = 0.0f;
+								 swipeTimer = 0.0f;
+								 bubbleTimer = 0.0f;
+								 bubbleSpawn = 0.0f;
+								 leftSlamCD = 0.0f;
+								 rightSlamCD = 0.0f;
+								 bubbleCD = 0.0f;
+								 swipeCD = 0.0f;
+								 eyealpha = 0;
+								 SGD::AudioManager::GetInstance()->StopAudio(m_hSlam2);
+								 SGD::AudioManager::GetInstance()->StopAudio(m_hBubble);
 							 }
 							 break;
 				}

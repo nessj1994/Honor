@@ -50,6 +50,11 @@ private:
 
 	unsigned int m_unMusicVol = 100;
 	unsigned int m_unEffectsVol = 100;
-	bool m_bFullScreen;
+	bool m_bFullScreen = !Game::GetInstance()->GetWindowed();
+
+	//Arcade input Timer
+	float m_fstickYOff;
+	float m_fstickXoff;
+	float m_fInputTimer;
 };
 
