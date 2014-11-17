@@ -76,7 +76,7 @@ void BullEnemy::Update(float elapsedTime)
 	}
 	// Every few seconds randomly change direction or switch states
 	// Only if the bull is not in the middle of charging
-	if (m_bsCurrState != BS_RUNNING)
+	if (m_bsCurrState != BS_RUNNING && m_bsCurrState != BS_DEATH)
 	{
 		m_fChangeTimer -= elapsedTime;
 		if (m_fChangeTimer <= 0.0f)
@@ -92,6 +92,7 @@ void BullEnemy::Update(float elapsedTime)
 				case 1:
 				{
 					m_bsCurrState = BS_WALKING;
+					break;
 				}
 				case 2:
 				{
@@ -99,6 +100,7 @@ void BullEnemy::Update(float elapsedTime)
 					{
 						SetFacingRight(!GetFacingRight());
 					}
+					break;
 				}
 			}
 		}
@@ -300,6 +302,10 @@ void BullEnemy::HandleCollision(const IEntity * pOther)
 	}
 	if (pOther->GetType() == ENT_LASER)
 	{
+		if (m_bsCurrState == BS_DEATH)
+		{
+			return;
+		}
 		m_bDying = true;
 		m_fDeathTimer = 0.5f;
 		m_bsCurrState = BS_DEATH;
