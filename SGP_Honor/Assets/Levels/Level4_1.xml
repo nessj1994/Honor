@@ -54134,7 +54134,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="55">
+	<Entities numEntities="56">
 		<Entity type="17" x="384" y="448" numArgs="1" name="HintStatue_1">
 			<Argument type="3" name="Message" value="These blocks can be frozen." />
 		</Entity>
@@ -54296,5 +54296,6 @@
 			<Argument type="0" name="IsHorizontal" value="0" />
 			<Argument type="1" name="ReturnDistance" value="0" />
 		</Entity>
+		<Entity type="13" x="2208" y="640" numArgs="0" name="Armor_1" />
 	</Entities>
 </Level>
