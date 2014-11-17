@@ -174,7 +174,7 @@ void MutantBat::Render()
 	{
 		return;
 	}
-	SGD::GraphicsManager::GetInstance()->DrawRectangle({ { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, m_szSize }, { 255, 255, 255, 255 });
+	//SGD::GraphicsManager::GetInstance()->DrawRectangle({ { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, m_szSize }, { 255, 255, 255, 255 });
 	Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height / 2 }, 0, m_ts, GetFacingRight(), 1);
 }
 

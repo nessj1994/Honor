@@ -353,7 +353,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if(pInput->IsKeyPressed(SGD::Key::P))
 	{
-		//LoadLevel("Level3_5");
+		LoadLevel("Level2_3");
 		m_bShowFPS ? m_bShowFPS = false : m_bShowFPS = true;
 	}
 	if(pInput->IsKeyPressed(SGD::Key::O))
@@ -491,6 +491,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_RIGHT_RAMP);
 	m_pEntities->CheckCollisions(Entity::ENT_POUNCER, Entity::ENT_DEATH);
 	//FLocking Collisions
+	m_pEntities->CheckCollisions(Entity::ENT_MUTANT_MAN, Entity::ENT_DOOR);
 	m_pEntities->CheckCollisions(Entity::ENT_MUTANT_BIRD, Entity::ENT_MUTANT_BIRD);
 	m_pEntities->CheckCollisions(Entity::ENT_MUTANT_MAN, Entity::ENT_MUTANT_MAN);
 	m_pEntities->CheckCollisions(Entity::ENT_ENEMY, Entity::ENT_ENEMY);

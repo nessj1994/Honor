@@ -1551,6 +1551,7 @@ void Player::KillPlayer()
 
 		// TODO Add effects
 		m_bSlowed = false;
+		SetIsBouncing(false);
 	}
 }
 
@@ -2128,7 +2129,7 @@ void Player::UpdateHawk(float elapsedTime)
 				if (GetHawkPtr() != nullptr)
 				{
 					float rightStickXOff = pInput->GetLeftJoystick(1).x;
-					float rightStickYOff = pInput->GetLeftJoystick(1).x;
+					float rightStickYOff = pInput->GetLeftJoystick(1).y;
 
 
 					if (pInput->IsKeyDown(SGD::Key::LeftArrow) == true)

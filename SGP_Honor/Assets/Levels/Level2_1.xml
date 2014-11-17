@@ -6949,7 +6949,7 @@
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
-		<CollisionTile type="-1" />
+		<CollisionTile type="0" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
 		<CollisionTile type="-1" />
@@ -10110,7 +10110,7 @@
 			<Argument type="1" name="ActivatorIndex" value="0" />
 			<Argument type="0" name="On" value="1" />
 		</Entity>
-		<Entity type="19" x="1329" y="255" numArgs="1" name="Enemy_1">
+		<Entity type="19" x="1256" y="260" numArgs="1" name="Enemy_1">
 			<Argument type="1" name="Type" value="2" />
 		</Entity>
 		<Entity type="19" x="1290" y="94" numArgs="1" name="Enemy_2">

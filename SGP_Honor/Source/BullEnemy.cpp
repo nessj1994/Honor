@@ -281,6 +281,10 @@ void BullEnemy::Render()
 // -Handles collision between entities
 void BullEnemy::HandleCollision(const IEntity * pOther)
 {
+	if (m_bsCurrState == BS_DEATH)
+	{
+		return;
+	}
 	if (pOther->GetType() == ENT_SOLID_WALL)
 	{
 		BasicCollision(pOther);

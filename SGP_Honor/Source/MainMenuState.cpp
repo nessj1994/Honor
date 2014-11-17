@@ -102,7 +102,7 @@ bool MainMenuState::Input(void) //Hanlde user Input
 	SGD::Rectangle rMouse = SGD::Rectangle({ pInput->GetMousePosition().x, pInput->GetMousePosition().y, pInput->GetMousePosition().x + 1, pInput->GetMousePosition().y + 1 });
 
 
-	if (m_fInputTimer > .5f)
+	if (m_fInputTimer > .05f)
 	{
 		m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
 		m_fInputTimer = 0;

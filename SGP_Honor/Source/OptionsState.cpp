@@ -112,7 +112,7 @@ bool OptionsState::Input(void) //Hanlde user Input
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
-	if (m_fInputTimer > .5f)
+	if (m_fInputTimer > .05f)
 	{
 		m_fstickXoff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).x;
 		if (m_fstickXoff == 0)
