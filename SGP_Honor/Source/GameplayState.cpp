@@ -177,7 +177,7 @@ void GameplayState::Enter(void) //Load Resources
 	{
 		if (oldGame)
 		{
-			LoadLevel("HubLevel");
+			LoadLevel("Level3_4");
 		}
 		else
 		{
