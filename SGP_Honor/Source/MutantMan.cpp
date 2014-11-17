@@ -28,6 +28,7 @@ MutantMan::MutantMan() : Listener(this)
 	m_hHurt = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/ZombieAttacked.wav");
 	m_hGag = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Gag.wav");
 	m_hPunch = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Punch-Mark.wav");
+	m_fVomitTimer = 6;
 }
 
 
@@ -170,7 +171,7 @@ void MutantMan::Update(float _elapsedTime)
 			}
 			if (m_fVomitTimer > 6.5f)
 			{
-				m_fVomitTimer = (float)(rand() % 6);
+				m_fVomitTimer = (float)(rand() % (6 - (3 + 1)) + 3);
 			}
 		}
 		m_vtVelocity = { 0, 300 };
