@@ -3,10 +3,12 @@
 #include "Player.h"
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "Camera.h"
+#include "../SGD Wrappers/SGD_Event.h"
 
 
-Armor::Armor()
+Armor::Armor() : Listener(this)
 {
+	Listener::RegisterForEvent("ResetRoom");
 	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/graphics/armor.png");
 	SetSize(SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage));
 	m_ptPosition = SGD::Point(100, 300);
@@ -45,5 +47,13 @@ void Armor::HandleCollision(const IEntity* pOther)
 		{
 			isCollected = true;
 		}
+	}
+}
+
+void Armor::HandleEvent(const SGD::Event* pEvent)
+{
+	if (pEvent->GetEventID() == "ResetRoom")
+	{
+		isCollected = false;
 	}
 }

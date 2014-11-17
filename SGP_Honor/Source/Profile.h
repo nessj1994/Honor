@@ -29,6 +29,6 @@ private:
 	int m_unCollectedHonor;
 	std::string m_sCurrentLevel;
 	int m_nNumber;
-	std::string m_sTime;
+	std::string m_sTime ="";
 };
 

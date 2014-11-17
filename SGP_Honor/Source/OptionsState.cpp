@@ -52,7 +52,7 @@ void OptionsState::Enter(void) //Load Resources
 	m_hEsc = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/esc.png");
 	m_hCircle = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/circle.png");
 
-	m_bFullScreen = !Game::GetInstance()->GetWindowed();
+	//m_bFullScreen = !Game::GetInstance()->GetWindowed();
 	pAudio->PlayAudio(m_hBGM);
 
 	m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
@@ -131,6 +131,8 @@ bool OptionsState::Input(void) //Hanlde user Input
 		SGD::GraphicsManager::GetInstance()->Resize({ Game::GetInstance()->GetScreenWidth(),
 			Game::GetInstance()->GetScreenHeight() }, !(Game::GetInstance()->GetWindowed()));
 		Game::GetInstance()->SetWindowed(!(Game::GetInstance()->GetWindowed()));
+
+		m_bFullScreen = !m_bFullScreen;
 	}
 
 
@@ -234,6 +236,9 @@ bool OptionsState::Input(void) //Hanlde user Input
 		SGD::GraphicsManager::GetInstance()->Resize({ Game::GetInstance()->GetScreenWidth(),
 			Game::GetInstance()->GetScreenHeight() }, !m_bFullScreen);
 		Game::GetInstance()->SetWindowed(m_bFullScreen);
+
+
+
 	}
 
 

@@ -19,7 +19,7 @@ Jellyfish::Jellyfish() : Listener(this)
 	m_ts.SetCurrAnimation("Jellyfish Moving");
 	m_ts.SetPlaying(true);
 	m_bFacingRight = false;
-	m_szSize.width = 80;
+	m_szSize.width = 90;
 	m_szSize.height = 64;
 
 	//m_szSize = SGD::GraphicsManager::GetInstance()->GetTextureSize(m_hImage) * Camera::GetInstance()->GetZoomScale();
@@ -89,7 +89,7 @@ void Jellyfish::Render(void)
 
 SGD::Rectangle Jellyfish::GetRect(void) const
 {
-	return SGD::Rectangle{ { m_ptPosition.x - 40, m_ptPosition.y - 32 }, m_szSize };
+	return SGD::Rectangle{ { m_ptPosition.x - 45, m_ptPosition.y - 32 }, m_szSize };
 	//return AnimationEngine::GetInstance()->GetRect(m_ts, m_bFacingRight, 1, m_ptPosition);
 }
 
