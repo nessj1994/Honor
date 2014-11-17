@@ -1943,7 +1943,7 @@ void Player::UpdateDash(float elapsedTime)
 			//if (pInput->IsKeyDown(SGD::Key::Tab) == true
 			|| pInput->IsButtonPressed(0, 5 /*Right bumper on xbox controller*/)))
 		{
-			m_fDashCoolTimer = .5f;
+			m_fDashCoolTimer = .40f;
 			GetDash()->GetEMDash()->Finish(false);
 			CastDash();
 			m_ts.SetPlaying(true);
