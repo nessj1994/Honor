@@ -35,7 +35,7 @@ void CutScene::Update(float _elapsedTime)
 	SGD::InputManager * pInput = SGD::InputManager::GetInstance();
 
 	// Go to the next slide when a key is pressed
-	if (pInput->IsAnyKeyPressed())
+	if (pInput->IsAnyKeyPressed() || pInput->IsButtonPressed(0, 0 /*Xbox button A*/))
 	{
 		++m_unCurrSlide;
 	}

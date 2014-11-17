@@ -181,7 +181,7 @@ void GameplayState::Enter(void) //Load Resources
 	{
 		if (oldGame)
 		{
-			LoadLevel("HubLevel");
+			LoadLevel("Level3_4");
 		}
 		else
 		{
@@ -345,11 +345,11 @@ bool GameplayState::Input(void) //Hanlde user Input
 	//}
 	if(pInput->IsKeyPressed(SGD::Key::H))
 	{
-		m_pPlayer->SetHonorCollected(m_pPlayer->GetHonorCollected() + 50);
-		//Gained Honor event for certain doors
-		SGD::Event* pATEvent = new SGD::Event("HONOR_GAINED", nullptr, m_pPlayer);
-		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		pATEvent = nullptr;
+		//m_pPlayer->SetHonorCollected(m_pPlayer->GetHonorCollected() + 50);
+		////Gained Honor event for certain doors
+		//SGD::Event* pATEvent = new SGD::Event("HONOR_GAINED", nullptr, m_pPlayer);
+		//SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		//pATEvent = nullptr;
 
 	}
 
@@ -521,6 +521,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
 	m_pEntities->CheckWorldCollision(Entity::ENT_BULL_ENEMY);
 	m_pEntities->CheckWorldCollision(Entity::ENT_SKELETON);
+	m_pEntities->CheckWorldCollision(Entity::ENT_ICE_GOLEM);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_POUNCER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_MUTANT_BIRD);
