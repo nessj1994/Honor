@@ -189,10 +189,8 @@ void GameplayState::Enter(void) //Load Resources
 			Game::GetInstance()->AddState(CutSceneState::GetInstance());
 		}
 	}
-
-
 	
-	LoadLevel("Level3_2");
+	LoadLevel("Level4_3");
 
 	// LoadLevel("HubLevel");
 
