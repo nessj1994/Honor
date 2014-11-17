@@ -90,6 +90,8 @@ void MainMenuState::Enter(void) //Load Resources
 // - unload all resources
 void MainMenuState::Exit(void)
 {
+	delete m_emSelect;
+	delete m_emTitle;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hButton);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
