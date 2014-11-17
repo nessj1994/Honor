@@ -90012,7 +90012,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="26">
+	<Entities numEntities="27">
 		<Entity type="5" x="284" y="5886" numArgs="3" name="MovingPlatform_1">
 			<Argument type="0" name="IsVertical" value="0" />
 			<Argument type="2" name="TurnDistance" value="1.0" />
@@ -90103,5 +90103,6 @@
 		<Entity type="0" x="2176" y="3968" numArgs="1" name="Honor_14">
 			<Argument type="1" name="Amount" value="20" />
 		</Entity>
+		<Entity type="13" x="1152" y="4160" numArgs="0" name="Armor_1" />
 	</Entities>
 </Level>

@@ -43,5 +43,7 @@ private:
 	SGD::HAudio m_hRoar2 = SGD::INVALID_HANDLE;
 
 	unsigned int m_unPrevFrame = 0;
+	//For the reset Bug
+	float m_fResetTimer;
 
 };

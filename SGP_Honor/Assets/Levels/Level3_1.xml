@@ -36882,7 +36882,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="42">
+	<Entities numEntities="43">
 		<Entity type="1" x="640" y="640" numArgs="3" name="Activator_1">
 			<Argument type="0" name="IsPressurePlate" value="0" />
 			<Argument type="0" name="Active" value="0" />
@@ -37025,5 +37025,6 @@
 			<Argument type="1" name="ActivatorIndex" value="4" />
 			<Argument type="0" name="StartOpen" value="0" />
 		</Entity>
+		<Entity type="13" x="2688" y="448" numArgs="0" name="Armor_1" />
 	</Entities>
 </Level>

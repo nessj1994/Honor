@@ -24590,7 +24590,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="36">
+	<Entities numEntities="37">
 		<Entity type="19" x="615" y="706" numArgs="1" name="Enemy_1">
 			<Argument type="1" name="Type" value="1" />
 		</Entity>
@@ -24712,5 +24712,6 @@
 		<Entity type="19" x="768" y="160" numArgs="1" name="Enemy_1">
 			<Argument type="1" name="Type" value="0" />
 		</Entity>
+		<Entity type="13" x="2432" y="128" numArgs="0" name="Armor_1" />
 	</Entities>
 </Level>

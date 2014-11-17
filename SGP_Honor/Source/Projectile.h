@@ -1,10 +1,10 @@
 #pragma once
 #include "Entity.h"
-
+#include "../SGD Wrappers/SGD_Listener.h"
 
 
 class Projectile :
-	public Entity
+	public Entity, SGD::Listener
 {
 public:
 	Projectile();
@@ -18,6 +18,7 @@ public:
 	int GetType(void) const override { return ENT_PROJ; }
 	virtual SGD::Rectangle GetRect(void) const override;
 	virtual void HandleCollision(const IEntity* pOther) override;
+	void HandleEvent(const SGD::Event* pEvent);
 
 	////////////////////////////////////////////////
 	/////////////////Accessors/////////////////////

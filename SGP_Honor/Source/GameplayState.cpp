@@ -161,10 +161,10 @@ void GameplayState::Enter(void) //Load Resources
 	bool oldGame = LoadGame();
 
 	//LoadLevel("Level4_1");
-	//m_pPlayer->SetHasBounce(true);
-	//m_pPlayer->SetHasDash(true);
-	//m_pPlayer->SetHasHawk(true);
-	//m_pPlayer->SetHasIce(true);
+	/*m_pPlayer->SetHasBounce(true);
+	m_pPlayer->SetHasDash(true);
+	m_pPlayer->SetHasHawk(true);
+	m_pPlayer->SetHasIce(true);*/
 
 	//LoadLevel("HubLevel");
 
@@ -187,9 +187,9 @@ void GameplayState::Enter(void) //Load Resources
 		}
 	}
 	
-	//LoadLevel("Level1_1");
+	//LoadLevel("Level2_2");
 
-	//LoadLevel("Level4_1");
+	//LoadLevel("Level4_2");
 
 	// LoadLevel("HubLevel");
 
@@ -351,6 +351,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::P))
 	{
+		LoadLevel("Level2_2");
 		m_bShowFPS ? m_bShowFPS = false : m_bShowFPS = true;
 	}
 	if (pInput->IsKeyPressed(SGD::Key::O) && (m_strCurrLevel != "Level0_1" && m_strCurrLevel != "Level0_2"))
@@ -472,6 +473,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_GEYSER);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_BOSS_WIZARD);
+	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_DEATH);
+	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_DOOR);
 
 
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_LASER);
@@ -2522,7 +2525,7 @@ void GameplayState::IncreaseHonorBeforeDeath(unsigned int _value)
 
 void GameplayState::WizardDefeated()
 {
-	//LoadLevel("HubLevel");
+	LoadLevel("HubLevel");
 	ending = true;
 	m_pPlayer->SetPosition({ -100, -100 });
 	Camera::GetInstance()->SetCameraCap(6);

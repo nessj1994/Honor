@@ -35012,7 +35012,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="25">
+	<Entities numEntities="26">
 		<Entity type="2" x="384" y="2048" numArgs="3" name="Laser_1">
 			<Argument type="1" name="Direction" value="3" />
 			<Argument type="1" name="ActivatorIndex" value="0" />
@@ -35091,5 +35091,6 @@
 		<Entity type="0" x="608" y="384" numArgs="1" name="Honor_17">
 			<Argument type="1" name="Amount" value="1" />
 		</Entity>
+		<Entity type="13" x="640" y="96" numArgs="0" name="Armor_1" />
 	</Entities>
 </Level>

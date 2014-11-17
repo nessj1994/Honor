@@ -26810,7 +26810,7 @@
 		<EventTile event="" />
 		<EventTile event="" />
 	</EventLayer>
-	<Entities numEntities="87">
+	<Entities numEntities="90">
 		<Entity type="2" x="608" y="608" numArgs="3" name="Laser_1">
 			<Argument type="1" name="Direction" value="3" />
 			<Argument type="1" name="ActivatorIndex" value="0" />
@@ -27186,6 +27186,15 @@
 		</Entity>
 		<Entity type="0" x="3456" y="1440" numArgs="1" name="Honor_11">
 			<Argument type="1" name="Amount" value="1" />
+		</Entity>
+		<Entity type="0" x="2054" y="1272" numArgs="1" name="Honor_1">
+			<Argument type="1" name="Amount" value="5" />
+		</Entity>
+		<Entity type="0" x="1891" y="1341" numArgs="1" name="Honor_2">
+			<Argument type="1" name="Amount" value="5" />
+		</Entity>
+		<Entity type="0" x="1996" y="1409" numArgs="1" name="Honor_3">
+			<Argument type="1" name="Amount" value="5" />
 		</Entity>
 	</Entities>
 </Level>
