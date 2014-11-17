@@ -24,6 +24,7 @@ BullEnemy::BullEnemy() : Listener(this)
 	m_hRunning = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Running.wav");
 	m_hRoar1 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Roar1.wav");
 	m_hRoar2 = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/Bull_Roar3.wav");
+	m_fResetTimer = 1;
 }
 
 BullEnemy::~BullEnemy()
@@ -39,6 +40,13 @@ BullEnemy::~BullEnemy()
 // -Main update loop
 void BullEnemy::Update(float elapsedTime)
 {
+	//For Reset Bug
+	if (m_fResetTimer > .5f)
+	{
+		m_ptPosition = GetOriginalPos();
+	}
+	m_fResetTimer -= elapsedTime;
+	//
 	m_unPrevFrame = m_ts.GetCurrFrame();
 	AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 	SGD::AudioManager * pAudio = SGD::AudioManager::GetInstance();
@@ -281,10 +289,6 @@ void BullEnemy::Render()
 // -Handles collision between entities
 void BullEnemy::HandleCollision(const IEntity * pOther)
 {
-	if (m_bsCurrState == BS_DEATH)
-	{
-		return;
-	}
 	if (pOther->GetType() == ENT_SOLID_WALL)
 	{
 		BasicCollision(pOther);
@@ -316,6 +320,7 @@ void BullEnemy::HandleEvent(const SGD::Event* pEvent)
 		m_bsCurrState = BS_IDLE;
 		SetAlive(true);
 		SetPosition(GetOriginalPos());
+		m_fResetTimer = 1;
 	}
 	//Turn around
 	if (pEvent->GetEventID() == "TurnMarker" &&
