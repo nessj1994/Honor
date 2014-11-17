@@ -161,10 +161,10 @@ void GameplayState::Enter(void) //Load Resources
 	bool oldGame = LoadGame();
 
 	//LoadLevel("Level4_1");
-	/*m_pPlayer->SetHasBounce(true);
-	m_pPlayer->SetHasDash(true);
-	m_pPlayer->SetHasHawk(true);
-	m_pPlayer->SetHasIce(true);*/
+	//m_pPlayer->SetHasBounce(true);
+	//m_pPlayer->SetHasDash(true);
+	//m_pPlayer->SetHasHawk(true);
+	//m_pPlayer->SetHasIce(true);
 
 	//LoadLevel("HubLevel");
 
@@ -187,7 +187,7 @@ void GameplayState::Enter(void) //Load Resources
 		}
 	}
 	
-	LoadLevel("Level1_1");
+	//LoadLevel("Level1_1");
 
 	//LoadLevel("Level4_1");
 
@@ -340,11 +340,11 @@ bool GameplayState::Input(void) //Hanlde user Input
 	//}
 	if (pInput->IsKeyPressed(SGD::Key::H))
 	{
-		m_pPlayer->SetHonorCollected(m_pPlayer->GetHonorCollected() + 50);
-		//Gained Honor event for certain doors
-		SGD::Event* pATEvent = new SGD::Event("HONOR_GAINED", nullptr, m_pPlayer);
-		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		pATEvent = nullptr;
+		//m_pPlayer->SetHonorCollected(m_pPlayer->GetHonorCollected() + 50);
+		////Gained Honor event for certain doors
+		//SGD::Event* pATEvent = new SGD::Event("HONOR_GAINED", nullptr, m_pPlayer);
+		//SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+		//pATEvent = nullptr;
 
 	}
 
@@ -517,6 +517,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckWorldCollision(Entity::ENT_ENEMY);
 	m_pEntities->CheckWorldCollision(Entity::ENT_BULL_ENEMY);
 	m_pEntities->CheckWorldCollision(Entity::ENT_SKELETON);
+	m_pEntities->CheckWorldCollision(Entity::ENT_ICE_GOLEM);
 
 	m_pEntities->CheckWorldCollision(Entity::ENT_POUNCER);
 	m_pEntities->CheckWorldCollision(Entity::ENT_MUTANT_BIRD);

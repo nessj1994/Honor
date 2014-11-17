@@ -46,6 +46,7 @@ void MainMenuState::Enter(void) //Load Resources
 	//Set the background color
 	SGD::GraphicsManager::GetInstance()->SetClearColor({50, 50, 50, 50 });	// dark gray
 	m_nCursor = 0;
+	m_rSword.top = 250.0f;
 
 	int nMusicVol;
 	int nEffectsVol;
