@@ -43,6 +43,11 @@ void PauseState::Enter(void)
 	m_hButton = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Buttons.png");
 	m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
 
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+	rMouse = SGD::Rectangle({ pInput->GetMousePosition().x, pInput->GetMousePosition().y, pInput->GetMousePosition().x + 1, pInput->GetMousePosition().y + 1 });
+	rLast = rMouse;
+
 }
 
 
@@ -66,9 +71,23 @@ bool PauseState::Input(void)
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
 
-	SGD::Rectangle rMouse = SGD::Rectangle({ pInput->GetMousePosition().x, pInput->GetMousePosition().y, pInput->GetMousePosition().x + 1, pInput->GetMousePosition().y + 1 });
+	rLast = rMouse;
 
-	if (m_fInputTimer > .1f)
+	rMouse = SGD::Rectangle({ pInput->GetMousePosition().x, pInput->GetMousePosition().y, pInput->GetMousePosition().x + 1, pInput->GetMousePosition().y + 1 });
+
+
+
+
+	if((pInput->IsAnyKeyPressed() || isAnyButtonPressed()) && !pInput->IsKeyPressed(SGD::Key::MouseLeft))
+	{
+		m_bMouse = false;
+	}
+	else if(rMouse != rLast)
+	{
+		m_bMouse = true;
+	}
+
+	if(m_fInputTimer > .1f)
 	{
 		m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
 		m_fInputTimer = 0;
@@ -80,7 +99,7 @@ bool PauseState::Input(void)
 	if(pInput->IsKeyPressed(SGD::Key::Down)
 		|| pInput->IsDPadPressed(0, SGD::DPad::Down) || m_fstickYOff > 0)
 	{
-		if (m_fstickYOff > 0)
+		if(m_fstickYOff > 0)
 		{
 			m_fstickYOff = 0;
 		}
@@ -95,7 +114,7 @@ bool PauseState::Input(void)
 	else if(pInput->IsKeyPressed(SGD::Key::Up)
 		|| pInput->IsDPadPressed(0, SGD::DPad::Up) || m_fstickYOff < 0)
 	{
-		if (m_fstickYOff < 0)
+		if(m_fstickYOff < 0)
 		{
 			m_fstickYOff = 0;
 		}
@@ -109,60 +128,52 @@ bool PauseState::Input(void)
 
 	}
 
-
-	if(m_rPlay.IsIntersecting(rMouse))
+	if(m_bMouse)
 	{
-		m_nCursor = 0;
-
-		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+		if(m_rPlay.IsIntersecting(rMouse))
 		{
-			Game::GetInstance()->RemoveState();
+			m_nCursor = 0;
+
+			if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+			{
+				Game::GetInstance()->RemoveState();
 
 
+			}
 		}
-	}
-	if(m_rOptions.IsIntersecting(rMouse))
-	{
-		m_nCursor = 1;
-
-		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+		if(m_rOptions.IsIntersecting(rMouse))
 		{
-			Game::GetInstance()->AddState(OptionsState::GetInstance());
+			m_nCursor = 1;
 
+			if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+			{
+				Game::GetInstance()->AddState(OptionsState::GetInstance());
+
+			}
 		}
-	}
-	if(m_rInstructions.IsIntersecting(rMouse))
-	{
-		m_nCursor = 2;
-
-		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+		if(m_rCredits.IsIntersecting(rMouse))
 		{
-			Game::GetInstance()->AddState(InstructionsState::GetInstance());
+			m_nCursor = 2;
 
+			if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+			{
+				Game::GetInstance()->AddState(CreditsState::GetInstance());
+
+			}
 		}
-	}
-	if(m_rCredits.IsIntersecting(rMouse))
-	{
-		m_nCursor = 3;
-
-		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+		if(m_rExit.IsIntersecting(rMouse))
 		{
-			Game::GetInstance()->AddState(CreditsState::GetInstance());
+			m_nCursor = 3;
 
+			if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+			{
+				Game::GetInstance()->ClearStates();
+				return true;
+
+			}
 		}
+
 	}
-	if(m_rExit.IsIntersecting(rMouse))
-	{
-		m_nCursor = 4;
-
-		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
-		{
-			Game::GetInstance()->ClearStates();
-			return true;
-
-		}
-	}
-
 
 	//Change between windowed and full screen modes
 	if(pInput->IsKeyDown(SGD::Key::Alt) && pInput->IsKeyReleased(SGD::Key::Enter))
@@ -188,33 +199,46 @@ bool PauseState::Input(void)
 		}
 		else if(m_nCursor == 2)
 		{
-			//change state to instructions state
-			Game::GetInstance()->AddState(InstructionsState::GetInstance());
-		}
-		else if(m_nCursor == 3)
-		{
 			//Change state to the credits state
 			Game::GetInstance()->AddState(CreditsState::GetInstance());
 		}
-		else if(m_nCursor == 4)
+		else if(m_nCursor == 3)
 		{
 			//return to main menu
 			Game::GetInstance()->ClearStates();
 		}
 	}
 
-	
+
 
 	if(pInput->IsKeyPressed(SGD::Key::Escape)
 		|| pInput->IsButtonPressed(0, 1 /*Button B on xbox controller*/))
 	{
 
-		m_nCursor = 4;
-		
+		m_nCursor = 3;
 
-	//	GameplayState::GetInstance()->ResetAudio();
-	//
-	//	Game::GetInstance()->RemoveState();
+
+		//	GameplayState::GetInstance()->ResetAudio();
+		//
+		//	Game::GetInstance()->RemoveState();
+	}
+
+
+	if(m_nCursor == 0)
+	{
+		m_rSword.top = m_rPlay.top + 10;
+	}
+	else if(m_nCursor == 1)
+	{
+		m_rSword.top = m_rOptions.top + 10;
+	}
+	else if(m_nCursor == 2)
+	{
+		m_rSword.top = m_rCredits.top + 10;
+	}
+	else if(m_nCursor == 3)
+	{
+		m_rSword.top = m_rExit.top + 10;
 	}
 
 	return true;
@@ -248,6 +272,7 @@ void PauseState::Render(void)
 	float windowHeight = Game::GetInstance()->GetScreenHeight();
 
 	SGD::GraphicsManager::GetInstance()->DrawRectangle(SGD::Rectangle(0.0f, 0.0f, windowWidth, windowHeight), SGD::Color(150, 255, 255, 255), {}, {});
+	pGraphics->DrawTexture(m_hSword, { m_rSword.left, m_rSword.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
 	//Change the highlighted options color to red dependent on the cursor
 	if(m_nCursor == 0)
 	{
@@ -289,60 +314,82 @@ void PauseState::Render(void)
 
 	}
 
-
 	if(m_nCursor == 2)
 	{
-		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 255 }, {}, {});
-		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		pGraphics->DrawRectangle(m_rCredits, { 255, 255, 255, 255 }, {}, {});
+		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rCredits.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Instructions", (int)((fWidth - (12 * 14)) / 2), 390, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Credits", (int)((fWidth - (7 * 14)) / 2), 390, 1, SGD::Color{ 255, 255, 165, 0 });
 	}
 	else
 	{
-		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 30 }, {}, {});
+		pGraphics->DrawRectangle(m_rCredits, { 255, 255, 255, 30 }, {}, {});
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Instructions", (int)((fWidth - (12 * 14)) / 2), 390, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Credits", (int)((fWidth - (7 * 14)) / 2), 390, 1, SGD::Color{ 255, 255, 165, 0 });
 
 	}
 
 
 	if(m_nCursor == 3)
 	{
-		pGraphics->DrawRectangle(m_rCredits, { 255, 255, 255, 255 }, {}, {});
-		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rCredits.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
-		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 450 }, 0.0f, {}, { 255, 255, 255, 255 });
-
-		font.DrawString("Credits", (int)((fWidth - (7 * 14)) / 2), 460, 1, SGD::Color{ 255, 255, 165, 0 });
-	}
-	else
-	{
-		pGraphics->DrawRectangle(m_rCredits, { 255, 255, 255, 30 }, {}, {});
-		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 450 }, 0.0f, {}, { 255, 255, 255, 255 });
-
-		font.DrawString("Credits", (int)((fWidth - (7 * 14)) / 2), 460, 1, SGD::Color{ 255, 255, 165, 0 });
-
-	}
-
-
-	if(m_nCursor == 4)
-	{
 		pGraphics->DrawRectangle(m_rExit, { 255, 255, 255, 255 }, {}, {});
 		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rExit.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
-		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 520 }, 0.0f, {}, { 255, 255, 255, 255 });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 450 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Exit", (int)((fWidth - (4 * 18)) / 2), 530, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Exit", (int)((fWidth - (4 * 18)) / 2), 460, 1, SGD::Color{ 255, 255, 165, 0 });
 	}
 	else
 	{
 		pGraphics->DrawRectangle(m_rExit, { 255, 255, 255, 30 }, {}, {});
-		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 520 }, 0.0f, {}, { 255, 255, 255, 255 });
+		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 450 }, 0.0f, {}, { 255, 255, 255, 255 });
 
-		font.DrawString("Exit", (int)((fWidth - (4 * 18)) / 2), 530, 1, SGD::Color{ 255, 255, 165, 0 });
+		font.DrawString("Exit", (int)((fWidth - (4 * 18)) / 2), 460, 1, SGD::Color{ 255, 255, 165, 0 });
 
 		//font.DrawString("Exit", 450, 450, 1, SGD::Color{ 255, 0, 0, 255 });
 	}
 
 
+}
+
+bool PauseState::isAnyButtonPressed()
+{
+
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+	//Check for controller input
+	if(pInput->IsButtonPressed(0, 0) ||
+		pInput->IsButtonPressed(0, 1) ||
+		pInput->IsButtonPressed(0, 2) ||
+		pInput->IsButtonPressed(0, 3) ||
+		pInput->IsButtonPressed(0, 4) ||
+		pInput->IsButtonPressed(0, 5) ||
+		pInput->IsButtonPressed(0, 6) ||
+		pInput->IsButtonPressed(0, 7) ||
+		pInput->IsButtonPressed(0, 8) ||
+		pInput->IsButtonPressed(0, 9) ||
+		pInput->IsButtonPressed(0, 10) ||
+		pInput->IsButtonPressed(0, 11) ||
+		pInput->IsDPadPressed(0, SGD::DPad::Up) ||
+		pInput->IsDPadPressed(0, SGD::DPad::Left) ||
+		pInput->IsDPadPressed(0, SGD::DPad::Right) ||
+		pInput->IsDPadPressed(0, SGD::DPad::Down) ||
+		pInput->GetLeftJoystick(0).x < -0.2 ||
+		pInput->GetLeftJoystick(0).x > 0.2 ||
+		pInput->GetRightJoystick(0).x < -0.2 ||
+		pInput->GetRightJoystick(0).x > 0.2 ||
+		pInput->GetLeftJoystick(0).y < -0.2 ||
+		pInput->GetLeftJoystick(0).y > 0.2 ||
+		pInput->GetRightJoystick(0).y < -0.2 ||
+		pInput->GetRightJoystick(0).y > 0.2 ||
+		pInput->GetTrigger(0) > 0 ||
+		pInput->GetTrigger(0) < 0
+		)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

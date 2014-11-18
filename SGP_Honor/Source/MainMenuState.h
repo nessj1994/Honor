@@ -4,6 +4,8 @@
 #include "../SGD Wrappers/SGD_Geometry.h"
 #include "../SGD Wrappers/SGD_Handle.h"
 
+class Emitter;
+
 class MainMenuState :
 	public IGameState
 {
@@ -50,9 +52,22 @@ private:
 	SGD::HTexture m_hSword = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hButton = SGD::INVALID_HANDLE;
 
+
+	bool m_bMouse = false;
+
+	SGD::Rectangle rLast;
+	SGD::Rectangle rMouse;
+
 	//Arcade input Timer
 	float m_fstickYOff;
 	float m_fInputTimer;
 
+	//Emitter Effects
+
+	Emitter* m_emSelect;
+	Emitter* m_emTitle;
+	bool m_bContinue;
+
+	bool isAnyButtonPressed();
 };
 

@@ -7,6 +7,7 @@
 
 
 class Profile;
+class Emitter;
 
 class ProfileState :
 	public IGameState
@@ -59,8 +60,20 @@ private:
 	SGD::HTexture m_hEsc = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hCircle = SGD::INVALID_HANDLE;
 
+	bool isAnyButtonPressed();
+
+	bool m_bMouse = false;
+
+	SGD::Rectangle rLast;
+	SGD::Rectangle rMouse;
+
+
 	//For Arcade Machine
 	float m_fInputTimer;
 	float m_fstickYOff;
+
+	//Emitters
+	Emitter* m_emBackgroundEffect;
+	Emitter* m_emTitle;
 };
 

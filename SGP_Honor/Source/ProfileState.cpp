@@ -13,6 +13,8 @@
 #include "Font.h"
 #include "BitmapFont.h"
 #include "Profile.h"
+#include "ParticleEngine.h"
+#include "Emitter.h"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 ///////////////////////////////////////////////////////////
@@ -43,6 +45,7 @@ ProfileState* ProfileState::GetInstance(void)
 // - set up entities
 void ProfileState::Enter(void) //Load Resources
 {
+	m_emBackgroundEffect = ParticleEngine::GetInstance()->LoadEmitter("assets/particles/MainSelect.xml", "MainSelect", { 0, 0 });
 	m_hSelection = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/selection.wav");
 
 	m_hBackground = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Castle.png");
@@ -56,6 +59,13 @@ void ProfileState::Enter(void) //Load Resources
 	LoadProfile(Game::GetInstance()->GetProfile(3));
 
 	m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
+
+	m_emTitle = ParticleEngine::GetInstance()->LoadEmitter("assets/particles/TitleMain.xml", "Title", { 220, -100 });
+
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+	rMouse = SGD::Rectangle({ pInput->GetMousePosition().x, pInput->GetMousePosition().y, pInput->GetMousePosition().x + 1, pInput->GetMousePosition().y + 1 });
+	rLast = rMouse;
 }
 
 
@@ -65,6 +75,8 @@ void ProfileState::Enter(void) //Load Resources
 // - unload all resources
 void ProfileState::Exit(void)
 {
+	delete m_emBackgroundEffect;
+	delete m_emTitle;
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSelection);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hButton);
@@ -84,12 +96,20 @@ bool ProfileState::Input(void) //Hanlde user Input
 
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
-	SGD::Rectangle rMouse = SGD::Rectangle({ pInput->GetMousePosition().x, pInput->GetMousePosition().y, pInput->GetMousePosition().x + 1, pInput->GetMousePosition().y + 1 });
+	rLast = rMouse;
 
-	if (m_fInputTimer > .05f)
+	rMouse = SGD::Rectangle({ pInput->GetMousePosition().x, pInput->GetMousePosition().y, pInput->GetMousePosition().x + 1, pInput->GetMousePosition().y + 1 });
+
+
+
+
+	if((pInput->IsAnyKeyPressed() || isAnyButtonPressed()) && !pInput->IsKeyPressed(SGD::Key::MouseLeft))
 	{
-		m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
-		m_fInputTimer = 0;
+		m_bMouse = false;
+	}
+	else if(rMouse != rLast)
+	{
+		m_bMouse = true;
 	}
 
 	m_fInputTimer += .0025f;
@@ -120,7 +140,7 @@ bool ProfileState::Input(void) //Hanlde user Input
 		|| pInput->IsDPadPressed(0, SGD::DPad::Down) || m_fstickYOff > 0)
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
-		if (m_fstickYOff > 0)
+		if(m_fstickYOff > 0)
 		{
 			m_fstickYOff = 0;
 		}
@@ -142,7 +162,7 @@ bool ProfileState::Input(void) //Hanlde user Input
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hSelection);
 
-		if (m_fstickYOff < 0)
+		if(m_fstickYOff < 0)
 		{
 			m_fstickYOff = 0;
 		}
@@ -164,57 +184,75 @@ bool ProfileState::Input(void) //Hanlde user Input
 
 	}
 
-	if(m_rProfile1.IsIntersecting(rMouse))
-	{
-		m_nCursor = 0;
-		Game::GetInstance()->SetSelectedProfile(1);
 
-		m_rSword.top = m_rProfile1.top + 10;
-		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+	if(m_bMouse)
+	{
+		if(m_rProfile1.IsIntersecting(rMouse))
+		{
+			m_nCursor = 0;
+			Game::GetInstance()->SetSelectedProfile(1);
+
+			m_rSword.top = m_rProfile1.top + 10;
+			if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+			{
+
+				Game::GetInstance()->AddState(GameplayState::GetInstance());
+
+			}
+		}
+		if(m_rProfile2.IsIntersecting(rMouse))
+		{
+			m_nCursor = 1;
+			m_rSword.top = m_rProfile2.top + 10;
+			Game::GetInstance()->SetSelectedProfile(2);
+
+			if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+			{
+				Game::GetInstance()->AddState(GameplayState::GetInstance());
+
+				//Game::GetInstance()->AddState(OptionsState::GetInstance());
+
+			}
+		}
+		if(m_rProfile3.IsIntersecting(rMouse))
+		{
+			Game::GetInstance()->SetSelectedProfile(3);
+
+			m_nCursor = 2;
+			m_rSword.top = m_rProfile3.top + 10;
+
+			if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+			{
+				Game::GetInstance()->AddState(GameplayState::GetInstance());
+
+				//Game::GetInstance()->AddState(InstructionsState::GetInstance());
+
+			}
+		}
+
+		if(m_rSelect.IsIntersecting(rMouse))
+		{
+			if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+			{
+				Game::GetInstance()->AddState(GameplayState::GetInstance());
+			}
+
+			m_nOptionCursor = 0;
+		}
+		if(m_rDelete.IsIntersecting(rMouse))
 		{
 
-			Game::GetInstance()->AddState(GameplayState::GetInstance());
+			if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+			{
+				DeleteProfile(Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber()));
+
+				LoadProfile(Game::GetInstance()->GetProfile(1));
+				LoadProfile(Game::GetInstance()->GetProfile(2));
+				LoadProfile(Game::GetInstance()->GetProfile(3));
+			}
+			m_nOptionCursor = 1;
 
 		}
-	}
-	if(m_rProfile2.IsIntersecting(rMouse))
-	{
-		m_nCursor = 1;
-		m_rSword.top = m_rProfile2.top + 10;
-		Game::GetInstance()->SetSelectedProfile(2);
-
-		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
-		{
-			Game::GetInstance()->AddState(GameplayState::GetInstance());
-
-			//Game::GetInstance()->AddState(OptionsState::GetInstance());
-
-		}
-	}
-	if(m_rProfile3.IsIntersecting(rMouse))
-	{
-		Game::GetInstance()->SetSelectedProfile(3);
-
-		m_nCursor = 2;
-		m_rSword.top = m_rProfile3.top + 10;
-
-		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
-		{
-			Game::GetInstance()->AddState(GameplayState::GetInstance());
-
-			//Game::GetInstance()->AddState(InstructionsState::GetInstance());
-
-		}
-	}
-
-	if(m_rSelect.IsIntersecting(rMouse))
-	{
-		m_nOptionCursor = 0;
-	}
-	if(m_rDelete.IsIntersecting(rMouse))
-	{
-		m_nOptionCursor = 1;
-		
 	}
 
 
@@ -296,7 +334,8 @@ bool ProfileState::Input(void) //Hanlde user Input
 // - Update all game entities
 void ProfileState::Update(float elapsedTime)
 {
-
+	m_emBackgroundEffect->Update(elapsedTime);
+	m_emTitle->Update(elapsedTime);
 }
 
 /////////////////////////////////////////////
@@ -314,7 +353,9 @@ void ProfileState::Render(void)
 
 	//Draw the background
 	pGraphics->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 1.6f, 1.2f });
-
+	//Emitter
+	m_emBackgroundEffect->Render();
+	m_emTitle->Render({ 220, 10 });
 	//Draw the title
 	font.DrawString("HONOR", 220, 10, 3, SGD::Color{ 255, 255, 130, 0 });
 
@@ -555,7 +596,7 @@ void ProfileState::LoadProfile(Profile* profile)
 		if(unlocked ? true : false)
 		{
 			if(name != "World1Level" && name != "World2Level" && name != "World3Level" && name != "World4Level" && name != "World5Level")
-			profile->SetCurrentLevel(name);
+				profile->SetCurrentLevel(name);
 		}
 
 
@@ -609,4 +650,46 @@ void ProfileState::DeleteProfile(Profile* profile)
 
 	remove(pathtowrite.c_str());
 
+}
+
+
+bool ProfileState::isAnyButtonPressed()
+{
+
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+	//Check for controller input
+	if(pInput->IsButtonPressed(0, 0) ||
+		pInput->IsButtonPressed(0, 1) ||
+		pInput->IsButtonPressed(0, 2) ||
+		pInput->IsButtonPressed(0, 3) ||
+		pInput->IsButtonPressed(0, 4) ||
+		pInput->IsButtonPressed(0, 5) ||
+		pInput->IsButtonPressed(0, 6) ||
+		pInput->IsButtonPressed(0, 7) ||
+		pInput->IsButtonPressed(0, 8) ||
+		pInput->IsButtonPressed(0, 9) ||
+		pInput->IsButtonPressed(0, 10) ||
+		pInput->IsButtonPressed(0, 11) ||
+		pInput->IsDPadPressed(0, SGD::DPad::Up) ||
+		pInput->IsDPadPressed(0, SGD::DPad::Left) ||
+		pInput->IsDPadPressed(0, SGD::DPad::Right) ||
+		pInput->IsDPadPressed(0, SGD::DPad::Down) ||
+		pInput->GetLeftJoystick(0).x < -0.2 ||
+		pInput->GetLeftJoystick(0).x > 0.2 ||
+		pInput->GetRightJoystick(0).x < -0.2 ||
+		pInput->GetRightJoystick(0).x > 0.2 ||
+		pInput->GetLeftJoystick(0).y < -0.2 ||
+		pInput->GetLeftJoystick(0).y > 0.2 ||
+		pInput->GetRightJoystick(0).y < -0.2 ||
+		pInput->GetRightJoystick(0).y > 0.2 ||
+		pInput->GetTrigger(0) > 0 ||
+		pInput->GetTrigger(0) < 0
+		)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
