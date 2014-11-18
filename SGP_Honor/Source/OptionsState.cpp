@@ -1,4 +1,7 @@
 #include "OptionsState.h"
+#include <ShlObj.h>
+#include <ostream>
+#include <string>
 
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
@@ -132,7 +135,34 @@ void OptionsState::Exit(void)
 	rootElement->LinkEndChild(element2);
 	element2->SetAttribute("sfx_volume", nEffectsVol);
 
-	doc.SaveFile("Assets/Options.xml");
+
+	HRESULT hr;
+	std::ostringstream stringstream;
+	char path[MAX_PATH];
+	LPWSTR wszPath = NULL;
+	size_t   size;
+
+	// Get the path to the app data folder
+	hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, 0, &wszPath);
+
+	// Convert from LPWSTR to char[]
+	wcstombs_s(&size, path, MAX_PATH, wszPath, MAX_PATH);
+
+	// Convert char types
+	if (hr == S_OK)
+		stringstream << path;
+	std::string pathtowrite = stringstream.str();
+
+	// Add the company and game information
+	pathtowrite += "\\honor\\";
+
+	// Create our directory
+	SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
+
+	// Create our save file
+	pathtowrite += "\\Options.xml";
+
+	doc.SaveFile(pathtowrite.c_str());
 
 
 	pAudio->StopAudio(m_hBGM);
