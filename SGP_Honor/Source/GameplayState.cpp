@@ -187,14 +187,7 @@ void GameplayState::Enter(void) //Load Resources
 			Game::GetInstance()->AddState(CutSceneState::GetInstance());
 		}
 	}
-	
-	//LoadLevel("Level2_2");
 
-	//LoadLevel("Level5_2");
-
-	// LoadLevel("HubLevel");
-
-	// ("HubLevel");
 
 
 	m_pHubOrb = new HubWorldOrb();
@@ -276,10 +269,6 @@ void GameplayState::Exit(void)
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
-	ParticleEngine::GetInstance()->Terminate();
-	ParticleEngine::GetInstance()->DeleteInstance();
-
-
 
 	//Unload Assets
 	//Level
@@ -354,7 +343,6 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::P))
 	{
-		LoadLevel("Level2_3");
 		m_bShowFPS ? m_bShowFPS = false : m_bShowFPS = true;
 	}
 	if (pInput->IsKeyPressed(SGD::Key::O) && (m_strCurrLevel != "Level0_1" && m_strCurrLevel != "Level0_2"))
