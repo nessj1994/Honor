@@ -140,6 +140,7 @@ void GameplayState::Enter(void) //Load Resources
 
 
 	//Load Audio
+	m_hHub = pAudio->LoadAudio(L"Assets/Audio/MenuMusic.xwm");
 	m_hWorld1 = pAudio->LoadAudio(L"Assets/Audio/spanish.xwm");
 	m_hWorld2 = pAudio->LoadAudio(L"Assets/Audio/cave.xwm");
 	m_hWorld3 = pAudio->LoadAudio(L"Assets/Audio/mountain.xwm");
@@ -161,10 +162,12 @@ void GameplayState::Enter(void) //Load Resources
 	bool oldGame = LoadGame();
 
 	//LoadLevel("Level4_1");
-	//m_pPlayer->SetHasBounce(true);
-	//m_pPlayer->SetHasDash(true);
-	//m_pPlayer->SetHasHawk(true);
-	//m_pPlayer->SetHasIce(true);
+	/*m_pPlayer->SetHasBounce(true);
+	m_pPlayer->SetHasDash(true);
+	m_pPlayer->SetHasIce(true);
+	m_pPlayer->SetHasHawk(true);
+	m_pPlayer->SetHasIce(true);*/
+
 
 	//LoadLevel("HubLevel");
 
@@ -177,7 +180,7 @@ void GameplayState::Enter(void) //Load Resources
 	{
 		if (oldGame)
 		{
-			LoadLevel("Level3_5");
+			LoadLevel("HubLevel");
 			if(Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level2_1" ||
 				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level2_2" ||
 				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level2_3" ||
@@ -227,14 +230,11 @@ void GameplayState::Enter(void) //Load Resources
 		}
 	}
 	
+	//LoadLevel("Level5_5");
+
 	//LoadLevel("Level2_2");
 
 	//LoadLevel("Level5_2");
-
-	// LoadLevel("HubLevel");
-
-	// ("HubLevel");
-
 
 	m_pHubOrb = new HubWorldOrb();
 	//Turorial Images
@@ -243,6 +243,19 @@ void GameplayState::Enter(void) //Load Resources
 	m_hXWallJump = pGraphics->LoadTexture("Assets/graphics/HonorWall.png");
 	m_hTriOpenDoor = pGraphics->LoadTexture("Assets/graphics/HonorTriangle.png");
 
+	m_hDashKey = pGraphics->LoadTexture("Assets/graphics/DashKeyboard.png");
+	m_hDashCont = pGraphics->LoadTexture("Assets/graphics/DashController.png");
+	m_hBubbleKey = pGraphics->LoadTexture("Assets/graphics/BubbleKeyboard.png");
+	m_hBubbleCont = pGraphics->LoadTexture("Assets/graphics/BubbleController.png");
+	m_hSprayKey = pGraphics->LoadTexture("Assets/graphics/KeyBoardSpray.png");
+	m_hSprayCont = pGraphics->LoadTexture("Assets/graphics/ControllerSpray.png");
+	m_hHawkKey = pGraphics->LoadTexture("Assets/graphics/HawkKeyBoard.png");
+	m_hHawkCont = pGraphics->LoadTexture("Assets/graphics/HawkController.png");
+
+    m_hXJUMPKey = pGraphics->LoadTexture("Assets/graphics/JumpKey.png");
+    m_hOAttackKey = pGraphics->LoadTexture("Assets/graphics/AttackKey.png");
+    m_hXWallJumpKey = pGraphics->LoadTexture("Assets/graphics/WallJumpKey.png");
+    m_hTriOpenDoorKey = pGraphics->LoadTexture("Assets/graphics/EnterDoor.png");
 }
 
 
@@ -315,10 +328,6 @@ void GameplayState::Exit(void)
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
-	ParticleEngine::GetInstance()->Terminate();
-	ParticleEngine::GetInstance()->DeleteInstance();
-
-
 
 	//Unload Assets
 	//Level
@@ -333,6 +342,8 @@ void GameplayState::Exit(void)
 
 
 	//Audio
+	pAudio->StopAudio(m_hHub);
+	pAudio->UnloadAudio(m_hHub);
 	pAudio->StopAudio(m_hWorld1);
 	pAudio->UnloadAudio(m_hWorld1);
 	pAudio->StopAudio(m_hWorld2);
@@ -391,10 +402,9 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::P))
 	{
-		LoadLevel("Level2_3");
 		m_bShowFPS ? m_bShowFPS = false : m_bShowFPS = true;
 	}
-	if (pInput->IsKeyPressed(SGD::Key::O) && (m_strCurrLevel != "Level0_1" && m_strCurrLevel != "Level0_2"))
+	if ((pInput->IsKeyPressed(SGD::Key::O)  || pInput->IsButtonPressed(0, 6)) && (m_strCurrLevel != "Level0_1" && m_strCurrLevel != "Level0_2"))
 	{
 		LoadLevel("HubLevel");
 	}	/*if(pInput->IsKeyPressed(SGD::Key::L))
@@ -485,6 +495,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_DOOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_YETI);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ICE_GOLEM);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ICE_BAT);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_WIZARD_DASH);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_WIZARD_HAWK);
 
@@ -635,14 +646,72 @@ void GameplayState::Render(void)
 	m_pLevel->Render();
 	m_pLevel->RenderImageLayer(true);
 
-	//Render Images for tutorial 
+	//Render Images for tutorials
 	if (m_strCurrLevel == "Level0_1" || m_strCurrLevel == "Level0_2")
 	{
-		Camera::GetInstance()->DrawTexture({ 600, 300 }, 0, m_hXJUMP, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 1759, 300 }, 0, m_hXJUMP, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 2720, 200 }, 0, m_hXWallJump, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 3803, 60 }, 0, m_hOAttack, false, .5, {}, {});
-		Camera::GetInstance()->DrawTexture({ 4180, 250 }, 0, m_hTriOpenDoor, false, 1, {}, {});
+		if (m_pPlayer->GetController())
+		{
+			Camera::GetInstance()->DrawTexture({ 600, 300 }, 0, m_hXJUMP, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 1759, 300 }, 0, m_hXJUMP, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 2720, 200 }, 0, m_hXWallJump, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 3803, 60 }, 0, m_hOAttack, false, .5, {}, {});
+			Camera::GetInstance()->DrawTexture({ 4180, 250 }, 0, m_hTriOpenDoor, false, 1, {}, {});
+		}
+		else
+		{
+			Camera::GetInstance()->DrawTexture({ 600, 300 }, 0, m_hXJUMPKey, false, 1.5f, {}, {});
+			Camera::GetInstance()->DrawTexture({ 1759, 300 }, 0, m_hXJUMPKey, false, 1.5f, {}, {});
+			Camera::GetInstance()->DrawTexture({ 2720, 200 }, 0, m_hXWallJumpKey, false, 1.0f, {}, {});
+			Camera::GetInstance()->DrawTexture({ 3803, 60 }, 0, m_hOAttackKey, false, .8f, {}, {});
+			Camera::GetInstance()->DrawTexture({ 4180, 250 }, 0, m_hTriOpenDoorKey, false, 1.0f, {}, {});
+		}
+		
+	}
+	if (m_strCurrLevel == "Level2_1")
+	{
+		if (m_pPlayer->GetController())
+		{
+			Camera::GetInstance()->DrawTexture({ 64, -30 }, 0, m_hDashCont, false, 1, {}, {});
+		}
+		else
+		{
+			Camera::GetInstance()->DrawTexture({ 64, -30 }, 0, m_hDashKey, false, 1, {}, {});
+		}
+		
+	}
+	if (m_strCurrLevel == "Level3_1")
+	{
+		if (m_pPlayer->GetController())
+		{
+			Camera::GetInstance()->DrawTexture({ 416, 740 }, 0, m_hHawkCont, false, 1, {}, {});
+		}
+		else
+		{
+			Camera::GetInstance()->DrawTexture({ 416, 740 }, 0, m_hHawkKey, false, 1, {}, {});
+		}
+	}
+	if (m_strCurrLevel == "Level4_1")
+	{
+		if (m_pPlayer->GetController())
+		{
+			Camera::GetInstance()->DrawTexture({ 191, 400 }, 0, m_hSprayCont, false, 1, {}, {});
+		}
+		else
+		{
+			Camera::GetInstance()->DrawTexture({ 191, 400 }, 0, m_hSprayKey, false, 1, {}, {});
+		}
+		
+	}
+	if (m_strCurrLevel == "Level5_1")
+	{
+		if (m_pPlayer->GetController())
+		{
+			Camera::GetInstance()->DrawTexture({ 384, 5940 }, 0, m_hBubbleCont, false, 1, {}, {});
+		}
+		else
+		{
+			Camera::GetInstance()->DrawTexture({ 384, 5940 }, 0, m_hBubbleKey, false, 1, {}, {});
+		}		
 	}
 	//Camera::GetInstance()->DrawTexture({ 270, 400 }, {}, SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/images.jpg"), false);
 	m_pEntities->RenderAll();
@@ -1063,16 +1132,16 @@ Entity* GameplayState::CreateProjectile(Entity* pOwner) const
 	if (pOwner->GetDirection().x == 1)
 		proj->SetPosition(SGD::Point(pOwner->GetRect().right, pOwner->GetPosition().y - pOwner->GetSize().height / 2));
 	else if (pOwner->GetDirection().x == -1)
-		proj->SetPosition(SGD::Point(pOwner->GetRect().left, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetRect().left, pOwner->GetPosition().y - pOwner->GetSize().height / 2));
 	else if (pOwner->GetDirection().y == -1)
-		proj->SetPosition(SGD::Point(pOwner->GetSize().width / 2, pOwner->GetRect().top));
+		proj->SetPosition(SGD::Point(pOwner->GetRect().left + pOwner->GetSize().width / 2, pOwner->GetPosition().y - pOwner->GetSize().height /*pOwner->GetRect().top*/));
 	else if (pOwner->GetDirection().y == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetSize().width / 2, pOwner->GetRect().bottom));
+		proj->SetPosition(SGD::Point(pOwner->GetRect().left + pOwner->GetSize().width / 2, pOwner->GetPosition().y /*pOwner->GetRect().bottom*/));
 
-	if (pOwner->GetDirection().x == 1)
+	/*if (pOwner->GetDirection().x == 1)
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	else
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));*/
 
 
 	proj->SetSize({ 16, 16 });
@@ -2246,7 +2315,7 @@ void GameplayState::LoadLevel(std::string _level)
 
 
 	//Play Music
-	if (_level == "HubLevel")
+	if (_level == "HubLevel" || _level == "Level0_1" || _level == "Level0_2" || _level == "World1Level" || _level == "World2Level" || _level == "World3Level" || _level == "World4Level" || _level == "World5Level")
 	{
 		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
 		{
@@ -2272,13 +2341,16 @@ void GameplayState::LoadLevel(std::string _level)
 		{
 			SGD::AudioManager::GetInstance()->StopAudio(m_hFinalBoss);
 		}
+
+		if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hHub, true);
 	}
 	if (_level == "Level1_1" || _level == "Level1_2" || _level == "Level1_3" || _level == "Level1_5")
 	{
-		//if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
-		//{
-		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
-		//}
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		}
 
 
 		if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
@@ -2289,10 +2361,11 @@ void GameplayState::LoadLevel(std::string _level)
 	}
 	else if (_level == "Level2_1" || _level == "Level2_2" || _level == "Level2_3" || _level == "Level2_4" || _level == "Level2_5")
 	{
-		//if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
-		//{
-		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
-		//}
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		}
+
 		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
 		{
 			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld1);
@@ -2304,9 +2377,11 @@ void GameplayState::LoadLevel(std::string _level)
 	}
 	else if (_level == "Level3_1" || _level == "Level3_2" || _level == "Level3_3" || _level == "Level3_4" || _level == "Level3_5")
 	{
-		//{
-		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
-		//}
+		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		}
+
 		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld2))
 		{
 			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld2);
@@ -2318,9 +2393,11 @@ void GameplayState::LoadLevel(std::string _level)
 	}
 	else if (_level == "Level4_1" || _level == "Level4_2" || _level == "Level4_3" || _level == "Level4_4" || _level == "Level4_5")
 	{
-		//{
-		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
-		//}
+		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		}
+
 		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld3))
 		{
 			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld3);
@@ -2332,9 +2409,11 @@ void GameplayState::LoadLevel(std::string _level)
 	}
 	else if (_level == "Level5_1" || _level == "Level5_2" || _level == "Level5_3" || _level == "Level5_4")
 	{
-		//{
-		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
-		//}
+		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		}
+
 		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld4))
 		{
 			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld4);
@@ -2346,9 +2425,11 @@ void GameplayState::LoadLevel(std::string _level)
 	}
 	else if (_level == "Level5_5")
 	{
-		//{
-		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
-		//}
+		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		}
+
 		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld5))
 		{
 			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld5);
@@ -2569,4 +2650,137 @@ void GameplayState::WizardDefeated()
 	ending = true;
 	m_pPlayer->SetPosition({ -100, -100 });
 	Camera::GetInstance()->SetCameraCap(6);
+}
+
+void GameplayState::StartMusic()
+{
+	if (m_hHub != SGD::INVALID_HANDLE)
+	{
+		//Play Music
+		std::string _level = m_strCurrLevel;
+		if (_level == "HubLevel" || _level == "Level0_1" || _level == "Level0_2" || _level == "World1Level" || _level == "World2Level" || _level == "World3Level" || _level == "World4Level" || _level == "World5Level")
+		{
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld1);
+			}
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld2))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld2);
+			}
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld3))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld3);
+			}
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld4))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld4);
+			}
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld5))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld5);
+			}
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hFinalBoss))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hFinalBoss);
+			}
+
+			if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hHub, true);
+		}
+		if (_level == "Level1_1" || _level == "Level1_2" || _level == "Level1_3" || _level == "Level1_5")
+		{
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+			}
+
+
+			if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld1, true);
+
+
+
+		}
+		else if (_level == "Level2_1" || _level == "Level2_2" || _level == "Level2_3" || _level == "Level2_4" || _level == "Level2_5")
+		{
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+			}
+
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld1);
+			}
+
+
+			if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld2))
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld2, true);
+		}
+		else if (_level == "Level3_1" || _level == "Level3_2" || _level == "Level3_3" || _level == "Level3_4" || _level == "Level3_5")
+		{
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+			}
+
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld2))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld2);
+			}
+
+
+			if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld3))
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld3, true);
+		}
+		else if (_level == "Level4_1" || _level == "Level4_2" || _level == "Level4_3" || _level == "Level4_4" || _level == "Level4_5")
+		{
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+			}
+
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld3))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld3);
+			}
+
+
+			if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld4))
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld4, true);
+		}
+		else if (_level == "Level5_1" || _level == "Level5_2" || _level == "Level5_3" || _level == "Level5_4")
+		{
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+			}
+
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld4))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld4);
+			}
+
+
+			if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld5))
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld5, true);
+		}
+		else if (_level == "Level5_5")
+		{
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+			}
+
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld5))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld5);
+			}
+
+
+			if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hFinalBoss))
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hFinalBoss, true);
+		}
+	}
 }

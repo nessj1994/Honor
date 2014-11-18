@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "../SGD Wrappers/SGD_Geometry.h"
 #include "../SGD Wrappers/SGD_Handle.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 class Emitter;
 
@@ -24,6 +25,9 @@ public:
 	virtual void Update(float elapsedTime)			 override; //update entities
 	virtual void Render(void)			 override; //Render all entities
 
+	void StartAudio() { SGD::AudioManager::GetInstance()->PlayAudio(m_hMusic, true); }
+	void StopAudio() { SGD::AudioManager::GetInstance()->StopAudio(m_hMusic); }
+
 private:
 
 	MainMenuState() = default;
@@ -38,6 +42,7 @@ private:
 	int m_nCursor = 0;
 	
 	SGD::HAudio m_hSelection = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hMusic = SGD::INVALID_HANDLE;
 
 	//SGD::Rectangle m_rPlay = SGD::Rectangle (100.0f, 400.0f, 520.0f, 600.0f );
 	SGD::Rectangle m_rPlay = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 130, Game::GetInstance()->GetScreenHeight() / 2 - 60}, SGD::Size{ 260, 65 });

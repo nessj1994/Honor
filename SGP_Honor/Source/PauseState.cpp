@@ -59,6 +59,8 @@ void PauseState::Exit(void)
 {
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hButton);
+	//SGD::AudioManager::GetInstance()->UnloadAudio(m_hMusic);
+	GameplayState::GetInstance()->StartMusic();
 }
 
 

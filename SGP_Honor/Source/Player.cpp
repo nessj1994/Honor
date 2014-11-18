@@ -123,13 +123,13 @@ void Player::Update(float elapsedTime)
 		m_emHawkReturn->Update(elapsedTime);
 		//
 
-		if (HasBounce() == true)
-		{
-			if (m_fTextTimer <= TEXT_TIME_LENGTH)
-			{
-				m_fTextTimer += elapsedTime;
-			}
-		}
+		//if (HasBounce() == true)
+		//{
+		//	if (m_fTextTimer <= TEXT_TIME_LENGTH)
+		//	{
+		//		m_fTextTimer += elapsedTime;
+		//	}
+		//}
 
 		//if (m_pSword != nullptr)
 		//{
@@ -295,7 +295,18 @@ void Player::Update(float elapsedTime)
 			Unit::Update(elapsedTime);
 			AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 
+
+			
+
+
 			SetGravity(-3000);
+
+			
+
+
+
+
+
 		}
 	}
 }
@@ -365,7 +376,7 @@ void Player::Render(void)
 
 		font.DrawString(output.str().c_str(), 60, 25, 1, SGD::Color{ 255, 255, 0, 0 });
 
-		if (HasBounce() == true)
+		/*if (HasBounce() == true)
 		{
 			if (m_fTextTimer <= TEXT_TIME_LENGTH)
 			{
@@ -373,7 +384,7 @@ void Player::Render(void)
 				font.DrawString("YOU GAINED THE BUBBLE ABILITY", (int)(m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x),
 					(int)(m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y - 100), 1, SGD::Color{ 255, 255, 0, 0 });
 			}
-		}
+		}*/
 
 		if (m_bDead)
 		{
@@ -395,13 +406,20 @@ SGD::Rectangle Player::GetRect(void) const
 
 void Player::HandleCollision(const IEntity* pOther)
 {
+
+	
+
+
+
 	float leftStickXOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).x;
 	
 	m_bSlowed = false;
 	if (SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Alt))
 	{
-		SGD::AudioManager::GetInstance()->PlayAudio(m_hBounceEffect);
-
+		if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBounceEffect))
+		{
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hBounceEffect);
+		}
 	}
 
 	Unit::HandleCollision(pOther);
@@ -765,70 +783,7 @@ void Player::BasicCollision(const IEntity* pOther)
 	nIntersectWidth = rIntersection.right - rIntersection.left;
 	nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
-	//Colliding with the side of the object
-	if (nIntersectHeight > nIntersectWidth)
-	{
-		if (rPlayer.right == rIntersection.right)
-		{
 
-			if (m_unCurrentState == RESTING_STATE
-				|| m_unCurrentState == LANDING_STATE)
-			{
-				SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
-				SetVelocity({ 0, GetVelocity().y });
-				SetDashTimer(0);
-			}
-			else
-			{
-				SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
-				SetVelocity({ 0, GetVelocity().y });
-				SetDashTimer(0);
-			}
-
-
-			if ((pInput->IsButtonDown(0, 0) == true
-				|| pInput->IsKeyDown(SGD::Key::Space) == true)
-				&& (m_unCurrentState != RESTING_STATE
-				|| m_unCurrentState != LANDING_STATE)
-				)
-			{
-				is_Right_Coll = true;
-			}
-		}
-		if (rPlayer.left == rIntersection.left)
-		{
-			if (m_unCurrentState == RESTING_STATE
-				|| m_unCurrentState == LANDING_STATE)
-			{
-				SetPosition({ (float)rObject.right, GetPosition().y });
-				SetDashTimer(0);
-				SetVelocity({ 0, GetVelocity().y });
-			}
-			else
-			{
-				SetPosition({ (float)rObject.right - 1, GetPosition().y });
-				SetDashTimer(0);
-				SetVelocity({ 0, GetVelocity().y });
-			}
-
-
-
-			if (
-
-				/*(pInput->IsButtonDown(0, 0) == true
-				|| pInput->IsKeyDown(SGD::Key::Space))
-
-
-				&&*/ (m_unCurrentState != RESTING_STATE
-				|| m_unCurrentState != LANDING_STATE)
-				//&& m_fButtonTimer > 0
-				)
-			{
-				is_Left_Coll = true;
-			}
-
-		}
-	}
 
 	if (nIntersectWidth > nIntersectHeight)
 	{
@@ -860,7 +815,10 @@ void Player::BasicCollision(const IEntity* pOther)
 
 					m_unJumpCount = 0;
 
-					m_fLandTimer = 0.001f;
+					//m_fLandTimer = 0.001f;
+
+					m_fLandTimer = 0.00001f;
+
 					m_unCurrentState = LANDING_STATE;
 				}
 
@@ -883,6 +841,85 @@ void Player::BasicCollision(const IEntity* pOther)
 			SetVelocity({ GetVelocity().x, 0 });
 		}
 	}
+
+
+	//Colliding with the side of the object
+	if (nIntersectHeight > nIntersectWidth)
+	{
+		if (rPlayer.right == rIntersection.right)
+		{
+
+			if (m_unCurrentState == RESTING_STATE
+				|| m_unCurrentState == LANDING_STATE)
+			{
+				SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
+				SetVelocity({ 0, GetVelocity().y });
+				SetDashTimer(0);
+			}
+			else
+			{
+				SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
+				SetVelocity({ 0, GetVelocity().y });
+				SetDashTimer(0);
+			}
+
+
+			if ((pInput->IsButtonDown(0, 0) == true
+				|| pInput->IsKeyDown(SGD::Key::Space) == true)
+				// && (m_unCurrentState != RESTING_STATE
+				// || m_unCurrentState != LANDING_STATE)
+				)
+			{
+			}
+
+
+			if ((m_unCurrentState != RESTING_STATE
+				 || m_unCurrentState != LANDING_STATE))
+			{
+				is_Right_Coll = true;
+
+			}
+
+
+		}
+		if (rPlayer.left == rIntersection.left)
+		{
+			if (m_unCurrentState == RESTING_STATE
+				|| m_unCurrentState == LANDING_STATE)
+			{
+				SetPosition({ (float)rObject.right, GetPosition().y });
+				SetDashTimer(0);
+
+				if (rPlayer.bottom != rIntersection.bottom)
+				{
+					SetVelocity({ 0, GetVelocity().y });
+				}
+
+			}
+			else
+			{
+				SetPosition({ (float)rObject.right - 1, GetPosition().y });
+				SetDashTimer(0);
+
+				if (rPlayer.bottom != rIntersection.bottom)
+				{
+					SetVelocity({ 0, GetVelocity().y });
+				}
+			}
+
+
+
+			if ( (m_unCurrentState != RESTING_STATE
+				|| m_unCurrentState != LANDING_STATE)
+				)
+			{
+				is_Left_Coll = true;
+			}
+
+		}
+	}
+
+	
 
 	if (IsBouncing() == false
 		&& m_unCurrentState == RESTING_STATE)
@@ -947,6 +984,23 @@ void Player::LeftRampCollision(const IEntity* pOther)
 		//SetPosition({ GetPosition().x, (float)rObject.bottom - tempVal - GetSize().height });
 		m_ptPosition.y = (float)rObject.bottom - tempVal - GetSize().height;
 		m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * tempVal);
+
+		if (IsBouncing() == true)
+		{
+
+			if (m_unJumpCount < 3)
+				m_unJumpCount++;
+
+			if (m_unJumpCount == 1)
+				SetVelocity({ GetVelocity().x, -900.0f });
+			if (m_unJumpCount == 2)
+				SetVelocity({ GetVelocity().x, -1500.0f });
+			if (m_unJumpCount == 3)
+				SetVelocity({ GetVelocity().x, -1900.0f });
+
+			m_unCurrentState = JUMPING_STATE;
+			SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height  /*- nIntersectHeight*/ });
+		}
 	}
 
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
@@ -974,6 +1028,8 @@ void Player::LeftRampCollision(const IEntity* pOther)
 			if (m_ptPosition.x > (float)rObject.left)
 			{
 				m_ptPosition.x += 1;
+				m_ptPosition.y -= 0.5f ;
+
 			}
 			else
 			{
@@ -1089,6 +1145,23 @@ void Player::RightRampCollision(const IEntity* pOther)
 			{
 				m_ptPosition.y = (float)rObject.bottom - GetSize().height - tempVal;
 				m_ptPosition.y = m_ptPosition.y - (nIntersectWidth * 1);
+
+				if (IsBouncing() == true)
+				{
+
+					if (m_unJumpCount < 3)
+						m_unJumpCount++;
+
+					if (m_unJumpCount == 1)
+						SetVelocity({ GetVelocity().x, -900.0f });
+					if (m_unJumpCount == 2)
+						SetVelocity({ GetVelocity().x, -1500.0f });
+					if (m_unJumpCount == 3)
+						SetVelocity({ GetVelocity().x, -1900.0f });
+
+					m_unCurrentState = JUMPING_STATE;
+					SetPosition({ GetPosition().x, (float)rObject.top - GetSize().height  /*- nIntersectHeight*/ });
+				}
 			}
 		}
 		//else
@@ -1657,6 +1730,7 @@ void Player::UpdateTimers(float elapsedTime)
 
 	m_fLandTimer -= elapsedTime;
 
+	if(m_fSwingTimer != 0)
 	m_fSwingTimer -= elapsedTime;
 
 	if (m_fStunTimer > 0)
@@ -1675,6 +1749,16 @@ void Player::UpdateTimers(float elapsedTime)
 	{
 		m_fSwingTimer = 0;
 		is_Swinging = false;
+		m_ts.ResetCurrFrame();
+		if (m_bHasArmor == false)
+		{
+			m_ts.SetCurrAnimation("Idle");
+		}
+		else
+		{
+			m_ts.SetCurrAnimation("Armor Player Idle");
+		}
+		m_ts.SetPlaying(true);
 	}
 
 	if (m_fJumpTimer < 0.0f)
@@ -1813,20 +1897,26 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
 	
-	if (pInput->IsKeyPressed(SGD::Key::D) == true || pInput->IsKeyPressed(SGD::Key::A) == true || (stickFrame == 5 && leftClamped == false)  )
+	if (pInput->IsKeyPressed(SGD::Key::D) == true || pInput->IsKeyPressed(SGD::Key::A) == true)
 	{
-		stickFrame = 1;
-		//m_ts.ResetCurrFrame();
+		m_ts.ResetCurrFrame();
 
 		//m_ts.SetPlaying(true);
 	}
 
-	if(pInput->IsKeyPressed(SGD::Key::J))
+	if (stickFrame == 5 && leftClamped == false && m_bController == true)
 	{
-		SGD::Event* pATEvent = new SGD::Event("JUMP_TIME", nullptr, this);
-		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		pATEvent = nullptr;
+		stickFrame = 1;
+		if (!(m_ts.GetCurrAnimation() == "Walking" || m_ts.GetCurrAnimation() == "Armor Player Walking"))
+		m_ts.ResetCurrFrame();
 	}
+
+	//if(pInput->IsKeyPressed(SGD::Key::J))
+	//{
+	//	SGD::Event* pATEvent = new SGD::Event("JUMP_TIME", nullptr, this);
+	//	SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+	//	pATEvent = nullptr;
+	//}
 
 	//reset currframe to 0 & set the animation playing to false
 	if ((pInput->IsKeyDown(SGD::Key::D) == true || pInput->IsKeyDown(SGD::Key::A) == true) || pInput->IsKeyDown(SGD::Key::Space) == true )
@@ -1870,12 +1960,11 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 
 
 	//Right Movement
-	if(pInput->IsKeyDown(SGD::Key::D) == true
+	if((pInput->IsKeyDown(SGD::Key::D) == true
 		|| leftStickXOff > JOYSTICK_DEADZONE)
+		&& !is_Right_Coll
+		)
 	{
-
-
-
 
 		if(m_fInputTimer > 0.20f
 			|| GetIsInputStuck() == false)
@@ -1926,8 +2015,10 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 	}
 
 	//Left Movement
-	if(pInput->IsKeyDown(SGD::Key::A) == true
+	if((pInput->IsKeyDown(SGD::Key::A) == true
 		|| leftStickXOff < -JOYSTICK_DEADZONE)
+		&& !is_Left_Coll
+		)
 	{
 
 
@@ -2077,8 +2168,10 @@ void Player::UpdateJump(float elapsedTime)
 	{
 		m_fButtonTimer += elapsedTime;
 		//if(GetIsJumping() == false)
-		if (m_unCurrentState == RESTING_STATE)
-		//	|| m_unCurrentState == LANDING_STATE)
+		if ((m_unCurrentState == RESTING_STATE
+			|| m_unCurrentState == LANDING_STATE)
+			&& m_fButtonTimer < 0.05f
+			 )
 		{
 			m_ts.ResetCurrFrame();
 			m_ts.SetPlaying(false);
@@ -2422,9 +2515,9 @@ void Player::UpdateVelocity(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	if (m_unCurrentState == LANDING_STATE
-		&& m_fLandTimer <= 0
-		&& pInput->IsKeyDown(SGD::Key::Space) == false
-		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false
+		//&& m_fLandTimer <= 0
+		//&& pInput->IsKeyDown(SGD::Key::Space) == false
+		//&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false
 		)
 	{
 		if (m_bHasArmor == false)
@@ -2435,6 +2528,8 @@ void Player::UpdateVelocity(float elapsedTime)
 		{
 			m_ts.SetCurrAnimation("Armor Player Idle");
 		}
+		m_ts.ResetCurrFrame();
+		m_ts.SetPlaying(true);
 		m_unCurrentState = RESTING_STATE;
 	}
 
@@ -2451,6 +2546,14 @@ void Player::UpdateVelocity(float elapsedTime)
 	{
 		SetVelocity(SGD::Vector(GetVelocity().x, 1050));
 	}
+
+	//if (m_unCurrentState == FALLING_STATE)
+	//{
+	//	//if (is_Right_Coll)
+	//	//{
+	//	//	SetVelocity(SGD::Vector(0, GetVelocity().y));
+	//	//}
+	//}
 
 	if (m_unCurrentState == RESTING_STATE
 		|| m_unCurrentState == LANDING_STATE)
@@ -2517,6 +2620,11 @@ void Player::UpdateVelocity(float elapsedTime)
 				SetVelocity(SGD::Vector(-1475, GetVelocity().y));
 		}
 
+	}
+
+	if (GetVelocity().y > 50)
+	{
+		m_unCurrentState = FALLING_STATE;
 	}
 
 }
@@ -2624,6 +2732,8 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 		swingRect = { 0, 0, 0, 0 };
 		m_pSword->SetRect(swingRect);
 
+
+
 	}
 
 
@@ -2634,10 +2744,10 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 void Player::SetHasBounce(bool bounce)
 {
 	m_bHasBounce = bounce;
-	/*if (bounce == true)
+	if (bounce == true)
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hGainAbility);
-	}*/
+	}
 }
 
 void Player::UpdateSnared(float elapsedTime)

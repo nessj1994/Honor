@@ -36,6 +36,12 @@ private:
 
 	SGD::HAudio m_hSelection = SGD::INVALID_HANDLE;
 
+	SGD::HAudio m_hWorld1 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWorld2 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWorld3 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWorld4 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hWorld5 = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hFinalBoss = SGD::INVALID_HANDLE;
 
 	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hBackground = SGD::INVALID_HANDLE;

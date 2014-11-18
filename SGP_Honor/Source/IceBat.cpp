@@ -131,9 +131,9 @@ void IceBat::Render(void)
 
 	//Render us with the camera
 	if(m_bFacingRight == true)
-		Camera::GetInstance()->DrawAnimation(m_ptPosition, 0.0f, m_ts, false, 1.0f, {});
+		Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height }, 0.0f, m_ts, false, 1.0f, {});
 	else
-		Camera::GetInstance()->DrawAnimation(m_ptPosition, 0.0f, m_ts, true, 1.0f, {});
+		Camera::GetInstance()->DrawAnimation({ m_ptPosition.x + m_szSize.width / 2, m_ptPosition.y + m_szSize.height }, 0.0f, m_ts, true, 1.0f, {});
 
 }
 int IceBat::GetType(void) const
@@ -228,6 +228,15 @@ void IceBat::HandleCollision(const IEntity* pOther)
 		}
 
 
+	}
+
+	if (pOther->GetType() == Entity::ENT_PLAYER)
+	{
+		if(GetAlive())
+		{
+		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
+		SGD::EventManager::GetInstance()->SendEventNow(&Event);
+		}
 	}
 
 

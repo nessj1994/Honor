@@ -36,5 +36,8 @@ private:
 
 	//Emitter
 	Emitter* m_emBackgroundEffect;
+
+	// music
+	SGD::HAudio m_hMusic = SGD::INVALID_HANDLE;
 };
 
