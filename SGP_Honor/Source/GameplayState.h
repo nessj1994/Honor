@@ -234,7 +234,14 @@ private:
 	SGD::HTexture m_hOAttack = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hXWallJump = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hTriOpenDoor = SGD::INVALID_HANDLE;
-	
+	SGD::HTexture m_hDashKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hDashCont = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hBubbleKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hBubbleCont = SGD::INVALID_HANDLE; 
+	SGD::HTexture m_hSprayKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hSprayCont = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hHawkKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hHawkCont = SGD::INVALID_HANDLE;
 	//FPS Count
 	bool			m_bShowFPS;
 	unsigned int	m_unFPS = 60;

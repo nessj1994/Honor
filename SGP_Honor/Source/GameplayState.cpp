@@ -196,6 +196,14 @@ void GameplayState::Enter(void) //Load Resources
 	m_hXWallJump = pGraphics->LoadTexture("Assets/graphics/HonorWall.png");
 	m_hTriOpenDoor = pGraphics->LoadTexture("Assets/graphics/HonorTriangle.png");
 
+	m_hDashKey = pGraphics->LoadTexture("Assets/graphics/DashKeyboard.png");
+	m_hDashCont = pGraphics->LoadTexture("Assets/graphics/DashController.png");
+	m_hBubbleKey = pGraphics->LoadTexture("Assets/graphics/BubbleKeyboard.png");
+	m_hBubbleCont = pGraphics->LoadTexture("Assets/graphics/BubbleController.png");
+	m_hSprayKey = pGraphics->LoadTexture("Assets/graphics/KeyBoardSpray.png");
+	m_hSprayCont = pGraphics->LoadTexture("Assets/graphics/ControllerSpray.png");
+	m_hHawkKey = pGraphics->LoadTexture("Assets/graphics/HawkKeyBoard.png");
+	m_hHawkCont = pGraphics->LoadTexture("Assets/graphics/HawkController.png");
 }
 
 
@@ -583,7 +591,7 @@ void GameplayState::Render(void)
 	m_pLevel->Render();
 	m_pLevel->RenderImageLayer(true);
 
-	//Render Images for tutorial 
+	//Render Images for tutorials
 	if (m_strCurrLevel == "Level0_1" || m_strCurrLevel == "Level0_2")
 	{
 		Camera::GetInstance()->DrawTexture({ 600, 300 }, 0, m_hXJUMP, false, 1, {}, {});
@@ -591,6 +599,22 @@ void GameplayState::Render(void)
 		Camera::GetInstance()->DrawTexture({ 2720, 200 }, 0, m_hXWallJump, false, 1, {}, {});
 		Camera::GetInstance()->DrawTexture({ 3803, 60 }, 0, m_hOAttack, false, .5, {}, {});
 		Camera::GetInstance()->DrawTexture({ 4180, 250 }, 0, m_hTriOpenDoor, false, 1, {}, {});
+	}
+	if (m_strCurrLevel == "Level2_1")
+	{
+		Camera::GetInstance()->DrawTexture({ 64, -30 }, 0, m_hDashKey, false, 1, {}, {});
+	}
+	if (m_strCurrLevel == "Level3_1")
+	{
+		Camera::GetInstance()->DrawTexture({ 416, 740 }, 0, m_hHawkKey, false, 1, {}, {});		
+	}
+	if (m_strCurrLevel == "Level4_1")
+	{
+		Camera::GetInstance()->DrawTexture({ 191, 400 }, 0, m_hSprayCont, false, 1, {}, {});
+	}
+	if (m_strCurrLevel == "Level5_1")
+	{
+		Camera::GetInstance()->DrawTexture({ 384, 5940 }, 0, m_hBubbleKey, false, 1, {}, {});
 	}
 	//Camera::GetInstance()->DrawTexture({ 270, 400 }, {}, SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/images.jpg"), false);
 	m_pEntities->RenderAll();
