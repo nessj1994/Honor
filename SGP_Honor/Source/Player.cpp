@@ -295,7 +295,18 @@ void Player::Update(float elapsedTime)
 			Unit::Update(elapsedTime);
 			AnimationEngine::GetInstance()->Update(elapsedTime, m_ts, this);
 
+
+			
+
+
 			SetGravity(-3000);
+
+			
+
+
+
+
+
 		}
 	}
 }
@@ -395,6 +406,11 @@ SGD::Rectangle Player::GetRect(void) const
 
 void Player::HandleCollision(const IEntity* pOther)
 {
+
+	
+
+
+
 	float leftStickXOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).x;
 	
 	m_bSlowed = false;
@@ -767,70 +783,7 @@ void Player::BasicCollision(const IEntity* pOther)
 	nIntersectWidth = rIntersection.right - rIntersection.left;
 	nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
-	//Colliding with the side of the object
-	if (nIntersectHeight > nIntersectWidth)
-	{
-		if (rPlayer.right == rIntersection.right)
-		{
 
-			if (m_unCurrentState == RESTING_STATE
-				|| m_unCurrentState == LANDING_STATE)
-			{
-				SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
-				SetVelocity({ 0, GetVelocity().y });
-				SetDashTimer(0);
-			}
-			else
-			{
-				SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
-				SetVelocity({ 0, GetVelocity().y });
-				SetDashTimer(0);
-			}
-
-
-			if ((pInput->IsButtonDown(0, 0) == true
-				|| pInput->IsKeyDown(SGD::Key::Space) == true)
-				&& (m_unCurrentState != RESTING_STATE
-				|| m_unCurrentState != LANDING_STATE)
-				)
-			{
-				is_Right_Coll = true;
-			}
-		}
-		if (rPlayer.left == rIntersection.left)
-		{
-			if (m_unCurrentState == RESTING_STATE
-				|| m_unCurrentState == LANDING_STATE)
-			{
-				SetPosition({ (float)rObject.right, GetPosition().y });
-				SetDashTimer(0);
-				SetVelocity({ 0, GetVelocity().y });
-			}
-			else
-			{
-				SetPosition({ (float)rObject.right - 1, GetPosition().y });
-				SetDashTimer(0);
-				SetVelocity({ 0, GetVelocity().y });
-			}
-
-
-
-			if (
-
-				/*(pInput->IsButtonDown(0, 0) == true
-				|| pInput->IsKeyDown(SGD::Key::Space))
-
-
-				&&*/ (m_unCurrentState != RESTING_STATE
-				|| m_unCurrentState != LANDING_STATE)
-				//&& m_fButtonTimer > 0
-				)
-			{
-				is_Left_Coll = true;
-			}
-
-		}
-	}
 
 	if (nIntersectWidth > nIntersectHeight)
 	{
@@ -862,7 +815,10 @@ void Player::BasicCollision(const IEntity* pOther)
 
 					m_unJumpCount = 0;
 
-					m_fLandTimer = 0.001f;
+					//m_fLandTimer = 0.001f;
+
+					m_fLandTimer = 0.00001f;
+
 					m_unCurrentState = LANDING_STATE;
 				}
 
@@ -885,6 +841,85 @@ void Player::BasicCollision(const IEntity* pOther)
 			SetVelocity({ GetVelocity().x, 0 });
 		}
 	}
+
+
+	//Colliding with the side of the object
+	if (nIntersectHeight > nIntersectWidth)
+	{
+		if (rPlayer.right == rIntersection.right)
+		{
+
+			if (m_unCurrentState == RESTING_STATE
+				|| m_unCurrentState == LANDING_STATE)
+			{
+				SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
+				SetVelocity({ 0, GetVelocity().y });
+				SetDashTimer(0);
+			}
+			else
+			{
+				SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
+				SetVelocity({ 0, GetVelocity().y });
+				SetDashTimer(0);
+			}
+
+
+			if ((pInput->IsButtonDown(0, 0) == true
+				|| pInput->IsKeyDown(SGD::Key::Space) == true)
+				// && (m_unCurrentState != RESTING_STATE
+				// || m_unCurrentState != LANDING_STATE)
+				)
+			{
+			}
+
+
+			if ((m_unCurrentState != RESTING_STATE
+				 || m_unCurrentState != LANDING_STATE))
+			{
+				is_Right_Coll = true;
+
+			}
+
+
+		}
+		if (rPlayer.left == rIntersection.left)
+		{
+			if (m_unCurrentState == RESTING_STATE
+				|| m_unCurrentState == LANDING_STATE)
+			{
+				SetPosition({ (float)rObject.right, GetPosition().y });
+				SetDashTimer(0);
+
+				if (rPlayer.bottom != rIntersection.bottom)
+				{
+					SetVelocity({ 0, GetVelocity().y });
+				}
+
+			}
+			else
+			{
+				SetPosition({ (float)rObject.right - 1, GetPosition().y });
+				SetDashTimer(0);
+
+				if (rPlayer.bottom != rIntersection.bottom)
+				{
+					SetVelocity({ 0, GetVelocity().y });
+				}
+			}
+
+
+
+			if ( (m_unCurrentState != RESTING_STATE
+				|| m_unCurrentState != LANDING_STATE)
+				)
+			{
+				is_Left_Coll = true;
+			}
+
+		}
+	}
+
+	
 
 	if (IsBouncing() == false
 		&& m_unCurrentState == RESTING_STATE)
@@ -993,6 +1028,8 @@ void Player::LeftRampCollision(const IEntity* pOther)
 			if (m_ptPosition.x > (float)rObject.left)
 			{
 				m_ptPosition.x += 1;
+				m_ptPosition.y -= 0.5f ;
+
 			}
 			else
 			{
@@ -1693,6 +1730,7 @@ void Player::UpdateTimers(float elapsedTime)
 
 	m_fLandTimer -= elapsedTime;
 
+	if(m_fSwingTimer != 0)
 	m_fSwingTimer -= elapsedTime;
 
 	if (m_fStunTimer > 0)
@@ -1873,12 +1911,12 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		m_ts.ResetCurrFrame();
 	}
 
-	if(pInput->IsKeyPressed(SGD::Key::J))
-	{
-		SGD::Event* pATEvent = new SGD::Event("JUMP_TIME", nullptr, this);
-		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		pATEvent = nullptr;
-	}
+	//if(pInput->IsKeyPressed(SGD::Key::J))
+	//{
+	//	SGD::Event* pATEvent = new SGD::Event("JUMP_TIME", nullptr, this);
+	//	SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+	//	pATEvent = nullptr;
+	//}
 
 	//reset currframe to 0 & set the animation playing to false
 	if ((pInput->IsKeyDown(SGD::Key::D) == true || pInput->IsKeyDown(SGD::Key::A) == true) || pInput->IsKeyDown(SGD::Key::Space) == true )
@@ -1922,12 +1960,11 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 
 
 	//Right Movement
-	if(pInput->IsKeyDown(SGD::Key::D) == true
+	if((pInput->IsKeyDown(SGD::Key::D) == true
 		|| leftStickXOff > JOYSTICK_DEADZONE)
+		&& !is_Right_Coll
+		)
 	{
-
-
-
 
 		if(m_fInputTimer > 0.20f
 			|| GetIsInputStuck() == false)
@@ -1978,8 +2015,10 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 	}
 
 	//Left Movement
-	if(pInput->IsKeyDown(SGD::Key::A) == true
+	if((pInput->IsKeyDown(SGD::Key::A) == true
 		|| leftStickXOff < -JOYSTICK_DEADZONE)
+		&& !is_Left_Coll
+		)
 	{
 
 
@@ -2129,8 +2168,10 @@ void Player::UpdateJump(float elapsedTime)
 	{
 		m_fButtonTimer += elapsedTime;
 		//if(GetIsJumping() == false)
-		if (m_unCurrentState == RESTING_STATE)
-		//	|| m_unCurrentState == LANDING_STATE)
+		if ((m_unCurrentState == RESTING_STATE
+			|| m_unCurrentState == LANDING_STATE)
+			&& m_fButtonTimer < 0.05f
+			 )
 		{
 			m_ts.ResetCurrFrame();
 			m_ts.SetPlaying(false);
@@ -2474,9 +2515,9 @@ void Player::UpdateVelocity(float elapsedTime)
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 	if (m_unCurrentState == LANDING_STATE
-		&& m_fLandTimer <= 0
-		&& pInput->IsKeyDown(SGD::Key::Space) == false
-		&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false
+		//&& m_fLandTimer <= 0
+		//&& pInput->IsKeyDown(SGD::Key::Space) == false
+		//&& pInput->IsButtonDown(0, 0 /*A button on Xbox*/) == false
 		)
 	{
 		if (m_bHasArmor == false)
@@ -2505,6 +2546,14 @@ void Player::UpdateVelocity(float elapsedTime)
 	{
 		SetVelocity(SGD::Vector(GetVelocity().x, 1050));
 	}
+
+	//if (m_unCurrentState == FALLING_STATE)
+	//{
+	//	//if (is_Right_Coll)
+	//	//{
+	//	//	SetVelocity(SGD::Vector(0, GetVelocity().y));
+	//	//}
+	//}
 
 	if (m_unCurrentState == RESTING_STATE
 		|| m_unCurrentState == LANDING_STATE)
@@ -2571,6 +2620,11 @@ void Player::UpdateVelocity(float elapsedTime)
 				SetVelocity(SGD::Vector(-1475, GetVelocity().y));
 		}
 
+	}
+
+	if (GetVelocity().y > 50)
+	{
+		m_unCurrentState = FALLING_STATE;
 	}
 
 }
@@ -2677,6 +2731,8 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 	{
 		swingRect = { 0, 0, 0, 0 };
 		m_pSword->SetRect(swingRect);
+
+
 
 	}
 

@@ -42,6 +42,7 @@ private:
 	int m_nCursor = 0;
 	
 	SGD::HAudio m_hSelection = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hMusic = SGD::INVALID_HANDLE;
 
 	//SGD::Rectangle m_rPlay = SGD::Rectangle (100.0f, 400.0f, 520.0f, 600.0f );
 	SGD::Rectangle m_rPlay = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 130, Game::GetInstance()->GetScreenHeight() / 2 - 60}, SGD::Size{ 260, 65 });
@@ -56,6 +57,12 @@ private:
 	SGD::HTexture m_hSword = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hButton = SGD::INVALID_HANDLE;
 
+
+	bool m_bMouse = false;
+
+	SGD::Rectangle rLast;
+	SGD::Rectangle rMouse;
+
 	//Arcade input Timer
 	float m_fstickYOff;
 	float m_fInputTimer;
@@ -65,9 +72,7 @@ private:
 	Emitter* m_emSelect;
 	Emitter* m_emTitle;
 	bool m_bContinue;
-	
-	// music
-	SGD::HAudio m_hMusic = SGD::INVALID_HANDLE;
 
+	bool isAnyButtonPressed();
 };
 

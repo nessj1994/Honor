@@ -232,8 +232,11 @@ void IceBat::HandleCollision(const IEntity* pOther)
 
 	if (pOther->GetType() == Entity::ENT_PLAYER)
 	{
+		if(GetAlive())
+		{
 		SGD::Event Event = { "KILL_PLAYER", nullptr, this };
 		SGD::EventManager::GetInstance()->SendEventNow(&Event);
+		}
 	}
 
 
