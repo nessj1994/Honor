@@ -2634,10 +2634,10 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 void Player::SetHasBounce(bool bounce)
 {
 	m_bHasBounce = bounce;
-	if (bounce == true)
+	/*if (bounce == true)
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hGainAbility);
-	}
+	}*/
 }
 
 void Player::UpdateSnared(float elapsedTime)
