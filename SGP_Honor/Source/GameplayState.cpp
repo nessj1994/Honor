@@ -161,10 +161,10 @@ void GameplayState::Enter(void) //Load Resources
 	bool oldGame = LoadGame();
 
 	//LoadLevel("Level4_1");
-	/*m_pPlayer->SetHasBounce(true);
-	m_pPlayer->SetHasDash(true);
-	m_pPlayer->SetHasHawk(true);
-	m_pPlayer->SetHasIce(true);*/
+	//m_pPlayer->SetHasBounce(true);
+	//m_pPlayer->SetHasDash(true);
+	//m_pPlayer->SetHasHawk(true);
+	//m_pPlayer->SetHasIce(true);
 
 	//LoadLevel("HubLevel");
 
@@ -177,7 +177,47 @@ void GameplayState::Enter(void) //Load Resources
 	{
 		if (oldGame)
 		{
-			LoadLevel("HubLevel");
+			LoadLevel("Level3_5");
+			if(Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level2_1" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level2_2" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level2_3" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level2_4" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level2_5"
+				)
+			{
+				m_pPlayer->SetHasDash(true);
+			}
+			else if(Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level3_1" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level3_2" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level3_3" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level3_4" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level3_5")
+			{
+				m_pPlayer->SetHasDash(true);
+				m_pPlayer->SetHasHawk(true);
+			}
+			else if(Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level4_1" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level4_2" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level4_3" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level4_4" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level4_5")
+			{
+				m_pPlayer->SetHasDash(true);
+				m_pPlayer->SetHasHawk(true);
+				m_pPlayer->SetHasIce(true);
+			}
+			else if(Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level5_1" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level5_2" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level5_3" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level5_4" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level5_5")
+			{
+				m_pPlayer->SetHasDash(true);
+				m_pPlayer->SetHasHawk(true);
+				m_pPlayer->SetHasIce(true);
+				m_pPlayer->SetHasBounce(true);
+			}
+
 		}
 		else
 		{
