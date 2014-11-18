@@ -313,4 +313,28 @@ void Hawk::HandleCollision(const IEntity* pOther)
 
 	}
 
+	if (pOther->GetType() == ENT_DOOR &&
+		pOther != GetOwner())
+	{
+		if (GetOwner()->GetType() == ENT_PLAYER)
+		{
+			Player* temp = dynamic_cast<Player*>(GetOwner());
+			temp->HawkExplode(m_ptPosition);
+			GetOwner()->SetHawkCast(false);
+		}
+		SetVelocity({ 0, 0 });
+	}
+
+	if (pOther->GetType() == ENT_DEATH &&
+		pOther != GetOwner())
+	{
+		if (GetOwner()->GetType() == ENT_PLAYER)
+		{
+			Player* temp = dynamic_cast<Player*>(GetOwner());
+			temp->HawkExplode(m_ptPosition);
+			GetOwner()->SetHawkCast(false);
+		}
+		SetVelocity({ 0, 0 });
+	}
+
 }

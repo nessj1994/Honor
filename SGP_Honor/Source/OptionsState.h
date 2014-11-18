@@ -4,6 +4,8 @@
 #include "../SGD Wrappers/SGD_Geometry.h"
 #include "Game.h"
 
+class Emitter;
+
 class OptionsState :
 	public IGameState
 {
@@ -56,5 +58,9 @@ private:
 	float m_fstickYOff;
 	float m_fstickXoff;
 	float m_fInputTimer;
+
+	//Emitter
+	Emitter* m_emBackgroundEffect;
+	Emitter* m_emTitle;
 };
 

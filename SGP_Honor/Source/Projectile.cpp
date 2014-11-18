@@ -8,11 +8,12 @@
 #include "Camera.h"
 #include "Game.h"
 
-Projectile::Projectile()
+Projectile::Projectile() : Listener(this)
 {
+	Listener::RegisterForEvent("ResetRoom");
 	SetSpeed(5000);
 	if(m_hImage == SGD::INVALID_HANDLE)
-	m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/graphics/TurretShot.png");
+		m_hImage = SGD::GraphicsManager::GetInstance()->LoadTexture(L"Assets/graphics/TurretShot.png");
 }
 
 
@@ -145,4 +146,14 @@ void Projectile::HandleCollision(const IEntity* pOther)
 
 	SGD::Rectangle entityRect = pOther->GetRect();
 
+}
+
+void Projectile::HandleEvent(const SGD::Event* pEvent)
+{
+	if (pEvent->GetEventID() == "ResetRoom")
+	{
+		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+		pMsg->QueueMessage();
+		pMsg = nullptr;
+	}
 }

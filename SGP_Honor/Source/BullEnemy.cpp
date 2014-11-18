@@ -326,7 +326,7 @@ void BullEnemy::HandleEvent(const SGD::Event* pEvent)
 		m_bsCurrState = BS_IDLE;
 		SetAlive(true);
 		SetPosition(GetOriginalPos());
-		m_fResetTimer = 1;
+		m_fResetTimer = 2;
 	}
 	//Turn around
 	if (pEvent->GetEventID() == "TurnMarker" &&

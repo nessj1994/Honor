@@ -80,6 +80,7 @@ Player::Player() : Listener(this)
 	//
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/PlayerAnimations.xml");
 	m_ts.SetCurrAnimation("Idle");
+	m_ts.SetPlaying(true);
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/ArmoredPlayerAnimations.xml");
 
 	//Load Sounds
@@ -135,6 +136,48 @@ void Player::Update(float elapsedTime)
 		//	m_pSword->Update(elapsedTime);
 		//}
 		SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+		//THIS IS HIDEOUS
+
+		//Check for controller input
+		if (pInput->IsButtonPressed(0, 0) ||
+			pInput->IsButtonPressed(0, 1) ||
+			pInput->IsButtonPressed(0, 2) ||
+			pInput->IsButtonPressed(0, 3) ||
+			pInput->IsButtonPressed(0, 4) ||
+			pInput->IsButtonPressed(0, 5) ||
+			pInput->IsButtonPressed(0, 6) ||
+			pInput->IsButtonPressed(0, 7) ||
+			pInput->IsButtonPressed(0, 8) ||
+			pInput->IsButtonPressed(0, 9) ||
+			pInput->IsButtonPressed(0, 10) ||
+			pInput->IsButtonPressed(0, 11) ||
+			pInput->IsDPadPressed(0, SGD::DPad::Up) ||
+			pInput->IsDPadPressed(0, SGD::DPad::Left) ||
+			pInput->IsDPadPressed(0, SGD::DPad::Right) ||
+			pInput->IsDPadPressed(0, SGD::DPad::Down) ||
+			pInput->GetLeftJoystick(0).x < -0.2 ||
+			pInput->GetLeftJoystick(0).x > 0.2 ||
+			pInput->GetRightJoystick(0).x < -0.2 ||
+			pInput->GetRightJoystick(0).x > 0.2 ||
+			pInput->GetLeftJoystick(0).y < -0.2 ||
+			pInput->GetLeftJoystick(0).y > 0.2 ||
+			pInput->GetRightJoystick(0).y < -0.2 ||
+			pInput->GetRightJoystick(0).y > 0.2 ||
+			pInput->GetTrigger(0) > 0 ||
+			pInput->GetTrigger(0) < 0
+			)
+		{
+			m_bController = true;
+		}
+		else if (pInput->IsAnyKeyPressed())
+		{
+			m_bController = false;
+		}
+
+
+
+
 		if (m_bDead)
 		{
 			UpdateDeath(elapsedTime);
@@ -158,7 +201,7 @@ void Player::Update(float elapsedTime)
 			static int stickFrame = 1;
 			bool controller = pInput->IsControllerConnected(0);
 
-			if (leftStickXOff > -JOYSTICK_DEADZONE && leftStickXOff < JOYSTICK_DEADZONE)
+			if (leftStickXOff > -JOYSTICK_DEADZONE && leftStickXOff < JOYSTICK_DEADZONE && leftClamped == false)
 			{
 				leftStickXOff = 0;
 				leftClamped = true;
@@ -373,8 +416,10 @@ void Player::HandleCollision(const IEntity* pOther)
 	m_bSlowed = false;
 	if (SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Alt))
 	{
-		SGD::AudioManager::GetInstance()->PlayAudio(m_hBounceEffect);
-
+		if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBounceEffect))
+		{
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hBounceEffect);
+		}
 	}
 
 	Unit::HandleCollision(pOther);
@@ -1799,10 +1844,14 @@ void Player::UpdateBounce(float elapsedTime)
 
 void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped, float leftStickXOff)
 {
+
+
 	if(GetIsInputStuck() == true)
 		m_fInputTimer += elapsedTime;
 
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+	
 	if (pInput->IsKeyPressed(SGD::Key::D) == true || pInput->IsKeyPressed(SGD::Key::A) == true || (stickFrame == 5 && leftClamped == false)  )
 	{
 		stickFrame = 1;
@@ -1827,7 +1876,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 	{
 		if(m_unCurrentState != JUMPING_STATE && m_unCurrentState != FALLING_STATE)
 		{
-			m_ts.SetPlaying(false);
+			//m_ts.SetPlaying(false);
 			m_ts.ResetCurrFrame();
 			if(m_bHasArmor == false)
 			{
@@ -1840,10 +1889,12 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 			m_ts.SetPlaying(true);
 		}
 	}
-	else if(leftClamped == true && m_unCurrentState == RESTING_STATE && is_Swinging == false)
+	else if(leftClamped == true && m_unCurrentState == RESTING_STATE && is_Swinging == false && m_bController == true)
 	{
-		m_ts.SetPlaying(false);
+		//m_ts.SetPlaying(false);
+		if (!(m_ts.GetCurrAnimation() == "Idle" || m_ts.GetCurrAnimation() == "Armor Player Idle"))
 		m_ts.ResetCurrFrame();
+
 		if(m_bHasArmor == false)
 		{
 			m_ts.SetCurrAnimation("Idle");
@@ -1966,6 +2017,7 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		}
 		SetFacingRight(false);
 	}
+
 }
 
 void Player::UpdateDash(float elapsedTime)
@@ -2637,10 +2689,10 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 void Player::SetHasBounce(bool bounce)
 {
 	m_bHasBounce = bounce;
-	if (bounce == true)
+	/*if (bounce == true)
 	{
 		SGD::AudioManager::GetInstance()->PlayAudio(m_hGainAbility);
-	}
+	}*/
 }
 
 void Player::UpdateSnared(float elapsedTime)

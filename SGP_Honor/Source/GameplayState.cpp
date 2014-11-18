@@ -161,10 +161,10 @@ void GameplayState::Enter(void) //Load Resources
 	bool oldGame = LoadGame();
 
 	//LoadLevel("Level4_1");
-	/*m_pPlayer->SetHasBounce(true);
+	m_pPlayer->SetHasBounce(true);
+	m_pPlayer->SetHasDash(true);
 	
-	
-	m_pPlayer->SetHasIce(true);*/
+	m_pPlayer->SetHasIce(true);
 
 	m_pPlayer->SetHasDash(true);
 	m_pPlayer->SetHasHawk(true);
@@ -193,7 +193,7 @@ void GameplayState::Enter(void) //Load Resources
 	
 	LoadLevel("Level5_5");
 
-	//LoadLevel("Level4_1");
+	LoadLevel("Level5_2");
 
 	// LoadLevel("HubLevel");
 
@@ -477,6 +477,8 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_SWITCH);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_GEYSER);
 	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_BOSS_WIZARD);
+	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_DEATH);
+	m_pEntities->CheckCollisions(Entity::ENT_HAWK, Entity::ENT_DOOR);
 
 
 	m_pEntities->CheckCollisions(Entity::ENT_BOSS_CRAB, Entity::ENT_LASER);
@@ -593,21 +595,19 @@ void GameplayState::Render(void)
 	}
 	/*if (ending == false)
 	{*/
-	//Render Images for tutorial 
-	if (m_strCurrLevel == "Level0_1")
-	{
-		Camera::GetInstance()->DrawTexture({ 600, 50 }, 0, m_hXJUMP, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 1759, 50 }, 0, m_hXJUMP, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 2736, 200 }, 0, m_hXWallJump, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 3803, 10 }, 0, m_hOAttack, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 4304, 200 }, 0, m_hTriOpenDoor, false, 1, {}, {});
-	}
-	//\
 
 	m_pLevel->Render();
 	m_pLevel->RenderImageLayer(true);
 
-
+	//Render Images for tutorial 
+	if (m_strCurrLevel == "Level0_1" || m_strCurrLevel == "Level0_2")
+	{
+		Camera::GetInstance()->DrawTexture({ 600, 300 }, 0, m_hXJUMP, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ 1759, 300 }, 0, m_hXJUMP, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ 2720, 200 }, 0, m_hXWallJump, false, 1, {}, {});
+		Camera::GetInstance()->DrawTexture({ 3803, 60 }, 0, m_hOAttack, false, .5, {}, {});
+		Camera::GetInstance()->DrawTexture({ 4180, 250 }, 0, m_hTriOpenDoor, false, 1, {}, {});
+	}
 	//Camera::GetInstance()->DrawTexture({ 270, 400 }, {}, SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/images.jpg"), false);
 	m_pEntities->RenderAll();
 	m_pLevel->RenderImageLayer(false);
@@ -625,11 +625,13 @@ void GameplayState::Render(void)
 	}
 
 
-
+	
+	//
 	// Draw a fading rectangle
 	SGD::Rectangle rect = SGD::Rectangle(0, 0, Game::GetInstance()->GetScreenWidth(), Game::GetInstance()->GetScreenHeight());
 	SGD::GraphicsManager::GetInstance()->DrawRectangle(rect, { m_cScreenFade, 0, 0, 0 }, { 0, 0, 0, 0 }, 0);
 	SGD::GraphicsManager::GetInstance()->DrawString(output.str().c_str(), { 5, 5 });
+
 }
 
 //Static Message callback function
@@ -2527,7 +2529,7 @@ void GameplayState::IncreaseHonorBeforeDeath(unsigned int _value)
 
 void GameplayState::WizardDefeated()
 {
-	//LoadLevel("HubLevel");
+	LoadLevel("HubLevel");
 	ending = true;
 	m_pPlayer->SetPosition({ -100, -100 });
 	Camera::GetInstance()->SetCameraCap(6);

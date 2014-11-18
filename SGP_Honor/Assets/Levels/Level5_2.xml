@@ -144041,7 +144041,7 @@
 		<Entity type="19" x="3184" y="4300" numArgs="1" name="Enemy_3">
 			<Argument type="1" name="Type" value="7" />
 		</Entity>
-		<Entity type="19" x="2846" y="3984" numArgs="1" name="Enemy_4">
+		<Entity type="19" x="2848" y="3936" numArgs="1" name="Enemy_4">
 			<Argument type="1" name="Type" value="4" />
 		</Entity>
 		<Entity type="2" x="2272" y="4160" numArgs="3" name="Laser_2">

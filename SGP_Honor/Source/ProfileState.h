@@ -7,6 +7,7 @@
 
 
 class Profile;
+class Emitter;
 
 class ProfileState :
 	public IGameState
@@ -62,5 +63,9 @@ private:
 	//For Arcade Machine
 	float m_fInputTimer;
 	float m_fstickYOff;
+
+	//Emitters
+	Emitter* m_emBackgroundEffect;
+	Emitter* m_emTitle;
 };
 
