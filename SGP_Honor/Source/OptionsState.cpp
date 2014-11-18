@@ -48,7 +48,14 @@ void OptionsState::Enter(void) //Load Resources
 
 	m_hSelection = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/selection.wav");
 
-	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/HonorBGM.xwm");
+	m_hBGM = pAudio->LoadAudio(L"Assets/Audio/MenuMusic.xwm");
+	m_hWorld1 = pAudio->LoadAudio(L"Assets/Audio/spanish.xwm");
+	m_hWorld2 = pAudio->LoadAudio(L"Assets/Audio/cave.xwm");
+	m_hWorld3 = pAudio->LoadAudio(L"Assets/Audio/mountain.xwm");
+	m_hWorld4 = pAudio->LoadAudio(L"Assets/Audio/Beach.xwm");
+	m_hWorld5 = pAudio->LoadAudio(L"Assets/Audio/World5.xwm");
+	m_hFinalBoss = pAudio->LoadAudio(L"Assets/Audio/FinalBoss.xwm");
+
 	m_hBackground = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Castle.png");
 	m_hSword = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/SwordButton.png");
 	m_hButton = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Buttons.png");
@@ -61,6 +68,36 @@ void OptionsState::Enter(void) //Load Resources
 	m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
 
 	m_emTitle = ParticleEngine::GetInstance()->LoadEmitter("assets/particles/TitleMain.xml", "Title", { 220, -100 });
+
+	// Stop all music
+	if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBGM))
+	{
+		SGD::AudioManager::GetInstance()->StopAudio(m_hBGM);
+	}
+	if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
+	{
+		SGD::AudioManager::GetInstance()->StopAudio(m_hWorld1);
+	}
+	if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld2))
+	{
+		SGD::AudioManager::GetInstance()->StopAudio(m_hWorld2);
+	}
+	if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld3))
+	{
+		SGD::AudioManager::GetInstance()->StopAudio(m_hWorld3);
+	}
+	if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld4))
+	{
+		SGD::AudioManager::GetInstance()->StopAudio(m_hWorld4);
+	}
+	if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld5))
+	{
+		SGD::AudioManager::GetInstance()->StopAudio(m_hWorld5);
+	}
+	if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hFinalBoss))
+	{
+		SGD::AudioManager::GetInstance()->StopAudio(m_hFinalBoss);
+	}
 }
 
 
@@ -100,6 +137,12 @@ void OptionsState::Exit(void)
 
 	pAudio->StopAudio(m_hBGM);
 	pAudio->UnloadAudio(m_hBGM);
+	pAudio->UnloadAudio(m_hWorld1);
+	pAudio->UnloadAudio(m_hWorld2);
+	pAudio->UnloadAudio(m_hWorld3);
+	pAudio->UnloadAudio(m_hWorld4);
+	pAudio->UnloadAudio(m_hWorld5);
+	pAudio->UnloadAudio(m_hFinalBoss);
 	pAudio->StopAudio(m_hSelection);
 	pAudio->UnloadAudio(m_hSelection);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
@@ -107,6 +150,11 @@ void OptionsState::Exit(void)
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hEsc);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hCircle);
+
+	if (Game::GetInstance()->GetStackSize() == 2)
+	{
+		MainMenuState::GetInstance()->StartAudio();
+	}
 	
 }
 

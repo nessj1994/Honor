@@ -140,6 +140,7 @@ void GameplayState::Enter(void) //Load Resources
 
 
 	//Load Audio
+	m_hHub = pAudio->LoadAudio(L"Assets/Audio/MenuMusic.xwm");
 	m_hWorld1 = pAudio->LoadAudio(L"Assets/Audio/spanish.xwm");
 	m_hWorld2 = pAudio->LoadAudio(L"Assets/Audio/cave.xwm");
 	m_hWorld3 = pAudio->LoadAudio(L"Assets/Audio/mountain.xwm");
@@ -186,14 +187,8 @@ void GameplayState::Enter(void) //Load Resources
 			Game::GetInstance()->AddState(CutSceneState::GetInstance());
 		}
 	}
-	
-	//LoadLevel("Level2_2");
 
 	//LoadLevel("Level3_1");
-
-	// LoadLevel("HubLevel");
-
-	// ("HubLevel");
 
 
 	m_pHubOrb = new HubWorldOrb();
@@ -275,10 +270,6 @@ void GameplayState::Exit(void)
 
 	SGD::GraphicsManager* pGraphics = SGD::GraphicsManager::GetInstance();
 	SGD::AudioManager* pAudio = SGD::AudioManager::GetInstance();
-	ParticleEngine::GetInstance()->Terminate();
-	ParticleEngine::GetInstance()->DeleteInstance();
-
-
 
 	//Unload Assets
 	//Level
@@ -293,6 +284,8 @@ void GameplayState::Exit(void)
 
 
 	//Audio
+	pAudio->StopAudio(m_hHub);
+	pAudio->UnloadAudio(m_hHub);
 	pAudio->StopAudio(m_hWorld1);
 	pAudio->UnloadAudio(m_hWorld1);
 	pAudio->StopAudio(m_hWorld2);
@@ -351,7 +344,6 @@ bool GameplayState::Input(void) //Hanlde user Input
 	// Temporary test for level changing
 	if (pInput->IsKeyPressed(SGD::Key::P))
 	{
-		LoadLevel("Level2_3");
 		m_bShowFPS ? m_bShowFPS = false : m_bShowFPS = true;
 	}
 	if (pInput->IsKeyPressed(SGD::Key::O) && (m_strCurrLevel != "Level0_1" && m_strCurrLevel != "Level0_2"))
@@ -2207,7 +2199,7 @@ void GameplayState::LoadLevel(std::string _level)
 
 
 	//Play Music
-	if (_level == "HubLevel")
+	if (_level == "HubLevel" || _level == "Level0_1" || _level == "Level0_2" || _level == "World1Level" || _level == "World2Level" || _level == "World3Level" || _level == "World4Level" || _level == "World5Level")
 	{
 		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
 		{
@@ -2233,13 +2225,16 @@ void GameplayState::LoadLevel(std::string _level)
 		{
 			SGD::AudioManager::GetInstance()->StopAudio(m_hFinalBoss);
 		}
+
+		if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hHub, true);
 	}
 	if (_level == "Level1_1" || _level == "Level1_2" || _level == "Level1_3" || _level == "Level1_5")
 	{
-		//if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
-		//{
-		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
-		//}
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		}
 
 
 		if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
@@ -2250,10 +2245,11 @@ void GameplayState::LoadLevel(std::string _level)
 	}
 	else if (_level == "Level2_1" || _level == "Level2_2" || _level == "Level2_3" || _level == "Level2_4" || _level == "Level2_5")
 	{
-		//if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
-		//{
-		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
-		//}
+		if(SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		}
+
 		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
 		{
 			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld1);
@@ -2265,9 +2261,11 @@ void GameplayState::LoadLevel(std::string _level)
 	}
 	else if (_level == "Level3_1" || _level == "Level3_2" || _level == "Level3_3" || _level == "Level3_4" || _level == "Level3_5")
 	{
-		//{
-		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
-		//}
+		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		}
+
 		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld2))
 		{
 			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld2);
@@ -2279,9 +2277,11 @@ void GameplayState::LoadLevel(std::string _level)
 	}
 	else if (_level == "Level4_1" || _level == "Level4_2" || _level == "Level4_3" || _level == "Level4_4" || _level == "Level4_5")
 	{
-		//{
-		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
-		//}
+		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		}
+
 		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld3))
 		{
 			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld3);
@@ -2293,9 +2293,11 @@ void GameplayState::LoadLevel(std::string _level)
 	}
 	else if (_level == "Level5_1" || _level == "Level5_2" || _level == "Level5_3" || _level == "Level5_4")
 	{
-		//{
-		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
-		//}
+		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		}
+
 		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld4))
 		{
 			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld4);
@@ -2307,9 +2309,11 @@ void GameplayState::LoadLevel(std::string _level)
 	}
 	else if (_level == "Level5_5")
 	{
-		//{
-		//	SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
-		//}
+		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+		{
+			SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+		}
+
 		if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld5))
 		{
 			SGD::AudioManager::GetInstance()->StopAudio(m_hWorld5);
@@ -2530,4 +2534,137 @@ void GameplayState::WizardDefeated()
 	ending = true;
 	m_pPlayer->SetPosition({ -100, -100 });
 	Camera::GetInstance()->SetCameraCap(6);
+}
+
+void GameplayState::StartMusic()
+{
+	if (m_hHub != SGD::INVALID_HANDLE)
+	{
+		//Play Music
+		std::string _level = m_strCurrLevel;
+		if (_level == "HubLevel" || _level == "Level0_1" || _level == "Level0_2" || _level == "World1Level" || _level == "World2Level" || _level == "World3Level" || _level == "World4Level" || _level == "World5Level")
+		{
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld1);
+			}
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld2))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld2);
+			}
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld3))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld3);
+			}
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld4))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld4);
+			}
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld5))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld5);
+			}
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hFinalBoss))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hFinalBoss);
+			}
+
+			if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hHub, true);
+		}
+		if (_level == "Level1_1" || _level == "Level1_2" || _level == "Level1_3" || _level == "Level1_5")
+		{
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+			}
+
+
+			if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld1, true);
+
+
+
+		}
+		else if (_level == "Level2_1" || _level == "Level2_2" || _level == "Level2_3" || _level == "Level2_4" || _level == "Level2_5")
+		{
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+			}
+
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld1))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld1);
+			}
+
+
+			if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld2))
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld2, true);
+		}
+		else if (_level == "Level3_1" || _level == "Level3_2" || _level == "Level3_3" || _level == "Level3_4" || _level == "Level3_5")
+		{
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+			}
+
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld2))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld2);
+			}
+
+
+			if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld3))
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld3, true);
+		}
+		else if (_level == "Level4_1" || _level == "Level4_2" || _level == "Level4_3" || _level == "Level4_4" || _level == "Level4_5")
+		{
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+			}
+
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld3))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld3);
+			}
+
+
+			if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld4))
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld4, true);
+		}
+		else if (_level == "Level5_1" || _level == "Level5_2" || _level == "Level5_3" || _level == "Level5_4")
+		{
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+			}
+
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld4))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld4);
+			}
+
+
+			if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld5))
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hWorld5, true);
+		}
+		else if (_level == "Level5_5")
+		{
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hHub))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hHub);
+			}
+
+			if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hWorld5))
+			{
+				SGD::AudioManager::GetInstance()->StopAudio(m_hWorld5);
+			}
+
+
+			if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hFinalBoss))
+				SGD::AudioManager::GetInstance()->PlayAudio(m_hFinalBoss, true);
+		}
+	}
 }

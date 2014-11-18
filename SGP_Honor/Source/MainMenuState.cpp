@@ -2,7 +2,6 @@
 
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
-#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_Color.h"
 #include "../TinyXML/tinyxml.h"
 #include "Game.h"
@@ -81,6 +80,12 @@ void MainMenuState::Enter(void) //Load Resources
 	m_emSelect = ParticleEngine::GetInstance()->LoadEmitter("assets/particles/MainSelect.xml", "MainSelect", { 0, 0 });
 	m_emTitle = ParticleEngine::GetInstance()->LoadEmitter("assets/particles/TitleMain.xml", "Title", { 220, 100 });
 
+	// Music
+	m_hMusic = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/MenuMusic.xwm");
+	if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hMusic))
+	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hMusic, true);
+	}
 }
 
 
@@ -92,10 +97,14 @@ void MainMenuState::Exit(void)
 {
 	delete m_emSelect;
 	delete m_emTitle;
+	ParticleEngine::GetInstance()->Terminate();
+	ParticleEngine::GetInstance()->DeleteInstance();
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hButton);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSelection);
+	SGD::AudioManager::GetInstance()->StopAudio(m_hMusic);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hMusic);
 }
 
 
@@ -184,6 +193,7 @@ bool MainMenuState::Input(void) //Hanlde user Input
 
 		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
 		{
+			StopAudio();
 			Game::GetInstance()->AddState(OptionsState::GetInstance());
 
 		}
@@ -244,6 +254,7 @@ bool MainMenuState::Input(void) //Hanlde user Input
 		}
 		else if(m_nCursor == 1)
 		{
+			StopAudio();
 			//Change State to options state
 			Game::GetInstance()->AddState(OptionsState::GetInstance());
 		}

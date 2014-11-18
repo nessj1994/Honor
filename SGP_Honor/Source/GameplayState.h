@@ -85,7 +85,7 @@ public:
 	//////////////////////////////////////////////////////////
 	////////////////////// Mutators /////////////////////////
 	void SetCamera(Camera* camera) { m_pCamera = camera; }
-	void ResetAudio() { SGD::AudioManager::GetInstance()->PlayAudio(m_hBGM); }
+	void ResetAudio() { SGD::AudioManager::GetInstance()->PlayAudio(m_hHub); }
 	void SetScreenFadeout(unsigned char _fade) { m_cScreenFade = _fade; }
 
 	///////////////////////////////////////////////////////////
@@ -125,6 +125,7 @@ public:
 	void IncreaseHonorBeforeDeath(unsigned int _value);
 
 	void WizardDefeated();
+	void StartMusic();
 
 private:
 
@@ -206,7 +207,7 @@ private:
 	Jellyfish* m_pJellyfish = nullptr;
 	Jellyfish* m_pJellyfish2 = nullptr;*/
 
-	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hHub = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hWorld1 = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hWorld2 = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hWorld3 = SGD::INVALID_HANDLE;

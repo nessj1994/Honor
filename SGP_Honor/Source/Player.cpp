@@ -400,8 +400,10 @@ void Player::HandleCollision(const IEntity* pOther)
 	m_bSlowed = false;
 	if (SGD::InputManager::GetInstance()->IsKeyDown(SGD::Key::Alt))
 	{
-		SGD::AudioManager::GetInstance()->PlayAudio(m_hBounceEffect);
-
+		if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBounceEffect))
+		{
+			SGD::AudioManager::GetInstance()->PlayAudio(m_hBounceEffect);
+		}
 	}
 
 	Unit::HandleCollision(pOther);
