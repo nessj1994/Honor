@@ -6,7 +6,7 @@
 #include "../SGD Wrappers/SGD_AudioManager.h"
 Turret::Turret()
 {
-	m_ptPosition = { 800, 150 };
+	//m_ptPosition = { 800, 150 };
 	m_szSize = { 32, 32 };
 	m_fFireTimer = 0.0f;
 	
@@ -61,7 +61,7 @@ void Turret::Update(float elapsedTime)
 	{
 		m_vtDirection = { 0, -1 };
 		m_bFacingRight = true;
-	
+		m_fRotation = 30.0f;
 
 	}
 	//down
@@ -77,17 +77,17 @@ void Turret::Update(float elapsedTime)
 }
 void Turret::Render(void)
 {
-	//Get the camera position for our offset
-	SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
+	////Get the camera position for our offset
+	//SGD::Point camPos = Camera::GetInstance()->GetCameraPos();
 
-	//create a reference to our rectangle
-	SGD::Rectangle rMyRect = GetRect();
+	////create a reference to our rectangle
+	//SGD::Rectangle rMyRect = GetRect();
 
-	//Offset our rectangle by the camera position for rendering
-	rMyRect.Offset({ -camPos.x, -camPos.y });
+	////Offset our rectangle by the camera position for rendering
+	//rMyRect.Offset({ -camPos.x, -camPos.y });
 
-	float fRotX = rMyRect.left + m_szSize.width / 2;
-	float fRotY = rMyRect.top + m_szSize.height / 2;
+	//float fRotX = rMyRect.left + m_szSize.width / 2;
+	//float fRotY = rMyRect.top + m_szSize.height / 2;
 
 	//Render us with the camera
 	if(m_bFacingRight == true)
