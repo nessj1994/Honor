@@ -36901,7 +36901,7 @@
 			<Argument type="1" name="ID" value="4" />
 		</Entity>
 		<Entity type="3" x="1760" y="736" numArgs="2" name="Turret_1">
-			<Argument type="1" name="Direction" value="1" />
+			<Argument type="1" name="Direction" value="2" />
 			<Argument type="2" name="Timer" value="1.4" />
 		</Entity>
 		<Entity type="19" x="1376" y="768" numArgs="1" name="Enemy_1">
