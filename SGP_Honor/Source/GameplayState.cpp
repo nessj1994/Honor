@@ -177,7 +177,7 @@ void GameplayState::Enter(void) //Load Resources
 	{
 		if (oldGame)
 		{
-			LoadLevel("Level3_4");
+			LoadLevel("HubLevel");
 		}
 		else
 		{
@@ -189,7 +189,7 @@ void GameplayState::Enter(void) //Load Resources
 	
 	//LoadLevel("Level2_2");
 
-	LoadLevel("Level5_2");
+	LoadLevel("Level3_1");
 
 	// LoadLevel("HubLevel");
 
@@ -445,6 +445,7 @@ void GameplayState::Update(float elapsedTime)
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_DOOR);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_BOSS_YETI);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ICE_GOLEM);
+	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_ICE_BAT);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_WIZARD_DASH);
 	m_pEntities->CheckCollisions(Entity::ENT_PLAYER, Entity::ENT_WIZARD_HAWK);
 
@@ -1023,16 +1024,16 @@ Entity* GameplayState::CreateProjectile(Entity* pOwner) const
 	if (pOwner->GetDirection().x == 1)
 		proj->SetPosition(SGD::Point(pOwner->GetRect().right, pOwner->GetPosition().y - pOwner->GetSize().height / 2));
 	else if (pOwner->GetDirection().x == -1)
-		proj->SetPosition(SGD::Point(pOwner->GetRect().left, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetRect().left, pOwner->GetPosition().y - pOwner->GetSize().height / 2));
 	else if (pOwner->GetDirection().y == -1)
-		proj->SetPosition(SGD::Point(pOwner->GetSize().width / 2, pOwner->GetRect().top));
+		proj->SetPosition(SGD::Point(pOwner->GetRect().left + pOwner->GetSize().width / 2, pOwner->GetPosition().y - pOwner->GetSize().height /*pOwner->GetRect().top*/));
 	else if (pOwner->GetDirection().y == 1)
-		proj->SetPosition(SGD::Point(pOwner->GetSize().width / 2, pOwner->GetRect().bottom));
+		proj->SetPosition(SGD::Point(pOwner->GetRect().left + pOwner->GetSize().width / 2, pOwner->GetPosition().y /*pOwner->GetRect().bottom*/));
 
-	if (pOwner->GetDirection().x == 1)
+	/*if (pOwner->GetDirection().x == 1)
 		proj->SetPosition(SGD::Point(pOwner->GetPosition().x + pOwner->GetSize().width, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
 	else
-		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));
+		proj->SetPosition(SGD::Point(pOwner->GetPosition().x, pOwner->GetPosition().y + pOwner->GetSize().height / 2));*/
 
 
 	proj->SetSize({ 16, 16 });
