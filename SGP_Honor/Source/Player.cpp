@@ -1711,6 +1711,16 @@ void Player::UpdateTimers(float elapsedTime)
 	{
 		m_fSwingTimer = 0;
 		is_Swinging = false;
+		m_ts.ResetCurrFrame();
+		if (m_bHasArmor == false)
+		{
+			m_ts.SetCurrAnimation("Idle");
+		}
+		else
+		{
+			m_ts.SetCurrAnimation("Armor Player Idle");
+		}
+		m_ts.SetPlaying(true);
 	}
 
 	if (m_fJumpTimer < 0.0f)
