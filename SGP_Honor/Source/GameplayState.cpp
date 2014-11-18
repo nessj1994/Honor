@@ -1191,7 +1191,6 @@ Player* GameplayState::CreatePlayer(void)
 
 	pSword->SetSize(SGD::Size(800, 80));
 	pPlayer->SetSword(pSword);
-	pPlayer->SetHasBounce(true);
 	m_pEntities->AddEntity(pSword, Entity::ENT_SWORD);
 
 
