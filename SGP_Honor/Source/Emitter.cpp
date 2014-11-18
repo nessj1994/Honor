@@ -277,6 +277,7 @@ void Emitter::Burst(SGD::Point _pos)
 	m_ptPosition = _pos;
 	m_iSpawned = m_unMaxParticles / 2;
 	m_fSpawnTimer = 0;
+	m_bDone = false;
 	for (unsigned int i = 0; i < m_vecParticles.size(); i++)
 	{
 		m_vecParticles[i].SetDead(false);

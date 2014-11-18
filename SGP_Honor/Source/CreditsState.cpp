@@ -9,6 +9,8 @@
 #include "GameplayState.h"
 #include "Font.h"
 #include "BitmapFont.h"
+#include "ParticleEngine.h"
+#include "Emitter.h"
 
 ///////////////////////////////////////////////////////////
 ///////////////////// Singleton Accessor /////////////////
@@ -38,6 +40,7 @@ CreditsState* CreditsState::GetInstance(void)
 // - set up entities
 void CreditsState::Enter(void) //Load Resources
 {
+	m_emBackgroundEffect = ParticleEngine::GetInstance()->LoadEmitter("assets/particles/MainSelect.xml", "MainSelect", { 0, 0 });
 	m_hBackground = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Castle.png");
 }
 
@@ -93,6 +96,7 @@ void CreditsState::Update(float elapsedTime)
 		Game::GetInstance()->ClearStates();
 		//Game::GetInstance()->RemoveState();
 	}
+	m_emBackgroundEffect->Update(elapsedTime);
 }
 
 /////////////////////////////////////////////
@@ -101,7 +105,7 @@ void CreditsState::Update(float elapsedTime)
 void CreditsState::Render(void)
 {
 	SGD::GraphicsManager::GetInstance()->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 1.6f, 1.2f });
-
+	m_emBackgroundEffect->Render();
 	Font font = Game::GetInstance()->GetFont()->GetFont("HonorFont_0.png");
 
 	font.DrawString("Developers:", 50, (int)(650 + textMovement), 2, SGD::Color{ 255, 255, 0, 0 });

@@ -147,7 +147,7 @@ public:
 
 private:
 
-
+	bool m_bController = false;
 	bool m_bHasDash = false;
 	bool m_bHasHawk = false;
 	bool m_bHasIce = false;

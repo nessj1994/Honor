@@ -13,6 +13,8 @@
 #include "ProfileState.h"
 #include "Font.h"
 #include "BitmapFont.h"
+#include "ParticleEngine.h"
+#include "Emitter.h"
 
 
 ///////////////////////////////////////////////////////////
@@ -75,6 +77,10 @@ void MainMenuState::Enter(void) //Load Resources
 
 	m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
 
+	//Emitters Ini
+	m_emSelect = ParticleEngine::GetInstance()->LoadEmitter("assets/particles/MainSelect.xml", "MainSelect", { 0, 0 });
+	m_emTitle = ParticleEngine::GetInstance()->LoadEmitter("assets/particles/TitleMain.xml", "Title", { 220, 100 });
+
 }
 
 
@@ -84,6 +90,8 @@ void MainMenuState::Enter(void) //Load Resources
 // - unload all resources
 void MainMenuState::Exit(void)
 {
+	delete m_emSelect;
+	delete m_emTitle;
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hButton);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
@@ -274,6 +282,8 @@ bool MainMenuState::Input(void) //Hanlde user Input
 // - Update all game entities
 void MainMenuState::Update(float elapsedTime)
 {
+	m_emSelect->Update(elapsedTime);
+	m_emTitle->Update(elapsedTime);
 	//Do Nothing
 }
 
@@ -291,6 +301,10 @@ void MainMenuState::Render(void)
 
 	//Draw the background
 	pGraphics->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 1.6f, 1.2f });
+
+	//Emitter Renders
+	m_emSelect->Render();
+	m_emTitle->Render();
 
 	//Draw the title
 	font.DrawString("HONOR", 220, 100, 3, SGD::Color{ 255, 255, 130, 0 });
