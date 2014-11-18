@@ -19,8 +19,7 @@ Wizard::Wizard() : Listener(this)
 {
 	
 	//m_bsCurrState = WZ_FLOATING;
-	m_bsCurrState == WZ_HAWK;
-	//m_bsCurrState = WZ_BULL;
+	m_bsCurrState = WZ_BULL;
 	SetSize({ 160.0f, 96.0f });
 	SetHitPoints(3);
 	AnimationEngine::GetInstance()->LoadAnimation("Assets/animationsWIZARD.xml");
@@ -217,9 +216,6 @@ void Wizard::Update(float elapsedTime)
 								SGD::AudioManager::GetInstance()->PlayAudio(m_hBat, true);
 							}
 						}
-					}
-					if ((m_fCurStateTimer - m_fOrigStateTimer) > 6.0f)
-					{
 
 						if (clonesCasted == false)
 						{
@@ -291,7 +287,8 @@ void Wizard::Update(float elapsedTime)
 						  if (clonesCasted == false)
 							  CastClones();
 
-						
+						  //if (bubbleCasted == false)
+						  //{
 
 						  if (m_fBubbleSpawner <= 0)
 						  {
@@ -299,7 +296,7 @@ void Wizard::Update(float elapsedTime)
 							  m_fBubbleSpawner = 1.0f;
 						  }
 
-						
+						  // }
 
 					  }
 
@@ -412,6 +409,17 @@ void Wizard::CastClones()
 		dashPtr4->SetTimer(0.8f);
 
 
+		//dashPtr1->SetPosition({ 100, 1850 });
+		//dashPtr1->SetTimer(0.5f);
+		//
+		//dashPtr2->SetPosition({ 600, 1850 });
+		//dashPtr2->SetTimer(1.5f);
+		//
+		//dashPtr3->SetPosition({ 100, 1950 });
+		//dashPtr3->SetTimer(2.0f);
+		//
+		//dashPtr4->SetPosition({ 600, 1950 });
+		//dashPtr4->SetTimer(1.0f);
 
 
 
@@ -498,24 +506,24 @@ void Wizard::CastHawks()
 	if (m_bsCurrState == WZ_HAWK)
 	{
 
-		hawkPtr1->SetPosition({ 200, m_ptPosition.y });
-		hawkPtr1->SetTimer(0.4f);
+		hawkPtr1->SetPosition({ 150, m_ptPosition.y });
+		hawkPtr1->SetTimer(0.1f);
 
-		hawkPtr2->SetPosition({ 400, m_ptPosition.y });
-		hawkPtr2->SetTimer(0.4f);
+		hawkPtr2->SetPosition({ 350, m_ptPosition.y });
+		hawkPtr2->SetTimer(0.2f);
 
-		hawkPtr3->SetPosition({ 600, m_ptPosition.y });
-		hawkPtr3->SetTimer(0.4f);
+		hawkPtr3->SetPosition({ 450, m_ptPosition.y });
+		hawkPtr3->SetTimer(0.3f);
 
-		hawkPtr4->SetPosition({ 800, m_ptPosition.y });
+		hawkPtr4->SetPosition({ 650, m_ptPosition.y });
 		hawkPtr4->SetTimer(0.4f);
 
 
 
-		hawkPtr1->SetDestPos({ 200, 600 });
-		hawkPtr2->SetDestPos({ 400, 600 });
-		hawkPtr3->SetDestPos({ 600, 600 });
-		hawkPtr4->SetDestPos({ 800, 600 });
+		hawkPtr1->SetDestPos({ 100, 600 });
+		hawkPtr2->SetDestPos({ 300, 600 });
+		hawkPtr3->SetDestPos({ 500, 600 });
+		hawkPtr4->SetDestPos({ 700, 600 });
 
 
 		hawkPtr1->SetDestSize({ 32, 32 });
@@ -580,7 +588,17 @@ void Wizard::CastHawks()
 
 	if (m_bsCurrState == WZ_BUBBLE)
 	{
-
+	//	hawkPtr1->SetPosition({ 150, m_ptPosition.y });
+	//	hawkPtr1->SetTimer(0.1f);
+	//
+	//	hawkPtr2->SetPosition({ 350, m_ptPosition.y });
+	//	hawkPtr2->SetTimer(0.2f);
+	//
+	//	hawkPtr3->SetPosition({ 450, m_ptPosition.y });
+	//	hawkPtr3->SetTimer(0.3f);
+	//
+	//	hawkPtr4->SetPosition({ 650, m_ptPosition.y });
+	//	hawkPtr4->SetTimer(0.4f);
 
 		if (rand() % 2 == 1)
 		{
@@ -675,32 +693,31 @@ void Wizard::HawkUpdate(float elapsedTime)
 	//Hawk 1
 	if (hawkPtr1->GetFall() == true)
 	{
-		if (hawkPtr1->GetPosition().y > 1950)
+		if (hawkPtr1->GetPosition().y < 950)
 		{
-			hawkPtr1->SetDestPos({ -300, -300 });
+
+			hawkPtr1->SetVelocity({ hawkPtr1->GetVelocity().x, hawkPtr1->GetVelocity().y + 1000 * elapsedTime });
 
 		}
 		else
 		{
-			
+			hawkPtr1->SetDestPos({ -300, -300 });
 
 
 		}
-		hawkPtr1->SetVelocity({ hawkPtr1->GetVelocity().x, 600 });
-
 	}
 
 	//hawk 2
 	if (hawkPtr2->GetFall() == true)
 	{
-		if (hawkPtr2->GetPosition().y > 1950)
+		if (hawkPtr2->GetPosition().y < 950)
 		{
-			hawkPtr2->SetDestPos({ -300, -300 });
+			hawkPtr2->SetVelocity({ hawkPtr2->GetVelocity().x, hawkPtr2->GetVelocity().y + 1000 * elapsedTime });
 
 		}
 		else
 		{
-			hawkPtr2->SetVelocity({ hawkPtr2->GetVelocity().x, 600 });
+			hawkPtr2->SetDestPos({ -300, -300 });
 
 
 		}
@@ -709,14 +726,14 @@ void Wizard::HawkUpdate(float elapsedTime)
 	//Hawk 3
 	if (hawkPtr3->GetFall() == true)
 	{
-		if (hawkPtr3->GetPosition().y > 1950)
+		if (hawkPtr3->GetPosition().y < 950)
 		{
-			hawkPtr3->SetDestPos({ -300, -300 });
+			hawkPtr3->SetVelocity({ hawkPtr3->GetVelocity().x, hawkPtr3->GetVelocity().y + 1000 * elapsedTime });
 
 		}
 		else
 		{
-			hawkPtr3->SetVelocity({ hawkPtr3->GetVelocity().x, 600 });
+			hawkPtr3->SetDestPos({ -300, -300 });
 
 
 		}
@@ -725,14 +742,14 @@ void Wizard::HawkUpdate(float elapsedTime)
 	//Hawk 4
 	if (hawkPtr4->GetFall() == true)
 	{
-		if (hawkPtr4->GetPosition().y > 1950)
+		if (hawkPtr4->GetPosition().y < 950)
 		{
-			ResetHawks();
+			hawkPtr4->SetVelocity({ hawkPtr4->GetVelocity().x, hawkPtr4->GetVelocity().y + 1000 * elapsedTime });
 
 		}
 		else
 		{
-			hawkPtr4->SetVelocity({ hawkPtr4->GetVelocity().x, 600 });
+			ResetHawks();
 
 		}
 	}
@@ -740,9 +757,17 @@ void Wizard::HawkUpdate(float elapsedTime)
 
 
 
+
+
+
+
+
+
+
+
 	if (m_fHawkStateTimer < 0)
 	{
-		m_fHawkStateTimer = 5.5f;
+		m_fHawkStateTimer = 0.0f;
 		//	m_bsCurrState = WZ_FLOATING;
 
 		ResetHawks();
@@ -759,10 +784,10 @@ void Wizard::ResetHawks()
 	hawkPtr4->SetPosition({ -300, -300 });
 
 
-	//hawkPtr1->SetSize({ 0, 0 });
-	//hawkPtr2->SetSize({ 0, 0 });
-	//hawkPtr3->SetSize({ 0, 0 });
-	//hawkPtr4->SetSize({ 0, 0 });
+	hawkPtr1->SetSize({ 0, 0 });
+	hawkPtr2->SetSize({ 0, 0 });
+	hawkPtr3->SetSize({ 0, 0 });
+	hawkPtr4->SetSize({ 0, 0 });
 
 
 	hawkPtr1->SetVelocity({ 0, 0 });
@@ -770,7 +795,7 @@ void Wizard::ResetHawks()
 	hawkPtr3->SetVelocity({ 0, 0 });
 	hawkPtr4->SetVelocity({ 0, 0 });
 
-	
+
 
 	hawksCasted = false;
 

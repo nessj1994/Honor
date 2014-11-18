@@ -24003,7 +24003,7 @@
 			<ImageTile type="8" />
 			<ImageTile type="8" />
 		</ImageLayer>
-		<ImageLayer speed="1" depth="-1" image="\Assets\graphics\TileSet1.png" name="Hazards" render="0" tileSetWidth="16" tileSetHeight="16" tileSetSize="32">
+		<ImageLayer speed="1" depth="-1" image="\Assets\graphics\TileSet1.png" name="Hazards" render="1" tileSetWidth="16" tileSetHeight="16" tileSetSize="32">
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -41588,6 +41588,7 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
+			<ImageTile type="148" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -41787,6 +41788,7 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
+			<ImageTile type="148" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -41986,6 +41988,7 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
+			<ImageTile type="148" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -42185,6 +42188,7 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
+			<ImageTile type="148" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -42384,11 +42388,7 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
-			<ImageTile type="-1" />
-			<ImageTile type="-1" />
-			<ImageTile type="-1" />
-			<ImageTile type="-1" />
-			<ImageTile type="-1" />
+			<ImageTile type="148" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -48005,7 +48005,7 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 		</ImageLayer>
-		<ImageLayer speed="1" depth="-1" image="\Assets\graphics\TS_Castle.png" name="Terrain" render="0" tileSetWidth="16" tileSetHeight="16" tileSetSize="32">
+		<ImageLayer speed="1" depth="-1" image="\Assets\graphics\TS_Castle.png" name="Terrain" render="1" tileSetWidth="16" tileSetHeight="16" tileSetSize="32">
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
@@ -72007,7 +72007,7 @@
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 		</ImageLayer>
-		<ImageLayer speed="1" depth="0" image="\Assets\graphics\FreezableGround.png" name="Ice" render="0" tileSetWidth="2" tileSetHeight="1" tileSetSize="32">
+		<ImageLayer speed="1" depth="0" image="\Assets\graphics\FreezableGround.png" name="Ice" render="1" tileSetWidth="2" tileSetHeight="1" tileSetSize="32">
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
 			<ImageTile type="-1" />
