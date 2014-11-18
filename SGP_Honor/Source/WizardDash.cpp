@@ -28,11 +28,11 @@ void WizardDash::Update(float elapsedTime)
 	{
 		if (IsFacingRight() == true)
 		{
-			SetVelocity({ 1000, 0 });
+			SetVelocity({ 800, 0 });
 		}
 		else
 		{
-			SetVelocity({ -1000, 0 });
+			SetVelocity({ -800, 0 });
 
 		}
 	}

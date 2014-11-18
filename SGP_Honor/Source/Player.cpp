@@ -738,70 +738,7 @@ void Player::BasicCollision(const IEntity* pOther)
 	nIntersectWidth = rIntersection.right - rIntersection.left;
 	nIntersectHeight = rIntersection.bottom - rIntersection.top;
 
-	//Colliding with the side of the object
-	if (nIntersectHeight > nIntersectWidth)
-	{
-		if (rPlayer.right == rIntersection.right)
-		{
 
-			if (m_unCurrentState == RESTING_STATE
-				|| m_unCurrentState == LANDING_STATE)
-			{
-				SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
-				SetVelocity({ 0, GetVelocity().y });
-				SetDashTimer(0);
-			}
-			else
-			{
-				SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
-				SetVelocity({ 0, GetVelocity().y });
-				SetDashTimer(0);
-			}
-
-
-			if ((pInput->IsButtonDown(0, 0) == true
-				|| pInput->IsKeyDown(SGD::Key::Space) == true)
-				&& (m_unCurrentState != RESTING_STATE
-				|| m_unCurrentState != LANDING_STATE)
-				)
-			{
-				is_Right_Coll = true;
-			}
-		}
-		if (rPlayer.left == rIntersection.left)
-		{
-			if (m_unCurrentState == RESTING_STATE
-				|| m_unCurrentState == LANDING_STATE)
-			{
-				SetPosition({ (float)rObject.right, GetPosition().y });
-				SetDashTimer(0);
-				SetVelocity({ 0, GetVelocity().y });
-			}
-			else
-			{
-				SetPosition({ (float)rObject.right - 1, GetPosition().y });
-				SetDashTimer(0);
-				SetVelocity({ 0, GetVelocity().y });
-			}
-
-
-
-			if (
-
-				/*(pInput->IsButtonDown(0, 0) == true
-				|| pInput->IsKeyDown(SGD::Key::Space))
-
-
-				&&*/ (m_unCurrentState != RESTING_STATE
-				|| m_unCurrentState != LANDING_STATE)
-				//&& m_fButtonTimer > 0
-				)
-			{
-				is_Left_Coll = true;
-			}
-
-		}
-	}
 
 	if (nIntersectWidth > nIntersectHeight)
 	{
@@ -859,6 +796,85 @@ void Player::BasicCollision(const IEntity* pOther)
 			SetVelocity({ GetVelocity().x, 0 });
 		}
 	}
+
+
+	//Colliding with the side of the object
+	if (nIntersectHeight > nIntersectWidth)
+	{
+		if (rPlayer.right == rIntersection.right)
+		{
+
+			if (m_unCurrentState == RESTING_STATE
+				|| m_unCurrentState == LANDING_STATE)
+			{
+				SetPosition({ (float)rObject.left - GetSize().width, GetPosition().y });
+				SetVelocity({ 0, GetVelocity().y });
+				SetDashTimer(0);
+			}
+			else
+			{
+				SetPosition({ (float)rObject.left - GetSize().width + 1, GetPosition().y });
+				SetVelocity({ 0, GetVelocity().y });
+				SetDashTimer(0);
+			}
+
+
+			if ((pInput->IsButtonDown(0, 0) == true
+				|| pInput->IsKeyDown(SGD::Key::Space) == true)
+				// && (m_unCurrentState != RESTING_STATE
+				// || m_unCurrentState != LANDING_STATE)
+				)
+			{
+			}
+
+
+			if ((m_unCurrentState != RESTING_STATE
+				 || m_unCurrentState != LANDING_STATE))
+			{
+				is_Right_Coll = true;
+
+			}
+
+
+		}
+		if (rPlayer.left == rIntersection.left)
+		{
+			if (m_unCurrentState == RESTING_STATE
+				|| m_unCurrentState == LANDING_STATE)
+			{
+				SetPosition({ (float)rObject.right, GetPosition().y });
+				SetDashTimer(0);
+
+				if (rPlayer.bottom != rIntersection.bottom)
+				{
+					SetVelocity({ 0, GetVelocity().y });
+				}
+
+			}
+			else
+			{
+				SetPosition({ (float)rObject.right - 1, GetPosition().y });
+				SetDashTimer(0);
+
+				if (rPlayer.bottom != rIntersection.bottom)
+				{
+					SetVelocity({ 0, GetVelocity().y });
+				}
+			}
+
+
+
+			if ( (m_unCurrentState != RESTING_STATE
+				|| m_unCurrentState != LANDING_STATE)
+				)
+			{
+				is_Left_Coll = true;
+			}
+
+		}
+	}
+
+	
 
 	if (IsBouncing() == false
 		&& m_unCurrentState == RESTING_STATE)
@@ -950,6 +966,8 @@ void Player::LeftRampCollision(const IEntity* pOther)
 			if (m_ptPosition.x > (float)rObject.left)
 			{
 				m_ptPosition.x += 1;
+				m_ptPosition.y -= 0.5f ;
+
 			}
 			else
 			{
@@ -1840,12 +1858,11 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 
 
 	//Right Movement
-	if(pInput->IsKeyDown(SGD::Key::D) == true
+	if((pInput->IsKeyDown(SGD::Key::D) == true
 		|| leftStickXOff > JOYSTICK_DEADZONE)
+		&& !is_Right_Coll
+		)
 	{
-
-
-
 
 		if(m_fInputTimer > 0.20f
 			|| GetIsInputStuck() == false)
@@ -1896,8 +1913,10 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 	}
 
 	//Left Movement
-	if(pInput->IsKeyDown(SGD::Key::A) == true
+	if((pInput->IsKeyDown(SGD::Key::A) == true
 		|| leftStickXOff < -JOYSTICK_DEADZONE)
+		&& !is_Left_Coll
+		)
 	{
 
 
@@ -2422,6 +2441,14 @@ void Player::UpdateVelocity(float elapsedTime)
 	{
 		SetVelocity(SGD::Vector(GetVelocity().x, 1050));
 	}
+
+	//if (m_unCurrentState == FALLING_STATE)
+	//{
+	//	//if (is_Right_Coll)
+	//	//{
+	//	//	SetVelocity(SGD::Vector(0, GetVelocity().y));
+	//	//}
+	//}
 
 	if (m_unCurrentState == RESTING_STATE
 		|| m_unCurrentState == LANDING_STATE)

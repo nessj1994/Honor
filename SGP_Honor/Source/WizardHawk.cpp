@@ -25,71 +25,74 @@ WizardHawk::~WizardHawk()
 void WizardHawk::Update(float elapsedTime)
 {
 	
+
+	m_ptPosition.x = m_ptDestPos.x;
+	m_ptPosition.y = m_ptDestPos.y;
 	SetGravity(0);
 
 	m_fTimer -= elapsedTime;
 
-	if (m_fTimer < 0)
-	{
-		if (m_ptPosition.x != -300)
-		{
-			if (m_ptPosition.x < m_ptDestPos.x)
-			{
-				m_ptPosition.x += elapsedTime * 20;
+	//if (m_fTimer < 0)
+	//{
+	//	if (m_ptPosition.x != -300)
+	//	{
+	//		if (m_ptPosition.x < m_ptDestPos.x)
+	//		{
+	//			m_ptPosition.x += elapsedTime * 20;
+	//
+	//			if ((m_ptDestPos.x - m_ptPosition.x) < 1)
+	//			{
+	//				m_ptPosition.x = m_ptDestPos.x;
+	//			}
+	//		}
+	//
+	//		if (m_ptPosition.x > m_ptDestPos.x)
+	//		{
+	//			m_ptPosition.x -= elapsedTime * 20;
+	//
+	//
+	//			if ((m_ptDestPos.x - m_ptPosition.x) < 1)
+	//			{
+	//				m_ptPosition.x = m_ptDestPos.x;
+	//			}
+	//
+	//
+	//		}
+	//
+	//		if (m_ptPosition.y < m_ptDestPos.y)
+	//		{
+	//			m_ptPosition.y += elapsedTime * 200;
+	//
+	//			if ((m_ptDestPos.y - m_ptPosition.y) < 1)
+	//			{
+	//				m_ptPosition.y = m_ptDestPos.y;
+	//
+	//			}
+	//
+	//		}
+	//
+	//		if (m_szSize.width < m_szDestSize.width)
+	//		{
+	//			m_szSize.width += elapsedTime * 200;
+	//			m_szSize.height += elapsedTime * 200;
+	//
+	//
+	//			if ((m_ptDestPos.y - m_ptPosition.y) < 1)
+	//			{
+	//				m_ptPosition.y = m_ptDestPos.y;
+	//
+	//			}
+	//
+	//		}
+	//	}
+	//
+	//	//Then do size expansion
+	//
+	//	
+	//
+	//}
 
-				if ((m_ptDestPos.x - m_ptPosition.x) < 1)
-				{
-					m_ptPosition.x = m_ptDestPos.x;
-				}
-			}
-
-			if (m_ptPosition.x > m_ptDestPos.x)
-			{
-				m_ptPosition.x -= elapsedTime * 20;
-
-
-				if ((m_ptDestPos.x - m_ptPosition.x) < 1)
-				{
-					m_ptPosition.x = m_ptDestPos.x;
-				}
-
-
-			}
-
-			if (m_ptPosition.y < m_ptDestPos.y)
-			{
-				m_ptPosition.y += elapsedTime * 200;
-
-				if ((m_ptDestPos.y - m_ptPosition.y) < 1)
-				{
-					m_ptPosition.y = m_ptDestPos.y;
-
-				}
-
-			}
-
-			if (m_szSize.width < m_szDestSize.width)
-			{
-				m_szSize.width += elapsedTime * 200;
-				m_szSize.height += elapsedTime * 200;
-
-
-				if ((m_ptDestPos.y - m_ptPosition.y) < 1)
-				{
-					m_ptPosition.y = m_ptDestPos.y;
-
-				}
-
-			}
-		}
-
-		//Then do size expansion
-
-		
-
-	}
-
-	Entity::Update(elapsedTime);
+	Unit::Update(elapsedTime);
 
 
 }

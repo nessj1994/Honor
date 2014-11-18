@@ -163,10 +163,12 @@ void GameplayState::Enter(void) //Load Resources
 	//LoadLevel("Level4_1");
 	/*m_pPlayer->SetHasBounce(true);
 	
-	m_pPlayer->SetHasHawk(true);
+	
 	m_pPlayer->SetHasIce(true);*/
 
 	m_pPlayer->SetHasDash(true);
+	m_pPlayer->SetHasHawk(true);
+
 
 	//LoadLevel("HubLevel");
 
@@ -189,7 +191,7 @@ void GameplayState::Enter(void) //Load Resources
 		}
 	}
 	
-	LoadLevel("Level1_3");
+	LoadLevel("Level5_5");
 
 	//LoadLevel("Level4_1");
 
