@@ -92,6 +92,8 @@ void MainMenuState::Exit(void)
 {
 	delete m_emSelect;
 	delete m_emTitle;
+	ParticleEngine::GetInstance()->Terminate();
+	ParticleEngine::GetInstance()->DeleteInstance();
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hButton);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
