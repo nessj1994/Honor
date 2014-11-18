@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "../SGD Wrappers/SGD_Geometry.h"
 #include "../SGD Wrappers/SGD_Handle.h"
+#include "../SGD Wrappers/SGD_AudioManager.h"
 
 class Emitter;
 
@@ -23,6 +24,9 @@ public:
 	virtual bool Input(void)			 override; //Hanlde user Input
 	virtual void Update(float elapsedTime)			 override; //update entities
 	virtual void Render(void)			 override; //Render all entities
+
+	void StartAudio() { SGD::AudioManager::GetInstance()->PlayAudio(m_hMusic, true); }
+	void StopAudio() { SGD::AudioManager::GetInstance()->StopAudio(m_hMusic); }
 
 private:
 
@@ -61,5 +65,9 @@ private:
 	Emitter* m_emSelect;
 	Emitter* m_emTitle;
 	bool m_bContinue;
+	
+	// music
+	SGD::HAudio m_hMusic = SGD::INVALID_HANDLE;
+
 };
 

@@ -42,6 +42,13 @@ void CreditsState::Enter(void) //Load Resources
 {
 	m_emBackgroundEffect = ParticleEngine::GetInstance()->LoadEmitter("assets/particles/MainSelect.xml", "MainSelect", { 0, 0 });
 	m_hBackground = SGD::GraphicsManager::GetInstance()->LoadTexture("assets/graphics/Honor_Castle.png");
+
+	// Music
+	m_hMusic = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/MenuMusic.xwm");
+	if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hMusic))
+	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hMusic, true);
+	}
 }
 
 
@@ -52,6 +59,8 @@ void CreditsState::Enter(void) //Load Resources
 void CreditsState::Exit(void)
 {
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
+	SGD::AudioManager::GetInstance()->StopAudio(m_hMusic);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hMusic);
 }
 
 

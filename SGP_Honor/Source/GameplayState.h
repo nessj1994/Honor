@@ -85,7 +85,7 @@ public:
 	//////////////////////////////////////////////////////////
 	////////////////////// Mutators /////////////////////////
 	void SetCamera(Camera* camera) { m_pCamera = camera; }
-	void ResetAudio() { SGD::AudioManager::GetInstance()->PlayAudio(m_hBGM); }
+	void ResetAudio() { SGD::AudioManager::GetInstance()->PlayAudio(m_hHub); }
 	void SetScreenFadeout(unsigned char _fade) { m_cScreenFade = _fade; }
 
 	///////////////////////////////////////////////////////////
@@ -125,6 +125,7 @@ public:
 	void IncreaseHonorBeforeDeath(unsigned int _value);
 
 	void WizardDefeated();
+	void StartMusic();
 
 private:
 
@@ -206,7 +207,7 @@ private:
 	Jellyfish* m_pJellyfish = nullptr;
 	Jellyfish* m_pJellyfish2 = nullptr;*/
 
-	SGD::HAudio m_hBGM = SGD::INVALID_HANDLE;
+	SGD::HAudio m_hHub = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hWorld1 = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hWorld2 = SGD::INVALID_HANDLE;
 	SGD::HAudio m_hWorld3 = SGD::INVALID_HANDLE;
@@ -234,7 +235,18 @@ private:
 	SGD::HTexture m_hOAttack = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hXWallJump = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hTriOpenDoor = SGD::INVALID_HANDLE;
-	
+	SGD::HTexture m_hXJUMPKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hOAttackKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hXWallJumpKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hTriOpenDoorKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hDashKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hDashCont = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hBubbleKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hBubbleCont = SGD::INVALID_HANDLE; 
+	SGD::HTexture m_hSprayKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hSprayCont = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hHawkKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hHawkCont = SGD::INVALID_HANDLE;
 	//FPS Count
 	bool			m_bShowFPS;
 	unsigned int	m_unFPS = 60;

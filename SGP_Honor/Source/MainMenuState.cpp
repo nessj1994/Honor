@@ -1,9 +1,12 @@
 #include "MainMenuState.h"
+#include <ShlObj.h>
+#include <ostream>
+#include <string>
 
 #include "../SGD Wrappers/SGD_GraphicsManager.h"
 #include "../SGD Wrappers/SGD_InputManager.h"
-#include "../SGD Wrappers/SGD_AudioManager.h"
 #include "../SGD Wrappers/SGD_Color.h"
+#include "../SGD Wrappers/SGD_String.h"
 #include "../TinyXML/tinyxml.h"
 #include "Game.h"
 #include "GameplayState.h"
@@ -50,22 +53,52 @@ void MainMenuState::Enter(void) //Load Resources
 	m_nCursor = 0;
 	m_rSword.top = 250.0f;
 
-	int nMusicVol;
-	int nEffectsVol;
+	int nMusicVol = 50;
+	int nEffectsVol = 50;
 
 	TiXmlDocument doc;
 
-	doc.LoadFile("Assets/Options.xml");
+	HRESULT hr;
+	std::ostringstream stringstream;
+	char path[MAX_PATH];
+	LPWSTR wszPath = NULL;
+	size_t   size;
+
+	// Get the path to the app data folder
+	hr = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, 0, &wszPath);
+
+	// Convert from LPWSTR to char[]
+	wcstombs_s(&size, path, MAX_PATH, wszPath, MAX_PATH);
+
+	// Convert char types
+	if (hr == S_OK)
+		stringstream << path;
+	std::string pathtowrite = stringstream.str();
+
+	// Add the company and game information
+	pathtowrite += "\\honor\\";
+
+	// Create our directory
+	SHCreateDirectoryEx(NULL, pathtowrite.c_str(), 0);
+
+	// Create our save file
+	pathtowrite += "\\Options.xml";
+
+	doc.LoadFile(pathtowrite.c_str());
 
 	TiXmlElement* pRoot = doc.RootElement();
 
-	TiXmlElement* pOption = pRoot->FirstChildElement("option");
+	if (pRoot != nullptr)
+	{
 
-	pOption->Attribute("music_volume", &nMusicVol);
+		TiXmlElement* pOption = pRoot->FirstChildElement("option");
 
-	pOption = pOption->NextSiblingElement();
+		pOption->Attribute("music_volume", &nMusicVol);
 
-	pOption->Attribute("sfx_volume", &nEffectsVol);
+		pOption = pOption->NextSiblingElement();
+
+		pOption->Attribute("sfx_volume", &nEffectsVol);
+	}
 
 
 	m_hSelection = SGD::AudioManager::GetInstance()->LoadAudio("assets/audio/selection.wav");
@@ -81,6 +114,12 @@ void MainMenuState::Enter(void) //Load Resources
 	m_emSelect = ParticleEngine::GetInstance()->LoadEmitter("assets/particles/MainSelect.xml", "MainSelect", { 0, 0 });
 	m_emTitle = ParticleEngine::GetInstance()->LoadEmitter("assets/particles/TitleMain.xml", "Title", { 220, 100 });
 
+	// Music
+	m_hMusic = SGD::AudioManager::GetInstance()->LoadAudio(L"Assets/Audio/MenuMusic.xwm");
+	if (!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hMusic))
+	{
+		SGD::AudioManager::GetInstance()->PlayAudio(m_hMusic, true);
+	}
 }
 
 
@@ -92,10 +131,14 @@ void MainMenuState::Exit(void)
 {
 	delete m_emSelect;
 	delete m_emTitle;
+	ParticleEngine::GetInstance()->Terminate();
+	ParticleEngine::GetInstance()->DeleteInstance();
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSword);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hButton);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBackground);
 	SGD::AudioManager::GetInstance()->UnloadAudio(m_hSelection);
+	SGD::AudioManager::GetInstance()->StopAudio(m_hMusic);
+	SGD::AudioManager::GetInstance()->UnloadAudio(m_hMusic);
 }
 
 
@@ -184,6 +227,7 @@ bool MainMenuState::Input(void) //Hanlde user Input
 
 		if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
 		{
+			StopAudio();
 			Game::GetInstance()->AddState(OptionsState::GetInstance());
 
 		}
@@ -244,6 +288,7 @@ bool MainMenuState::Input(void) //Hanlde user Input
 		}
 		else if(m_nCursor == 1)
 		{
+			StopAudio();
 			//Change State to options state
 			Game::GetInstance()->AddState(OptionsState::GetInstance());
 		}

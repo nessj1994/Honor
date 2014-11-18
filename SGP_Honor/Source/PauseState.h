@@ -49,5 +49,6 @@ private:
 	//For Arcade Machine
 	float m_fInputTimer;
 	float m_fstickYOff;
+
 };
 
