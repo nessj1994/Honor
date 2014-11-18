@@ -204,6 +204,11 @@ void GameplayState::Enter(void) //Load Resources
 	m_hSprayCont = pGraphics->LoadTexture("Assets/graphics/ControllerSpray.png");
 	m_hHawkKey = pGraphics->LoadTexture("Assets/graphics/HawkKeyBoard.png");
 	m_hHawkCont = pGraphics->LoadTexture("Assets/graphics/HawkController.png");
+
+    m_hXJUMPKey = pGraphics->LoadTexture("Assets/graphics/JumpKey.png");
+    m_hOAttackKey = pGraphics->LoadTexture("Assets/graphics/AttackKey.png");
+    m_hXWallJumpKey = pGraphics->LoadTexture("Assets/graphics/WallJumpKey.png");
+    m_hTriOpenDoorKey = pGraphics->LoadTexture("Assets/graphics/EnterDoor.png");
 }
 
 
@@ -594,27 +599,69 @@ void GameplayState::Render(void)
 	//Render Images for tutorials
 	if (m_strCurrLevel == "Level0_1" || m_strCurrLevel == "Level0_2")
 	{
-		Camera::GetInstance()->DrawTexture({ 600, 300 }, 0, m_hXJUMP, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 1759, 300 }, 0, m_hXJUMP, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 2720, 200 }, 0, m_hXWallJump, false, 1, {}, {});
-		Camera::GetInstance()->DrawTexture({ 3803, 60 }, 0, m_hOAttack, false, .5, {}, {});
-		Camera::GetInstance()->DrawTexture({ 4180, 250 }, 0, m_hTriOpenDoor, false, 1, {}, {});
+		if (m_pPlayer->GetController())
+		{
+			Camera::GetInstance()->DrawTexture({ 600, 300 }, 0, m_hXJUMP, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 1759, 300 }, 0, m_hXJUMP, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 2720, 200 }, 0, m_hXWallJump, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 3803, 60 }, 0, m_hOAttack, false, .5, {}, {});
+			Camera::GetInstance()->DrawTexture({ 4180, 250 }, 0, m_hTriOpenDoor, false, 1, {}, {});
+		}
+		else
+		{
+			Camera::GetInstance()->DrawTexture({ 600, 300 }, 0, m_hXJUMPKey, false, 1.5, {}, {});
+			Camera::GetInstance()->DrawTexture({ 1759, 300 }, 0, m_hXJUMPKey, false, 1.5, {}, {});
+			Camera::GetInstance()->DrawTexture({ 2720, 200 }, 0, m_hXWallJumpKey, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 3803, 60 }, 0, m_hOAttackKey, false, .8, {}, {});
+			Camera::GetInstance()->DrawTexture({ 4180, 250 }, 0, m_hTriOpenDoorKey, false, 1, {}, {});
+		}
+		
 	}
 	if (m_strCurrLevel == "Level2_1")
 	{
-		Camera::GetInstance()->DrawTexture({ 64, -30 }, 0, m_hDashKey, false, 1, {}, {});
+		if (m_pPlayer->GetController())
+		{
+			Camera::GetInstance()->DrawTexture({ 64, -30 }, 0, m_hDashCont, false, 1, {}, {});
+		}
+		else
+		{
+			Camera::GetInstance()->DrawTexture({ 64, -30 }, 0, m_hDashKey, false, 1, {}, {});
+		}
+		
 	}
 	if (m_strCurrLevel == "Level3_1")
 	{
-		Camera::GetInstance()->DrawTexture({ 416, 740 }, 0, m_hHawkKey, false, 1, {}, {});		
+		if (m_pPlayer->GetController())
+		{
+			Camera::GetInstance()->DrawTexture({ 416, 740 }, 0, m_hHawkCont, false, 1, {}, {});
+		}
+		else
+		{
+			Camera::GetInstance()->DrawTexture({ 416, 740 }, 0, m_hHawkKey, false, 1, {}, {});
+		}
 	}
 	if (m_strCurrLevel == "Level4_1")
 	{
-		Camera::GetInstance()->DrawTexture({ 191, 400 }, 0, m_hSprayCont, false, 1, {}, {});
+		if (m_pPlayer->GetController())
+		{
+			Camera::GetInstance()->DrawTexture({ 191, 400 }, 0, m_hSprayCont, false, 1, {}, {});
+		}
+		else
+		{
+			Camera::GetInstance()->DrawTexture({ 191, 400 }, 0, m_hSprayKey, false, 1, {}, {});
+		}
+		
 	}
 	if (m_strCurrLevel == "Level5_1")
 	{
-		Camera::GetInstance()->DrawTexture({ 384, 5940 }, 0, m_hBubbleKey, false, 1, {}, {});
+		if (m_pPlayer->GetController())
+		{
+			Camera::GetInstance()->DrawTexture({ 384, 5940 }, 0, m_hBubbleCont, false, 1, {}, {});
+		}
+		else
+		{
+			Camera::GetInstance()->DrawTexture({ 384, 5940 }, 0, m_hBubbleKey, false, 1, {}, {});
+		}		
 	}
 	//Camera::GetInstance()->DrawTexture({ 270, 400 }, {}, SGD::GraphicsManager::GetInstance()->LoadTexture("Assets/images.jpg"), false);
 	m_pEntities->RenderAll();

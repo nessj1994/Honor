@@ -112,6 +112,9 @@ public:
 	//Unsigned ints
 	unsigned int GetHonorCollected(void) const { return m_unHonorCollected; }
 
+	//Get if there using the controller
+	bool GetController() { return m_bController; }
+
 	//Slowed
 	bool Slowed() { return m_bSlowed; }
 	void SetSlowed(bool _logic) { m_bSlowed = _logic; }

@@ -234,6 +234,10 @@ private:
 	SGD::HTexture m_hOAttack = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hXWallJump = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hTriOpenDoor = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hXJUMPKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hOAttackKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hXWallJumpKey = SGD::INVALID_HANDLE;
+	SGD::HTexture m_hTriOpenDoorKey = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hDashKey = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hDashCont = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hBubbleKey = SGD::INVALID_HANDLE;
