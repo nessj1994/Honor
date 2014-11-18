@@ -1849,12 +1849,18 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
 
 	
-	if (pInput->IsKeyPressed(SGD::Key::D) == true || pInput->IsKeyPressed(SGD::Key::A) == true || (stickFrame == 5 && leftClamped == false)  )
+	if (pInput->IsKeyPressed(SGD::Key::D) == true || pInput->IsKeyPressed(SGD::Key::A) == true)
 	{
-		stickFrame = 1;
-		//m_ts.ResetCurrFrame();
+		m_ts.ResetCurrFrame();
 
 		//m_ts.SetPlaying(true);
+	}
+
+	if (stickFrame == 5 && leftClamped == false && m_bController == true)
+	{
+		stickFrame = 1;
+		if (!(m_ts.GetCurrAnimation() == "Walking" || m_ts.GetCurrAnimation() == "Armor Player Walking"))
+		m_ts.ResetCurrFrame();
 	}
 
 	if(pInput->IsKeyPressed(SGD::Key::J))
@@ -2471,6 +2477,8 @@ void Player::UpdateVelocity(float elapsedTime)
 		{
 			m_ts.SetCurrAnimation("Armor Player Idle");
 		}
+		m_ts.ResetCurrFrame();
+		m_ts.SetPlaying(true);
 		m_unCurrentState = RESTING_STATE;
 	}
 
