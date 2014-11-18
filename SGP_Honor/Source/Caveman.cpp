@@ -19,9 +19,9 @@ Caveman::Caveman() : SGD::Listener(this)
 	Listener::RegisterForEvent("CaveMan_Stop");
 	Listener::RegisterForEvent("FLIP_LASER");
 	Listener::RegisterForEvent("KILL_PLAYER");
-	SetSize({ 64.0f, 96.0f });
-	m_szSize = { 64, 96 };
-	m_bFacingRight = false;
+	SetSize({ 64.0f, 64 });
+	m_szSize = { 64, 64 };
+	m_bFacingRight = true;
 	m_bsCurrState = CM_THINKING;
 	SetHitPoints(3);
 	m_fThinkingTimer = 0;
@@ -178,13 +178,13 @@ void Caveman::Update(float elapsedTime)
 			switch (Door)
 			{
 			case 1:
-				SetPosition({ 227, 500 });
+				SetPosition({ 227, 530 });
 				break;
 			case 2:
-				SetPosition({ 510, 500 });
+				SetPosition({ 510, 530 });
 				break;
 			case 3:
-				SetPosition({ 798, 500 });
+				SetPosition({ 798, 530 });
 				break;
 			default:
 				break;
@@ -328,6 +328,7 @@ void Caveman::DropStalactites()
 
 void Caveman::Render(void)
 {
+	//SGD::GraphicsManager::GetInstance()->DrawRectangle({ { m_ptPosition.x - Camera::GetInstance()->GetCameraPos().x, m_ptPosition.y - Camera::GetInstance()->GetCameraPos().y }, m_szSize }, { 255, 155, 100, 155 });
 	//Emitter Renders
 	m_hHawkExplode->Render();
 	m_emEYES->Render();
@@ -391,7 +392,7 @@ void Caveman::HandleEvent(const SGD::Event* pEvent)
 		if (m_bsCurrState != CM_DEATH)
 		{
 			SetHitPoints(3);
-			SetPosition({ 510, 500 });
+			SetPosition({ 510, 580 });
 			m_bsCurrState = CM_THINKING;
 		}		
 	}

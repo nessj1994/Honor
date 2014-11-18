@@ -188,7 +188,7 @@ void GameplayState::Enter(void) //Load Resources
 		}
 	}
 
-	//LoadLevel("Level3_1");
+	LoadLevel("Level2_5");
 
 
 	m_pHubOrb = new HubWorldOrb();
