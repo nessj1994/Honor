@@ -232,7 +232,7 @@ void GameplayState::Enter(void) //Load Resources
 		}
 	}
 	
-	LoadLevel("Level2_1");
+	//LoadLevel("Level2_1");
 
 	//LoadLevel("Level2_2");
 
