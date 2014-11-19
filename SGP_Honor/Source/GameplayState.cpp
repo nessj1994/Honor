@@ -162,11 +162,11 @@ void GameplayState::Enter(void) //Load Resources
 	bool oldGame = LoadGame();
 
 	//LoadLevel("Level4_1");
-	/*m_pPlayer->SetHasBounce(true);
-	m_pPlayer->SetHasDash(true);
-	m_pPlayer->SetHasIce(true);
-	m_pPlayer->SetHasHawk(true);
-	m_pPlayer->SetHasIce(true);*/
+	//m_pPlayer->SetHasBounce(true);
+	//m_pPlayer->SetHasDash(true);
+	//m_pPlayer->SetHasIce(true);
+	//m_pPlayer->SetHasHawk(true);
+	//m_pPlayer->SetHasIce(true);
 
 
 	//LoadLevel("HubLevel");
@@ -270,6 +270,23 @@ void GameplayState::Exit(void)
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hXJUMP);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hXWallJump);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hTriOpenDoor);
+
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hDashKey);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hDashCont);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBubbleKey);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBubbleCont);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSprayKey);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSprayCont);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHawkKey);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHawkCont);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hXJUMPKey);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hOAttackKey);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hXWallJumpKey);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hTriOpenDoorKey);
+
+
+
+
 
 	// Save collected honor
 	m_pLevel->Exit();
@@ -598,7 +615,7 @@ void GameplayState::Update(float elapsedTime)
 	if (ending == true)
 	{
 		endingTimer += elapsedTime;
-		if (endingTimer >= 5.0f)
+		if (endingTimer >= 0.1f)
 		{
 			endFadeTimer += elapsedTime;
 			if (endFadeTimer < 3.0f)
@@ -2646,10 +2663,11 @@ void GameplayState::IncreaseHonorBeforeDeath(unsigned int _value)
 
 void GameplayState::WizardDefeated()
 {
-	LoadLevel("HubLevel");
+	//LoadLevel("HubLevel");
 	ending = true;
 	m_pPlayer->SetPosition({ -100, -100 });
-	Camera::GetInstance()->SetCameraCap(6);
+	SGD::AudioManager::GetInstance()->StopAudio(m_hFinalBoss);
+	Camera::GetInstance()->SetCameraCap(3);
 }
 
 void GameplayState::StartMusic()
