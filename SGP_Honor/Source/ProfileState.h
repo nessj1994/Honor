@@ -52,13 +52,21 @@ private:
 	SGD::Rectangle m_rSelect = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 290, Game::GetInstance()->GetScreenHeight() / 2 + 160 }, SGD::Size{ 260, 65 });
 	SGD::Rectangle m_rDelete = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 + 50 , Game::GetInstance()->GetScreenHeight() / 2 + 160 }, SGD::Size{ 260, 65 });
 	SGD::Rectangle m_rSword = SGD::Rectangle(SGD::Point{ 20, 140 }, SGD::Size{ 280, 305 });
-
+	SGD::Rectangle m_rSword2 = SGD::Rectangle(SGD::Point{ Game::GetInstance()->GetScreenWidth() / 2 - 390, Game::GetInstance()->GetScreenHeight() / 2 + 170 }, SGD::Size{ 260, 65 });
 
 	SGD::HTexture m_hBackground = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hSword = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hButton = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hEsc = SGD::INVALID_HANDLE;
 	SGD::HTexture m_hCircle = SGD::INVALID_HANDLE;
+
+	bool isAnyButtonPressed();
+
+	bool m_bMouse = false;
+
+	SGD::Rectangle rLast;
+	SGD::Rectangle rMouse;
+
 
 	//For Arcade Machine
 	float m_fInputTimer;

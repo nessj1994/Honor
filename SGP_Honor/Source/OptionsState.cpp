@@ -71,6 +71,11 @@ void OptionsState::Enter(void) //Load Resources
 	m_fstickYOff = SGD::InputManager::GetInstance()->GetLeftJoystick(0).y;
 
 	m_emTitle = ParticleEngine::GetInstance()->LoadEmitter("assets/particles/TitleMain.xml", "Title", { 220, -100 });
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+
+	rMouse = SGD::Rectangle({ pInput->GetMousePosition().x, pInput->GetMousePosition().y, pInput->GetMousePosition().x + 1, pInput->GetMousePosition().y + 1 });
+	rLast = rMouse;
 
 	// Stop all music
 	if (SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hBGM))
@@ -195,6 +200,22 @@ void OptionsState::Exit(void)
 bool OptionsState::Input(void) //Hanlde user Input
 {
 	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+
+
+	rLast = rMouse;
+
+	rMouse = SGD::Rectangle({ pInput->GetMousePosition().x, pInput->GetMousePosition().y, pInput->GetMousePosition().x + 1, pInput->GetMousePosition().y + 1 });
+
+
+	if((pInput->IsAnyKeyPressed() || isAnyButtonPressed()) && !pInput->IsKeyPressed(SGD::Key::MouseLeft))
+	{
+		m_bMouse = false;
+	}
+	else if(rMouse != rLast)
+	{
+		m_bMouse = true;
+	}
+
 
 	if (m_fInputTimer > .05f)
 	{
@@ -325,7 +346,58 @@ bool OptionsState::Input(void) //Hanlde user Input
 
 	}
 
+	if(m_bMouse)
+	{
+		if(m_rPlay.IsIntersecting(rMouse))
+		{
+			m_unCursor = 0;
 
+			m_rSword.top = m_rPlay.top + 10;
+			if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+			{
+				//Game::GetInstance()->AddState(ProfileState::GetInstance());
+
+			}
+		}
+		if(m_rOptions.IsIntersecting(rMouse))
+		{
+			m_unCursor = 1;
+			m_rSword.top = m_rOptions.top + 10;
+
+			if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+			{
+				//Game::GetInstance()->AddState(OptionsState::GetInstance());
+
+			}
+		}
+		if(m_rInstructions.IsIntersecting(rMouse))
+		{
+			m_unCursor = 2;
+			m_rSword.top = m_rInstructions.top + 10;
+
+			if(pInput->IsKeyPressed(SGD::Key::MouseLeft))
+			{
+				//change state to instructions state
+				//Game::GetInstance()->SetSelectedProfile(4);
+				//Game::GetInstance()->AddState(GameplayState::GetInstance());
+
+			}
+		}
+	}
+
+
+	if(m_unCursor == 0)
+	{
+		m_rSword.top = m_rPlay.top + 10;
+	}
+	else if(m_unCursor == 1)
+	{
+		m_rSword.top = m_rOptions.top + 10;
+	}
+	else if(m_unCursor == 2)
+	{
+		m_rSword.top = m_rInstructions.top + 10;
+	}
 
 	return true;
 }
@@ -372,6 +444,9 @@ void OptionsState::Render(void)
 	//Draw the background
 	pGraphics->DrawTexture(m_hBackground, { 0, 0 }, 0.0f, {}, {}, { 1.6f, 1.2f });
 
+	pGraphics->DrawTexture(m_hSword, { m_rSword.left, m_rSword.top }, 0.0f, {}, {}, { 1.4f, 1.4f });
+
+
 	m_emBackgroundEffect->Render();
 	m_emTitle->Render({ 220, 10 });
 	//Draw the title
@@ -396,7 +471,7 @@ void OptionsState::Render(void)
 	if(m_unCursor == 0)
 	{
 		pGraphics->DrawRectangle(m_rPlay, { 255, 255, 255, 255 }, {}, {});
-		pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rPlay.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rPlay.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 240 }, 0.0f, {}, { 255, 255, 255, 255 });
 
@@ -423,7 +498,7 @@ void OptionsState::Render(void)
 	if(m_unCursor == 1)
 	{
 		pGraphics->DrawRectangle(m_rOptions, { 255, 255, 255, 255 }, {}, {});
-		pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rOptions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rOptions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 310 }, 0.0f, {}, { 255, 255, 255, 255 });
 
 		font.DrawString("Effects Volume:", (int)((fWidth - (4 * 19)) / 2.5), 325, .8f, SGD::Color{ 255, 255, 130, 0 });
@@ -442,7 +517,7 @@ void OptionsState::Render(void)
 	if(m_unCursor == 2 && m_bFullScreen)
 	{
 		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 255 }, {}, {});
-		pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 		pGraphics->DrawTexture(m_hButton, { (fWidth - (256)) / 2, 380 }, 0.0f, {}, { 255, 255, 255, 255 });
 
 		font.DrawString("Full Screen:", (int)((fWidth - (4 * 19)) / 2.5), 395, .8f, SGD::Color{ 255, 255, 130, 0 });
@@ -463,7 +538,7 @@ void OptionsState::Render(void)
 	}
 	else if(m_unCursor == 2 && !m_bFullScreen)
 	{
-		pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
+		//pGraphics->DrawTexture(m_hSword, { (fWidth - 256) / 2 - 164, m_rInstructions.top + 10 }, 0.0f, {}, {}, { 1.4f, 1.4f });
 
 
 		pGraphics->DrawRectangle(m_rInstructions, { 255, 255, 255, 30 }, {}, {});
@@ -489,4 +564,45 @@ void OptionsState::Render(void)
 	font.DrawString("or ", 162, (int)(Game::GetInstance()->GetScreenHeight() - 50), 1.0f, { 255, 130, 0 });
 	pGraphics->DrawTexture(m_hCircle, { 200, Game::GetInstance()->GetScreenHeight() - 40 }, 0.0f, {}, {}, { 1.0f, 1.0f });
 	font.DrawString("to go back.", 245, (int)(Game::GetInstance()->GetScreenHeight() - 50), 1.0f, { 255, 130, 0 });
+}
+
+bool OptionsState::isAnyButtonPressed()
+{
+
+	SGD::InputManager* pInput = SGD::InputManager::GetInstance();
+	//Check for controller input
+	if(pInput->IsButtonPressed(0, 0) ||
+		pInput->IsButtonPressed(0, 1) ||
+		pInput->IsButtonPressed(0, 2) ||
+		pInput->IsButtonPressed(0, 3) ||
+		pInput->IsButtonPressed(0, 4) ||
+		pInput->IsButtonPressed(0, 5) ||
+		pInput->IsButtonPressed(0, 6) ||
+		pInput->IsButtonPressed(0, 7) ||
+		pInput->IsButtonPressed(0, 8) ||
+		pInput->IsButtonPressed(0, 9) ||
+		pInput->IsButtonPressed(0, 10) ||
+		pInput->IsButtonPressed(0, 11) ||
+		pInput->IsDPadPressed(0, SGD::DPad::Up) ||
+		pInput->IsDPadPressed(0, SGD::DPad::Left) ||
+		pInput->IsDPadPressed(0, SGD::DPad::Right) ||
+		pInput->IsDPadPressed(0, SGD::DPad::Down) ||
+		pInput->GetLeftJoystick(0).x < -0.2 ||
+		pInput->GetLeftJoystick(0).x > 0.2 ||
+		pInput->GetRightJoystick(0).x < -0.2 ||
+		pInput->GetRightJoystick(0).x > 0.2 ||
+		pInput->GetLeftJoystick(0).y < -0.2 ||
+		pInput->GetLeftJoystick(0).y > 0.2 ||
+		pInput->GetRightJoystick(0).y < -0.2 ||
+		pInput->GetRightJoystick(0).y > 0.2 ||
+		pInput->GetTrigger(0) > 0 ||
+		pInput->GetTrigger(0) < 0
+		)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

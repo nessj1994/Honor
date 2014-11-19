@@ -1732,6 +1732,7 @@ void Player::UpdateTimers(float elapsedTime)
 
 	m_fLandTimer -= elapsedTime;
 
+	if(m_fSwingTimer != 0)
 	m_fSwingTimer -= elapsedTime;
 
 	if (m_fStunTimer > 0)
@@ -1912,12 +1913,12 @@ void Player::UpdateMovement(float elapsedTime, int stickFrame, bool leftClamped,
 		m_ts.ResetCurrFrame();
 	}
 
-	if(pInput->IsKeyPressed(SGD::Key::J))
-	{
-		SGD::Event* pATEvent = new SGD::Event("JUMP_TIME", nullptr, this);
-		SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
-		pATEvent = nullptr;
-	}
+	//if(pInput->IsKeyPressed(SGD::Key::J))
+	//{
+	//	SGD::Event* pATEvent = new SGD::Event("JUMP_TIME", nullptr, this);
+	//	SGD::EventManager::GetInstance()->QueueEvent(pATEvent);
+	//	pATEvent = nullptr;
+	//}
 
 	//reset currframe to 0 & set the animation playing to false
 	if ((pInput->IsKeyDown(SGD::Key::D) == true || pInput->IsKeyDown(SGD::Key::A) == true) || pInput->IsKeyDown(SGD::Key::Space) == true )
@@ -2732,6 +2733,8 @@ void Player::UpdatePlayerSwing(float elapsedTime)
 	{
 		swingRect = { 0, 0, 0, 0 };
 		m_pSword->SetRect(swingRect);
+
+
 
 	}
 

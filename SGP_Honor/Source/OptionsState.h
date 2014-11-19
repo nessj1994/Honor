@@ -54,6 +54,7 @@ private:
 	SGD::Rectangle m_rPlay = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 130, Game::GetInstance()->GetScreenHeight() / 2 - 60 }, SGD::Size{ 260, 65 });
 	SGD::Rectangle m_rOptions = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 130, Game::GetInstance()->GetScreenHeight() / 2 + 10 }, SGD::Size{ 260, 65 });
 	SGD::Rectangle m_rInstructions = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 130, Game::GetInstance()->GetScreenHeight() / 2 + 80 }, SGD::Size{ 260, 65 });
+	SGD::Rectangle m_rSword = SGD::Rectangle({ Game::GetInstance()->GetScreenWidth() / 2 - 300, Game::GetInstance()->GetScreenHeight() / 2 - 60 }, SGD::Size{ 260, 65 });
 
 
 	unsigned int m_unMusicVol = 100;
@@ -64,6 +65,14 @@ private:
 	float m_fstickYOff;
 	float m_fstickXoff;
 	float m_fInputTimer;
+
+	bool isAnyButtonPressed();
+
+	bool m_bMouse = false;
+
+	SGD::Rectangle rLast;
+	SGD::Rectangle rMouse;
+
 
 	//Emitter
 	Emitter* m_emBackgroundEffect;

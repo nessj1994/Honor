@@ -88,6 +88,7 @@ void Yeti::Update(float elapsedTime)
 								  //melee attack?
 								  if(fabs(m_fDistance) <= m_fMeleeRange)
 								  {
+									  if(!SGD::AudioManager::GetInstance()->IsAudioPlaying(m_hSlam))
 									  SGD::AudioManager::GetInstance()->PlayAudio(m_hSlam);
 									  m_ts.ResetCurrFrame();
 									  m_ts.SetCurrAnimation("yetismash");
@@ -106,9 +107,9 @@ void Yeti::Update(float elapsedTime)
 
 
 
-							  if(m_vtVelocity.x < 500)
+							  if(m_vtVelocity.x < 400)
 							  {
-								  m_vtVelocity.x = 500;
+								  m_vtVelocity.x = 400;
 							  }
 
 						  }
@@ -169,9 +170,9 @@ void Yeti::Update(float elapsedTime)
 								   pMsg = nullptr;
 							   }
 
-							   if(m_vtVelocity.x < 500)
+							   if(m_vtVelocity.x < 400)
 							   {
-								   m_vtVelocity.x = 500;
+								   m_vtVelocity.x = 400;
 							   }
 						   }
 						   break;
@@ -377,7 +378,7 @@ void Yeti::HandleEvent(const SGD::Event* pEvent)
 			if(GetCurrentState() != JUMPING_STATE)
 			{
 				SetCurrentState(JUMPING_STATE);
-				m_vtVelocity = { 400, -700 };
+				m_vtVelocity = { 400, -600 };
 				m_fJumpTimer = 0.0f;
 			}
 		}
@@ -445,6 +446,8 @@ void Yeti::HandleEvent(const SGD::Event* pEvent)
 	if(pEvent->GetEventID() == "ResetRoom")
 	{
 		m_ptPosition = GetStartPosition();
+		m_ts.ResetCurrFrame();
+		m_ts.SetCurrAnimation("yetiidle");
 		SetCurrentState(CHASING_STATE);
 		m_fStartTimer = 2.0f;
 		m_bFacingRight = true;

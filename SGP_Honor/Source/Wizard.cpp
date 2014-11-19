@@ -336,6 +336,16 @@ void Wizard::Update(float elapsedTime)
 		font.DrawString("VICTORY", (int)(m_ptPosition.x-200), (int)(m_ptPosition.y-100), 3, SGD::Color{ 255, 255, 0, 0 });
 
 
+		SGD::AudioManager::GetInstance()->StopAudio(m_hFloating);
+		SGD::AudioManager::GetInstance()->StopAudio(m_hBat);
+		SGD::AudioManager::GetInstance()->StopAudio(m_hDash);
+		SGD::AudioManager::GetInstance()->StopAudio(m_hLaugh);
+		SGD::AudioManager::GetInstance()->StopAudio(m_hVictory);
+
+		DestroyEntityMessage* pMsg = new DestroyEntityMessage{ this };
+		pMsg->QueueMessage();
+		pMsg = nullptr;
+
 		GameplayState::GetInstance()->WizardDefeated();
 	}
 

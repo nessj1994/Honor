@@ -162,12 +162,13 @@ void GameplayState::Enter(void) //Load Resources
 	bool oldGame = LoadGame();
 
 	//LoadLevel("Level4_1");
-	/*m_pPlayer->SetHasBounce(true);
-	m_pPlayer->SetHasDash(true);
-	m_pPlayer->SetHasIce(true);
-	m_pPlayer->SetHasIce(true);*/
+	//m_pPlayer->SetHasBounce(true);
+	//m_pPlayer->SetHasDash(true);
+	//m_pPlayer->SetHasIce(true);
+	//m_pPlayer->SetHasHawk(true);
+	//m_pPlayer->SetHasIce(true);
 
-	m_pPlayer->SetHasHawk(true);
+	//m_pPlayer->SetHasHawk(true);
 
 
 	//LoadLevel("HubLevel");
@@ -182,6 +183,46 @@ void GameplayState::Enter(void) //Load Resources
 		if (oldGame)
 		{
 			LoadLevel("HubLevel");
+			if(Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level2_1" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level2_2" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level2_3" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level2_4" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level2_5"
+				)
+			{
+				m_pPlayer->SetHasDash(true);
+			}
+			else if(Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level3_1" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level3_2" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level3_3" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level3_4" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level3_5")
+			{
+				m_pPlayer->SetHasDash(true);
+				m_pPlayer->SetHasHawk(true);
+			}
+			else if(Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level4_1" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level4_2" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level4_3" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level4_4" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level4_5")
+			{
+				m_pPlayer->SetHasDash(true);
+				m_pPlayer->SetHasHawk(true);
+				m_pPlayer->SetHasIce(true);
+			}
+			else if(Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level5_1" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level5_2" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level5_3" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level5_4" ||
+				Game::GetInstance()->GetProfile(Game::GetInstance()->GetSelectedNumber())->GetCurrentLevel() == "Level5_5")
+			{
+				m_pPlayer->SetHasDash(true);
+				m_pPlayer->SetHasHawk(true);
+				m_pPlayer->SetHasIce(true);
+				m_pPlayer->SetHasBounce(true);
+			}
+
 		}
 		else
 		{
@@ -195,6 +236,7 @@ void GameplayState::Enter(void) //Load Resources
 
 	//LoadLevel("Level2_2");
 
+	//LoadLevel("Level5_2");
 
 	m_pHubOrb = new HubWorldOrb();
 	//Turorial Images
@@ -230,6 +272,23 @@ void GameplayState::Exit(void)
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hXJUMP);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hXWallJump);
 	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hTriOpenDoor);
+
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hDashKey);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hDashCont);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBubbleKey);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hBubbleCont);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSprayKey);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hSprayCont);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHawkKey);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hHawkCont);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hXJUMPKey);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hOAttackKey);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hXWallJumpKey);
+	SGD::GraphicsManager::GetInstance()->UnloadTexture(m_hTriOpenDoorKey);
+
+
+
+
 
 	// Save collected honor
 	m_pLevel->Exit();
@@ -364,7 +423,7 @@ bool GameplayState::Input(void) //Hanlde user Input
 	{
 		m_bShowFPS ? m_bShowFPS = false : m_bShowFPS = true;
 	}
-	if (pInput->IsKeyPressed(SGD::Key::O) && (m_strCurrLevel != "Level0_1" && m_strCurrLevel != "Level0_2"))
+	if ((pInput->IsKeyPressed(SGD::Key::O)  || pInput->IsButtonPressed(0, 6)) && (m_strCurrLevel != "Level0_1" && m_strCurrLevel != "Level0_2"))
 	{
 		LoadLevel("HubLevel");
 	}	/*if(pInput->IsKeyPressed(SGD::Key::L))
@@ -558,7 +617,7 @@ void GameplayState::Update(float elapsedTime)
 	if (ending == true)
 	{
 		endingTimer += elapsedTime;
-		if (endingTimer >= 5.0f)
+		if (endingTimer >= 0.1f)
 		{
 			endFadeTimer += elapsedTime;
 			if (endFadeTimer < 3.0f)
@@ -619,11 +678,11 @@ void GameplayState::Render(void)
 		}
 		else
 		{
-			Camera::GetInstance()->DrawTexture({ 600, 300 }, 0, m_hXJUMPKey, false, 1.5, {}, {});
-			Camera::GetInstance()->DrawTexture({ 1759, 300 }, 0, m_hXJUMPKey, false, 1.5, {}, {});
-			Camera::GetInstance()->DrawTexture({ 2720, 200 }, 0, m_hXWallJumpKey, false, 1, {}, {});
-			Camera::GetInstance()->DrawTexture({ 3803, 60 }, 0, m_hOAttackKey, false, .8, {}, {});
-			Camera::GetInstance()->DrawTexture({ 4180, 250 }, 0, m_hTriOpenDoorKey, false, 1, {}, {});
+			Camera::GetInstance()->DrawTexture({ 600, 300 }, 0, m_hXJUMPKey, false, 1.5f, {}, {});
+			Camera::GetInstance()->DrawTexture({ 1759, 300 }, 0, m_hXJUMPKey, false, 1.5f, {}, {});
+			Camera::GetInstance()->DrawTexture({ 2720, 200 }, 0, m_hXWallJumpKey, false, 1.0f, {}, {});
+			Camera::GetInstance()->DrawTexture({ 3803, 60 }, 0, m_hOAttackKey, false, .8f, {}, {});
+			Camera::GetInstance()->DrawTexture({ 4180, 250 }, 0, m_hTriOpenDoorKey, false, 1.0f, {}, {});
 		}
 		
 	}
@@ -2606,10 +2665,11 @@ void GameplayState::IncreaseHonorBeforeDeath(unsigned int _value)
 
 void GameplayState::WizardDefeated()
 {
-	LoadLevel("HubLevel");
+	//LoadLevel("HubLevel");
 	ending = true;
 	m_pPlayer->SetPosition({ -100, -100 });
-	Camera::GetInstance()->SetCameraCap(6);
+	SGD::AudioManager::GetInstance()->StopAudio(m_hFinalBoss);
+	Camera::GetInstance()->SetCameraCap(3);
 }
 
 void GameplayState::StartMusic()

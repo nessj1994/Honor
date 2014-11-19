@@ -93,7 +93,7 @@ bool CreditsState::Input(void) //Hanlde user Input
 // - Update all game entities
 void CreditsState::Update(float elapsedTime)
 {
-	if (CreditTimer < 16.0f)
+	if (CreditTimer < 17.0f)
 	{
 		CreditTimer += elapsedTime;
 		textMovement -= 100 * elapsedTime;
