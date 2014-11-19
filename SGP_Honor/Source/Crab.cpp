@@ -17,7 +17,7 @@
 #define BubbleSpawnRate 0.2f
 #define BubbleCooldown 3.0f
 #define SlamTime 2.2f
-#define SwipeTime 3.2f
+#define SwipeTime 1.2f
 #define SwipeCooldown 1.5f
 #define HitCooldown 0.5f
 #define Death 2.0f

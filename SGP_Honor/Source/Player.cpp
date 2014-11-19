@@ -1627,6 +1627,8 @@ void Player::HandleEvent(const SGD::Event* pEvent)
 
 void Player::KillPlayer()
 {
+	m_bHawkCast = false;
+
 	if (m_bHasArmor)
 	{
 		// Jump and remove armor

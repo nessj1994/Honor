@@ -9,7 +9,9 @@
 #include "Caveman.h"
 #include "AnimationEngine.h"
 
-Hawk::Hawk()
+
+
+Hawk::Hawk() 
 {
 	if (GetOwner() != nullptr)
 	{
