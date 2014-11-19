@@ -1798,6 +1798,24 @@ void Player::UpdateFriction(float elapsedTime, bool leftClamped)
 		}
 
 	}
+
+	if (SGD::InputManager::GetInstance()->IsButtonPressed(0, 3) == true ||
+		SGD::InputManager::GetInstance()->IsKeyPressed(SGD::Key::E))
+	{
+		if (GetHawkPtr() != nullptr)
+		{
+
+
+
+			DestroyEntityMessage* pMsg = new DestroyEntityMessage{ GetHawkPtr() };
+			pMsg->QueueMessage();
+			pMsg = nullptr;
+
+			SetHawkPtr(nullptr);
+		}
+
+	}
+	
 	//Right Friction
 	if (GetVelocity().x > 0
 		&& (pInput->IsKeyDown(SGD::Key::D) == false
